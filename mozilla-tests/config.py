@@ -42,16 +42,17 @@ SUITES = {
     'svg': GRAPH_CONFIG + ['--activeTests', 'tsvg:tsvg_opacity'],
     'scroll': GRAPH_CONFIG + ['--activeTests', 'tscroll'],
     'dromaeo': GRAPH_CONFIG + ['--activeTests', 'dromaeo_basics:dromaeo_v8:dromaeo_sunspider:dromaeo_jslib:dromaeo_css:dromaeo_dom'],
-    'addon': GRAPH_CONFIG + ['--activeTests', 'ts', '--noShutdown'],
-    'addon-baseline': GRAPH_CONFIG + ['--activeTests', 'ts', '--noShutdown'],
+    'addon': GRAPH_CONFIG + ['--activeTests', 'ts', '--noShutdown', '--sampleConfig', 'addon.config'],
+    'addon-baseline': GRAPH_CONFIG + ['--activeTests', 'ts', '--noShutdown', '--sampleConfig', 'addon.config'],
     'a11y': GRAPH_CONFIG + ['--activeTests', 'a11y'],
+    'paint': GRAPH_CONFIG + ['--activeTests', 'ts_paint:tpaint', '--setPref', 'dom.send_after_paint_to_content=true'],
     'remote-ts': GRAPH_CONFIG + ['--activeTests', 'ts', '--noChrome'],
     'remote-tdhtml': GRAPH_CONFIG + ['--activeTests', 'tdhtml', '--noChrome'],
     'remote-tsvg': GRAPH_CONFIG + ['--activeTests', 'tsvg', '--noChrome'],
     'remote-tsspider': GRAPH_CONFIG + ['--activeTests', 'tsspider', '--noChrome'],
     'remote-tpan': GRAPH_CONFIG + ['--activeTests', 'tpan', '--noChrome'],
-    'remote-tp4': GRAPH_CONFIG + ['--activeTests', 'tp4'],
-    'remote-tp4_nochrome': GRAPH_CONFIG + ['--activeTests', 'tp4', '--noChrome'],
+    'remote-tp4m': GRAPH_CONFIG + ['--activeTests', 'tp4m'],
+    'remote-tp4m_nochrome': GRAPH_CONFIG + ['--activeTests', 'tp4m', '--noChrome'],
     'remote-twinopen': GRAPH_CONFIG + ['--activeTests', 'twinopen'],
     'remote-tzoom': GRAPH_CONFIG + ['--activeTests', 'tzoom'],
 }
@@ -60,11 +61,12 @@ BRANCHES = {
     'mozilla-central': {},
     'shadow-central': {},
     'mozilla-beta': {},
+    'mozilla-aurora': {},
     'mozilla-2.0': {},
     'mozilla-2.1': {},
     'mozilla-1.9.2': {},
     'mozilla-1.9.1': {},
-    'tryserver': {},
+    'try': {},
     'addontester': {},
     'addonbaselinetester': {},
 }
@@ -196,9 +198,9 @@ UNITTEST_SUITES = {
         #                     'mochitest-ipcplugins']),
         ('mobile-mochitest-browser-chrome', ['mobile-mochitest-browser-chrome']),
         #('reftest', ['reftest']),
-        ('crashtest', ['crashtest']),
+        #('crashtest', ['crashtest']),
         #('xpcshell', ['xpcshell']),
-        ('jsreftest', ['jsreftest']),
+        #('jsreftest', ['jsreftest']),
     ],
 
 }
@@ -258,8 +260,7 @@ PLATFORM_UNITTEST_VARS = {
             'enable_debug_unittests': True,
             'xp': {
                 'opt_unittest_suites' : UNITTEST_SUITES['opt_unittest_suites'][:],
-                'debug_unittest_suites' : removeSuite('mochitest-browser-chrome', \
-                                          UNITTEST_SUITES['debug_unittest_suites'][:]), 
+                'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
             },
             'win7': {
                 'opt_unittest_suites' : UNITTEST_SUITES['opt_unittest_suites'][:],
@@ -491,13 +492,14 @@ BRANCHES['mozilla-central']['scroll_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-central']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-central']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-central']['a11y_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-central']['paint_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-central']['remote-ts_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-central']['remote-tdhtml_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-central']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-central']['remote-tsspider_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-central']['remote-tpan_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-central']['remote-tp4_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-central']['remote-tp4_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-central']['remote-tp4m_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-central']['remote-tp4m_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-central']['remote-twinopen_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-central']['remote-tzoom_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-central']['repo_path'] = "mozilla-central"
@@ -505,11 +507,23 @@ BRANCHES['mozilla-central']['platforms']['win32']['enable_opt_unittests'] = True
 BRANCHES['mozilla-central']['platforms']['linux']['enable_mobile_unittests'] = True
 BRANCHES['mozilla-central']['platforms']['win64']['enable_opt_unittests'] = True
 BRANCHES['mozilla-central']['platforms']['android']['enable_opt_unittests'] = True
+BRANCHES['mozilla-central']['platforms']['linux']['fedora']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['linux64']['fedora64']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['linux64']['fedora64']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['macosx']['leopard-o']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['macosx64']['snowleopard']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['macosx64']['snowleopard']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['macosx64']['leopard']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['win32']['xp']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['win32']['xp']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['win32']['win7']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['win32']['win7']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['branch_name'] = "Mozilla-Beta"
 BRANCHES['mozilla-beta']['mobile_branch_name'] = "Mozilla-Beta"
-BRANCHES['mozilla-beta']['build_branch'] = "1.9.2"
+BRANCHES['mozilla-beta']['build_branch'] = "Mozilla-Beta"
 BRANCHES['mozilla-beta']['talos_command'] = TALOS_CMD
 BRANCHES['mozilla-beta']['fetch_symbols'] = True
 BRANCHES['mozilla-beta']['fetch_release_symbols'] = False
@@ -527,13 +541,14 @@ BRANCHES['mozilla-beta']['scroll_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-beta']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-beta']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-beta']['a11y_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-beta']['paint_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-beta']['remote-ts_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-beta']['remote-tdhtml_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-beta']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-beta']['remote-tsspider_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-beta']['remote-tpan_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-beta']['remote-tp4_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-beta']['remote-tp4_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-beta']['remote-tp4m_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-beta']['remote-tp4m_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-beta']['remote-twinopen_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-beta']['remote-tzoom_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-beta']['repo_path'] = "mozilla-beta"
@@ -541,6 +556,55 @@ BRANCHES['mozilla-beta']['platforms']['win32']['enable_opt_unittests'] = True
 BRANCHES['mozilla-beta']['platforms']['linux']['enable_mobile_unittests'] = True
 BRANCHES['mozilla-beta']['platforms']['win64']['enable_opt_unittests'] = True
 BRANCHES['mozilla-beta']['platforms']['android']['enable_opt_unittests'] = True
+
+######## mozilla-aurora
+BRANCHES['mozilla-aurora']['branch_name'] = "Mozilla-Aurora"
+BRANCHES['mozilla-aurora']['mobile_branch_name'] = "Mozilla-Aurora"
+BRANCHES['mozilla-aurora']['build_branch'] = "Mozilla-Aurora"
+BRANCHES['mozilla-aurora']['talos_command'] = TALOS_CMD
+BRANCHES['mozilla-aurora']['fetch_symbols'] = True
+BRANCHES['mozilla-aurora']['fetch_release_symbols'] = False
+BRANCHES['mozilla-aurora']['release_tests'] = 5
+BRANCHES['mozilla-aurora']['support_url_base'] = 'http://build.mozilla.org/talos'
+BRANCHES['mozilla-aurora']['chrome_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['dromaeo_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['dirty_tests'] = (1, True, TALOS_DIRTY_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['tp4_tests'] = (1, True, TALOS_TP4_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, NO_WIN)
+BRANCHES['mozilla-aurora']['svg_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['v8_tests'] = (0, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['scroll_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['a11y_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-aurora']['paint_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-aurora']['remote-ts_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tdhtml_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tsspider_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tpan_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tp4m_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tp4m_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-twinopen_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tzoom_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['repo_path'] = "mozilla-aurora"
+BRANCHES['mozilla-aurora']['platforms']['win32']['enable_opt_unittests'] = True
+BRANCHES['mozilla-aurora']['platforms']['linux']['enable_mobile_unittests'] = True
+BRANCHES['mozilla-aurora']['platforms']['win64']['enable_opt_unittests'] = True
+BRANCHES['mozilla-aurora']['platforms']['android']['enable_opt_unittests'] = True
+BRANCHES['mozilla-aurora']['platforms']['linux']['fedora']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['linux64']['fedora64']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['linux64']['fedora64']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['macosx']['leopard-o']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['macosx64']['snowleopard']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['macosx64']['snowleopard']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['macosx64']['leopard']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['win32']['xp']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['win32']['xp']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['win32']['win7']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-aurora']['platforms']['win32']['win7']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 
 ######## shadow-central
 BRANCHES['shadow-central']['branch_name'] = "Shadow-Central"
@@ -560,8 +624,8 @@ BRANCHES['shadow-central']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNE
 BRANCHES['shadow-central']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['shadow-central']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['shadow-central']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['shadow-central']['remote-tp4_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['shadow-central']['remote-tp4_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['shadow-central']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['shadow-central']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['shadow-central']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['shadow-central']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['shadow-central']['svg_tests'] = (1, True, {}, ALL_PLATFORMS)
@@ -570,6 +634,7 @@ BRANCHES['shadow-central']['scroll_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['shadow-central']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['shadow-central']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['shadow-central']['a11y_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['shadow-central']['paint_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['shadow-central']['repo_path'] = "shadow-central"
 
 ######## mozilla-2.0
@@ -592,8 +657,8 @@ BRANCHES['mozilla-2.0']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNEC_O
 BRANCHES['mozilla-2.0']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.0']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.0']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-2.0']['remote-tp4_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-2.0']['remote-tp4_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-2.0']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-2.0']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.0']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.0']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.0']['svg_tests'] = (1, True, {}, ALL_PLATFORMS)
@@ -602,6 +667,7 @@ BRANCHES['mozilla-2.0']['scroll_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-2.0']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-2.0']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-2.0']['a11y_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-2.0']['paint_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-2.0']['repo_path'] = "mozilla-2.0"
 
 ######## mozilla-2.1
@@ -623,8 +689,8 @@ BRANCHES['mozilla-2.1']['remote-tdhtml_tests'] = (1, True, TALOS_REMOTE_FENNEC_O
 BRANCHES['mozilla-2.1']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.1']['remote-tsspider_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.1']['remote-tpan_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-2.1']['remote-tp4_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-2.1']['remote-tp4_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-2.1']['remote-tp4m_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-2.1']['remote-tp4m_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.1']['remote-twinopen_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.1']['remote-tzoom_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-2.1']['svg_tests'] = (1, True, {}, ALL_PLATFORMS)
@@ -633,6 +699,7 @@ BRANCHES['mozilla-2.1']['scroll_tests'] = (1, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-2.1']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-2.1']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-2.1']['a11y_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-2.1']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-2.1']['repo_path'] = "mozilla-2.1"
 
 ######## mozilla-1.9.1
@@ -645,7 +712,7 @@ BRANCHES['mozilla-1.9.1']['support_url_base'] = 'http://build.mozilla.org/talos'
 BRANCHES['mozilla-1.9.1']['chrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.1']['nochrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.1']['dromaeo_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['mozilla-1.9.1']['dirty_tests'] = (1, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
+BRANCHES['mozilla-1.9.1']['dirty_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.1']['tp4_tests'] = (1, True, TALOS_TP4_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.1']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_NO_WIN)
 BRANCHES['mozilla-1.9.1']['remote-ts_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
@@ -653,8 +720,8 @@ BRANCHES['mozilla-1.9.1']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNEC
 BRANCHES['mozilla-1.9.1']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.1']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.1']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-1.9.1']['remote-tp4_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-1.9.1']['remote-tp4_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-1.9.1']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-1.9.1']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.1']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.1']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.1']['svg_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
@@ -663,6 +730,7 @@ BRANCHES['mozilla-1.9.1']['scroll_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFOR
 BRANCHES['mozilla-1.9.1']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.1']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.1']['a11y_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
+BRANCHES['mozilla-1.9.1']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.1']['enable_unittests'] = False
 
 ######## mozilla-1.9.2
@@ -677,7 +745,7 @@ BRANCHES['mozilla-1.9.2']['fetch_release_symbols'] = False
 BRANCHES['mozilla-1.9.2']['chrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['nochrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['dromaeo_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['mozilla-1.9.2']['dirty_tests'] = (1, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
+BRANCHES['mozilla-1.9.2']['dirty_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['tp4_tests'] = (1, True, TALOS_TP4_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_NO_WIN)
 BRANCHES['mozilla-1.9.2']['remote-ts_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
@@ -685,8 +753,8 @@ BRANCHES['mozilla-1.9.2']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNEC
 BRANCHES['mozilla-1.9.2']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.2']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.2']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-1.9.2']['remote-tp4_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-1.9.2']['remote-tp4_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-1.9.2']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-1.9.2']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.2']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.2']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-1.9.2']['svg_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
@@ -695,6 +763,7 @@ BRANCHES['mozilla-1.9.2']['scroll_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFOR
 BRANCHES['mozilla-1.9.2']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['a11y_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
+BRANCHES['mozilla-1.9.2']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['enable_unittests'] = False
 
 ######## addontester 
@@ -716,8 +785,8 @@ BRANCHES['addontester']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNEC_O
 BRANCHES['addontester']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addontester']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addontester']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tp4_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tp4_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['addontester']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['addontester']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addontester']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addontester']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addontester']['svg_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
@@ -726,6 +795,7 @@ BRANCHES['addontester']['scroll_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS
 BRANCHES['addontester']['addon_tests'] = (1, False, TALOS_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['addontester']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['addontester']['a11y_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
+BRANCHES['addontester']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['addontester']['enable_unittests'] = False
 ######## addonbaselinetester - tests against 1.9.2
 BRANCHES['addonbaselinetester']['branch_name'] = "AddonTester"
@@ -746,8 +816,8 @@ BRANCHES['addonbaselinetester']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_
 BRANCHES['addonbaselinetester']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addonbaselinetester']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addonbaselinetester']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tp4_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tp4_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['addonbaselinetester']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['addonbaselinetester']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addonbaselinetester']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addonbaselinetester']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['addonbaselinetester']['svg_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
@@ -756,38 +826,53 @@ BRANCHES['addonbaselinetester']['scroll_tests'] = (0, True, {}, OLD_BRANCH_ALL_P
 BRANCHES['addonbaselinetester']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['addonbaselinetester']['addon-baseline_tests'] = (1, False, TALOS_BASELINE_ADDON_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['addonbaselinetester']['a11y_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
+BRANCHES['addonbaselinetester']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['addonbaselinetester']['enable_unittests'] = False
 
-######## tryserver
-BRANCHES['tryserver']['branch_name'] = "Tryserver"
-BRANCHES['tryserver']['mobile_branch_name'] = "Tryserver"
-BRANCHES['tryserver']['build_branch'] = "Tryserver"
-BRANCHES['tryserver']['talos_command'] = TALOS_CMD
-BRANCHES['tryserver']['fetch_symbols'] = True
-BRANCHES['tryserver']['support_url_base'] = 'http://build.mozilla.org/talos'
-BRANCHES['tryserver']['chrome_tests'] = (1, False, {}, ALL_PLATFORMS)
-BRANCHES['tryserver']['nochrome_tests'] = (1, False, {}, ALL_PLATFORMS)
-BRANCHES['tryserver']['dromaeo_tests'] = (1, False, {}, ALL_PLATFORMS)
-BRANCHES['tryserver']['dirty_tests'] = (1, False, TALOS_DIRTY_OPTS, ALL_PLATFORMS)
-BRANCHES['tryserver']['tp4_tests'] = (1, False, TALOS_TP4_OPTS, ALL_PLATFORMS)
-BRANCHES['tryserver']['cold_tests'] = (0, False, TALOS_DIRTY_OPTS, NO_WIN)
-BRANCHES['tryserver']['remote-ts_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-tdhtml_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-tsspider_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-tp4_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-tp4_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-twinopen_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['tryserver']['svg_tests'] = (1, False, {}, ALL_PLATFORMS)
-BRANCHES['tryserver']['v8_tests'] = (0, False, {}, ALL_PLATFORMS)
-BRANCHES['tryserver']['scroll_tests'] = (1, False, {}, ALL_PLATFORMS)
-BRANCHES['tryserver']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
-BRANCHES['tryserver']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
-BRANCHES['tryserver']['a11y_tests'] = (1, False, {}, NO_MAC)
-BRANCHES['tryserver']['repo_path'] = "try"
-BRANCHES['tryserver']['platforms']['win32']['win7']['opt_unittest_suites'] += [('reftest-no-accel', ['reftest-no-d2d-d3d'])]
+######## try
+BRANCHES['try']['branch_name'] = "Try"
+BRANCHES['try']['mobile_branch_name'] = "Try"
+BRANCHES['try']['build_branch'] = "Try"
+BRANCHES['try']['talos_command'] = TALOS_CMD
+BRANCHES['try']['fetch_symbols'] = True
+BRANCHES['try']['support_url_base'] = 'http://build.mozilla.org/talos'
+BRANCHES['try']['chrome_tests'] = (1, False, {}, ALL_PLATFORMS)
+BRANCHES['try']['nochrome_tests'] = (1, False, {}, ALL_PLATFORMS)
+BRANCHES['try']['dromaeo_tests'] = (1, False, {}, ALL_PLATFORMS)
+BRANCHES['try']['dirty_tests'] = (1, False, TALOS_DIRTY_OPTS, ALL_PLATFORMS)
+BRANCHES['try']['tp4_tests'] = (1, False, TALOS_TP4_OPTS, ALL_PLATFORMS)
+BRANCHES['try']['cold_tests'] = (0, False, TALOS_DIRTY_OPTS, NO_WIN)
+BRANCHES['try']['remote-ts_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-tdhtml_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-tsspider_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-tpan_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-tp4m_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-tp4m_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-twinopen_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['remote-tzoom_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['try']['svg_tests'] = (1, False, {}, ALL_PLATFORMS)
+BRANCHES['try']['v8_tests'] = (0, False, {}, ALL_PLATFORMS)
+BRANCHES['try']['scroll_tests'] = (1, False, {}, ALL_PLATFORMS)
+BRANCHES['try']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLATFORMS)
+BRANCHES['try']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
+BRANCHES['try']['a11y_tests'] = (1, False, {}, NO_MAC)
+BRANCHES['try']['paint_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['try']['repo_path'] = "try"
+BRANCHES['try']['platforms']['win32']['win7']['opt_unittest_suites'] += [('reftest-no-accel', ['reftest-no-d2d-d3d'])]
+BRANCHES['try']['platforms']['linux']['fedora']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['linux64']['fedora64']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['linux64']['fedora64']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['macosx']['leopard-o']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['macosx64']['snowleopard']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['macosx64']['snowleopard']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['macosx64']['leopard']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['win32']['xp']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['win32']['xp']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['win32']['win7']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['win32']['win7']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['try']['platforms']['android']['enable_opt_unittests'] = True
 
 ######## generic branch variables for project branches
 for branch in ACTIVE_PROJECT_BRANCHES:

@@ -1,4 +1,4 @@
-MAC_SNOW_MINIS = ['moz2-darwin10-slave%02i' % x for x in range(5,10) + range(11,30) + range(40,57)]
+MAC_SNOW_MINIS = ['moz2-darwin10-slave%02i' % x for x in range(5,10) + range(15,30) + range(40,57)]
 MAC_MINIS      = ['moz2-darwin9-slave%02i' % x for x in [1,2,5,6,7] + range(9,10) + range(11,27) + range(29,68) + range(69,73)]
 XSERVES        = ['bm-xserve%02i' % x for x in [6,7,8,9,10,11,12,15,16,17,18,19,20,21,22,23,24]]
 LINUX_VMS      = ['moz2-linux-slave%02i' % x for x in [1,2] + range(5,10) + range(11,17) + range(18,47)]
@@ -7,7 +7,7 @@ LINUX_IXS      = ['mv-moz2-linux-ix-slave%02i' % x for x in range(2,22)] + \
                  ['linux-ix-slave%02i' % x for x in (1,2,6)] # added for bug 638309
 LINUX64_VMS    = ['moz2-linux64-slave%02i' % x for x in range(1,7) + range(8,10) + range(11,13)]
 LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in range(3,22)]
-WIN32_VMS      = ['win32-slave%02i' % x for x in [1,2] + range(5,10) + range(11,21) + range(22,50)]
+WIN32_VMS      = ['win32-slave%02i' % x for x in [1] + range(6,10) + [11,20,26] + range(30,50)]
 WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(2,22)] + ['w32-ix-slave%02i' % x for x in range(22,43)] + \
                  ['w32-ix-slave%02i' % x for x in range(1,5)] # added for bug 638309
 SLAVES = {
@@ -25,8 +25,10 @@ TRY_LINUX_IXS  = ['mv-moz2-linux-ix-slave%02i' % x for x in range(22,24)] + \
 TRY_LINUX64    = ['try-linux64-slave%02i' % x for x in range(1,11)]
 TRY_LINUX64_IXS= ['linux64-ix-slave%02i' % x for x in range(22,41)]
 TRY_MAC        = ['try-mac-slave%02i' % x for x in range(1,5) + range(6,48)]
+TRY_MAC.remove('try-mac-slave35') # Bug 650297
 TRY_XSERVES    = ['bm-xserve%02i' % x for x in [8,10,20,23,24]]
-TRY_MAC64      = ['try-mac64-slave%02i' % x for x in range(1,32)]
+TRY_MAC64      = ['try-mac64-slave%02i' % x for x in range(1,32)] + \
+                 ['moz2-darwin10-slave%02i' % x for x in range(11,15)]
 TRY_WIN32      = ['try-w32-slave%02i' % x for x in range(1,5) + range(6,37)] + \
                  ['win32-slave%02i' % x for x in range(50,60)]
 TRY_WIN32_IXS  = ['mw32-ix-slave%02i' % x for x in range(22,26)] + \
@@ -65,7 +67,6 @@ GLOBAL_VARS = {
     'unittest_masters': [
         ('production-master01.build.mozilla.org:9009', True, 5),
         ('staging-master.build.mozilla.org:9009', False, 1),
-        ('talos-staging-master02.build.mozilla.org:9012', False, 1),
         ('geriatric-master.build.mozilla.org:9989', False, 1),
     ],
     'xulrunner_tinderbox_tree': 'XULRunner',
@@ -119,6 +120,11 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-Beta',
         'mobile_tinderbox_tree': 'Mozilla-Beta',
     },
+    'mozilla-aurora': {
+        'packaged_unittest_tinderbox_tree': 'Mozilla-Aurora',
+        'tinderbox_tree': 'Mozilla-Aurora',
+        'mobile_tinderbox_tree': 'Mozilla-Aurora',
+    },
     'tracemonkey': {
         'tinderbox_tree': 'TraceMonkey',
         'mobile_tinderbox_tree': 'TraceMonkey',
@@ -144,16 +150,15 @@ BRANCHES = {
         'mobile_tinderbox_tree': 'Jaegermonkey',
         'packaged_unittest_tinderbox_tree': 'Jaegermonkey',
     },
-    'tryserver': {
-        'tinderbox_tree': 'MozillaTry',
-        'graph_branch': 'Tryserver',
-        'mobile_tinderbox_tree': 'MozillaTry',
-        'packaged_unittest_tinderbox_tree': 'MozillaTry',
-        'download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/tryserver-builds',
-        'mobile_download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/tryserver-builds',
+    'try': {
+        'tinderbox_tree': 'Try',
+        'mobile_tinderbox_tree': 'Try',
+        'packaged_unittest_tinderbox_tree': 'Try',
+        'download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds',
+        'mobile_download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds',
         'enable_mail_notifier': True,
         'notify_real_author': True,
-        'package_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/tryserver-builds',
+        'package_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds',
         'talos_masters': [],
         'platforms': {
             'win32': {

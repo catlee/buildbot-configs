@@ -1,7 +1,7 @@
 MAC_SNOW_MINIS = ['moz2-darwin10-slave%02i' % x for x in range(1,30) + range(40,57)]
 MAC_MINIS      = ['moz2-darwin9-slave%02i' % x for x in range(1,4) + range(5,73)]
 XSERVES        = ['bm-xserve%02i' % x for x in [6,7,9,11,12,15,16,17,18,19,21,22]]
-WIN32_VMS      = ['win32-slave%02i' % x for x in range(1,61)]
+WIN32_VMS      = ['win32-slave%02i' % x for x in [1,4] + range(6,12) + [20,21,26] + range(30,61)]
 WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(1,26)] + ['w32-ix-slave%02i' % x for x in range(1,43)]
 LINUX_VMS      = ['moz2-linux-slave%02i' % x for x in range(1,61)]
 LINUX_IXS      = ['mv-moz2-linux-ix-slave%02i' % x for x in range(1,24)] + ['linux-ix-slave%02i' % x for x in range(1,43)]
@@ -12,7 +12,7 @@ SLAVES = {
     'linux64':     LINUX64_VMS + LINUX64_IXS,
     'win32':       WIN32_VMS + WIN32_IXS,
     'macosx':      MAC_MINIS + XSERVES,
-    'macosx64': MAC_SNOW_MINIS,
+    'macosx64':    MAC_SNOW_MINIS,
 }
 
 TRY_LINUX      = ['try-linux-slave%02i' % x for x in range (1,26)]
@@ -48,7 +48,6 @@ GLOBAL_VARS = {
     # and sendchange retry count before give up
     'talos_masters': [
         ('staging-master.build.mozilla.org:9009', True, 1),
-        ('talos-staging-master02.build.mozilla.org:9012', True, 1),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
@@ -79,6 +78,10 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
+    'mozilla-aurora': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
     'mozilla-1.9.2': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
@@ -87,12 +90,12 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
-    'tryserver': {
+    'try': {
         'download_base_url': 'http://staging-stage.build.mozilla.org/pub/mozilla.org/firefox',
         'mobile_download_base_url': 'http://staging-stage.build.mozilla.org/pub/mozilla.org/mobile',
         'enable_mail_notifier': False, # Set to True when testing
         'email_override': [], # Set to your address when testing
-        'package_url': 'http://staging-stage.build.mozilla.org/pub/mozilla.org/firefox/tryserver-builds',
+        'package_url': 'http://staging-stage.build.mozilla.org/pub/mozilla.org/firefox/try-builds',
         'talos_masters': [],
         'platforms': {
             'win32': {

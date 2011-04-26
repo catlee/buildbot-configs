@@ -60,7 +60,9 @@ GLOBAL_VARS = {
     'platforms': {
         'linux': {},
         'linuxqt': {},
+        'linux-rpm': {},
         'linux64': {},
+        'linux64-rpm': {},
         'win32': {},
         'macosx64': {},
         'linux-debug': {},
@@ -73,6 +75,7 @@ GLOBAL_VARS = {
         'maemo5-gtk': {},
         'maemo5-qt': {},
         'android-r7': {},
+        'android-debug': {},
         'linux': {},
         'win32': {},
         'macosx': {},
@@ -210,6 +213,30 @@ MOBILE_PLATFORM_VARS = {
         'talos_masters': GLOBAL_VARS['talos_masters'],
         'unittest_masters': GLOBAL_VARS['unittest_masters'],
     },
+    'android-debug': {
+        'base_name': 'Android Debug %(branch)s',
+        'mozconfig': 'mobile/android/mobile-browser/debug',
+        'profiled_build': False,
+        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+        'build_space': 6,
+        'generate_symbols': False,
+        'slaves': SLAVES['linux'],
+        'platform_objdir': MOBILE_OBJDIR,
+        'enable_ccache': True,
+        'env': {
+            'JAVA_HOME': '/tools/jdk6',
+            'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
+            'MOZ_OBJDIR': MOBILE_OBJDIR,
+            'CCACHE_DIR': '/builds/slave/ccache',
+            'CCACHE_UMASK': '002',
+            'LC_ALL': 'C',
+        },
+        'multi_locale': False,
+        'enable_mobile_nightly': False,
+        'enable_mobile_dep': False,
+        'package_globlist': ['embedding/android/*.apk'],
+        'unittest_masters': GLOBAL_VARS['unittest_masters'],
+    },
     'linux': {
         'base_name': 'Linux Mobile Desktop %(branch)s',
         'mozconfig': 'mobile/linux-i686/mobile-browser/nightly',
@@ -234,6 +261,7 @@ MOBILE_PLATFORM_VARS = {
             'LC_ALL': 'C',
         },
         'package_globlist': ['-r', 'dist/*.tar.bz2', 'dist/*.zip'],
+        'unittest_masters': GLOBAL_VARS['unittest_masters'],
     },
     'macosx': {
         'base_name': 'OS X 10.5.2 Mobile Desktop %(branch)s',
@@ -358,6 +386,52 @@ PLATFORM_VARS = {
             'enable_checktests': True,
             'talos_masters': None #GLOBAL_VARS['talos_masters'],
         },
+        'linux-rpm': {
+            'base_name': 'Linux RPM %(branch)s',
+            'mozconfig': 'linux/%(branch)s/nightly-rpm',
+            'enable_nightly': False, # We will explicitly enable for m-c
+            'enable_dep': False,
+            'enable_xulrunner': False,
+            'stage_platform': 'linux-rpm',
+            'mc_patches': [],
+            'create_snippet': False,
+            'create_partial': False,
+            'test_pretty_names': False,
+            'profiled_build': False,
+            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+            'build_space': 6,
+            'upload_symbols': False,
+            'download_symbols': False,
+            'packageTests': False, #Done in rpm spec file
+            'slaves': SLAVES['linux'],
+            'platform_objdir': OBJDIR,
+            'update_platform': 'Linux_x86-gcc3',
+            'enable_ccache': True,
+            'enable_shared_checkouts': True,
+            'env': {
+                'DISPLAY': ':2',
+                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'MOZ_OBJDIR': OBJDIR,
+                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
+                'SYMBOL_SERVER_USER': 'ffxbld',
+                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
+                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
+                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
+                'MOZ_SYMBOLS_EXTRA_BUILDID': 'linux-rpm',
+                'TINDERBOX_OUTPUT': '1',
+                'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'CCACHE_DIR': '/builds/ccache',
+                'CCACHE_COMPRESS': '1',
+                'CCACHE_UMASK': '002',
+                'LC_ALL': 'C',
+                'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
+            },
+            'enable_opt_unittests': False,
+            'enable_checktests': True,
+            'talos_masters': [],
+            'unittest_masters': [],
+            'test_pretty_names': False,
+        },
         'linux64': {
             'base_name': 'Linux x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly',
@@ -393,6 +467,51 @@ PLATFORM_VARS = {
             'talos_masters': GLOBAL_VARS['talos_masters'],
             'test_pretty_names': True,
             'l10n_check_test': True,
+        },
+        'linux64-rpm': {
+            'base_name': 'Linux RPM x86-64 %(branch)s',
+            'mozconfig': 'linux64/%(branch)s/nightly-rpm',
+            'enable_nightly': False, # We will explicitly enable for m-c
+            'enable_dep': False,
+            'enable_xulrunner': False,
+            'stage_platform': 'linux64-rpm',
+            'mc_patches': [],
+            'create_snippet': False,
+            'create_partial': False,
+            'test_pretty_names': False,
+            'profiled_build': False,
+            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+            'build_space': 6,
+            'upload_symbols': False,
+            'download_symbols': False,
+            'packageTests': False, #Done in rpm spec file
+            'slaves': SLAVES['linux64'],
+            'platform_objdir': OBJDIR,
+            'update_platform': 'Linux_x86_64-gcc3',
+            'enable_shared_checkouts': True,
+            'env': {
+                'DISPLAY': ':2',
+                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'MOZ_OBJDIR': OBJDIR,
+                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
+                'SYMBOL_SERVER_USER': 'ffxbld',
+                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
+                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
+                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
+                'MOZ_SYMBOLS_EXTRA_BUILDID': 'linux64-rpm',
+                'TINDERBOX_OUTPUT': '1',
+                'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'CCACHE_DIR': '/builds/ccache',
+                'CCACHE_COMPRESS': '1',
+                'CCACHE_UMASK': '002',
+                'LC_ALL': 'C',
+                'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
+            },
+            'enable_opt_unittests': False,
+            'enable_checktests': True,
+            'talos_masters': [],
+            'unittest_masters': [],
+            'test_pretty_names': False,
         },
         'macosx': {
             'base_name': 'OS X 10.5.2 %(branch)s',
@@ -633,17 +752,25 @@ PROJECTS = {
     },
     'spidermonkey': {
         'platforms': {
-            'linux-debug':    ['nomethodjit', 'notracejit'],
-            'linux64-debug':  ['nomethodjit', 'notracejit'],
+            'linux':          ['warnaserr'],
+            'linux-debug':    ['nomethodjit', 'notracejit', 'warnaserrdebug'],
+            'linux64':        ['warnaserr'],
+            'linux64-debug':  ['nomethodjit', 'notracejit', 'warnaserrdebug'],
             'win32-debug':    ['nomethodjit', 'notracejit'],
-            'macosx64-debug': ['nomethodjit', 'notracejit', 'dtrace', 'shark'],
-            'macosx-debug':   ['nomethodjit', 'notracejit', 'dtrace', 'shark'],
+            'macosx64':       ['warnaserr'],
+            'macosx64-debug': ['nomethodjit', 'notracejit', 'dtrace', 'shark', 'warnaserrdebug'],
+            'macosx':         ['warnaserr'],
+            'macosx-debug':   ['nomethodjit', 'notracejit', 'dtrace', 'shark', 'warnaserrdebug'],
         },
         'env': {
+            'linux': PLATFORM_VARS['linux']['env'],
             'linux-debug': PLATFORM_VARS['linux-debug']['env'],
+            'linux64': PLATFORM_VARS['linux64']['env'],
             'linux64-debug': PLATFORM_VARS['linux64-debug']['env'],
             'win32-debug': PLATFORM_VARS['win32-debug']['env'],
+            'macosx64': PLATFORM_VARS['macosx64']['env'],
             'macosx64-debug': PLATFORM_VARS['macosx64-debug']['env'],
+            'macosx': PLATFORM_VARS['macosx']['env'],
             'macosx-debug': PLATFORM_VARS['macosx-debug']['env'],
         },
         'hgurl': 'http://hg.mozilla.org',
@@ -668,6 +795,8 @@ BRANCHES = {
     },
     'mozilla-beta': {
     },
+    'mozilla-aurora': {
+    },
     'mozilla-2.0': {
         'mobile_platforms': {},
     },
@@ -691,7 +820,7 @@ BRANCHES = {
         },
         'mobile_platforms': {},
     },
-    'tryserver': {
+    'try': {
         'mobile_platforms': {
             'maemo5-gtk': {},
             'maemo5-qt': {},
@@ -824,8 +953,11 @@ BRANCHES['mozilla-central']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2
 BRANCHES['mozilla-central']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-central'
 BRANCHES['mozilla-central']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-central'
 BRANCHES['mozilla-central']['mobile_platforms']['android-r7']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-central'
+BRANCHES['mozilla-central']['mobile_platforms']['android-debug']['enable_mobile_dep'] = True
 BRANCHES['mozilla-central']['enable_blocklist_update'] = True
 BRANCHES['mozilla-central']['blocklist_update_on_closed_tree'] = False
+BRANCHES['mozilla-central']['platforms']['linux-rpm']['enable_nightly'] = True
+BRANCHES['mozilla-central']['platforms']['linux64-rpm']['enable_nightly'] = True
 
 ######## shadow-central
 # custom settings for shadow-central repo
@@ -861,7 +993,7 @@ BRANCHES['shadow-central']['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BU
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['repo_path'] = 'mozilla-beta'
-BRANCHES['mozilla-beta']['l10n_repo_path'] = 'l10n-central'
+BRANCHES['mozilla-beta']['l10n_repo_path'] = 'releases/l10n/mozilla-beta'
 BRANCHES['mozilla-beta']['enable_weekly_bundle'] = True
 BRANCHES['mozilla-beta']['start_hour'] = [3]
 BRANCHES['mozilla-beta']['start_minute'] = [2]
@@ -876,13 +1008,13 @@ BRANCHES['mozilla-beta']['unittest_build_space'] = 6
 # And code coverage
 BRANCHES['mozilla-beta']['enable_codecoverage'] = True
 # L10n configuration
-BRANCHES['mozilla-beta']['enable_l10n'] = True
+BRANCHES['mozilla-beta']['enable_l10n'] = False
 BRANCHES['mozilla-beta']['enable_l10n_onchange'] = True
-BRANCHES['mozilla-beta']['l10nNightlyUpdate'] = True
+BRANCHES['mozilla-beta']['l10nNightlyUpdate'] = False
 BRANCHES['mozilla-beta']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                                  'macosx64']
 BRANCHES['mozilla-beta']['l10nDatedDirs'] = True
-BRANCHES['mozilla-beta']['l10n_tree'] = 'fx37x'
+BRANCHES['mozilla-beta']['l10n_tree'] = 'fxbeta'
 #make sure it has an ending slash
 BRANCHES['mozilla-beta']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/firefox/nightly/latest-mozilla-beta-l10n/'
@@ -891,6 +1023,9 @@ BRANCHES['mozilla-beta']['enUS_binaryURL'] = \
 BRANCHES['mozilla-beta']['allLocalesFile'] = 'browser/locales/all-locales'
 BRANCHES['mozilla-beta']['enable_multi_locale'] = True
 BRANCHES['mozilla-beta']['upload_mobile_symbols'] = True
+# temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
+BRANCHES['mozilla-beta']['enable_nightly'] = False
+BRANCHES['mozilla-beta']['enable_mobile_nightly'] = False
 # If True, a complete update snippet for this branch will be generated and
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
@@ -905,8 +1040,72 @@ BRANCHES['mozilla-beta']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fi
 BRANCHES['mozilla-beta']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-beta'
 BRANCHES['mozilla-beta']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-beta'
 BRANCHES['mozilla-beta']['mobile_platforms']['android-r7']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
+BRANCHES['mozilla-beta']['mobile_platforms']['maemo5-gtk']['mozharness_config'] = 'multi_locale/mozilla-beta_maemo5_gtk.json'
+BRANCHES['mozilla-beta']['mobile_platforms']['maemo5-qt']['mozharness_config'] = 'multi_locale/mozilla-beta_maemo5_qt.json'
+BRANCHES['mozilla-beta']['mobile_platforms']['android-r7']['mozharness_config'] = 'multi_locale/mozilla-beta_android.json'
+BRANCHES['mozilla-beta']['mobile_platforms']['android-debug']['enable_mobile_dep'] = True
 BRANCHES['mozilla-beta']['enable_blocklist_update'] = True
 BRANCHES['mozilla-beta']['blocklist_update_on_closed_tree'] = False
+
+######## mozilla-aurora
+BRANCHES['mozilla-aurora']['repo_path'] = 'mozilla-aurora'
+BRANCHES['mozilla-aurora']['l10n_repo_path'] = 'releases/l10n/mozilla-aurora'
+BRANCHES['mozilla-aurora']['enable_weekly_bundle'] = True
+BRANCHES['mozilla-aurora']['start_hour'] = [4]
+BRANCHES['mozilla-aurora']['start_minute'] = [20]
+# Enable XULRunner / SDK builds
+BRANCHES['mozilla-aurora']['enable_xulrunner'] = True
+# Enable unit tests
+BRANCHES['mozilla-aurora']['geriatric_masters'] = [
+    ('10.250.48.137:9989', False),
+]
+BRANCHES['mozilla-aurora']['enable_mac_a11y'] = True
+BRANCHES['mozilla-aurora']['unittest_build_space'] = 6
+# And code coverage
+BRANCHES['mozilla-aurora']['enable_codecoverage'] = True
+# L10n configuration
+BRANCHES['mozilla-aurora']['enable_l10n'] = True
+BRANCHES['mozilla-aurora']['enable_l10n_onchange'] = True
+BRANCHES['mozilla-aurora']['l10nNightlyUpdate'] = True
+BRANCHES['mozilla-aurora']['l10n_platforms'] = ['linux', 'linux64', 'win32',
+                                                 'macosx64']
+BRANCHES['mozilla-aurora']['l10nDatedDirs'] = True
+BRANCHES['mozilla-aurora']['l10n_tree'] = 'fxaurora'
+#make sure it has an ending slash
+BRANCHES['mozilla-aurora']['l10nUploadPath'] = \
+    '/home/ftp/pub/mozilla.org/firefox/nightly/latest-mozilla-aurora-l10n/'
+BRANCHES['mozilla-aurora']['enUS_binaryURL'] = \
+    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-aurora'
+BRANCHES['mozilla-aurora']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-aurora']['enable_multi_locale'] = True
+BRANCHES['mozilla-aurora']['upload_mobile_symbols'] = True
+# If True, a complete update snippet for this branch will be generated and
+# uploaded to. Any platforms with 'debug' in them will not have snippets
+# generated.
+BRANCHES['mozilla-aurora']['create_snippet'] = True
+BRANCHES['mozilla-aurora']['create_mobile_snippet'] = True
+BRANCHES['mozilla-aurora']['create_partial'] = True
+BRANCHES['mozilla-aurora']['create_partial_l10n'] = True
+BRANCHES['mozilla-aurora']['aus2_user'] = 'ffxbld'
+BRANCHES['mozilla-aurora']['aus2_ssh_key'] = 'ffxbld_dsa'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
+BRANCHES['mozilla-aurora']['mobile_platforms']['android-r7']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-aurora'
+BRANCHES['mozilla-aurora']['mobile_platforms']['maemo5-gtk']['mozconfig'] = 'mobile/maemo5-gtk/mozilla-aurora/nightly'
+BRANCHES['mozilla-aurora']['mobile_platforms']['maemo5-qt']['mozconfig'] = 'mobile/maemo5-qt/mozilla-aurora/nightly'
+BRANCHES['mozilla-aurora']['mobile_platforms']['android-r7']['mozconfig'] = 'mobile/android/mozilla-aurora/nightly'
+BRANCHES['mozilla-aurora']['mobile_platforms']['android-debug']['mozconfig'] = 'mobile/android/mozilla-aurora/debug'
+BRANCHES['mozilla-aurora']['mobile_platforms']['linux']['mozconfig'] = 'mobile/linux-i686/mozilla-aurora/nightly'
+BRANCHES['mozilla-aurora']['mobile_platforms']['macosx']['mozconfig'] = 'mobile/macosx-i686/mozilla-aurora/nightly'
+BRANCHES['mozilla-aurora']['mobile_platforms']['win32']['mozconfig'] = 'mobile/win32-i686/mozilla-aurora/nightly'
+BRANCHES['mozilla-aurora']['mobile_platforms']['maemo5-gtk']['mozharness_config'] = 'multi_locale/mozilla-aurora_maemo5_gtk.json'
+BRANCHES['mozilla-aurora']['mobile_platforms']['maemo5-qt']['mozharness_config'] = 'multi_locale/mozilla-aurora_maemo5_qt.json'
+BRANCHES['mozilla-aurora']['mobile_platforms']['android-r7']['mozharness_config'] = 'multi_locale/mozilla-aurora_android.json'
+BRANCHES['mozilla-aurora']['mobile_platforms']['android-debug']['enable_mobile_dep'] = True
+BRANCHES['mozilla-aurora']['enable_blocklist_update'] = True
+BRANCHES['mozilla-aurora']['blocklist_update_on_closed_tree'] = False
 
 ######## mozilla-2.0
 BRANCHES['mozilla-2.0']['repo_path'] = 'releases/mozilla-2.0'
@@ -1012,12 +1211,14 @@ BRANCHES['mozilla-2.1']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incomin
 BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-gtk']['mozconfig'] = 'mobile/maemo5-gtk/mobile-2.0/nightly'
 BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-qt']['mozconfig'] = 'mobile/maemo5-qt/mobile-2.0/nightly'
 BRANCHES['mozilla-2.1']['mobile_platforms']['android-r7']['mozconfig'] = 'mobile/android/mobile-2.0/nightly'
+BRANCHES['mozilla-2.1']['mobile_platforms']['android-debug']['mozconfig'] = 'mobile/android/mobile-2.0/debug'
 BRANCHES['mozilla-2.1']['mobile_platforms']['linux']['mozconfig'] = 'mobile/linux-i686/mobile-2.0/nightly'
 BRANCHES['mozilla-2.1']['mobile_platforms']['macosx']['mozconfig'] = 'mobile/macosx-i686/mobile-2.0/nightly'
 BRANCHES['mozilla-2.1']['mobile_platforms']['win32']['mozconfig'] = 'mobile/win32-i686/mobile-2.0/nightly'
 BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-gtk']['mozharness_config'] = 'multi_locale/mobile-2.0_maemo5_gtk.json'
 BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-qt']['mozharness_config'] = 'multi_locale/mobile-2.0_maemo5_qt.json'
 BRANCHES['mozilla-2.1']['mobile_platforms']['android-r7']['mozharness_config'] = 'multi_locale/mobile-2.0_android.json'
+BRANCHES['mozilla-2.1']['mobile_platforms']['android-debug']['enable_mobile_dep'] = True
 
 ######## mozilla-1.9.1
 BRANCHES['mozilla-1.9.1']['repo_path'] = 'releases/mozilla-1.9.1'
@@ -1173,65 +1374,67 @@ BRANCHES['mozilla-1.9.2']['platforms']['linux64']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['platforms']['macosx']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['platforms']['win32']['l10n_check_test'] = False
 
-######## tryserver
+######## try
 # Try-specific configs
-BRANCHES['tryserver']['stage_username'] = 'trybld'
-BRANCHES['tryserver']['stage_username_mobile'] = 'trybld'
-BRANCHES['tryserver']['stage_ssh_key'] = 'trybld_dsa'
-BRANCHES['tryserver']['stage_ssh_mobile_key'] = 'trybld_dsa'
-BRANCHES['tryserver']['stage_base_path'] = '/home/ftp/pub/firefox/tryserver-builds'
-BRANCHES['tryserver']['stage_base_path_mobile'] = '/home/ftp/pub/firefox/tryserver-builds'
-BRANCHES['tryserver']['enable_merging'] = False
-BRANCHES['tryserver']['enable_try'] = True
-BRANCHES['tryserver']['package_dir'] ='%(who)s-%(got_revision)s'
+BRANCHES['try']['stage_username'] = 'trybld'
+BRANCHES['try']['stage_username_mobile'] = 'trybld'
+BRANCHES['try']['stage_ssh_key'] = 'trybld_dsa'
+BRANCHES['try']['stage_ssh_mobile_key'] = 'trybld_dsa'
+BRANCHES['try']['stage_base_path'] = '/home/ftp/pub/firefox/try-builds'
+BRANCHES['try']['stage_base_path_mobile'] = '/home/ftp/pub/firefox/try-builds'
+BRANCHES['try']['enable_merging'] = False
+BRANCHES['try']['enable_try'] = True
+BRANCHES['try']['package_dir'] ='%(who)s-%(got_revision)s'
 # This is a path, relative to HGURL, where the repository is located
 # HGURL  repo_path should be a valid repository
-BRANCHES['tryserver']['repo_path'] = 'try'
-BRANCHES['tryserver']['start_hour'] = [3]
-BRANCHES['tryserver']['start_minute'] = [2]
+BRANCHES['try']['repo_path'] = 'try'
+BRANCHES['try']['start_hour'] = [3]
+BRANCHES['try']['start_minute'] = [2]
 # Disable Nightly builds
-BRANCHES['tryserver']['enable_nightly'] = False
-BRANCHES['tryserver']['enable_mobile_nightly'] = False
+BRANCHES['try']['enable_nightly'] = False
+BRANCHES['try']['enable_mobile_nightly'] = False
 # Disable XULRunner / SDK builds
-BRANCHES['tryserver']['enable_xulrunner'] = False
-BRANCHES['tryserver']['enable_mac_a11y'] = True
+BRANCHES['try']['enable_xulrunner'] = False
+BRANCHES['try']['enable_mac_a11y'] = True
 # only do unittests locally until they are switched over to talos-r3
-BRANCHES['tryserver']['enable_l10n'] = False
-BRANCHES['tryserver']['enable_l10n_onchange'] = False
-BRANCHES['tryserver']['l10nNightlyUpdate'] = False
-BRANCHES['tryserver']['l10nDatedDirs'] = False
-BRANCHES['tryserver']['enable_codecoverage'] = False
-BRANCHES['tryserver']['enable_shark'] = False
-BRANCHES['tryserver']['create_snippet'] = False
+BRANCHES['try']['enable_l10n'] = False
+BRANCHES['try']['enable_l10n_onchange'] = False
+BRANCHES['try']['l10nNightlyUpdate'] = False
+BRANCHES['try']['l10nDatedDirs'] = False
+BRANCHES['try']['enable_codecoverage'] = False
+BRANCHES['try']['enable_shark'] = False
+BRANCHES['try']['create_snippet'] = False
 # need this or the master.cfg will bail
-BRANCHES['tryserver']['aus2_base_upload_dir'] = 'fake'
-BRANCHES['tryserver']['platforms']['linux']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['tryserver']['platforms']['linux64']['slaves'] = TRY_SLAVES['linux64']
-BRANCHES['tryserver']['platforms']['linuxqt']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['tryserver']['platforms']['win32']['slaves'] = TRY_SLAVES['win32']
-BRANCHES['tryserver']['platforms']['macosx64']['slaves'] = TRY_SLAVES['macosx64']
-BRANCHES['tryserver']['platforms']['linux-debug']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['tryserver']['platforms']['linux64-debug']['slaves'] = TRY_SLAVES['linux64']
-BRANCHES['tryserver']['platforms']['win32-debug']['slaves'] = TRY_SLAVES['win32']
-BRANCHES['tryserver']['platforms']['macosx-debug']['slaves'] = TRY_SLAVES['macosx']
-BRANCHES['tryserver']['platforms']['macosx64-debug']['slaves'] = TRY_SLAVES['macosx64']
-BRANCHES['tryserver']['platforms']['linux']['upload_symbols'] = False
-BRANCHES['tryserver']['platforms']['linux64']['upload_symbols'] = False
-BRANCHES['tryserver']['platforms']['linuxqt']['upload_symbols'] = False
-BRANCHES['tryserver']['platforms']['macosx64']['upload_symbols'] = False
-BRANCHES['tryserver']['platforms']['win32']['upload_symbols'] = True
-BRANCHES['tryserver']['platforms']['win32']['env']['SYMBOL_SERVER_USER'] = 'trybld'
-BRANCHES['tryserver']['platforms']['win32']['env']['SYMBOL_SERVER_PATH'] = '/symbols/windows'
-BRANCHES['tryserver']['platforms']['win32']['env']['SYMBOL_SERVER_SSH_KEY'] = '/c/Documents and Settings/cltbld/.ssh/trybld_dsa'
-BRANCHES['tryserver']['mobile_platforms']['android-r7']['mozconfig'] = 'mobile-tryserver/android'
-BRANCHES['tryserver']['mobile_platforms']['maemo5-gtk']['mozconfig'] = 'mobile-tryserver/maemo5-gtk/'
-BRANCHES['tryserver']['mobile_platforms']['maemo5-qt']['mozconfig'] = 'mobile-tryserver/maemo5-qt'
-BRANCHES['tryserver']['mobile_platforms']['android-r7']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['tryserver']['mobile_platforms']['maemo5-gtk']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['tryserver']['mobile_platforms']['maemo5-qt']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['tryserver']['mobile_platforms']['android-r7']['upload_symbols'] = False
-BRANCHES['tryserver']['mobile_platforms']['maemo5-gtk']['upload_symbols'] = False
-BRANCHES['tryserver']['mobile_platforms']['maemo5-qt']['upload_symbols'] = False
+BRANCHES['try']['aus2_base_upload_dir'] = 'fake'
+BRANCHES['try']['platforms']['linux']['slaves'] = TRY_SLAVES['linux']
+BRANCHES['try']['platforms']['linux64']['slaves'] = TRY_SLAVES['linux64']
+BRANCHES['try']['platforms']['linux-rpm']['slaves'] = TRY_SLAVES['linux']
+BRANCHES['try']['platforms']['linux64-rpm']['slaves'] = TRY_SLAVES['linux64']
+BRANCHES['try']['platforms']['linuxqt']['slaves'] = TRY_SLAVES['linux']
+BRANCHES['try']['platforms']['win32']['slaves'] = TRY_SLAVES['win32']
+BRANCHES['try']['platforms']['macosx64']['slaves'] = TRY_SLAVES['macosx64']
+BRANCHES['try']['platforms']['linux-debug']['slaves'] = TRY_SLAVES['linux']
+BRANCHES['try']['platforms']['linux64-debug']['slaves'] = TRY_SLAVES['linux64']
+BRANCHES['try']['platforms']['win32-debug']['slaves'] = TRY_SLAVES['win32']
+BRANCHES['try']['platforms']['macosx-debug']['slaves'] = TRY_SLAVES['macosx']
+BRANCHES['try']['platforms']['macosx64-debug']['slaves'] = TRY_SLAVES['macosx64']
+BRANCHES['try']['platforms']['linux']['upload_symbols'] = False
+BRANCHES['try']['platforms']['linux64']['upload_symbols'] = False
+BRANCHES['try']['platforms']['linuxqt']['upload_symbols'] = False
+BRANCHES['try']['platforms']['macosx64']['upload_symbols'] = False
+BRANCHES['try']['platforms']['win32']['upload_symbols'] = True
+BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_USER'] = 'trybld'
+BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_PATH'] = '/symbols/windows'
+BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_SSH_KEY'] = '/c/Documents and Settings/cltbld/.ssh/trybld_dsa'
+BRANCHES['try']['mobile_platforms']['android-r7']['mozconfig'] = 'mobile-try/android'
+BRANCHES['try']['mobile_platforms']['maemo5-gtk']['mozconfig'] = 'mobile-try/maemo5-gtk/'
+BRANCHES['try']['mobile_platforms']['maemo5-qt']['mozconfig'] = 'mobile-try/maemo5-qt'
+BRANCHES['try']['mobile_platforms']['android-r7']['slaves'] = TRY_SLAVES['linux']
+BRANCHES['try']['mobile_platforms']['maemo5-gtk']['slaves'] = TRY_SLAVES['linux']
+BRANCHES['try']['mobile_platforms']['maemo5-qt']['slaves'] = TRY_SLAVES['linux']
+BRANCHES['try']['mobile_platforms']['android-r7']['upload_symbols'] = False
+BRANCHES['try']['mobile_platforms']['maemo5-gtk']['upload_symbols'] = False
+BRANCHES['try']['mobile_platforms']['maemo5-qt']['upload_symbols'] = False
 
 ######## generic branch configs
 for branch in ACTIVE_PROJECT_BRANCHES:
@@ -1293,8 +1496,10 @@ for branch in ACTIVE_PROJECT_BRANCHES:
             BRANCHES[branch]['platforms'][platform]['mozconfig'] = platform + '/' + branchConfig.get('mozconfig_dir', 'generic') + '/nightly'
 
 # Bug 578880, remove the following block after gcc-4.5 switch
-branches = ['mozilla-2.0', 'mozilla-central', 'shadow-central', 'tryserver']
+branches = BRANCHES.keys()
 branches.extend(ACTIVE_PROJECT_BRANCHES)
+for branch in ('mozilla-1.9.1', 'mozilla-1.9.2', 'mozilla-2.1'):
+    branches.remove(branch)
 for branch in branches:
     BRANCHES[branch]['platforms']['linux']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib'
     BRANCHES[branch]['platforms']['linuxqt']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib'
