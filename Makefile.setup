@@ -5,7 +5,7 @@ PIP_PACKAGES_FILE ?= master-pip.txt
 HG ?= hg
 HG_HOST = http://hg.mozilla.org
 HG_DIR = build
-MASTER_NAME = $(error MASTER_NAME must be defined (see setup-master.py -8 -l for a list))
+MASTER_NAME = $(error MASTER_NAME must be defined (see setup-master.py -l for a list))
 DATABASE = tm-b01-master01.mozilla.org/buildbot
 MYSQL_CONFIG = $(HOME)/.$(MASTER_NAME)_update_from_files.conf
 CRONTAB = /etc/cron.d/$(MASTER_NAME)
@@ -18,6 +18,12 @@ BUILDBOT_BRANCH = production-0.8
 BUILDBOTCUSTOM_BRANCH = production-0.8
 BUILDBOTCONFIGS_BRANCH = production
 INSTALL_BUILDBOT_SLAVE=
+
+ifdef MASTERS_JSON
+SETUP_MASTER=setup-master.py -j $(MASTERS_JSON)
+else
+SETUP_MASTER=setup-master.py
+endif
 
 all: virtualenv deps install-buildbot master master-makefile other-files done
 
@@ -51,7 +57,7 @@ endif
 	echo "$(BASEDIR)/tools/lib/python" > $(SITE_PACKAGES)/build-tools-lib.pth
 
 master:
-	(cd $(BASEDIR)/buildbot-configs; $(VIRTUALENV_PYTHON) setup-master.py -8 -b $(BUILDBOT) $(BASEDIR)/master $(MASTER_NAME))
+	(cd $(BASEDIR)/buildbot-configs; $(VIRTUALENV_PYTHON) $(SETUP_MASTER) -b $(BUILDBOT) $(BASEDIR)/master $(MASTER_NAME))
 
 master-makefile:
 	cp $(BASEDIR)/buildbot-configs/Makefile.master $(BASEDIR)/Makefile
