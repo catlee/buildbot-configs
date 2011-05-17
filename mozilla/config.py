@@ -1532,6 +1532,25 @@ for branch in branches:
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
         }
 
+# Manage mozconfigs in source tree
+# This can go away once all branches have moved over
+for branch in ('mozilla-central',):
+    BRANCHES[branch]['mozconfigsInTree'] = True
+    for platform in PLATFORM_VARS:
+        if '-' in platform:
+            real_platform, type_ = platform.split("-", 1)
+        elif platform.endswith('qt'):
+            real_platform = platform[:-2]
+            type_ = 'qt'
+        else:
+            real_platform = platform
+            type_ = 'nightly'
+
+        if not platform in BRANCHES[branch]['platforms']:
+            continue
+
+        BRANCHES[branch]['platforms'][platform]['mozconfig'] = 'build/mozconfigs/%s/%s' % (real_platform, type_)
+
 if __name__ == "__main__":
     import sys, pprint
     args = sys.argv[1:]
