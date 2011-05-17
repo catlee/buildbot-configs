@@ -44,14 +44,14 @@ deps:
 # This is generally true when using virtualenvs.
 install-buildbot: SITE_PACKAGES = $(BASEDIR)/lib/$(shell ls $(BASEDIR)/lib/)/site-packages
 install-buildbot:
-	$(HG) clone -b $(BUILDBOT_BRANCH) $(HG_HOST)/$(HG_DIR)/buildbot $(BASEDIR)/buildbot
+	test -d $(BASEDIR)/buildbot || $(HG) clone -b $(BUILDBOT_BRANCH) $(HG_HOST)/$(HG_DIR)/buildbot $(BASEDIR)/buildbot
 	(cd $(BASEDIR)/buildbot/master; $(VIRTUALENV_PYTHON) setup.py develop install)
 ifdef INSTALL_BUILDBOT_SLAVE
 	(cd $(BASEDIR)/buildbot/slave; $(VIRTUALENV_PYTHON) setup.py develop install)
 endif
-	$(HG) clone -b $(BUILDBOTCUSTOM_BRANCH) $(HG_HOST)/$(HG_DIR)/buildbotcustom $(BASEDIR)/buildbotcustom
-	$(HG) clone -b $(BUILDBOTCONFIGS_BRANCH) $(HG_HOST)/$(HG_DIR)/buildbot-configs $(BASEDIR)/buildbot-configs
-	$(HG) clone $(HG_HOST)/$(HG_DIR)/tools $(BASEDIR)/tools
+	test -d $(BASEDIR)/buildbotcustom || $(HG) clone -b $(BUILDBOTCUSTOM_BRANCH) $(HG_HOST)/$(HG_DIR)/buildbotcustom $(BASEDIR)/buildbotcustom
+	test -d $(BASEDIR)/buildbot-configs || $(HG) clone -b $(BUILDBOTCONFIGS_BRANCH) $(HG_HOST)/$(HG_DIR)/buildbot-configs $(BASEDIR)/buildbot-configs
+	test -d $(BASEDIR)/tools || $(HG) clone $(HG_HOST)/$(HG_DIR)/tools $(BASEDIR)/tools
 	# Get buildbotcustom and the build/tools library into PYTHONPATH
 	ln -s $(BASEDIR)/buildbotcustom $(SITE_PACKAGES)/buildbotcustom
 	echo "$(BASEDIR)/tools/lib/python" > $(SITE_PACKAGES)/build-tools-lib.pth
