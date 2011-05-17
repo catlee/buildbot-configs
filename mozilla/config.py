@@ -1535,7 +1535,7 @@ for branch in branches:
 # Manage mozconfigs in source tree
 # This can go away once all branches have moved over
 for branch in ('mozilla-central',):
-    BRANCHES[branch]['mozconfigsInTree'] = True
+    BRANCHES[branch]['mozconfigs_in_tree'] = True
     for platform in PLATFORM_VARS:
         if '-' in platform:
             real_platform, type_ = platform.split("-", 1)
