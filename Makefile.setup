@@ -53,7 +53,7 @@ endif
 	test -d $(BASEDIR)/buildbot-configs || $(HG) clone -b $(BUILDBOTCONFIGS_BRANCH) $(HG_HOST)/$(HG_DIR)/buildbot-configs $(BASEDIR)/buildbot-configs
 	test -d $(BASEDIR)/tools || $(HG) clone $(HG_HOST)/$(HG_DIR)/tools $(BASEDIR)/tools
 	# Get buildbotcustom and the build/tools library into PYTHONPATH
-	ln -s $(BASEDIR)/buildbotcustom $(SITE_PACKAGES)/buildbotcustom
+	ln -sf $(BASEDIR)/buildbotcustom $(SITE_PACKAGES)/buildbotcustom
 	echo "$(BASEDIR)/tools/lib/python" > $(SITE_PACKAGES)/build-tools-lib.pth
 
 master:
