@@ -318,6 +318,7 @@ PLATFORM_VARS = {
         'linux': {
             'base_name': 'Linux %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly',
+            'src_mozconfig': 'build/mozconfigs/linux32/nightly',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -354,6 +355,7 @@ PLATFORM_VARS = {
         'linuxqt': {
             'base_name': 'Linux QT %(branch)s',
             'mozconfig': 'linux/%(branch)s/qt',
+            'src_mozconfig': 'build/mozconfigs/linux32/qt',
             'xr_mozconfig': 'linux/%(branch)s/xulrunner-qt',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -389,6 +391,7 @@ PLATFORM_VARS = {
         'linux-rpm': {
             'base_name': 'Linux RPM %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly-rpm',
+            'src_mozconfig': 'build/mozconfigs/linux32/rpm',
             'enable_nightly': False, # We will explicitly enable for m-c
             'enable_dep': False,
             'enable_xulrunner': False,
@@ -435,6 +438,7 @@ PLATFORM_VARS = {
         'linux64': {
             'base_name': 'Linux x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly',
+            'src_mozconfig': 'build/mozconfigs/linux64/nightly',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -471,6 +475,7 @@ PLATFORM_VARS = {
         'linux64-rpm': {
             'base_name': 'Linux RPM x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly-rpm',
+            'src_mozconfig': 'build/mozconfigs/linux64/rpm',
             'enable_nightly': False, # We will explicitly enable for m-c
             'enable_dep': False,
             'enable_xulrunner': False,
@@ -516,6 +521,7 @@ PLATFORM_VARS = {
         'macosx': {
             'base_name': 'OS X 10.5.2 %(branch)s',
             'mozconfig': 'macosx/%(branch)s/nightly',
+            'src_mozconfig': 'build/mozconfigs/macosx-universal/nightly', # TODO: same as macosx64?
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 10,
@@ -547,6 +553,7 @@ PLATFORM_VARS = {
         'macosx64': {
             'base_name': 'OS X 10.6.2 %(branch)s',
             'mozconfig': 'macosx64/%(branch)s/nightly',
+            'src_mozconfig': 'build/mozconfigs/macosx-universal/nightly',
             'packageTests': True,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -580,6 +587,7 @@ PLATFORM_VARS = {
         'win32': {
             'base_name': 'WINNT 5.2 %(branch)s',
             'mozconfig': 'win32/%(branch)s/nightly',
+            'src_mozconfig': 'build/mozconfigs/win32/nightly',
             'profiled_build': True,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 12,
@@ -615,6 +623,7 @@ PLATFORM_VARS = {
         'linux-debug': {
             'base_name': 'Linux %(branch)s leak test',
             'mozconfig': 'linux/%(branch)s/debug',
+            'src_mozconfig': 'build/mozconfigs/linux32/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
@@ -643,6 +652,7 @@ PLATFORM_VARS = {
         'linux64-debug': {
             'base_name': 'Linux x86-64 %(branch)s leak test',
             'mozconfig': 'linux64/%(branch)s/debug',
+            'src_mozconfig': 'build/mozconfigs/linux64/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': False,
@@ -671,6 +681,7 @@ PLATFORM_VARS = {
         'macosx-debug': {
             'base_name': 'OS X 10.5.2 %(branch)s leak test',
             'mozconfig': 'macosx/%(branch)s/debug',
+            'src_mozconfig': 'build/mozconfigs/macosx32/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
@@ -693,6 +704,7 @@ PLATFORM_VARS = {
         'macosx64-debug': {
             'base_name': 'OS X 10.6.2 %(branch)s leak test',
             'mozconfig': 'macosx64/%(branch)s/debug',
+            'src_mozconfig': 'build/mozconfigs/macosx64/debug',
             'packageTests': True,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -715,6 +727,7 @@ PLATFORM_VARS = {
         'win32-debug': {
             'base_name': 'WINNT 5.2 %(branch)s leak test',
             'mozconfig': 'win32/%(branch)s/debug',
+            'src_mozconfig': 'build/mozconfigs/win32/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
@@ -1531,25 +1544,6 @@ for branch in branches:
         BRANCHES[branch]['platforms']['linux64-debug']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
         }
-
-# Manage mozconfigs in source tree
-# This can go away once all branches have moved over
-for branch in ('mozilla-central',):
-    BRANCHES[branch]['mozconfigs_in_tree'] = True
-    for platform in PLATFORM_VARS:
-        if '-' in platform:
-            real_platform, type_ = platform.split("-", 1)
-        elif platform.endswith('qt'):
-            real_platform = platform[:-2]
-            type_ = 'qt'
-        else:
-            real_platform = platform
-            type_ = 'nightly'
-
-        if not platform in BRANCHES[branch]['platforms']:
-            continue
-
-        BRANCHES[branch]['platforms'][platform]['mozconfig'] = 'build/mozconfigs/%s/%s' % (real_platform, type_)
 
 if __name__ == "__main__":
     import sys, pprint
