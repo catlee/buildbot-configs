@@ -75,10 +75,17 @@ def load_masters_json(masters_json):
         if m['role'] in ('scheduler',):
             continue
 
-        # TODO: staging/production/preproduction
+        if m['environment'] == 'production':
+            environment_config = 'production_config.py'
+        elif m['environment'] == 'staging':
+            environment_config = 'staging_config.py'
+        elif m['environment'] == 'preproduction':
+            environment_config = 'preproduction_config.py'
         c = MasterConfig(name=m['name'],
                 globs=[
-                    'config.py', 'production_config.py', 'master_common.py',
+                    'config.py',
+                    environment_config,
+                    'master_common.py',
                     'project_branches.py',
                     ],
                 renames=[
@@ -86,7 +93,7 @@ def load_masters_json(masters_json):
                     ('passwords.py.template', 'passwords.py'),
                     ],
                 local_links=[
-                    ('production_config.py', 'localconfig.py'),
+                    (environment_config, 'localconfig.py'),
                     ],
                 extras=[
                     ('master_config.json', json.dumps(m, indent=2)),
@@ -99,20 +106,20 @@ def load_masters_json(masters_json):
             c.globs.append('release_templates')
             c.globs.append('release-firefox*.py')
             c.globs.append('builder_master.cfg')
-            c.globs.append('production_build_localconfig.py')
+            c.globs.append('build_localconfig.py')
             c.local_links.append(('builder_master.cfg', 'master.cfg'))
-            c.local_links.append(('production_build_localconfig.py', 'master_localconfig.py'))
+            c.local_links.append(('build_localconfig.py', 'master_localconfig.py'))
         elif m['role'] == 'try':
             c.config_dir = 'mozilla'
             c.local_links.append(('builder_master.cfg', 'master.cfg'))
-            c.local_links.append(('production_try_localconfig.py', 'master_localconfig.py'))
+            c.local_links.append(('try_localconfig.py', 'master_localconfig.py'))
             c.globs.append('builder_master.cfg')
-            c.globs.append('production_try_localconfig.py')
+            c.globs.append('try_localconfig.py')
         elif m['role'] == 'tests':
             c.config_dir = 'mozilla-tests'
             c.local_links.append(('tests_master.cfg', 'master.cfg'))
-            c.local_links.append(('production_tests_localconfig.py', 'master_localconfig.py'))
-            c.globs.append('production_tests_localconfig.py')
+            c.local_links.append(('tests_localconfig.py', 'master_localconfig.py'))
+            c.globs.append('tests_localconfig.py')
             c.globs.append('tests_master.cfg')
 
         retval.append(c)
