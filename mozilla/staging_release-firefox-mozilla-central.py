@@ -67,8 +67,11 @@ releaseConfig['otherReposToTag']     = {
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
-releaseConfig['unittestPlatforms']   = releaseConfig['enUSPlatforms']
 releaseConfig['xulrunnerPlatforms']  = ()
+
+# Unittests
+releaseConfig['unittestPlatforms']   = ()
+releaseConfig['enableUnittests'] = True
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
@@ -84,7 +87,7 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 releaseConfig['cvsroot']             = ':ext:stgbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'moz20-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = False
-releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R13'
+releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R14'
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'staging-stage.build.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'

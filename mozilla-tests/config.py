@@ -10,6 +10,12 @@ import localconfig
 reload(localconfig)
 from localconfig import SLAVES, GLOBAL_VARS, GRAPH_CONFIG
 
+REMOTE_PROCESS_NAMES = { 'default':         'org.mozilla.fennec',
+                         'mozilla-beta':    'org.mozilla.firefox_beta',
+                         'mozilla-aurora':  'org.mozilla.fennec_aurora',
+                         'mozilla-release': 'org.mozilla.firefox',
+                       }
+
 TALOS_CMD = ['python', 'run_tests.py', '--noisy', WithProperties('%(configFile)s')]
 
 TALOS_ADDON_CMD = ['python', 'run_tests.py', '--noisy', '--amo', WithProperties('%(configFile)s')]
@@ -28,9 +34,12 @@ TALOS_REMOTE_FENNEC_OPTS = { 'productName':  'fennec',
                                                             '--webServer', 'bm-remote.build.mozilla.org',
                                                             '--browserWait', '60',
                                                           ],
-                                               'exePath': 'org.mozilla.fennec',
+                                               'processName': REMOTE_PROCESS_NAMES,
                                              },
                            }
+
+UNITTEST_REMOTE_EXTRAS = { 'processName': REMOTE_PROCESS_NAMES,
+                         }
 
 SUITES = {
     'chrome': GRAPH_CONFIG + ['--activeTests', 'ts:tdhtml:twinopen:tsspider'],
@@ -79,7 +88,7 @@ PLATFORMS = {
     'win64': {},
     'linux': {},
     'linux64' : {},
-    'android': {},
+    'linux-android': {},
 }
 
 # work around path length problem bug 599795
@@ -87,38 +96,45 @@ PLATFORMS = {
 PLATFORMS['macosx']['slave_platforms'] = ['leopard-o']
 PLATFORMS['macosx']['env_name'] = 'mac-perf'
 PLATFORMS['macosx']['leopard-o'] = {'name': "Rev3 MacOSX Leopard 10.5.8"}
+PLATFORMS['macosx']['stage_product'] = 'firefox'
 
 PLATFORMS['macosx64']['slave_platforms'] = ['leopard', 'snowleopard']
 PLATFORMS['macosx64']['env_name'] = 'mac-perf'
 PLATFORMS['macosx64']['leopard'] = {'name': "Rev3 MacOSX Leopard 10.5.8"}
 PLATFORMS['macosx64']['snowleopard'] = {'name': "Rev3 MacOSX Snow Leopard 10.6.2"}
+PLATFORMS['macosx64']['stage_product'] = 'firefox'
 
 PLATFORMS['win32']['slave_platforms'] = ['xp', 'win7']
 PLATFORMS['win32']['env_name'] = 'win32-perf'
 PLATFORMS['win32']['xp'] = {'name': "Rev3 WINNT 5.1"}
 PLATFORMS['win32']['win7'] = {'name': "Rev3 WINNT 6.1"}
+PLATFORMS['win32']['stage_product'] = 'firefox'
 
 PLATFORMS['win64']['slave_platforms'] = ['w764']
 PLATFORMS['win64']['env_name'] = 'win64-perf'
 PLATFORMS['win64']['w764'] = {'name': "Rev3 WINNT 6.1 x64",
                               'download_symbols': False,
                              }
+PLATFORMS['win64']['stage_product'] = 'firefox'
 
 PLATFORMS['linux']['slave_platforms'] = ['fedora']
 PLATFORMS['linux']['env_name'] = 'linux-perf'
 PLATFORMS['linux']['fedora'] = {'name': "Rev3 Fedora 12"}
+PLATFORMS['linux']['stage_product'] = 'firefox'
 
 PLATFORMS['linux64']['slave_platforms'] = ['fedora64']
 PLATFORMS['linux64']['env_name'] = 'linux-perf'
 PLATFORMS['linux64']['fedora64'] = {'name': "Rev3 Fedora 12x64"}
+PLATFORMS['linux64']['stage_product'] = 'firefox'
 
-PLATFORMS['android']['slave_platforms'] = ['tegra_android']
-PLATFORMS['android']['env_name'] = 'android-perf'
-PLATFORMS['android']['is_mobile'] = True
-PLATFORMS['android']['branch_extra'] = 'mobile-browser'
-PLATFORMS['android']['tegra_android'] = {'name': "Android Tegra 250",
+PLATFORMS['linux-android']['slave_platforms'] = ['tegra_android']
+PLATFORMS['linux-android']['env_name'] = 'android-perf'
+PLATFORMS['linux-android']['is_mobile'] = True
+PLATFORMS['linux-android']['tegra_android'] = {'name': "Android Tegra 250",
                                          'download_symbols': False,
                                         }
+PLATFORMS['linux-android']['stage_product'] = 'mobile'
+PLATFORMS['linux-android']['stage_platform'] = 'android'
 
 
 # Copy the slave names into PLATFORMS[platform][slave_platform], trimming off
@@ -127,7 +143,7 @@ for platform, platform_config in PLATFORMS.items():
     for slave_platform in platform_config['slave_platforms']:
         platform_config[slave_platform]['slaves'] = sorted(SLAVES[slave_platform.split('-')[0]])
 
-MOBILE_PLATFORMS = PLATFORMS['android']['slave_platforms']
+MOBILE_PLATFORMS = PLATFORMS['linux-android']['slave_platforms']
 
 ALL_PLATFORMS = PLATFORMS['linux']['slave_platforms'] + \
                 PLATFORMS['linux64']['slave_platforms'] + \
@@ -139,7 +155,7 @@ NO_WIN = PLATFORMS['macosx64']['slave_platforms'] + PLATFORMS['linux']['slave_pl
 
 NO_MAC = PLATFORMS['linux']['slave_platforms'] + PLATFORMS['linux64']['slave_platforms'] + PLATFORMS['win32']['slave_platforms'] + PLATFORMS['win64']['slave_platforms']
 
-ANDROID = PLATFORMS['android']['slave_platforms']
+ANDROID = PLATFORMS['linux-android']['slave_platforms']
 
 # these three are for mozilla-1.9.1 and mozilla-1.9.2
 OLD_BRANCH_ALL_PLATFORMS = PLATFORMS['linux']['slave_platforms'] + \
@@ -160,7 +176,7 @@ BRANCH_UNITTEST_VARS = {
         'macosx64': {},
         'win32': {},
         'win64': {},
-        'android': {},
+        'linux-android': {},
     },
 }
 
@@ -223,6 +239,20 @@ def removeSuite(suiteName, suiteList):
             suites.remove(suiteName)
             suiteList[i] = (name, suites)
     return suiteList
+
+PLATFORM_UNITTEST_JSREFTEST = [ ('jsreftest-1', (
+                                  {'suite': 'jsreftest',
+                                            'totalChunks': 2,
+                                            'thisChunk': 1,
+                                  },
+                                 )),
+                                ('jsreftest-2', (
+                                  {'suite': 'jsreftest',
+                                            'totalChunks': 2,
+                                            'thisChunk': 2,
+                                  },
+                                 )),
+                              ]
 
 # You must define opt_unittest_suites when enable_opt_unittests is True for a 
 # platform. Likewise debug_unittest_suites for enable_debug_unittests
@@ -300,10 +330,10 @@ PLATFORM_UNITTEST_VARS = {
                 'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
             },
         },
-        'android': {
+        'linux-android': {
             'is_remote': True,
-            'branch_extra': 'mobile-browser',
             'host_utils_url': 'http://bm-remote.build.mozilla.org/tegra/tegra-host-utils.zip',
+            'remote_extras': UNITTEST_REMOTE_EXTRAS,
             'tegra_android': {
                 'opt_unittest_suites': [
                     ('mochitest-1', (
@@ -351,18 +381,6 @@ PLATFORM_UNITTEST_VARS = {
                          'thisChunk': 2,
                         },
                     )),
-#                    ('jsreftest-1', (
-#                        {'suite': 'jsreftest',
-#                         'totalChunks': 2,
-#                         'thisChunk': 1,
-#                        },
-#                    )),
-#                    ('jsreftest-2', (
-#                        {'suite': 'jsreftest',
-#                         'totalChunks': 2,
-#                         'thisChunk': 2,
-#                        },
-#                    )),
                     ('crashtest', (
                         {'suite': 'crashtest'},
                     )),
@@ -439,8 +457,8 @@ PROJECTS = {
             'w764': {'ext':'win64-x86_64.zip',}, 
             'fedora64': {'ext':'linux-x86_64.tar.bz2',}, 
             'fedora':{'ext':'linux-i686.tar.bz2'}, 
-            'leopard':{'ext':'.mac.dmg'}, 
-            'snowleopard':{'ext':'.mac.dmg'},   
+            'leopard':{'ext':'mac.dmg'}, 
+            'snowleopard':{'ext':'mac.dmg'},   
             'xp':{
                 'ext':'win32.zip',
                 'env':PLATFORM_UNITTEST_VARS['win32']['env_name'],
@@ -454,7 +472,7 @@ PROJECTS = {
         'hgurl': 'http://hg.mozilla.org',
         'repo_path': 'projects/addon-sdk',
         'jetpack_tarball': 'archive/tip.tar.bz2',
-        'ftp_url': 'ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-mozilla-central/',
+        'ftp_url': 'ftp://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-mozilla-central',
     },
 }
 for k, v in localconfig.PROJECTS.items():
@@ -506,7 +524,7 @@ BRANCHES['mozilla-central']['repo_path'] = "mozilla-central"
 BRANCHES['mozilla-central']['platforms']['win32']['enable_opt_unittests'] = True
 BRANCHES['mozilla-central']['platforms']['linux']['enable_mobile_unittests'] = True
 BRANCHES['mozilla-central']['platforms']['win64']['enable_opt_unittests'] = True
-BRANCHES['mozilla-central']['platforms']['android']['enable_opt_unittests'] = True
+BRANCHES['mozilla-central']['platforms']['linux-android']['enable_opt_unittests'] = True
 BRANCHES['mozilla-central']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('reftest-no-accel', ['opengl-no-accel'])]
 BRANCHES['mozilla-central']['platforms']['linux']['fedora']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 BRANCHES['mozilla-central']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
@@ -520,6 +538,7 @@ BRANCHES['mozilla-central']['platforms']['win32']['xp']['opt_unittest_suites'] +
 BRANCHES['mozilla-central']['platforms']['win32']['xp']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 BRANCHES['mozilla-central']['platforms']['win32']['win7']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
 BRANCHES['mozilla-central']['platforms']['win32']['win7']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+BRANCHES['mozilla-central']['platforms']['linux-android']['tegra_android']['opt_unittest_suites'] += PLATFORM_UNITTEST_JSREFTEST
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['branch_name'] = "Mozilla-Beta"
@@ -556,7 +575,7 @@ BRANCHES['mozilla-beta']['repo_path'] = "releases/mozilla-beta"
 BRANCHES['mozilla-beta']['platforms']['win32']['enable_opt_unittests'] = True
 BRANCHES['mozilla-beta']['platforms']['linux']['enable_mobile_unittests'] = True
 BRANCHES['mozilla-beta']['platforms']['win64']['enable_opt_unittests'] = True
-BRANCHES['mozilla-beta']['platforms']['android']['enable_opt_unittests'] = True
+BRANCHES['mozilla-beta']['platforms']['linux-android']['enable_opt_unittests'] = True
 
 ######## mozilla-aurora
 BRANCHES['mozilla-aurora']['branch_name'] = "Mozilla-Aurora"
@@ -580,20 +599,20 @@ BRANCHES['mozilla-aurora']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, ALL_PLA
 BRANCHES['mozilla-aurora']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-aurora']['a11y_tests'] = (1, True, {}, NO_MAC)
 BRANCHES['mozilla-aurora']['paint_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['remote-ts_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-aurora']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-ts_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tdhtml_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tsspider_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tpan_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tp4m_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tp4m_nochrome_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-twinopen_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
+BRANCHES['mozilla-aurora']['remote-tzoom_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
 BRANCHES['mozilla-aurora']['repo_path'] = "releases/mozilla-aurora"
 BRANCHES['mozilla-aurora']['platforms']['win32']['enable_opt_unittests'] = True
 BRANCHES['mozilla-aurora']['platforms']['linux']['enable_mobile_unittests'] = True
 BRANCHES['mozilla-aurora']['platforms']['win64']['enable_opt_unittests'] = True
-BRANCHES['mozilla-aurora']['platforms']['android']['enable_opt_unittests'] = False
+BRANCHES['mozilla-aurora']['platforms']['linux-android']['enable_opt_unittests'] = True
 BRANCHES['mozilla-aurora']['platforms']['linux']['fedora']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 BRANCHES['mozilla-aurora']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
 BRANCHES['mozilla-aurora']['platforms']['linux64']['fedora64']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
@@ -874,7 +893,7 @@ BRANCHES['try']['platforms']['win32']['xp']['opt_unittest_suites'] += [('jetpack
 BRANCHES['try']['platforms']['win32']['xp']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 BRANCHES['try']['platforms']['win32']['win7']['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
 BRANCHES['try']['platforms']['win32']['win7']['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
-BRANCHES['try']['platforms']['android']['enable_opt_unittests'] = True
+BRANCHES['try']['platforms']['linux-android']['enable_opt_unittests'] = True
 
 ######## generic branch variables for project branches
 for branch in ACTIVE_PROJECT_BRANCHES:
@@ -921,6 +940,12 @@ for branch in ACTIVE_PROJECT_BRANCHES:
                     BRANCHES[branch][suite + '_tests'] = (talosConfig.get(suite, 1), True, {}, NO_MAC)
                 else:
                     BRANCHES[branch][suite + '_tests'] = (talosConfig.get(suite, 1), True, {}, ALL_PLATFORMS)
+
+# This is here rather than in project_branches.py, because enabling it there
+# will enable old-style, on-buildslave opt unittests due to the same file
+# existing in both mozilla/ and mozilla-tests/.
+BRANCHES['tracemonkey']['platforms']['linux-android']['enable_opt_unittests'] = True
+BRANCHES['tracemonkey']['platforms']['linux-android']['tegra_android']['opt_unittest_suites'] += PLATFORM_UNITTEST_JSREFTEST
 
 if __name__ == "__main__":
     import sys, pprint, re

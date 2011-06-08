@@ -14,16 +14,16 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '5.0b2'
+releaseConfig['version']             = '5.0b4'
 releaseConfig['appVersion']          = '5.0'
 releaseConfig['milestone']           = '5.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_5_0b2'
+releaseConfig['baseTag']             = 'FIREFOX_5_0b4'
 #  Old version info
-releaseConfig['oldVersion']          = '5.0b1'
+releaseConfig['oldVersion']          = '5.0b3'
 releaseConfig['oldAppVersion']       = '5.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_5_0b1'
+releaseConfig['oldBaseTag']          = 'FIREFOX_5_0b3'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = '5.0'
 releaseConfig['nextMilestone']       = '5.0'
@@ -32,7 +32,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '2b3275216413',
+        'revision': 'bca54750eec4',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -63,8 +63,11 @@ releaseConfig['otherReposToTag']     = {
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
-releaseConfig['unittestPlatforms']   = ()
 releaseConfig['xulrunnerPlatforms']  = ()
+
+# Unittests
+releaseConfig['unittestPlatforms']   = ()
+releaseConfig['enableUnittests'] = True
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
@@ -80,7 +83,7 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 releaseConfig['cvsroot']             = ':ext:cltbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'mozBeta-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = True
-releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R13'
+releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R14'
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage-old.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
