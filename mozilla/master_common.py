@@ -84,6 +84,11 @@ def prioritizeBuilders(botmaster, builders):
     return builders
 c['prioritizeBuilders'] = prioritizeBuilders
 
+# Create our QueueDir objects
+from buildbotcustom.status.queue import QueueDir
+commandsQueue = QueueDir('commands', '/dev/shm/queue/commands')
+pulseQueue = QueueDir('pulse', '/dev/shm/queue/pulse')
+
 import passwords
 reload(passwords)
 if hasattr(passwords, 'PULSE_PASSWORD'):
@@ -92,19 +97,8 @@ if hasattr(passwords, 'PULSE_PASSWORD'):
     import buildbotcustom.status.pulse
     reload(buildbotcustom.status.pulse)
     from buildbotcustom.status.pulse import PulseStatus
-    from mozillapulse.publishers import GenericPublisher
-    from mozillapulse.config import PulseConfiguration
     c['status'].append(PulseStatus(
-        GenericPublisher(PulseConfiguration(
-            user=passwords.PULSE_USERNAME,
-            password=passwords.PULSE_PASSWORD,
-            ),
-            exchange=passwords.PULSE_EXCHANGE),
+        pulseQueue,
         ignoreBuilders=[re.compile('.*shadow-central.*'), re.compile('fuzzer-.*')],
         send_logs=False,
         ))
-
-# Create our QueueDir objects
-from buildbotcustom.status.queue import QueueDir
-QueueDir('commands', '/dev/shm/queue/commands')
-QueueDir('pulse', '/dev/shm/queue/pulse')
