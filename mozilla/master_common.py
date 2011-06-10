@@ -103,3 +103,8 @@ if hasattr(passwords, 'PULSE_PASSWORD'):
         ignoreBuilders=[re.compile('.*shadow-central.*'), re.compile('fuzzer-.*')],
         send_logs=False,
         ))
+
+# Create our QueueDir objects
+from buildbotcustom.status.queue import QueueDir
+QueueDir('commands', '/dev/shm/queue/commands')
+QueueDir('pulse', '/dev/shm/queue/pulse')
