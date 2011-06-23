@@ -8,6 +8,7 @@ PROJECT_BRANCHES = {
         'talos_suites': {
             'dirty': 0,
             'tp4': 0,
+            'tp': 0,
             'chrome': 0,
             'nochrome': 0,
             'dromaeo': 0,
@@ -15,6 +16,10 @@ PROJECT_BRANCHES = {
             'scroll': 0,
             'paint': 0,
         },
+        'add_test_suites': [
+            ('macosx64', 'snowleopard', 'opt', 'mochitest-other', 'mochitest-a11y'),
+            ('macosx64', 'snowleopard', 'debug', 'mochitest-other', 'mochitest-a11y'),
+        ]
     },
     'build-system': {
         'enable_talos': False,
@@ -61,7 +66,11 @@ PROJECT_BRANCHES = {
             'remote-tdhtml': 1,
             'remote-tsvg': 1,
             'remote-tsspider': 1,
+            'remote-tpan': 1,
+            'remote-tp4m': 1,
+            'remote-tp4m_nochrome': 1,
             'remote-twinopen': 1,
+            'remote-tzoom': 1,
         }
     },
     'places': {
@@ -128,6 +137,10 @@ PROJECT_BRANCHES = {
             'remote-tsvg': 1,
             'remote-tsspider': 1,
             'remote-tpan': 1,
+            'remote-tp4m': 1,
+            'remote-tp4m_nochrome': 1,
+            'remote-twinopen': 1,
+            'remote-tzoom': 1,
             'v8': 1,
         }
     },
@@ -164,45 +177,7 @@ PROJECT_BRANCHES = {
     },
     #####  TWIGS aka RENTABLE BRANCHES
     'alder': {},
-    'birch': {
-        'platforms': {
-            'macosx': {
-                'enable_opt_unittests': False,
-                'enable_debug_unittests': False,
-            },
-            'macosx-debug': {
-                'dont_build': True,
-            },
-            'macosx64': {
-                'enable_opt_unittests': False,
-                'enable_debug_unittests': False,
-            },
-            'macosx64-debug': {
-                'dont_build': True,
-            },
-            'linux': {
-                'enable_opt_unittests': False,
-                'enable_debug_unittests': False,
-            },
-            'linux-debug': {
-                'dont_build': True,
-            },
-            'linux64': {
-                'enable_opt_unittests': False,
-                'enable_debug_unittests': False,
-            },
-            'linux64-debug': {
-                'dont_build': True,
-            },
-            'win32': {
-                'enable_opt_unittests': False,
-                'enable_debug_unittests': False,
-            },
-            'win32-debug': {
-                'dont_build': True,
-            },
-        },
-    },
+    'birch': {},
     'cedar': {},
     'holly': {},
     'larch': {},
