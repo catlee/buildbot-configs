@@ -85,7 +85,7 @@ def prioritizeBuilders(botmaster, builders):
 c['prioritizeBuilders'] = prioritizeBuilders
 
 # Create our QueueDir objects
-from buildbotcustom.status.queue import QueueDir
+from queuedir import QueueDir
 commandsQueue = QueueDir('commands', '/dev/shm/queue/commands')
 pulseQueue = QueueDir('pulse', '/dev/shm/queue/pulse')
 
