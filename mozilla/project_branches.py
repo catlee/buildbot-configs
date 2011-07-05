@@ -2,6 +2,7 @@
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
     'accessibility': {
+        'mozconfig_dir': 'accessibility',
         'enable_nightly': True,
         'enabled_products': ['firefox'],
         # only want a11y so turn off the default set
@@ -45,6 +46,19 @@ PROJECT_BRANCHES = {
     'electrolysis': {
         'mozconfig_dir': 'electrolysis',
         'enable_talos': True,
+    },
+    'fx-team': {
+        'repo_path': 'integration/fx-team',
+        'mozconfig_dir': 'mozilla-central',
+        'enable_nightly': True,
+        'enabled_products': ['firefox'],
+        'talos_suites': {
+            'remote-ts': 1,
+            'remote-tdhtml': 1,
+            'remote-tsvg': 1,
+            'remote-tsspider': 1,
+            'remote-twinopen': 1,
+        }
     },
     'graphics':{
         'enable_unittests': False,

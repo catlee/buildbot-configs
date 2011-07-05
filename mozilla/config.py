@@ -917,8 +917,7 @@ BRANCHES = {
     'mozilla-aurora': {
     },
     'mozilla-2.0': {
-        # platforms now has mobile platforms and fennec4 is EOL
-        # 'lock_platforms': True,
+        'lock_platforms': True,
         'platforms': {
             'linux': {},
             'linuxqt': {},
@@ -1307,6 +1306,8 @@ BRANCHES['mozilla-2.0']['platforms']['win32']['l10n_check_test'] = False
 BRANCHES['mozilla-2.0']['platforms']['macosx64']['test_pretty_names'] = False
 
 ######## mozilla-1.9.1
+# mozilla-1.9.1 can be removed once we're no longer refreshing MUs from 3.5.18,
+# or bug 662298 is fixed.
 BRANCHES['mozilla-1.9.1']['repo_path'] = 'releases/mozilla-1.9.1'
 BRANCHES['mozilla-1.9.1']['l10n_repo_path'] = 'releases/l10n-mozilla-1.9.1'
 BRANCHES['mozilla-1.9.1']['enable_weekly_bundle'] = True
