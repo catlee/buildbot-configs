@@ -745,7 +745,6 @@ PLATFORM_VARS = {
             'packageTests': True,
             'upload_symbols': True,
             'update_platform': 'Linux_x86-gcc3',
-            'create_snippet': False,
             'create_partial': False,
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
@@ -1075,6 +1074,7 @@ BRANCHES['mozilla-central']['upload_mobile_symbols'] = True
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
 BRANCHES['mozilla-central']['create_snippet'] = True
+BRANCHES['mozilla-central']['update_channel'] = 'nightly'
 BRANCHES['mozilla-central']['create_mobile_snippet'] = True
 BRANCHES['mozilla-central']['create_partial'] = True
 BRANCHES['mozilla-central']['create_partial_l10n'] = True
@@ -1196,16 +1196,6 @@ BRANCHES['mozilla-beta']['enable_mobile_nightly'] = False
 # If True, a complete update snippet for this branch will be generated and
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
-BRANCHES['mozilla-beta']['create_snippet'] = True
-BRANCHES['mozilla-beta']['create_mobile_snippet'] = True
-BRANCHES['mozilla-beta']['create_partial'] = True
-BRANCHES['mozilla-beta']['create_partial_l10n'] = True
-BRANCHES['mozilla-beta']['aus2_user'] = 'ffxbld'
-BRANCHES['mozilla-beta']['aus2_ssh_key'] = 'ffxbld_dsa'
-BRANCHES['mozilla-beta']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-beta'
-BRANCHES['mozilla-beta']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-beta'
-BRANCHES['mozilla-beta']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-beta'
-BRANCHES['mozilla-beta']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-beta'
 BRANCHES['mozilla-beta']['enable_blocklist_update'] = True
 BRANCHES['mozilla-beta']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-beta']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
@@ -1248,6 +1238,7 @@ BRANCHES['mozilla-aurora']['upload_mobile_symbols'] = True
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
 BRANCHES['mozilla-aurora']['create_snippet'] = True
+BRANCHES['mozilla-aurora']['update_channel'] = 'aurora'
 BRANCHES['mozilla-aurora']['create_mobile_snippet'] = True
 BRANCHES['mozilla-aurora']['create_partial'] = True
 BRANCHES['mozilla-aurora']['create_partial_l10n'] = True
@@ -1301,6 +1292,7 @@ BRANCHES['mozilla-2.0']['upload_mobile_symbols'] = True
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
 BRANCHES['mozilla-2.0']['create_snippet'] = True
+BRANCHES['mozilla-2.0']['update_channel'] = 'nightly'
 # turn on in bug 594867
 BRANCHES['mozilla-2.0']['create_mobile_snippet'] = False
 BRANCHES['mozilla-2.0']['create_partial'] = True
@@ -1465,6 +1457,7 @@ BRANCHES['mozilla-1.9.2']['allLocalesFile'] = 'browser/locales/all-locales'
 BRANCHES['mozilla-1.9.2']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-1.9.2' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-1.9.2']['create_snippet'] = True
+BRANCHES['mozilla-1.9.2']['update_channel'] = 'nightly'
 BRANCHES['mozilla-1.9.2']['create_partial'] = True
 BRANCHES['mozilla-1.9.2']['create_partial_l10n'] = True
 BRANCHES['mozilla-1.9.2']['aus2_user'] = 'ffxbld'
@@ -1583,6 +1576,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['l10nDatedDirs'] = branchConfig.get('l10nDatedDirs', False)
     # nightly updates
     BRANCHES[branch]['create_snippet'] = branchConfig.get('create_snippet', False)
+    BRANCHES[branch]['update_channel'] = branchConfig.get('update_channel', 'nightly-%s' % branch)
     BRANCHES[branch]['create_partial'] = branchConfig.get('create_partial', False)
     BRANCHES[branch]['create_partial_l10n'] = branchConfig.get('create_partial_l10n', False)
     BRANCHES[branch]['create_mobile_snippet'] = branchConfig.get('create_mobile_snippet', False)
