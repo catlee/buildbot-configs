@@ -58,14 +58,16 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-2.0'
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
-    'build/partner-repacks': 'default'
 }
 
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
-releaseConfig['unittestPlatforms']   = ()
 releaseConfig['xulrunnerPlatforms']  = releaseConfig['enUSPlatforms']
+
+# Unittests
+releaseConfig['unittestPlatforms']   = ()
+releaseConfig['enableUnittests'] = True
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
@@ -99,15 +101,15 @@ releaseConfig['verifyConfigs']       = {
 }
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = True
+releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Major update configuration
 releaseConfig['majorUpdateRepoPath'] = 'releases/mozilla-2.0'
-releaseConfig['majorUpdateToVersion']   = '5.0b2'
+releaseConfig['majorUpdateToVersion']   = '5.0b6'
 releaseConfig['majorUpdateAppVersion']  = '5.0'
 releaseConfig['majorUpdateBuildNumber'] = 1
-releaseConfig['majorUpdateBaseTag']     = 'FIREFOX_5_0b2'
+releaseConfig['majorUpdateBaseTag']     = 'FIREFOX_5_0b6'
 releaseConfig['majorUpdateReleaseNotesUrl']  = 'https://www.mozilla.com/%locale%/firefox/5.0/details/'
 releaseConfig['majorUpdatePatcherConfig']    = 'moz20-branch-major-update-patcher2.cfg'
 releaseConfig['majorPatcherToolsTag']        = 'UPDATE_PACKAGING_R11_1_MU'

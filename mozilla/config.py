@@ -19,17 +19,13 @@ GLOBAL_VARS = {
     'hghost': 'hg.mozilla.org',
     'config_subdir': 'mozilla2',
     'objdir': 'obj-firefox',
-    'mobile_objdir': 'obj-fennec', # TODO: remove when MobileBuildFactory dies
     'objdir_unittests': 'objdir',
     'stage_username': 'ffxbld',
     'stage_username_xulrunner': 'xrbld',
-    'stage_username_mobile': 'ffxbld', # TODO: remove when MobileBuildFactory dies
     'stage_base_path': '/home/ftp/pub',
-    'stage_base_path_mobile': '/home/ftp/pub/mobile', # TODO: remove when MobileBuildFactory dies
     'stage_group': None,
     'stage_ssh_key': 'ffxbld_dsa',
     'stage_ssh_xulrunner_key': 'xrbld_dsa',
-    'stage_ssh_mobile_key': 'ffxbld_dsa', # TODO: remove when MobileBuildFactory dies
     'symbol_server_path': '/mnt/netapp/breakpad/symbols_ffx/',
     'symbol_server_post_upload_cmd': '/usr/local/bin/post-symbol-upload.py',
     'symbol_server_mobile_path': '/mnt/netapp/breakpad/symbols_mob/',
@@ -78,7 +74,6 @@ GLOBAL_VARS = {
         'win32-mobile': {},
         'macosx-mobile': {},
     },
-    'mobile_platforms': {}, # TODO: remove when MobileBuildFactory dies
     'product_name': 'firefox', # Not valid for mobile builds
     'app_name': 'browser',     # Not valid for mobile builds
     'brand_name': 'Minefield', # Not valid for mobile builds
@@ -88,8 +83,6 @@ GLOBAL_VARS = {
     'blocklist_update_on_closed_tree': False,
     'enable_nightly': True,
     'enabled_products': ['firefox', 'mobile'],
-    'enable_mobile_nightly': True, # TODO: remove when MobileBuildFactory dies
-    'enable_mobile_dep': True, # TODO: remove when MobileBuildFactory dies
 
     # if true, this branch will get bundled and uploaded to ftp.m.o for users
     # to download and thereby accelerate their cloning
@@ -113,207 +106,9 @@ GLOBAL_VARS.update(localconfig.GLOBAL_VARS.copy())
 
 # shorthand, because these are used often
 OBJDIR = GLOBAL_VARS['objdir']
-MOBILE_OBJDIR = GLOBAL_VARS['mobile_objdir'] # TODO: remove when MobileBuildFactory dies
 SYMBOL_SERVER_PATH = GLOBAL_VARS['symbol_server_path']
 SYMBOL_SERVER_POST_UPLOAD_CMD = GLOBAL_VARS['symbol_server_post_upload_cmd']
 SYMBOL_SERVER_MOBILE_PATH = GLOBAL_VARS['symbol_server_mobile_path']
-
-# TODO: remove when MobileBuildFactory dies
-MOBILE_PLATFORM_VARS = {
-    'maemo5-gtk':{
-        'base_name': 'Maemo 5 GTK %(branch)s',
-        'mozconfig': 'mobile/maemo5-gtk/mobile-browser/nightly',
-        'mozharness_config': 'multi_locale/trunk_maemo5_gtk.json',
-        'profiled_build': False,
-        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-        'build_space': 6,
-        'generate_symbols': True,
-        'slaves': SLAVES['linux'],
-        'platform_objdir': MOBILE_OBJDIR,
-        'enable_ccache': False,
-        'env': {
-            'CC': '/scratchbox/compilers/bin/gcc',
-            'CXX': '/scratchbox/compilers/bin/g++',
-            'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-            'SYMBOL_SERVER_USER': 'ffxbld',
-            'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-            'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-            'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
-            'MOZ_OBJDIR': MOBILE_OBJDIR,
-            'CCACHE_DIR': '/builds/slave/ccache',
-            'CCACHE_UMASK': '002',
-        },
-        'package_globlist': ['dist/*.tar.bz2', 'dist/*.zip',
-                             'mobile/*.deb', 'dist/deb_name.txt'],
-        'upload_platform': 'linux',
-        'scratchbox_target': 'FREMANTLE_ARMEL',
-        'multi_locale': True,
-        'compare_locales_tag': 'RELEASE_AUTOMATION',
-        'l10n_tag': 'default',
-        'merge_locales': True,
-    },
-    'maemo5-qt':{
-        'base_name': 'Maemo 5 QT %(branch)s',
-        'mozconfig': 'mobile/maemo5-qt/mobile-browser/nightly',
-        'mozharness_config': 'multi_locale/trunk_maemo5_qt.json',
-        'profiled_build': False,
-        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-        'build_space': 6,
-        'generate_symbols': True,
-        'slaves': SLAVES['linux'],
-        'platform_objdir': MOBILE_OBJDIR,
-        'enable_ccache': False,
-        'env': {
-            'CC': '/scratchbox/compilers/bin/gcc',
-            'CXX': '/scratchbox/compilers/bin/g++',
-            'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-            'SYMBOL_SERVER_USER': 'ffxbld',
-            'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-            'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-            'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
-            'MOZ_OBJDIR': MOBILE_OBJDIR,
-            'CCACHE_DIR': '/builds/slave/ccache',
-            'CCACHE_UMASK': '002',
-        },
-        'package_globlist': ['dist/*.tar.bz2', 'dist/*.zip',
-                             'mobile/*.deb', 'dist/deb_name.txt'],
-        'upload_platform': 'linux',
-        'scratchbox_target': 'FREMANTLE_ARMEL',
-        'multi_locale': True,
-        'compare_locales_tag': 'RELEASE_AUTOMATION',
-        'l10n_tag': 'default',
-        'merge_locales': True,
-    },
-    'android-r7': {
-        'base_name': 'Android R7 %(branch)s',
-        'mozconfig': 'mobile/android/mobile-browser/nightly',
-        'mozharness_config': 'multi_locale/trunk_android.json',
-        'profiled_build': False,
-        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-        'build_space': 6,
-        'generate_symbols': True,
-        'slaves': SLAVES['linux'],
-        'platform_objdir': MOBILE_OBJDIR,
-        'enable_ccache': True,
-        'update_platform': 'Android_arm-eabi-gcc3',
-        'env': {
-            'JAVA_HOME': '/tools/jdk6',
-            'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
-            'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-            'SYMBOL_SERVER_USER': 'ffxbld',
-            'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-            'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-            'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
-            'MOZ_OBJDIR': MOBILE_OBJDIR,
-            'CCACHE_DIR': '/builds/slave/ccache',
-            'CCACHE_UMASK': '002',
-            'LC_ALL': 'C',
-        },
-        'multi_locale': True,
-        'package_globlist': ['embedding/android/*.apk'],
-        'talos_masters': GLOBAL_VARS['talos_masters'],
-        'unittest_masters': GLOBAL_VARS['unittest_masters'],
-    },
-    'android-debug': {
-        'base_name': 'Android Debug %(branch)s',
-        'mozconfig': 'mobile/android/mobile-browser/debug',
-        'profiled_build': False,
-        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-        'build_space': 6,
-        'generate_symbols': False,
-        'slaves': SLAVES['linux'],
-        'platform_objdir': MOBILE_OBJDIR,
-        'enable_ccache': True,
-        'env': {
-            'JAVA_HOME': '/tools/jdk6',
-            'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
-            'MOZ_OBJDIR': MOBILE_OBJDIR,
-            'CCACHE_DIR': '/builds/slave/ccache',
-            'CCACHE_UMASK': '002',
-            'LC_ALL': 'C',
-        },
-        'multi_locale': False,
-        'enable_mobile_nightly': False,
-        'enable_mobile_dep': False,
-        'package_globlist': ['embedding/android/*.apk'],
-        'unittest_masters': GLOBAL_VARS['unittest_masters'],
-    },
-    'linux': {
-        'base_name': 'Linux Mobile Desktop %(branch)s',
-        'mozconfig': 'mobile/linux-i686/mobile-browser/nightly',
-        'profiled_build': False,
-        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-        'build_space': 6,
-        'generate_symbols': True,
-        'l10n_chunks': 0,
-        'slaves': SLAVES['linux'],
-        'platform_objdir': MOBILE_OBJDIR,
-        'enable_ccache': True,
-        'env': {
-            'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-            'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-            'SYMBOL_SERVER_USER': 'ffxbld',
-            'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-            'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-            'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
-            'MOZ_OBJDIR': MOBILE_OBJDIR,
-            'CCACHE_DIR': '/builds/slave/ccache',
-            'CCACHE_UMASK': '002',
-            'LC_ALL': 'C',
-        },
-        'package_globlist': ['-r', 'dist/*.tar.bz2', 'dist/*.zip'],
-        'unittest_masters': GLOBAL_VARS['unittest_masters'],
-    },
-    'macosx': {
-        'base_name': 'OS X 10.5.2 Mobile Desktop %(branch)s',
-        'mozconfig': 'mobile/macosx-i686/mobile-browser/nightly',
-        'profiled_build': False,
-        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-        'build_space': 6,
-        'generate_symbols': True,
-        'l10n_chunks': 0,
-        'slaves': SLAVES['macosx'],
-        'platform_objdir': MOBILE_OBJDIR,
-        'enable_ccache': True,
-        'enable_mobile_dep': False,
-        'env': {
-            'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-            'SYMBOL_SERVER_USER': 'ffxbld',
-            'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-            'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-            'SYMBOL_SERVER_SSH_KEY': "/Users/cltbld/.ssh/ffxbld_dsa",
-            'MOZ_OBJDIR': MOBILE_OBJDIR,
-            'CCACHE_DIR': '/builds/slave/ccache',
-            'CCACHE_UMASK': '002',
-            'CHOWN_ROOT': '~/bin/chown_root',
-            'CHOWN_REVERT': '~/bin/chown_revert',
-            'LC_ALL': 'C',
-        },
-        'package_globlist': ['-r', 'dist/*.dmg'],
-     },
-     'win32': {
-        'base_name': 'WINNT 5.2 Mobile Desktop %(branch)s',
-        'mozconfig': 'mobile/win32-i686/mobile-browser/nightly',
-        'profiled_build': False,
-        'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-        'build_space': 6,
-        'generate_symbols': True,
-        'l10n_chunks': 0,
-        'slaves': SLAVES['win32'],
-        'platform_objdir': MOBILE_OBJDIR,
-        'enable_mobile_dep': False,
-        'env': {
-            'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-            'SYMBOL_SERVER_USER': 'ffxbld',
-            'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-            'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-            'SYMBOL_SERVER_SSH_KEY': "/c/Documents and Settings/cltbld/.ssh/ffxbld_dsa",
-            'MOZ_OBJDIR': MOBILE_OBJDIR,
-        },
-        'package_globlist': ['-r', 'dist/*.zip'],
-    },
-}
-
 
 PLATFORM_VARS = {
         'linux': {
@@ -454,6 +249,7 @@ PLATFORM_VARS = {
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
             'update_platform': 'Linux_x86_64-gcc3',
+            'enable_ccache': True,
             'enable_shared_checkouts': True,
             'env': {
                 'DISPLAY': ':2',
@@ -675,7 +471,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
-            'enable_ccache': False,
+            'enable_ccache': True,
             'enable_shared_checkouts': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
@@ -1089,7 +885,8 @@ PROJECTS = {
             'linux-debug':    ['nomethodjit', 'notracejit', 'warnaserrdebug'],
             'linux64':        ['warnaserr'],
             'linux64-debug':  ['nomethodjit', 'notracejit', 'warnaserrdebug'],
-            'win32-debug':    ['nomethodjit', 'notracejit'],
+            'win32':          ['warnaserr'],
+            'win32-debug':    ['nomethodjit', 'notracejit', 'warnaserrdebug'],
             'macosx64':       ['warnaserr'],
             'macosx64-debug': ['nomethodjit', 'notracejit', 'dtrace', 'shark', 'warnaserrdebug'],
             'macosx':         ['warnaserr'],
@@ -1100,6 +897,7 @@ PROJECTS = {
             'linux-debug': PLATFORM_VARS['linux-debug']['env'],
             'linux64': PLATFORM_VARS['linux64']['env'],
             'linux64-debug': PLATFORM_VARS['linux64-debug']['env'],
+            'win32': PLATFORM_VARS['win32']['env'],
             'win32-debug': PLATFORM_VARS['win32-debug']['env'],
             'macosx64': PLATFORM_VARS['macosx64']['env'],
             'macosx64-debug': PLATFORM_VARS['macosx64-debug']['env'],
@@ -1125,13 +923,13 @@ BRANCHES = {
     },
     'shadow-central': {
     },
+    'mozilla-release': {
+    },
     'mozilla-beta': {
     },
     'mozilla-aurora': {
     },
     'mozilla-2.0': {
-        # platforms now has mobile platforms which
-        # which should be on mozilla-2.1
         'lock_platforms': True,
         'platforms': {
             'linux': {},
@@ -1144,20 +942,6 @@ BRANCHES = {
             'macosx-debug': {},
             'macosx64-debug': {},
             'win32-debug': {},
-        },
-    },
-    'mozilla-2.1': {
-        'lock_platforms': True,
-        'platforms': {},
-        # m-c no longer has these as default
-        'mobile_platforms': {
-            'maemo5-gtk': {},
-            'maemo5-qt': {},
-            'android-r7': {},
-            'android-debug': {},
-            'linux': {},
-            'macosx': {},
-            'win32': {},
         },
     },
     'mozilla-1.9.1': {
@@ -1218,11 +1002,6 @@ for branch in BRANCHES.keys():
                 for key, value in PROJECT_BRANCHES[branch]['platforms'][platform].items():
                     BRANCHES[branch]['platforms'][platform][key] = deepcopy(value)
 
-    # XXX remove when MobileBuildFactory dies
-    for mobile_platform, mobile_platform_config in MOBILE_PLATFORM_VARS.items():
-        if mobile_platform in BRANCHES[branch]['mobile_platforms'].keys():
-            BRANCHES[branch]['mobile_platforms'][mobile_platform] = deepcopy(mobile_platform_config)
-
     # Copy in local config
     if branch in localconfig.BRANCHES:
         for key, value in localconfig.BRANCHES[branch].items():
@@ -1247,11 +1026,6 @@ for branch in BRANCHES.keys():
                 if isinstance(value, str):
                     value = value % locals()
                 BRANCHES[branch]['platforms'][platform][key] = value
-
-    # XXX remove when MobileBuildFactory dies
-    for mobile_platform, mobile_platform_config in MOBILE_PLATFORM_VARS.items():
-        if mobile_platform in BRANCHES[branch]['mobile_platforms']:
-            BRANCHES[branch]['mobile_platforms'][mobile_platform] = deepcopy(mobile_platform_config)
 
     # Check for project branch removing a platform from default platforms
     if branch in ACTIVE_PROJECT_BRANCHES:
@@ -1293,6 +1067,8 @@ BRANCHES['mozilla-central']['l10nUploadPath'] = \
 BRANCHES['mozilla-central']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-central'
 BRANCHES['mozilla-central']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-central']['localesURL'] = \
+    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-central' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-central']['enable_multi_locale'] = True
 BRANCHES['mozilla-central']['upload_mobile_symbols'] = True
 # If True, a complete update snippet for this branch will be generated and
@@ -1344,6 +1120,42 @@ BRANCHES['shadow-central']['platforms']['linux64']['env']['MOZ_SYMBOLS_EXTRA_BUI
 BRANCHES['shadow-central']['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'shadow-central'
 BRANCHES['shadow-central']['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-shadow-central'
 
+######## mozilla-release
+BRANCHES['mozilla-release']['repo_path'] = 'releases/mozilla-release'
+BRANCHES['mozilla-release']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
+BRANCHES['mozilla-release']['enable_weekly_bundle'] = True
+BRANCHES['mozilla-release']['start_hour'] = [3]
+BRANCHES['mozilla-release']['start_minute'] = [2]
+BRANCHES['mozilla-release']['enable_xulrunner'] = False
+# Enable unit tests
+BRANCHES['mozilla-release']['geriatric_masters'] = [
+    ('10.250.48.137:9989', False),
+]
+BRANCHES['mozilla-release']['enable_mac_a11y'] = True
+# And code coverage
+BRANCHES['mozilla-release']['enable_codecoverage'] = True
+# L10n configuration
+BRANCHES['mozilla-release']['enable_l10n'] = False
+BRANCHES['mozilla-release']['enable_l10n_onchange'] = True
+BRANCHES['mozilla-release']['l10nNightlyUpdate'] = False
+BRANCHES['mozilla-release']['l10n_platforms'] = ['linux', 'linux64', 'win32',
+                                                 'macosx64']
+BRANCHES['mozilla-release']['l10nDatedDirs'] = True
+BRANCHES['mozilla-release']['l10n_tree'] = 'fxrel'
+BRANCHES['mozilla-release']['enUS_binaryURL'] = \
+    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-release'
+BRANCHES['mozilla-release']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-release']['localesURL'] = \
+    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-release' % (GLOBAL_VARS['hgurl'])
+BRANCHES['mozilla-release']['enable_multi_locale'] = True
+BRANCHES['mozilla-release']['upload_mobile_symbols'] = True
+# temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
+BRANCHES['mozilla-release']['enable_nightly'] = False
+BRANCHES['mozilla-release']['enable_mobile_nightly'] = False
+BRANCHES['mozilla-release']['enable_blocklist_update'] = False
+BRANCHES['mozilla-release']['blocklist_update_on_closed_tree'] = False
+BRANCHES['mozilla-release']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-release'
+
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['repo_path'] = 'releases/mozilla-beta'
 BRANCHES['mozilla-beta']['l10n_repo_path'] = 'releases/l10n/mozilla-beta'
@@ -1374,6 +1186,8 @@ BRANCHES['mozilla-beta']['l10nUploadPath'] = \
 BRANCHES['mozilla-beta']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-beta'
 BRANCHES['mozilla-beta']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-beta']['localesURL'] = \
+    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-beta' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-beta']['enable_multi_locale'] = True
 BRANCHES['mozilla-beta']['upload_mobile_symbols'] = True
 # temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
@@ -1426,6 +1240,8 @@ BRANCHES['mozilla-aurora']['l10nUploadPath'] = \
 BRANCHES['mozilla-aurora']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-aurora'
 BRANCHES['mozilla-aurora']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-aurora']['localesURL'] = \
+    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-aurora' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-aurora']['enable_multi_locale'] = True
 BRANCHES['mozilla-aurora']['upload_mobile_symbols'] = True
 # If True, a complete update snippet for this branch will be generated and
@@ -1477,6 +1293,8 @@ BRANCHES['mozilla-2.0']['l10nUploadPath'] = \
 BRANCHES['mozilla-2.0']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-2.0'
 BRANCHES['mozilla-2.0']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-2.0']['localesURL'] = \
+    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-2.0' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-2.0']['enable_multi_locale'] = True
 BRANCHES['mozilla-2.0']['upload_mobile_symbols'] = True
 # If True, a complete update snippet for this branch will be generated and
@@ -1500,65 +1318,9 @@ BRANCHES['mozilla-2.0']['platforms']['win32']['l10n_check_test'] = False
 # TODO: Remove this when bug 525438 lands on mozilla-2.0
 BRANCHES['mozilla-2.0']['platforms']['macosx64']['test_pretty_names'] = False
 
-######## mozilla-2.1
-BRANCHES['mozilla-2.1']['repo_path'] = 'releases/mozilla-2.1'
-BRANCHES['mozilla-2.1']['l10n_repo_path'] = 'releases/l10n-mozilla-2.0'
-BRANCHES['mozilla-2.1']['mobile_repo_path'] = 'releases/mobile-2.0'
-BRANCHES['mozilla-2.1']['enable_weekly_bundle'] = True
-BRANCHES['mozilla-2.1']['start_hour'] = [3]
-BRANCHES['mozilla-2.1']['start_minute'] = [2]
-# Enable XULRunner / SDK builds
-BRANCHES['mozilla-2.1']['enable_xulrunner'] = False
-# Enable unit tests
-BRANCHES['mozilla-2.1']['enable_mac_a11y'] = False
-BRANCHES['mozilla-2.1']['unittest_build_space'] = 6
-# And code coverage
-BRANCHES['mozilla-2.1']['enable_codecoverage'] = False
-BRANCHES['mozilla-2.1']['enable_blocklist_update'] = False
-BRANCHES['mozilla-2.1']['blocklist_update_on_closed_tree'] = False
-# L10n configuration
-BRANCHES['mozilla-2.1']['enable_l10n'] = True
-BRANCHES['mozilla-2.1']['enable_l10n_onchange'] = True
-BRANCHES['mozilla-2.1']['l10nNightlyUpdate'] = False
-BRANCHES['mozilla-2.1']['l10n_platforms'] = ['linux' , 'linux64', 'win32',
-                                             'macosx64']
-BRANCHES['mozilla-2.1']['l10nDatedDirs'] = True
-BRANCHES['mozilla-2.1']['l10n_tree'] = 'fennec40x'
-#make sure it has an ending slash
-BRANCHES['mozilla-2.1']['l10nUploadPath'] = \
-    '/home/ftp/pub/mozilla.org/firefox/nightly/latest-mozilla-2.1-l10n/'
-BRANCHES['mozilla-2.1']['enUS_binaryURL'] = \
-    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-2.1'
-BRANCHES['mozilla-2.1']['allLocalesFile'] = 'browser/locales/all-locales'
-BRANCHES['mozilla-2.1']['enable_multi_locale'] = True
-BRANCHES['mozilla-2.1']['upload_mobile_symbols'] = True
-# If True, a complete update snippet for this branch will be generated and
-# uploaded to. Any platforms with 'debug' in them will not have snippets
-# generated.
-BRANCHES['mozilla-2.1']['create_snippet'] = True
-# turn on in bug 594867
-BRANCHES['mozilla-2.1']['create_mobile_snippet'] = True
-BRANCHES['mozilla-2.1']['create_partial'] = True
-BRANCHES['mozilla-2.1']['create_partial_l10n'] = True
-BRANCHES['mozilla-2.1']['aus2_user'] = 'ffxbld'
-BRANCHES['mozilla-2.1']['aus2_ssh_key'] = 'ffxbld_dsa'
-BRANCHES['mozilla-2.1']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-2.1'
-BRANCHES['mozilla-2.1']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-2.1'
-BRANCHES['mozilla-2.1']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-2.1'
-BRANCHES['mozilla-2.1']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-2.1'
-BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-gtk']['mozconfig'] = 'mobile/maemo5-gtk/mobile-2.0/nightly'
-BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-qt']['mozconfig'] = 'mobile/maemo5-qt/mobile-2.0/nightly'
-BRANCHES['mozilla-2.1']['mobile_platforms']['android-r7']['mozconfig'] = 'mobile/android/mobile-2.0/nightly'
-BRANCHES['mozilla-2.1']['mobile_platforms']['android-debug']['mozconfig'] = 'mobile/android/mobile-2.0/debug'
-BRANCHES['mozilla-2.1']['mobile_platforms']['linux']['mozconfig'] = 'mobile/linux-i686/mobile-2.0/nightly'
-BRANCHES['mozilla-2.1']['mobile_platforms']['macosx']['mozconfig'] = 'mobile/macosx-i686/mobile-2.0/nightly'
-BRANCHES['mozilla-2.1']['mobile_platforms']['win32']['mozconfig'] = 'mobile/win32-i686/mobile-2.0/nightly'
-BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-gtk']['mozharness_config'] = 'multi_locale/mobile-2.0_maemo5_gtk.json'
-BRANCHES['mozilla-2.1']['mobile_platforms']['maemo5-qt']['mozharness_config'] = 'multi_locale/mobile-2.0_maemo5_qt.json'
-BRANCHES['mozilla-2.1']['mobile_platforms']['android-r7']['mozharness_config'] = 'multi_locale/mobile-2.0_android.json'
-BRANCHES['mozilla-2.1']['mobile_platforms']['android-debug']['enable_mobile_dep'] = True
-
 ######## mozilla-1.9.1
+# mozilla-1.9.1 can be removed once we're no longer refreshing MUs from 3.5.18,
+# or bug 662298 is fixed.
 BRANCHES['mozilla-1.9.1']['repo_path'] = 'releases/mozilla-1.9.1'
 BRANCHES['mozilla-1.9.1']['l10n_repo_path'] = 'releases/l10n-mozilla-1.9.1'
 BRANCHES['mozilla-1.9.1']['enable_weekly_bundle'] = True
@@ -1623,6 +1385,8 @@ BRANCHES['mozilla-1.9.1']['l10nUploadPath'] = \
 BRANCHES['mozilla-1.9.1']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-1.9.1'
 BRANCHES['mozilla-1.9.1']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-1.9.1']['localesURL'] = \
+    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-1.9.1' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-1.9.1']['create_snippet'] = True
 BRANCHES['mozilla-1.9.1']['create_partial'] = True
 BRANCHES['mozilla-1.9.1']['create_partial_l10n'] = False
@@ -1698,6 +1462,8 @@ BRANCHES['mozilla-1.9.2']['l10nUploadPath'] = \
 BRANCHES['mozilla-1.9.2']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-1.9.2'
 BRANCHES['mozilla-1.9.2']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-1.9.2']['localesURL'] = \
+    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-1.9.2' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-1.9.2']['create_snippet'] = True
 BRANCHES['mozilla-1.9.2']['create_partial'] = True
 BRANCHES['mozilla-1.9.2']['create_partial_l10n'] = True
@@ -1846,7 +1612,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     for platform in BRANCHES[branch]['platforms']:
         if platform.endswith('debug') and 'linux-android' not in platform:
             BRANCHES[branch]['platforms'][platform]['mozconfig'] = platform.split('-')[0] + '/' + branchConfig.get('mozconfig_dir', 'generic') + '/debug'
-        elif platform.endswith('qt'):
+        elif platform.endswith('qt') and 'maemo' not in platform:
             BRANCHES[branch]['platforms'][platform]['mozconfig'] = 'linux/' + branchConfig.get('mozconfig_dir', 'generic') + '/qt'
         else:
             BRANCHES[branch]['platforms'][platform]['mozconfig'] = platform + '/' + branchConfig.get('mozconfig_dir', 'generic') + '/nightly'
@@ -1854,7 +1620,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
 # Bug 578880, remove the following block after gcc-4.5 switch
 branches = BRANCHES.keys()
 branches.extend(ACTIVE_PROJECT_BRANCHES)
-for branch in ('mozilla-1.9.1', 'mozilla-1.9.2', 'mozilla-2.1'):
+for branch in ('mozilla-1.9.1', 'mozilla-1.9.2',):
     branches.remove(branch)
 for branch in branches:
     if BRANCHES[branch]['platforms'].has_key('linux'):

@@ -9,7 +9,7 @@ LINUX64_VMS    = ['moz2-linux64-slave%02i' % x for x in range(1,7) + range(8,10)
 LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in range(3,22)]
 WIN32_VMS      = ['win32-slave%02i' % x for x in [1] + range(6,10) + [11,20,26] + range(30,50)]
 WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(2,22)] + ['w32-ix-slave%02i' % x for x in range(22,43)] + \
-                 ['w32-ix-slave%02i' % x for x in range(1,5)] # added for bug 638309
+                 ['w32-ix-slave%02i' % x for x in range(1,5)] + ['w32-ix-slave%02i' % x for x in range(7,9)] # added for bug 638309 and 661758
 SLAVES = {
     'linux':       LINUX_VMS + LINUX_IXS,
     'linux64':     LINUX64_VMS + LINUX64_IXS,
@@ -56,17 +56,14 @@ GLOBAL_VARS = {
     # and if a failure to notify the talos master should result in a warning,
     # and sendchange retry count before give up
     'talos_masters': [
-        ('production-master01.build.mozilla.org:9009', True, 5),
+        ('buildbot-master10.build.mozilla.org:9301', True, 5),
         ('talos-master.mozilla.org:9010', True, 5),
-        ('staging-master.build.mozilla.org:9009', False, 1),
-        ('talos-staging-master02.build.mozilla.org:9012', False, 1),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
     # and sendchange retry count before give up
     'unittest_masters': [
-        ('production-master01.build.mozilla.org:9009', True, 5),
-        ('staging-master.build.mozilla.org:9009', False, 1),
+        ('buildbot-master10.build.mozilla.org:9301', True, 5),
         ('geriatric-master.build.mozilla.org:9989', False, 1),
     ],
     'xulrunner_tinderbox_tree': 'XULRunner',
@@ -110,10 +107,10 @@ BRANCHES = {
         'tinderbox_tree': 'Firefox4.0',
         'packaged_unittest_tinderbox_tree': 'Firefox4.0',
     },
-    'mozilla-2.1': {
-        'tinderbox_tree': 'Mobile2.0',
-        'mobile_tinderbox_tree': 'Mobile2.0',
-        'packaged_unittest_tinderbox_tree': 'Mobile2.0',
+    'mozilla-release': {
+        'packaged_unittest_tinderbox_tree': 'Mozilla-Release',
+        'tinderbox_tree': 'Mozilla-Release',
+        'mobile_tinderbox_tree': 'Mozilla-Release',
     },
     'mozilla-beta': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-Beta',
