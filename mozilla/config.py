@@ -1122,6 +1122,7 @@ BRANCHES['shadow-central']['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BU
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['repo_path'] = 'releases/mozilla-release'
+BRANCHES['mozilla-release']['update_channel'] = 'release'
 BRANCHES['mozilla-release']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
 BRANCHES['mozilla-release']['enable_weekly_bundle'] = True
 BRANCHES['mozilla-release']['start_hour'] = [3]
@@ -1160,6 +1161,7 @@ BRANCHES['mozilla-release']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EX
 BRANCHES['mozilla-beta']['repo_path'] = 'releases/mozilla-beta'
 BRANCHES['mozilla-beta']['l10n_repo_path'] = 'releases/l10n/mozilla-beta'
 BRANCHES['mozilla-beta']['enable_weekly_bundle'] = True
+BRANCHES['mozilla-beta']['update_channel'] = 'beta'
 BRANCHES['mozilla-beta']['start_hour'] = [3]
 BRANCHES['mozilla-beta']['start_minute'] = [2]
 # Enable XULRunner / SDK builds
