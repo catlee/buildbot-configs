@@ -9,8 +9,7 @@ import buildbotcustom.process.factory
 
 from buildbotcustom.l10n import DependentL10n
 from buildbotcustom.misc import get_l10n_repositories, isHgPollerTriggered, \
-  generateTestBuilderNames, generateTestBuilder, _nextFastSlave, \
-  generateBlocklistBuilder
+  generateTestBuilderNames, generateTestBuilder, _nextFastSlave
 from buildbotcustom.process.factory import StagingRepositorySetupFactory, \
   ReleaseTaggingFactory, CCSourceFactory, CCReleaseBuildFactory, \
   ReleaseUpdatesFactory, UpdateVerifyFactory, ReleaseFinalVerification, \
@@ -320,7 +319,7 @@ gloConfig = {
                                     'macosx64': '',
                                     'win32':  ''},
     },
-    '60': {
+    'beta': {
         'hgUsername'                 : 'tbirdbld',
         'hgSshKey'                   : '~cltbld/.ssh/tbirdbld_dsa',
         'relbranchPrefix'            : 'COMM',
@@ -348,11 +347,11 @@ gloConfig = {
         'chatzillaCVSRoot'           : '',
         'chatzillaTimestamp'         : '', # leave empty if chatzilla is not to be tagged
         'l10nRepoPath'               : 'releases/l10n-mozilla-beta',
-        'l10nRevisionFile'           : 'l10n-thunderbird-changesets-6.0',
+        'l10nRevisionFile'           : 'l10n-thunderbird-changesets-beta',
         'toolsRepoPath'              : 'build/tools',
         'buildToolsRepoPath'	   : '',
         'cvsroot'                    : ':ext:tbirdbld@cvs.mozilla.org:/cvsroot', # for patcher, etc.
-        'productVersionFile'         : 'mail/config/version-60.txt',
+        'productVersionFile'         : 'mail/config/version.txt',
         'productName'                : 'thunderbird',
         'binaryName'                 : 'thunderbird',
         'brandName'                  : 'Thunderbird',
@@ -792,12 +791,6 @@ for gloKey in gloConfig:
             packageTests = False
             unittestMasters = None
             unittestBranch = None
-
-        if branchConfig.get('enable_blocklist_update', False):
-            if platform == 'linux':
-                weeklyBuilders.append('%s blocklist update' % pf['base_name'])
-                blocklistBuilder = generateBlocklistBuilder(branchConfig, sourceRepoName, platform, pf['base_name'], pf['slaves'])
-                builders.append(blocklistBuilder)
 
         build_factory = CCReleaseBuildFactory(
             env=pf['env'],
