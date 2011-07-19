@@ -32,11 +32,14 @@ ACTIVE_BRANCHES.extend([
 ACTIVE_PROJECTS = PROJECTS.keys()
 
 ACTIVE_RELEASE_BRANCHES = []
+ACTIVE_MOBILE_RELEASE_BRANCHES = []
+ENABLE_RELEASES = False
 if 'release_branches' in master_config:
     ACTIVE_RELEASE_BRANCHES.extend(master_config['release_branches'])
     ENABLE_RELEASES = True
-else:
-    ENABLE_RELEASES = False
+if 'mobile_release_branches' in master_config:
+    ACTIVE_MOBILE_RELEASE_BRANCHES.extend(master_config['mobile_release_branches'])
+    ENABLE_RELEASES = True
 
 # Set up our fast slaves
 # No need to reload, this is reloaded by builder_master.cfg

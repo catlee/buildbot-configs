@@ -603,6 +603,7 @@ PLATFORM_VARS = {
             'android_signing': True,
             'post_upload_include_platform': True,
             'multi_locale': True,
+            'multi_locale_script': 'scripts/multil10n.py',
         },
         'linux-android-debug': {
             'base_name': 'Android Debug %(branch)s',
@@ -690,6 +691,7 @@ PLATFORM_VARS = {
             'stage_product': 'mobile',
             'post_upload_include_platform': True,
             'multi_locale': True,
+            'multi_locale_script': 'scripts/maemo_multi_locale_build.py',
         },
         'linux-maemo5-qt': {
             'base_name': 'Maemo 5 QT %(branch)s',
@@ -1034,6 +1036,44 @@ for branch in BRANCHES.keys():
                     if platform_config.get('dont_build'):
                         del BRANCHES[branch]['platforms'][platform]
 
+# XXX remove once we have Windows 64-bit as a platform for every branch
+BRANCHES['mozilla-central']['platforms']['win64'] = {
+    'base_name': 'WINNT 6.1 x86-64 mozilla-central',
+    'mozconfig': 'win64/mozilla-central/nightly',
+    # XXX we cannot build xulrunner on Win64 -- see bug 575912
+    'enable_xulrunner': False,
+    'profiled_build': True,
+    'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+    'build_space': 12,
+    'upload_symbols': True,
+    'packageTests': True,
+    'slaves': SLAVES['win64'],
+    'platform_objdir': OBJDIR,
+    'stage_product': 'firefox',
+    'mochitest_leak_threshold': 484,
+    'crashtest_leak_threshold': 484,
+    'update_platform': 'WINNT_x86_64-msvc',
+    'enable_shared_checkouts': True,
+    'env': {
+        'CVS_RSH': 'ssh',
+        'MOZ_OBJDIR': OBJDIR,
+        'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
+        'SYMBOL_SERVER_USER': 'ffxbld',
+        'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
+        'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
+        'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/ffxbld_dsa",
+        'TINDERBOX_OUTPUT': '1',
+        'MOZ_CRASHREPORTER_NO_REPORT': '1',
+        'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
+        'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+    },
+    'enable_opt_unittests': False,
+    'enable_checktests': True,
+    'talos_masters': GLOBAL_VARS['talos_masters'],
+    'test_pretty_names': True,
+    'l10n_check_test': True,
+}
+
 ######## mozilla-central
 # This is a path, relative to HGURL, where the repository is located
 # HGURL + repo_path should be a valid repository
@@ -1247,10 +1287,10 @@ BRANCHES['mozilla-aurora']['create_partial_l10n'] = True
 BRANCHES['mozilla-aurora']['aus2_user'] = 'ffxbld'
 BRANCHES['mozilla-aurora']['aus2_ssh_key'] = 'ffxbld_dsa'
 # use mozilla-aurora-test when disabling updates for merges
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora-bug669305'
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora-bug669305'
-BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora-bug669305'
-BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora-bug669305'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
 BRANCHES['mozilla-aurora']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-aurora'
 BRANCHES['mozilla-aurora']['enable_blocklist_update'] = True
 BRANCHES['mozilla-aurora']['blocklist_update_on_closed_tree'] = False

@@ -64,9 +64,13 @@ PROJECT_BRANCHES = {
         'enable_unittests': False,
         'enable_talos': False,
     },
+    'ionmonkey': {
+        'mozconfig_dir': 'mozilla-central',
+        'enable_talos' : False,
+    
+    },
     'jaegermonkey': {
         'mozconfig_dir': 'jaegermonkey',
-        'enable_talos': False,
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
@@ -75,6 +79,7 @@ PROJECT_BRANCHES = {
         'repo_path': 'integration/mozilla-inbound',
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': True,
+        'enable_weekly_bundle': True,
         'talos_suites': {
             'remote-ts': 1,
             'remote-tdhtml': 1,
@@ -110,7 +115,7 @@ PROJECT_BRANCHES = {
     'private-browsing': {
         'enable_talos': False,
         'enabled_products': ['firefox'],
-        'enable_nightly': True,
+        'enable_nightly': False,
     },
     'services-central': {
         'repo_path': 'services/services-central',
