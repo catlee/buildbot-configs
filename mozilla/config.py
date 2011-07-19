@@ -115,6 +115,7 @@ PLATFORM_VARS = {
             'base_name': 'Linux %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly',
             'src_mozconfig': 'browser/config/mozconfigs/linux32/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -155,6 +156,7 @@ PLATFORM_VARS = {
             'mozconfig': 'linux/%(branch)s/qt',
             'src_mozconfig': 'browser/config/mozconfigs/linux32/qt',
             'xr_mozconfig': 'linux/%(branch)s/xulrunner-qt',
+            'src_xulrunner_mozconfig': 'browser/config/mozconfigs/linux32/xulrunner-qt',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -239,6 +241,7 @@ PLATFORM_VARS = {
             'base_name': 'Linux x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly',
             'src_mozconfig': 'browser/config/mozconfigs/linux64/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux64/xulrunner',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -325,7 +328,9 @@ PLATFORM_VARS = {
         'macosx': {
             'base_name': 'OS X 10.5.2 %(branch)s',
             'mozconfig': 'macosx/%(branch)s/nightly',
-            'src_mozconfig': 'browser/config/mozconfigs/macosx-universal/nightly', # TODO: same as macosx64?
+            'src_mozconfig': 'browser/config/mozconfigs/macosx-universal/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
+            'src_shark_mozconfig': 'browser/config/mozconfigs/macosx-universal/shark',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 10,
@@ -360,6 +365,8 @@ PLATFORM_VARS = {
             'base_name': 'OS X 10.6.2 %(branch)s',
             'mozconfig': 'macosx64/%(branch)s/nightly',
             'src_mozconfig': 'browser/config/mozconfigs/macosx-universal/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
+            'src_shark_mozconfig': 'browser/config/mozconfigs/macosx-universal/shark',
             'packageTests': True,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -396,6 +403,7 @@ PLATFORM_VARS = {
             'base_name': 'WINNT 5.2 %(branch)s',
             'mozconfig': 'win32/%(branch)s/nightly',
             'src_mozconfig': 'browser/config/mozconfigs/win32/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/win32/xulrunner',
             'profiled_build': True,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 12,
@@ -565,6 +573,7 @@ PLATFORM_VARS = {
         'linux-android': {
             'base_name': 'Android %(branch)s',
             'mozconfig': 'linux-android/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/android/nightly',
             'enable_xulrunner': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -608,6 +617,7 @@ PLATFORM_VARS = {
         'linux-android-debug': {
             'base_name': 'Android Debug %(branch)s',
             'mozconfig': 'linux-android-debug/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/android/debug',
             'enable_xulrunner': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -740,6 +750,7 @@ PLATFORM_VARS = {
         'linux-mobile': {
             'base_name': 'Linux Mobile Desktop %(branch)s',
             'mozconfig': 'linux-mobile/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/linux-desktop/nightly',
             'profiled_build': False,
             'enable_xulrunner': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -782,6 +793,7 @@ PLATFORM_VARS = {
         'win32-mobile': {
             'base_name': 'WINNT 5.2 Mobile Desktop %(branch)s',
             'mozconfig': 'win32-mobile/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/win32-desktop/nightly',
             'profiled_build': False,
             'enable_xulrunner': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -823,6 +835,7 @@ PLATFORM_VARS = {
         'macosx-mobile': {
             'base_name': 'OS X 10.5.2 Mobile Desktop %(branch)s',
             'mozconfig': 'macosx-mobile/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/macosx-desktop/nightly',
             'profiled_build': False,
             'enable_xulrunner': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
