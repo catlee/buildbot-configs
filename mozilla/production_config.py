@@ -69,6 +69,7 @@ GLOBAL_VARS = {
     'xulrunner_tinderbox_tree': 'XULRunner',
     'weekly_tinderbox_tree': 'Testing',
     'l10n_tinderbox_tree': 'Mozilla-l10n',
+    'stackwalk_cgi': 'http://foo/bar',
 }
 
 BUILDS_BEFORE_REBOOT = 1
