@@ -16,7 +16,7 @@ ACTIVE_BRANCHES = ['shadow-central', 'mozilla-1.9.2', 'mozilla-central',
         'mozilla-2.0', 'mozilla-beta', 'mozilla-aurora', 'mozilla-release',
 ] + ACTIVE_PROJECT_BRANCHES
 ACTIVE_PROJECTS = PROJECTS.keys()
-ACTIVE_RELEASE_BRANCHES = []
+ACTIVE_RELEASE_BRANCHES = ['mozilla-beta']
 
 # Set up our fast slaves
 # No need to reload, this is reloaded by builder_master.cfg
@@ -25,5 +25,5 @@ buildbotcustom.misc.fastRegexes.extend([
     '-ix-',
     'xserve',
     ])
-ENABLE_RELEASES = False
-RESERVED_SLAVES = "reserved_slaves_bm01"
+ENABLE_RELEASES = True
+RESERVED_SLAVES = "reserved_slaves"

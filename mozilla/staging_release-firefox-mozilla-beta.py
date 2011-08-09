@@ -120,3 +120,11 @@ releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
 # Misc configuration
 releaseConfig['enable_repo_setup'] = True
 releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
+
+releaseConfig['signingServer'] = 'localhost:8080'
+releaseConfig['signingFormats'] = {
+        'win32': ('signcode', 'signcode,gpg'),
+        'linux': (None, 'gpg'),
+        'linux64': (None, 'gpg'),
+        'macosx64': (None, 'gpg'),
+        }
