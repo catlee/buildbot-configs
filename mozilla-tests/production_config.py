@@ -46,6 +46,7 @@ BRANCHES = {
     'mozilla-1.9.2': {
         'tinderbox_tree': 'Firefox3.6',
         'mobile_tinderbox_tree': 'Mobile1.1',
+        'stackwalk_cgi': None,
     },
     'tracemonkey': {
         'tinderbox_tree': 'TraceMonkey',
