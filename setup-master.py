@@ -105,6 +105,7 @@ def load_masters_json(masters_json):
             c.globs.append('l10n-changesets*')
             c.globs.append('release_templates')
             c.globs.append('release-firefox*.py')
+            c.globs.append('release-fennec*.py')
             c.globs.append('builder_master.cfg')
             c.globs.append('build_localconfig.py')
             c.local_links.append(('builder_master.cfg', 'master.cfg'))
@@ -124,69 +125,6 @@ def load_masters_json(masters_json):
 
         retval.append(c)
     return retval
-
-mozilla2_staging = MasterConfig(
-        config_dir='mozilla2-staging',
-        globs=['*.py', '*.cfg', '*.ini', 'l10n-changesets*'],
-        renames=[
-            ('BuildSlaves.py.template', 'BuildSlaves.py'),
-            ],
-        local_links=[],
-        )
-
-mozilla2_staging1 = mozilla2_staging + MasterConfig(
-        "staging-moz2_master",
-        local_links=[
-            ('master1.cfg', 'master.cfg'),
-            ('release_config1.py', 'release_config.py'),
-            ('release_mobile_config1.py', 'release_mobile_config.py'),
-            ],
-        )
-
-mozilla2_staging2 = mozilla2_staging + MasterConfig(
-        "staging-moz2_master2",
-        local_links=[
-            ('master2.cfg', 'master.cfg'),
-            ('release_config2.py', 'release_config.py'),
-            ('release_mobile_config2.py', 'release_mobile_config.py'),
-            ],
-        )
-
-mozilla2 = MasterConfig(
-        config_dir='mozilla2',
-        globs=['*.py', '*.cfg', '*.ini', 'l10n-changesets*'],
-        renames=[
-            ('BuildSlaves.py.template', 'BuildSlaves.py'),
-            ],
-        local_links=[],
-        )
-
-mozilla2_1 = mozilla2 + MasterConfig(
-        "pm-moz2_master",
-        local_links=[
-            ('master1.cfg', 'master.cfg'),
-            ('release_config1.py', 'release_config.py'),
-            ('release_mobile_config1.py', 'release_mobile_config.py'),
-            ],
-        )
-
-mozilla2_2 = mozilla2 + MasterConfig(
-        "pm02-moz2_master",
-        local_links=[
-            ('master2.cfg', 'master.cfg'),
-            ('release_config2.py', 'release_config.py'),
-            ('release_mobile_config2.py', 'release_mobile_config.py'),
-            ],
-        )
-
-mozilla2_3 = mozilla2 + MasterConfig(
-        "pm-2-moz2_master",
-        local_links=[
-            ('master3.cfg', 'master.cfg'),
-            ('release_config3.py', 'release_config.py'),
-            ('release_mobile_config3.py', 'release_mobile_config.py'),
-            ],
-        )
 
 debsign = MasterConfig(
         config_dir='debsign',
@@ -245,14 +183,18 @@ mozilla_base = MasterConfig(
         )
 
 mozilla_production = mozilla_base + MasterConfig(
-    globs=['release-firefox-*.py'],
+    globs=['release-firefox-*.py', 'release-fennec-*.py'],
     )
 
 mozilla_staging = mozilla_base + MasterConfig(
-    globs=['staging_release-firefox-*.py'],
+    globs=['staging_release-*-*.py'],
     local_links=[('staging_release-firefox-mozilla-%s.py' % v,
                   'release-firefox-mozilla-%s.py' % v)
-                 for v in ['1.9.1', '1.9.2', '2.0', 'central', 'beta']]
+                 for v in ['1.9.2', 'central', 'beta',
+                           'release']] + \
+                [('staging_release-fennec-mozilla-%s.py' % v,
+                  'release-fennec-mozilla-%s.py' % v)
+                 for v in ['beta', 'release']]
     )
 
 mozilla_staging_scheduler_master_sm01 = mozilla_staging + MasterConfig(
@@ -462,6 +404,42 @@ mozilla_staging_tests_master2 = mozilla_tests + MasterConfig(
             ]
         )
 
+mozilla_staging_ateam_master1 = mozilla_tests + MasterConfig(
+        "staging-ateam_master1",
+        local_links = [
+            ('staging_ateam_master01_localconfig.py', 'master_localconfig.py'),
+            ('staging_ateam_config.py', 'localconfig.py'),
+            ('universal_master_sqlite.cfg', 'master.cfg'),
+            ]
+        )
+
+mozilla_staging_ateam_master2 = mozilla_tests + MasterConfig(
+        "staging-ateam_master2",
+        local_links = [
+            ('staging_ateam_master02_localconfig.py', 'master_localconfig.py'),
+            ('staging_ateam_config.py', 'localconfig.py'),
+            ('universal_master_sqlite.cfg', 'master.cfg'),
+            ]
+        )
+
+mozilla_staging_addon_master = mozilla_tests + MasterConfig(
+        "staging-addon_master",
+        local_links = [
+            ('staging_addon_master_localconfig.py', 'master_localconfig.py'),
+            ('staging_addon_config.py', 'localconfig.py'),
+            ('universal_master_sqlite.cfg', 'master.cfg'),
+            ]
+        )
+
+mozilla_production_addon_master = mozilla_tests + MasterConfig(
+        "production-addon_master",
+        local_links = [
+            ('production_addon_master_localconfig.py', 'master_localconfig.py'),
+            ('production_addon_config.py', 'localconfig.py'),
+            ('universal_master_sqlite.cfg', 'master.cfg'),
+            ]
+        )
+
 mozilla_preproduction_tests_scheduler_master = mozilla_tests + MasterConfig(
         "preproduction-tests_scheduler",
         local_links = [
@@ -581,8 +559,6 @@ mozilla_preproduction_release_master = mozilla_production + MasterConfig(
 
 # Buildbot 0.7 masters
 masters_07 = [
-        mozilla2_staging1, mozilla2_staging2,
-        mozilla2_1, mozilla2_2, mozilla2_3,
         debsign_production, debsign_staging,
         mobile_production, mobile_staging,
         ]
@@ -614,6 +590,10 @@ masters_08 = [
         mozilla_staging_tests_scheduler_master,
         mozilla_staging_tests_master1,
         mozilla_staging_tests_master2,
+        mozilla_staging_ateam_master1,
+        mozilla_staging_ateam_master2,
+        mozilla_staging_addon_master,
+        mozilla_production_addon_master,
         mozilla_preproduction_tests_scheduler_master,
         mozilla_preproduction_tests_master,
         mozilla_production_tests_scheduler_master,
