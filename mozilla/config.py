@@ -590,6 +590,7 @@ PLATFORM_VARS = {
             'android_signing': True,
             'post_upload_include_platform': True,
             'multi_locale': True,
+            'multi_locale_script': 'scripts/multil10n.py',
         },
         'linux-android-debug': {
             'base_name': 'Android Debug %(branch)s',
@@ -677,6 +678,7 @@ PLATFORM_VARS = {
             'stage_product': 'mobile',
             'post_upload_include_platform': True,
             'multi_locale': True,
+            'multi_locale_script': 'scripts/maemo_multi_locale_build.py',
         },
         'linux-maemo5-qt': {
             'base_name': 'Maemo 5 QT %(branch)s',
@@ -892,7 +894,7 @@ PROJECTS = {
             'macosx-debug': PLATFORM_VARS['macosx-debug']['env'],
         },
         'hgurl': 'http://hg.mozilla.org',
-        'repo_path': 'tracemonkey',
+        'repo_path': 'integration/mozilla-inbound',
     },
 }
 
@@ -915,21 +917,6 @@ BRANCHES = {
     'mozilla-beta': {
     },
     'mozilla-aurora': {
-    },
-    'mozilla-2.0': {
-        'lock_platforms': True,
-        'platforms': {
-            'linux': {},
-            'linuxqt': {},
-            'linux64': {},
-            'win32': {},
-            'macosx64': {},
-            'linux-debug': {},
-            'linux64-debug': {},
-            'macosx-debug': {},
-            'macosx64-debug': {},
-            'win32-debug': {},
-        },
     },
     'mozilla-1.9.1': {
         'lock_platforms': True,
@@ -1021,6 +1008,44 @@ for branch in BRANCHES.keys():
                 for platform, platform_config in value.items():
                     if platform_config.get('dont_build'):
                         del BRANCHES[branch]['platforms'][platform]
+
+# XXX remove once we have Windows 64-bit as a platform for every branch
+BRANCHES['mozilla-central']['platforms']['win64'] = {
+    'base_name': 'WINNT 6.1 x86-64 mozilla-central',
+    'mozconfig': 'win64/mozilla-central/nightly',
+    # XXX we cannot build xulrunner on Win64 -- see bug 575912
+    'enable_xulrunner': False,
+    'profiled_build': True,
+    'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+    'build_space': 12,
+    'upload_symbols': True,
+    'packageTests': True,
+    'slaves': SLAVES['win64'],
+    'platform_objdir': OBJDIR,
+    'stage_product': 'firefox',
+    'mochitest_leak_threshold': 484,
+    'crashtest_leak_threshold': 484,
+    'update_platform': 'WINNT_x86_64-msvc',
+    'enable_shared_checkouts': True,
+    'env': {
+        'CVS_RSH': 'ssh',
+        'MOZ_OBJDIR': OBJDIR,
+        'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
+        'SYMBOL_SERVER_USER': 'ffxbld',
+        'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
+        'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
+        'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/ffxbld_dsa",
+        'TINDERBOX_OUTPUT': '1',
+        'MOZ_CRASHREPORTER_NO_REPORT': '1',
+        'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
+        'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+    },
+    'enable_opt_unittests': False,
+    'enable_checktests': True,
+    'talos_masters': GLOBAL_VARS['talos_masters'],
+    'test_pretty_names': True,
+    'l10n_check_test': True,
+}
 
 ######## mozilla-central
 # This is a path, relative to HGURL, where the repository is located
@@ -1240,6 +1265,7 @@ BRANCHES['mozilla-aurora']['create_partial'] = True
 BRANCHES['mozilla-aurora']['create_partial_l10n'] = True
 BRANCHES['mozilla-aurora']['aus2_user'] = 'ffxbld'
 BRANCHES['mozilla-aurora']['aus2_ssh_key'] = 'ffxbld_dsa'
+# use mozilla-aurora-test when disabling updates for merges
 BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
 BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
 BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
@@ -1248,62 +1274,6 @@ BRANCHES['mozilla-aurora']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXT
 BRANCHES['mozilla-aurora']['enable_blocklist_update'] = True
 BRANCHES['mozilla-aurora']['blocklist_update_on_closed_tree'] = False
 
-######## mozilla-2.0
-BRANCHES['mozilla-2.0']['repo_path'] = 'releases/mozilla-2.0'
-BRANCHES['mozilla-2.0']['l10n_repo_path'] = 'l10n-central'
-BRANCHES['mozilla-2.0']['enable_weekly_bundle'] = True
-BRANCHES['mozilla-2.0']['start_hour'] = [3]
-BRANCHES['mozilla-2.0']['start_minute'] = [2]
-# Enable XULRunner / SDK builds
-BRANCHES['mozilla-2.0']['enable_xulrunner'] = True
-# Enable unit tests
-BRANCHES['mozilla-2.0']['geriatric_masters'] = [
-    ('10.250.48.137:9989', False),
-]
-BRANCHES['mozilla-2.0']['enable_mac_a11y'] = True
-BRANCHES['mozilla-2.0']['unittest_build_space'] = 6
-# And code coverage
-BRANCHES['mozilla-2.0']['enable_codecoverage'] = False
-BRANCHES['mozilla-2.0']['enable_blocklist_update'] = False
-BRANCHES['mozilla-2.0']['blocklist_update_on_closed_tree'] = False
-# L10n configuration
-BRANCHES['mozilla-2.0']['enable_l10n'] = True
-BRANCHES['mozilla-2.0']['enable_l10n_onchange'] = True
-BRANCHES['mozilla-2.0']['l10nNightlyUpdate'] = True
-BRANCHES['mozilla-2.0']['l10n_platforms'] = ['linux' , 'linux64', 'win32',
-                                             'macosx64']
-BRANCHES['mozilla-2.0']['l10nDatedDirs'] = True
-BRANCHES['mozilla-2.0']['l10n_tree'] = 'fx40x'
-#make sure it has an ending slash
-BRANCHES['mozilla-2.0']['l10nUploadPath'] = \
-    '/home/ftp/pub/mozilla.org/firefox/nightly/latest-mozilla-2.0-l10n/'
-BRANCHES['mozilla-2.0']['enUS_binaryURL'] = \
-    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-2.0'
-BRANCHES['mozilla-2.0']['allLocalesFile'] = 'browser/locales/all-locales'
-BRANCHES['mozilla-2.0']['localesURL'] = \
-    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-2.0' % (GLOBAL_VARS['hgurl'])
-BRANCHES['mozilla-2.0']['enable_multi_locale'] = True
-BRANCHES['mozilla-2.0']['upload_mobile_symbols'] = True
-# If True, a complete update snippet for this branch will be generated and
-# uploaded to. Any platforms with 'debug' in them will not have snippets
-# generated.
-BRANCHES['mozilla-2.0']['create_snippet'] = True
-# turn on in bug 594867
-BRANCHES['mozilla-2.0']['create_mobile_snippet'] = False
-BRANCHES['mozilla-2.0']['create_partial'] = True
-BRANCHES['mozilla-2.0']['create_partial_l10n'] = True
-BRANCHES['mozilla-2.0']['aus2_user'] = 'ffxbld'
-BRANCHES['mozilla-2.0']['aus2_ssh_key'] = 'ffxbld_dsa'
-BRANCHES['mozilla-2.0']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-2.0'
-BRANCHES['mozilla-2.0']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-2.0'
-BRANCHES['mozilla-2.0']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-2.0'
-BRANCHES['mozilla-2.0']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-2.0'
-BRANCHES['mozilla-2.0']['platforms']['linux']['l10n_check_test'] = False
-BRANCHES['mozilla-2.0']['platforms']['linux64']['l10n_check_test'] = False
-BRANCHES['mozilla-2.0']['platforms']['macosx64']['l10n_check_test'] = False
-BRANCHES['mozilla-2.0']['platforms']['win32']['l10n_check_test'] = False
-# TODO: Remove this when bug 525438 lands on mozilla-2.0
-BRANCHES['mozilla-2.0']['platforms']['macosx64']['test_pretty_names'] = False
 
 ######## mozilla-1.9.1
 # mozilla-1.9.1 can be removed once we're no longer refreshing MUs from 3.5.18,
