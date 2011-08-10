@@ -1,1 +1,0 @@
-release-fennec-5.0.py

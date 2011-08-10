@@ -22,18 +22,23 @@ from config import BRANCHES, SLAVES, PROJECTS, ACTIVE_PROJECT_BRANCHES
 ACTIVE_BRANCHES = ACTIVE_PROJECT_BRANCHES[:]
 ACTIVE_BRANCHES.extend([
     'mozilla-1.9.2',
-    'mozilla-2.0',
     'mozilla-central',
     'shadow-central',
+    'mozilla-beta',
+    'mozilla-aurora',
+    'mozilla-release',
     ])
 ACTIVE_PROJECTS = PROJECTS.keys()
 
 ACTIVE_RELEASE_BRANCHES = []
+ACTIVE_MOBILE_RELEASE_BRANCHES = []
+ENABLE_RELEASES = False
 if 'release_branches' in master_config:
     ACTIVE_RELEASE_BRANCHES.extend(master_config['release_branches'])
     ENABLE_RELEASES = True
-else:
-    ENABLE_RELEASES = False
+if 'mobile_release_branches' in master_config:
+    ACTIVE_MOBILE_RELEASE_BRANCHES.extend(master_config['mobile_release_branches'])
+    ENABLE_RELEASES = True
 
 # Set up our fast slaves
 # No need to reload, this is reloaded by builder_master.cfg
