@@ -359,7 +359,10 @@ def makeBuildConfig(builderType=None, branchName=None, hgBranch=None,
         # Blocklist settings
         bc['repo_path'] = bc['hg_branch'] # alias
         bc['product_name'] = 'thunderbird'
-        bc['enable_blocklist_update'] = True
+        if branchName in ['comm-release']:
+            bc['enable_blocklist_update'] = False
+        else:
+            bc['enable_blocklist_update'] = True
         if branchName in ['comm-central', 'comm-1.9.2']:
             bc['blocklist_update_on_closed_tree'] = True
         else:
@@ -483,7 +486,23 @@ BRANCHES['comm-beta-bloat'] = makeBuildConfig(
                                mozillaCentralBranch = 'releases/mozilla-beta',
                                tinderboxTree = 'Thunderbird-Beta'
                            )
-
+BRANCHES['comm-release'] = makeBuildConfig(
+                               builderType   = 'nightly',
+                               branchName    = 'comm-release',
+                               hgBranch      = 'releases/comm-release',
+                               mozillaCentralBranch = 'releases/mozilla-release',
+                               tinderboxTree = 'Thunderbird-Release',
+                               allLocalesFile = 'all-locales.comm-release',
+                               wantNightly   = False,
+                               wantL10n      = False
+                           )
+BRANCHES['comm-release-bloat'] = makeBuildConfig(
+                               builderType   = 'bloat',
+                               branchName    = 'comm-release',
+                               hgBranch      = 'releases/comm-release',
+                               mozillaCentralBranch = 'releases/mozilla-release',
+                               tinderboxTree = 'Thunderbird-Release'
+                           )
 BRANCHES['comm-miramar'] = makeBuildConfig(
                                builderType   = 'nightly',
                                branchName    = 'comm-miramar',
