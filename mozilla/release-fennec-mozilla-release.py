@@ -32,7 +32,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': 'FIXME',
+        'revision': '339923bc045a',
         'relbranch': None,
         'bumpFiles': {
             'mobile/confvars.sh': {
@@ -67,7 +67,7 @@ releaseConfig['enUSPlatforms']        = ('linux-maemo5-gtk', 'linux-android',
                                          'linux-mobile', 'macosx-mobile',
                                          'win32-mobile')
 releaseConfig['signedPlatforms']      = ('linux-android',)
-releaseConfig['unittestPlatforms']    = releaseConfig['enUSPlatforms']
+releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
 releaseConfig['enableUnittests']      = True
 
