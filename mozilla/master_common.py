@@ -82,22 +82,3 @@ def prioritizeBuilders(botmaster, builders):
     log.msg("Sorted %i builders in %.2fs" % (len(builders), time.time() - s))
     return builders
 c['prioritizeBuilders'] = prioritizeBuilders
-
-# Create our QueueDir objects
-from buildtools.queuedir import QueueDir
-commandsQueue = QueueDir('commands', '/dev/shm/queue/commands')
-pulseQueue = QueueDir('pulse', '/dev/shm/queue/pulse')
-
-import passwords
-reload(passwords)
-if hasattr(passwords, 'PULSE_PASSWORD'):
-    # Send pulse messages
-    import re
-    import buildbotcustom.status.pulse
-    reload(buildbotcustom.status.pulse)
-    from buildbotcustom.status.pulse import PulseStatus
-    c['status'].append(PulseStatus(
-        pulseQueue,
-        ignoreBuilders=[re.compile('.*shadow-central.*'), re.compile('fuzzer-.*')],
-        send_logs=False,
-        ))
