@@ -3,7 +3,7 @@ MAC_MINIS      = ['moz2-darwin9-slave%02i' % x for x in range(1,4) + range(5,73)
 XSERVES        = ['bm-xserve%02i' % x for x in range(6,13) + range(15,25)]
 WIN32_VMS      = ['win32-slave%02i' % x for x in [1,4] + range(6,12) + [11,20,21,26] + range(30,61)]
 WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(1,26)] + ['w32-ix-slave%02i' % x for x in range(1,43)]
-WIN64_IXS      = ['mw64-ix-slave01'] + ['w64-ix-slave%02i' % x for x in [2] + range(6,43)]
+WIN64_IXS      = ['mw64-ix-slave01'] + ['w64-ix-slave%02i' % x for x in range(1,43)]
 LINUX_VMS      = ['moz2-linux-slave%02i' % x for x in range(1,61)]
 LINUX_IXS      = ['mv-moz2-linux-ix-slave%02i' % x for x in range(1,24)] + ['linux-ix-slave%02i' % x for x in range(1,43)]
 LINUX64_VMS    = ['moz2-linux64-slave%02i' % x for x in range(1,13)]
@@ -50,11 +50,12 @@ GLOBAL_VARS = {
     'graph_server': 'graphs-stage.mozilla.org',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://build.mozilla.org/stage-clobberer/index.php',
+    'disable_tinderbox_mail': True,
     # List of talos masters to notify of new builds,
     # and if a failure to notify the talos master should result in a warning,
     # and sendchange retry count before give up
     'talos_masters': [
-        ('staging-master.build.mozilla.org:9009', True, 1),
+        ('dev-master01.build.scl1.mozilla.com:9009', True, 1),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
@@ -138,6 +139,7 @@ PLATFORM_VARS = {
 
 PROJECTS = {
     'fuzzing': {
+        'disable_tinderbox_mail': True,
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'fuzzing_repo': 'ssh://stage-ffxbld@hg.mozilla.org/private/fuzzing',
         'fuzzing_remote_host': 'stage-ffxbld@dm-pvtbuild01.mozilla.org',
@@ -146,16 +148,19 @@ PROJECTS = {
         'idle_slaves': 0,
     },
     'nanojit': {
+        'disable_tinderbox_mail': True,
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'tinderbox_tree': 'MozillaTest',
     },
     'valgrind': {
+        'disable_tinderbox_mail': True,
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'tinderbox_tree': 'MozillaTest',
     },
     'spidermonkey': {
+        'disable_tinderbox_mail': True,
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'tinderbox_tree': 'MozillaTest',

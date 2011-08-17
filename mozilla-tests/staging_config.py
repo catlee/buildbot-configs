@@ -13,14 +13,13 @@ GRAPH_CONFIG = ['--resultsServer', 'graphs-stage.mozilla.org',
     '--resultsLink', '/server/collect.cgi']
 
 GLOBAL_VARS = {
+    'disable_tinderbox_mail': True,
     'tinderbox_tree': 'MozillaTest',
     'mobile_tinderbox_tree': 'MobileTest',
     'build_tools_repo_path': 'build/tools',
     'stage_server': 'dev-stage01.build.sjc1.mozilla.com',
     'stage_username': 'ffxbld',
     'stage_ssh_key': 'ffxbld_dsa',
-    'stackwalk_cgi': 'http://stackwalker.pvt.build.mozilla.org/stackwalk.cgi',
-
 }
 
 BRANCHES = {
