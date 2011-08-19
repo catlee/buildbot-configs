@@ -13,16 +13,18 @@ c['manhole'] = manhole.PasswordManhole("tcp:7001:interface=127.0.0.1", "cltbld",
 
 from config import BRANCHES, SLAVES, PROJECTS, ACTIVE_PROJECT_BRANCHES
 ACTIVE_BRANCHES = ['shadow-central', 'mozilla-1.9.2', 'mozilla-central',
-        'mozilla-2.0', 'mozilla-beta', 'mozilla-aurora', 'mozilla-release',
+        'mozilla-beta', 'mozilla-aurora', 'mozilla-release',
 ] + ACTIVE_PROJECT_BRANCHES
 ACTIVE_PROJECTS = PROJECTS.keys()
 ACTIVE_RELEASE_BRANCHES = []
+ACTIVE_MOBILE_RELEASE_BRANCHES = []
 
 # Set up our fast slaves
 # No need to reload, this is reloaded by builder_master.cfg
 import buildbotcustom.misc
 buildbotcustom.misc.fastRegexes.extend([
-    '-ix-',
+    'linux-ix-',
+    'linux64-ix-',
     'xserve',
     ])
 ENABLE_RELEASES = False

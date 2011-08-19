@@ -2,18 +2,20 @@
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
     'accessibility': {
+        'mozconfig_dir': 'accessibility',
         'enable_nightly': True,
         'enabled_products': ['firefox'],
-        # only want a11y so turn off the default set
+        # only want a11y which is run within the "chrome" suite
+        # turn other suites off
         'talos_suites': {
             'dirty': 0,
             'tp4': 0,
             'tp': 0,
-            'chrome': 0,
+            'chrome_twinopen': 0,
+            'chrome_mac': 0,
             'nochrome': 0,
             'dromaeo': 0,
             'svg': 0,
-            'scroll': 0,
             'paint': 0,
         },
         'add_test_suites': [
@@ -63,27 +65,41 @@ PROJECT_BRANCHES = {
         'enable_unittests': False,
         'enable_talos': False,
     },
+    'ionmonkey': {
+        'mozconfig_dir': 'mozilla-central',
+        'enable_talos' : False,
+    },
     'jaegermonkey': {
         'mozconfig_dir': 'jaegermonkey',
-        'enable_talos': False,
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
-    },
-    'mozilla-inbound': {
-        'repo_path': 'integration/mozilla-inbound',
-        'mozconfig_dir': 'mozilla-central',
-        'enable_nightly': True,
         'talos_suites': {
             'remote-ts': 1,
             'remote-tdhtml': 1,
             'remote-tsvg': 1,
             'remote-tsspider': 1,
-            'remote-tpan': 1,
-            'remote-tp4m': 1,
-            'remote-tp4m_nochrome': 1,
             'remote-twinopen': 1,
-            'remote-tzoom': 1,
+        },
+    },
+    'mozilla-inbound': {
+        'repo_path': 'integration/mozilla-inbound',
+        'mozconfig_dir': 'mozilla-central',
+        'enable_nightly': True,
+        'enable_weekly_bundle': True,
+        'platforms': {
+            'linux64': {
+                'build_space': 7,
+            },
+            'linux': {
+                'build_space': 7,
+            },
+            'linuxqt': {
+                'build_space': 7,
+            },
+        },
+        'talos_suites': {
+            'v8': 1,
         }
     },
     'places': {
@@ -94,22 +110,15 @@ PROJECT_BRANCHES = {
             'linux': {
                 'build_space': 6,
             },
-            'linuxqt': { 
+            'linuxqt': {
                 'build_space': 6,
             },
         },
-        'talos_suites': {
-            'remote-ts': 1,
-            'remote-tdhtml': 1,
-            'remote-tsvg': 1,
-            'remote-tsspider': 1,
-            'remote-twinopen': 1,
-        }
     },
     'private-browsing': {
         'enable_talos': False,
         'enabled_products': ['firefox'],
-        'enable_nightly': True,
+        'enable_nightly': False,
     },
     'services-central': {
         'repo_path': 'services/services-central',
@@ -145,15 +154,6 @@ PROJECT_BRANCHES = {
         'create_snippet': True,
         'create_partial': True,
         'talos_suites': {
-            'remote-ts': 1,
-            'remote-tdhtml': 1,
-            'remote-tsvg': 1,
-            'remote-tsspider': 1,
-            'remote-tpan': 1,
-            'remote-tp4m': 1,
-            'remote-tp4m_nochrome': 1,
-            'remote-twinopen': 1,
-            'remote-tzoom': 1,
             'v8': 1,
         }
     },
@@ -194,7 +194,13 @@ PROJECT_BRANCHES = {
     'cedar': {},
     'holly': {},
     'larch': {},
-    'maple': {},
+    # customizations while booked for bcp47 project as per bug 667734
+    'maple': {
+        'enable_talos': False,
+        'enable_nightly': True,
+        'create_snippet': True,
+        'create_partial': True,
+    },
 }
 
 # All is the default

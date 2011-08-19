@@ -42,17 +42,10 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-Aurora',
         'mobile_tinderbox_tree': 'Mozilla-Aurora',
     },
-    'mozilla-2.0': {
-        'tinderbox_tree': 'Firefox4.0',
-        'mobile_tinderbox_tree': 'Firefox4.0',
-    },
-    'mozilla-2.1': {
-        'tinderbox_tree': 'Mobile2.0',
-        'mobile_tinderbox_tree': 'Mobile2.0',
-    },
     'mozilla-1.9.2': {
         'tinderbox_tree': 'Firefox3.6',
         'mobile_tinderbox_tree': 'Mobile1.1',
+        'stackwalk_cgi': None,
     },
     'tracemonkey': {
         'tinderbox_tree': 'TraceMonkey',
@@ -75,6 +68,7 @@ BRANCHES = {
         'mobile_tinderbox_tree': 'AddonTester',
     },
     'try': {
+        'disable_tinderbox_mail': True,
         'tinderbox_tree': 'Try',
         'mobile_tinderbox_tree': 'Try',
         'enable_mail_notifier': True,

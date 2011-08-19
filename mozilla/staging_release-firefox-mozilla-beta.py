@@ -1,4 +1,6 @@
 releaseConfig = {}
+releaseConfig['skip_repo_setup']       = True
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
@@ -14,19 +16,19 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '5.0b3'
-releaseConfig['appVersion']          = '5.0'
-releaseConfig['milestone']           = '5.0'
+releaseConfig['version']             = '6.0b1'
+releaseConfig['appVersion']          = '6.0'
+releaseConfig['milestone']           = '6.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_5_0b3'
+releaseConfig['baseTag']             = 'FIREFOX_6_0b1'
 #  Old version info
-releaseConfig['oldVersion']          = '5.0b2'
+releaseConfig['oldVersion']          = '5.0b6'
 releaseConfig['oldAppVersion']       = '5.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_5_0b2'
+releaseConfig['oldBaseTag']          = 'FIREFOX_5_0b6'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '5.0'
-releaseConfig['nextMilestone']       = '5.0'
+releaseConfig['nextAppVersion']      = '6.0'
+releaseConfig['nextMilestone']       = '6.0'
 #  Repository configuration, for tagging
 ## Staging repository path
 releaseConfig['userRepoRoot'] = 'users/stage-ffxbld'
@@ -35,7 +37,7 @@ releaseConfig['sourceRepositories']  = {
         'name': 'mozilla-beta',
         'clonePath': 'releases/mozilla-beta',
         'path': 'users/stage-ffxbld/mozilla-beta',
-        'revision': '23d449276096',
+        'revision': 'FIXME',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -88,7 +90,7 @@ releaseConfig['cvsroot']             = ':ext:stgbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'mozBeta-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = False
 releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R14'
-releaseConfig['ftpServer']           = 'ftp.mozilla.org'
+releaseConfig['ftpServer']           = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['stagingServer']       = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'http://dev-stage01.build.sjc1.mozilla.com'
@@ -118,7 +120,7 @@ releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-i386')
 
 # Misc configuration
-releaseConfig['enable_repo_setup'] = True
+releaseConfig['enable_repo_setup'] = False
 releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
 
 releaseConfig['signingServer'] = 'localhost:8080'

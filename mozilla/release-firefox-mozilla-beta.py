@@ -14,25 +14,25 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '5.0b7'
-releaseConfig['appVersion']          = '5.0'
-releaseConfig['milestone']           = '5.0'
+releaseConfig['version']             = '7.0b1'
+releaseConfig['appVersion']          = '7.0'
+releaseConfig['milestone']           = '7.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_5_0b7'
+releaseConfig['baseTag']             = 'FIREFOX_7_0b1'
 #  Old version info
-releaseConfig['oldVersion']          = '5.0b6'
-releaseConfig['oldAppVersion']       = '5.0'
+releaseConfig['oldVersion']          = '6.0b5'
+releaseConfig['oldAppVersion']       = '6.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_5_0b6'
+releaseConfig['oldBaseTag']          = 'FIREFOX_6_0b5'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '5.0'
-releaseConfig['nextMilestone']       = '5.0'
+releaseConfig['nextAppVersion']      = '7.0'
+releaseConfig['nextMilestone']       = '7.0'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': 'f1acd88f828e',
+        'revision': '8786e3e49240',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -63,7 +63,7 @@ releaseConfig['otherReposToTag']     = {
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
-releaseConfig['xulrunnerPlatforms']  = ()
+releaseConfig['xulrunnerPlatforms']  = releaseConfig['enUSPlatforms']
 
 # Unittests
 releaseConfig['unittestPlatforms']   = ()

@@ -1,4 +1,5 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
@@ -90,7 +91,7 @@ releaseConfig['cvsroot']             = ':ext:stgbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'moz192-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = False
 releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R11_1'
-releaseConfig['ftpServer']           = 'ftp.mozilla.org'
+releaseConfig['ftpServer']           = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['stagingServer']       = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'http://dev-stage01.build.sjc1.mozilla.com'
@@ -110,7 +111,7 @@ releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
 
 # Major update configuration
-releaseConfig['majorUpdateRepoPath'] = 'users/stage-ffxbld/mozilla-2.0'
+releaseConfig['majorUpdateRepoPath'] = 'users/stage-ffxbld/mozilla-release'
 releaseConfig['majorUpdateToVersion']   = '4.0rc1'
 releaseConfig['majorUpdateAppVersion']  = '4.0'
 releaseConfig['majorUpdateBuildNumber'] = 1

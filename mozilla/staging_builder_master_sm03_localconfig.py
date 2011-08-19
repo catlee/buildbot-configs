@@ -6,7 +6,7 @@ c['status'] = [
         WebStatus(http_port=8012, allowForce=True)
 ]
 
-c['buildbotURL'] = 'http://staging-master.build.mozilla.org:8012/'
+c['buildbotURL'] = 'http://dev-master01.build.scl1.mozilla.com:8012/'
 
 from buildbot import manhole
 c['manhole'] = manhole.PasswordManhole("tcp:1237:interface=127.0.0.1", "cltbld", "password")
@@ -14,13 +14,15 @@ c['manhole'] = manhole.PasswordManhole("tcp:1237:interface=127.0.0.1", "cltbld",
 from config import BRANCHES, SLAVES, PROJECTS
 ACTIVE_BRANCHES = [b for b in BRANCHES.keys() if b != 'mozilla-1.9.1']
 ACTIVE_PROJECTS = PROJECTS.keys()
-ACTIVE_RELEASE_BRANCHES = ['mozilla-1.9.1', 'mozilla-1.9.2', 'mozilla-2.0', ]
+ACTIVE_RELEASE_BRANCHES = ['mozilla-beta', 'mozilla-release']
+ACTIVE_MOBILE_RELEASE_BRANCHES = ['mozilla-beta', 'mozilla-release']
 
 # Set up our fast slaves
 # No need to reload, this is reloaded by builder_master.cfg
 import buildbotcustom.misc
 buildbotcustom.misc.fastRegexes.extend([
-    '-ix-',
+    'linux-ix-',
+    'linux64-ix-',
     'xserve',
     ])
 ENABLE_RELEASES = True
