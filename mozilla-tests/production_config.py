@@ -47,10 +47,6 @@ BRANCHES = {
         'mobile_tinderbox_tree': 'Mobile1.1',
         'stackwalk_cgi': None,
     },
-    'tracemonkey': {
-        'tinderbox_tree': 'TraceMonkey',
-        'mobile_tinderbox_tree': 'TraceMonkey',
-    },
     'places': {
         'tinderbox_tree': 'Places',
         'mobile_tinderbox_tree': 'Places',
@@ -68,6 +64,7 @@ BRANCHES = {
         'mobile_tinderbox_tree': 'AddonTester',
     },
     'try': {
+        'disable_tinderbox_mail': True,
         'tinderbox_tree': 'Try',
         'mobile_tinderbox_tree': 'Try',
         'enable_mail_notifier': True,
