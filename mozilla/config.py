@@ -402,6 +402,7 @@ PLATFORM_VARS = {
             'crashtest_leak_threshold': 484,
             'update_platform': 'WINNT_x86-msvc',
             'enable_shared_checkouts': True,
+            'enable_pymake': True,
             'env': {
                 'CVS_RSH': 'ssh',
                 'MOZ_OBJDIR': OBJDIR,
