@@ -14,16 +14,16 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '7.0b2'
+releaseConfig['version']             = '7.0b4'
 releaseConfig['appVersion']          = '7.0'
 releaseConfig['milestone']           = '7.0'
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_7_0b2'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'FENNEC_7_0b4'
 #  Old version info
-releaseConfig['oldVersion']          = '7.0b1'
+releaseConfig['oldVersion']          = '7.0b3'
 releaseConfig['oldAppVersion']       = '7.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FENNEC_7_0b1'
+releaseConfig['oldBaseTag']          = 'FENNEC_7_0b3'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = '7.0'
 releaseConfig['nextMilestone']       = '7.0'
@@ -32,10 +32,14 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '7e3966aece57',
-        'relbranch': None,
+        'revision': 'ff20a21364bb',
+        'relbranch': 'MOBILE70_2011083111_RELBRANCH',
         'bumpFiles': {
             'mobile/confvars.sh': {
+                'version': releaseConfig['appVersion'],
+                'nextVersion': releaseConfig['nextAppVersion']
+            },
+            'browser/config/version.txt': {
                 'version': releaseConfig['appVersion'],
                 'nextVersion': releaseConfig['nextAppVersion']
             },

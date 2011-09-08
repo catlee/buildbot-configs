@@ -14,16 +14,16 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '7.0b2'
+releaseConfig['version']             = '7.0b4'
 releaseConfig['appVersion']          = '7.0'
 releaseConfig['milestone']           = '7.0'
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_7_0b2'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'FIREFOX_7_0b4'
 #  Old version info
-releaseConfig['oldVersion']          = '7.0b1'
+releaseConfig['oldVersion']          = '7.0b3'
 releaseConfig['oldAppVersion']       = '7.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_7_0b1'
+releaseConfig['oldBaseTag']          = 'FIREFOX_7_0b3'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = '7.0'
 releaseConfig['nextMilestone']       = '7.0'
@@ -32,8 +32,8 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '7e3966aece57',
-        'relbranch': None,
+        'revision': 'ff20a21364bb',
+        'relbranch': 'GECKO70_2011083111_RELBRANCH',
         'bumpFiles': {
             'browser/config/version.txt': {
                 'version': releaseConfig['appVersion'],
@@ -112,6 +112,8 @@ releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
 releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-sparc',
                                           'opensolaris-i386')
+releaseConfig['releaseUptake']       = 3
+releaseConfig['releasetestUptake']   = 1
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

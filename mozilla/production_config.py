@@ -1,5 +1,5 @@
 MAC_SNOW_MINIS = ['moz2-darwin10-slave%02i' % x for x in range(5,10) + range(15,30) + range(40,57)]
-MAC_MINIS      = ['moz2-darwin9-slave%02i' % x for x in [1,2,5,6,7] + range(9,10) + range(11,27) + range(29,68) + range(69,73)]
+MAC_MINIS      = ['moz2-darwin9-slave%02i' % x for x in range(1,73) if x not in (3,4,5,8,10,20,27,28,40,59,68)]
 XSERVES        = ['bm-xserve%02i' % x for x in [6,7,9,11,12,15,16,17,18,19,21,22]]
 LINUX_VMS      = ['moz2-linux-slave%02i' % x for x in [1,2] + range(5,10) + range(11,17) + range(18,47)]
 LINUX_IXS      = ['mv-moz2-linux-ix-slave%02i' % x for x in range(2,22)] + \
@@ -36,7 +36,7 @@ TRY_XSERVES    = ['bm-xserve%02i' % x for x in [8,10,20,23,24]]
 TRY_MAC64      = ['try-mac64-slave%02i' % x for x in range(1,32)] + \
                  ['moz2-darwin10-slave%02i' % x for x in range(11,15)]
 TRY_WIN32_IXS  = ['mw32-ix-slave%02i' % x for x in range(16,19) + range(22,26)] + \
-                 ['w32-ix-slave%02i' % x for x in range(2,23)]
+                 ['w32-ix-slave%02i' % x for x in range(2,24)]
 TRY_WIN64_IXS  = ['w64-ix-slave%02i' % x for x in range(25,43)]
 TRY_SLAVES = {
     'linux':       TRY_LINUX + TRY_LINUX_IXS,
@@ -63,7 +63,6 @@ GLOBAL_VARS = {
     # and sendchange retry count before give up
     'talos_masters': [
         ('buildbot-master10.build.mozilla.org:9301', True, 5),
-        ('talos-master.mozilla.org:9010', True, 5),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
@@ -173,6 +172,9 @@ BRANCHES = {
 }
 
 PLATFORM_VARS = {
+    'macosx': {
+        'talos_masters': GLOBAL_VARS['talos_masters'] + [('talos-master.mozilla.org:9010', True, 5)]
+    }
 }
 
 PROJECTS = {
