@@ -27,5 +27,7 @@ buildbotcustom.misc.fastRegexes.extend([
     'linux64-ix-',
     'xserve',
     ])
-ENABLE_RELEASES = True
-RESERVED_SLAVES = "reserved_slaves"
+ENABLE_RELEASES = False
+RESERVED_SLAVES = "reserved_slaves_bm01"
+
+QUEUEDIR = "/dev/shm/queue"
