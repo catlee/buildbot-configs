@@ -144,6 +144,7 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
+                'PYTHON26': '/tools/python-2.6.5/bin/python',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
