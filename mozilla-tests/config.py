@@ -8,7 +8,7 @@ from project_branches import PROJECT_BRANCHES, ACTIVE_PROJECT_BRANCHES
 
 import localconfig
 reload(localconfig)
-from localconfig import SLAVES, GLOBAL_VARS, GRAPH_CONFIG
+from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS, GRAPH_CONFIG
 
 REMOTE_PROCESS_NAMES = { 'default':         'org.mozilla.fennec',
                          'mozilla-beta':    'org.mozilla.firefox_beta',
@@ -116,13 +116,16 @@ PLATFORMS['linux-android']['stage_platform'] = 'android'
 for platform, platform_config in PLATFORMS.items():
     for slave_platform in platform_config['slave_platforms']:
         platform_config[slave_platform]['slaves'] = sorted(SLAVES[slave_platform.split('-')[0]])
+        if slave_platform in TRY_SLAVES:
+            platform_config[slave_platform]['try_slaves'] = sorted(TRY_SLAVES[slave_platform.split('-')[0]])
+        else:
+            platform_config[slave_platform]['try_slaves'] = platform_config[slave_platform]['slaves']
 
 MOBILE_PLATFORMS = PLATFORMS['linux-android']['slave_platforms']
 
 ALL_PLATFORMS = PLATFORMS['linux']['slave_platforms'] + \
                 PLATFORMS['linux64']['slave_platforms'] + \
                 PLATFORMS['win32']['slave_platforms'] + \
-                PLATFORMS['win64']['slave_platforms'] + \
                 PLATFORMS['macosx64']['slave_platforms']
 
 WIN7_ONLY = ['win7']
@@ -445,6 +448,7 @@ PLATFORM_UNITTEST_VARS = {
                 'opt_unittest_suites' : \
                     UNITTEST_SUITES['opt_unittest_suites'][:] + \
                     [('reftest-ipc', ['reftest-ipc'])] + \
+                    [('reftest-no-accel', ['opengl-no-accel'])] + \
                     [('crashtest-ipc', ['crashtest-ipc'])],
                 'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
                 'mobile_unittest_suites' : UNITTEST_SUITES['mobile_unittest_suites'][:],
@@ -479,7 +483,7 @@ PLATFORM_UNITTEST_VARS = {
         'win64': {
             'builds_before_reboot': 1,
             'download_symbols': False,
-            'enable_opt_unittests': True,
+            'enable_opt_unittests': False,
             # We can't yet run unit tests on debug builds - see bug 562459
             'enable_debug_unittests': False,
             'w764': {
@@ -754,7 +758,19 @@ BRANCHES['mozilla-central']['repo_path'] = "mozilla-central"
 BRANCHES['mozilla-central']['mobile_branch_name'] = "Mobile"
 BRANCHES['mozilla-central']['mobile_talos_branch'] = "mobile"
 BRANCHES['mozilla-central']['build_branch'] = "1.9.2"
-BRANCHES['mozilla-central']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('reftest-no-accel', ['opengl-no-accel'])]
+# Let's add win64 tests only for mozilla-central until we have enough capacity - see bug 667024
+# XXX hacking warning - this code could get out of date easily
+BRANCHES['mozilla-central']['platforms']['win64']['enable_opt_unittests'] = True
+for suite in SUITES.keys():
+    options = SUITES[suite]['options']
+    if options[1] == ALL_PLATFORMS:
+        options = (options[0], ALL_PLATFORMS + PLATFORMS['win64']['slave_platforms'])
+    if not SUITES[suite]['enable_by_default']:
+        # Suites that are turned off by default
+        BRANCHES['mozilla-central'][suite + '_tests'] = (0, True) + options
+    else:
+        # Suites that are turned on by default
+        BRANCHES['mozilla-central'][suite + '_tests'] = (1, True) + options
 BRANCHES['mozilla-central']['platforms']['linux-android']['enable_debug_unittests'] = True
 BRANCHES['mozilla-central']['xperf_tests'] = (1, True, {}, WIN7_ONLY)
 
@@ -804,7 +820,6 @@ BRANCHES['addonbaselinetester']['enable_unittests'] = False
 
 ######## try
 BRANCHES['try']['tp4_tests'] = (1, False, TALOS_TP4_OPTS, ALL_PLATFORMS)
-BRANCHES['try']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('reftest-no-accel', ['opengl-no-accel'])]
 BRANCHES['try']['platforms']['linux-android']['enable_debug_unittests'] = True
 BRANCHES['try']['platforms']['win32']['win7']['opt_unittest_suites'] += [('reftest-no-accel', ['reftest-no-d2d-d3d'])]
 
