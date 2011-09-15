@@ -7,7 +7,7 @@ from project_branches import PROJECT_BRANCHES, ACTIVE_PROJECT_BRANCHES
 import localconfig
 reload(localconfig)
 from localconfig import MAC_SNOW_MINIS, MAC_MINIS, XSERVES, LINUX_VMS, \
-                        LINUX_IXS, WIN32_VMS, WIN32_IXS, SLAVES, \
+                        LINUX_IXS, WIN32_IXS, SLAVES, \
                         TRY_SLAVES
 
 GLOBAL_VARS = {
@@ -60,6 +60,7 @@ GLOBAL_VARS = {
         'linux64': {},
         'linux64-rpm': {},
         'win32': {},
+        'win64': {},
         'macosx64': {},
         'linux-debug': {},
         'linux64-debug': {},
@@ -114,6 +115,8 @@ PLATFORM_VARS = {
         'linux': {
             'base_name': 'Linux %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly',
+            'src_mozconfig': 'browser/config/mozconfigs/linux32/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -152,7 +155,9 @@ PLATFORM_VARS = {
         'linuxqt': {
             'base_name': 'Linux QT %(branch)s',
             'mozconfig': 'linux/%(branch)s/qt',
+            'src_mozconfig': 'browser/config/mozconfigs/linux32/qt',
             'xr_mozconfig': 'linux/%(branch)s/xulrunner-qt',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner-qt',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -188,6 +193,7 @@ PLATFORM_VARS = {
         'linux-rpm': {
             'base_name': 'Linux RPM %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly-rpm',
+            'src_mozconfig': 'browser/config/mozconfigs/linux32/rpm',
             'enable_nightly': False, # We will explicitly enable for m-c
             'enable_dep': False,
             'enable_xulrunner': False,
@@ -235,6 +241,8 @@ PLATFORM_VARS = {
         'linux64': {
             'base_name': 'Linux x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly',
+            'src_mozconfig': 'browser/config/mozconfigs/linux64/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux64/xulrunner',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -274,6 +282,7 @@ PLATFORM_VARS = {
         'linux64-rpm': {
             'base_name': 'Linux RPM x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly-rpm',
+            'src_mozconfig': 'browser/config/mozconfigs/linux64/rpm',
             'enable_nightly': False, # We will explicitly enable for m-c
             'enable_dep': False,
             'enable_xulrunner': False,
@@ -320,6 +329,9 @@ PLATFORM_VARS = {
         'macosx': {
             'base_name': 'OS X 10.5.2 %(branch)s',
             'mozconfig': 'macosx/%(branch)s/nightly',
+            'src_mozconfig': 'browser/config/mozconfigs/macosx-universal/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
+            'src_shark_mozconfig': 'browser/config/mozconfigs/macosx-universal/shark',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 10,
@@ -353,6 +365,9 @@ PLATFORM_VARS = {
         'macosx64': {
             'base_name': 'OS X 10.6.2 %(branch)s',
             'mozconfig': 'macosx64/%(branch)s/nightly',
+            'src_mozconfig': 'browser/config/mozconfigs/macosx-universal/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
+            'src_shark_mozconfig': 'browser/config/mozconfigs/macosx-universal/shark',
             'packageTests': True,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -388,6 +403,8 @@ PLATFORM_VARS = {
         'win32': {
             'base_name': 'WINNT 5.2 %(branch)s',
             'mozconfig': 'win32/%(branch)s/nightly',
+            'src_mozconfig': 'browser/config/mozconfigs/win32/nightly',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/win32/xulrunner',
             'profiled_build': True,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 12,
@@ -421,9 +438,47 @@ PLATFORM_VARS = {
             'test_pretty_names': True,
             'l10n_check_test': True,
         },
+        'win64': {
+            'base_name': 'WINNT 6.1 x86-64 %(branch)s',
+            'mozconfig': 'win64/%(branch)s/nightly',
+            # XXX we cannot build xulrunner on Win64 -- see bug 575912
+            'enable_xulrunner': False,
+            'profiled_build': True,
+            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+            'build_space': 12,
+            'upload_symbols': True,
+            'packageTests': True,
+            'slaves': SLAVES['win64'],
+            'platform_objdir': OBJDIR,
+            'stage_product': 'firefox',
+            'mochitest_leak_threshold': 484,
+            'crashtest_leak_threshold': 484,
+            'update_platform': 'WINNT_x86_64-msvc',
+            'enable_shared_checkouts': True,
+            'env': {
+                'CVS_RSH': 'ssh',
+                'MOZ_OBJDIR': OBJDIR,
+                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
+                'SYMBOL_SERVER_USER': 'ffxbld',
+                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
+                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
+                'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/ffxbld_dsa",
+                'MOZ_SYMBOLS_EXTRA_BUILDID': 'win64',
+                'TINDERBOX_OUTPUT': '1',
+                'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
+                'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+            },
+            'enable_opt_unittests': False,
+            'enable_checktests': True,
+            'talos_masters': GLOBAL_VARS['talos_masters'],
+            'test_pretty_names': True,
+            'l10n_check_test': True,
+        },
         'linux-debug': {
             'base_name': 'Linux %(branch)s leak test',
             'mozconfig': 'linux/%(branch)s/debug',
+            'src_mozconfig': 'browser/config/mozconfigs/linux32/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
@@ -453,6 +508,7 @@ PLATFORM_VARS = {
         'linux64-debug': {
             'base_name': 'Linux x86-64 %(branch)s leak test',
             'mozconfig': 'linux64/%(branch)s/debug',
+            'src_mozconfig': 'browser/config/mozconfigs/linux64/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': False,
@@ -482,6 +538,7 @@ PLATFORM_VARS = {
         'macosx-debug': {
             'base_name': 'OS X 10.5.2 %(branch)s leak test',
             'mozconfig': 'macosx/%(branch)s/debug',
+            'src_mozconfig': 'browser/config/mozconfigs/macosx32/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
@@ -506,6 +563,7 @@ PLATFORM_VARS = {
         'macosx64-debug': {
             'base_name': 'OS X 10.6.2 %(branch)s leak test',
             'mozconfig': 'macosx64/%(branch)s/debug',
+            'src_mozconfig': 'browser/config/mozconfigs/macosx64/debug',
             'packageTests': True,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -530,6 +588,7 @@ PLATFORM_VARS = {
         'win32-debug': {
             'base_name': 'WINNT 5.2 %(branch)s leak test',
             'mozconfig': 'win32/%(branch)s/debug',
+            'src_mozconfig': 'browser/config/mozconfigs/win32/debug',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
@@ -552,6 +611,7 @@ PLATFORM_VARS = {
         'linux-android': {
             'base_name': 'Android %(branch)s',
             'mozconfig': 'linux-android/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/android/nightly',
             'enable_xulrunner': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -595,6 +655,7 @@ PLATFORM_VARS = {
         'linux-android-debug': {
             'base_name': 'Android Debug %(branch)s',
             'mozconfig': 'linux-android-debug/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/android/debug',
             'enable_xulrunner': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -727,6 +788,7 @@ PLATFORM_VARS = {
         'linux-mobile': {
             'base_name': 'Linux Mobile Desktop %(branch)s',
             'mozconfig': 'linux-mobile/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/linux-desktop/nightly',
             'profiled_build': False,
             'enable_xulrunner': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -734,7 +796,6 @@ PLATFORM_VARS = {
             'packageTests': True,
             'upload_symbols': True,
             'update_platform': 'Linux_x86-gcc3',
-            'create_snippet': False,
             'create_partial': False,
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
@@ -770,6 +831,7 @@ PLATFORM_VARS = {
         'win32-mobile': {
             'base_name': 'WINNT 5.2 Mobile Desktop %(branch)s',
             'mozconfig': 'win32-mobile/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/win32-desktop/nightly',
             'profiled_build': False,
             'enable_xulrunner': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -811,6 +873,7 @@ PLATFORM_VARS = {
         'macosx-mobile': {
             'base_name': 'OS X 10.5.2 Mobile Desktop %(branch)s',
             'mozconfig': 'macosx-mobile/%(branch)s/nightly',
+            'src_mozconfig': 'mobile/config/mozconfigs/macosx-desktop/nightly',
             'profiled_build': False,
             'enable_xulrunner': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
@@ -867,6 +930,7 @@ PROJECTS = {
         'job_interval': 24*3600, # Once a day
         'linux': {'env': PLATFORM_VARS['linux']['env']},
         'linux64': {'env': PLATFORM_VARS['linux64']['env']},
+        'repo_path': 'mozilla-central',
     },
     'spidermonkey': {
         'platforms': {
@@ -1009,44 +1073,6 @@ for branch in BRANCHES.keys():
                     if platform_config.get('dont_build'):
                         del BRANCHES[branch]['platforms'][platform]
 
-# XXX remove once we have Windows 64-bit as a platform for every branch
-BRANCHES['mozilla-central']['platforms']['win64'] = {
-    'base_name': 'WINNT 6.1 x86-64 mozilla-central',
-    'mozconfig': 'win64/mozilla-central/nightly',
-    # XXX we cannot build xulrunner on Win64 -- see bug 575912
-    'enable_xulrunner': False,
-    'profiled_build': True,
-    'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-    'build_space': 12,
-    'upload_symbols': True,
-    'packageTests': True,
-    'slaves': SLAVES['win64'],
-    'platform_objdir': OBJDIR,
-    'stage_product': 'firefox',
-    'mochitest_leak_threshold': 484,
-    'crashtest_leak_threshold': 484,
-    'update_platform': 'WINNT_x86_64-msvc',
-    'enable_shared_checkouts': True,
-    'env': {
-        'CVS_RSH': 'ssh',
-        'MOZ_OBJDIR': OBJDIR,
-        'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-        'SYMBOL_SERVER_USER': 'ffxbld',
-        'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
-        'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-        'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/ffxbld_dsa",
-        'TINDERBOX_OUTPUT': '1',
-        'MOZ_CRASHREPORTER_NO_REPORT': '1',
-        'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
-        'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
-    },
-    'enable_opt_unittests': False,
-    'enable_checktests': True,
-    'talos_masters': GLOBAL_VARS['talos_masters'],
-    'test_pretty_names': True,
-    'l10n_check_test': True,
-}
-
 ######## mozilla-central
 # This is a path, relative to HGURL, where the repository is located
 # HGURL + repo_path should be a valid repository
@@ -1087,6 +1113,7 @@ BRANCHES['mozilla-central']['upload_mobile_symbols'] = True
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
 BRANCHES['mozilla-central']['create_snippet'] = True
+BRANCHES['mozilla-central']['update_channel'] = 'nightly'
 BRANCHES['mozilla-central']['create_mobile_snippet'] = True
 BRANCHES['mozilla-central']['create_partial'] = True
 BRANCHES['mozilla-central']['create_partial_l10n'] = True
@@ -1131,9 +1158,11 @@ BRANCHES['shadow-central']['platforms']['linuxqt']['env']['MOZ_SYMBOLS_EXTRA_BUI
 BRANCHES['shadow-central']['platforms']['linux64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'linux64-shadow-central'
 BRANCHES['shadow-central']['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'shadow-central'
 BRANCHES['shadow-central']['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-shadow-central'
+BRANCHES['shadow-central']['platforms']['win64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'win64-shadow-central'
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['repo_path'] = 'releases/mozilla-release'
+BRANCHES['mozilla-release']['update_channel'] = 'release'
 BRANCHES['mozilla-release']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
 BRANCHES['mozilla-release']['enable_weekly_bundle'] = True
 BRANCHES['mozilla-release']['start_hour'] = [3]
@@ -1167,11 +1196,13 @@ BRANCHES['mozilla-release']['enable_mobile_nightly'] = False
 BRANCHES['mozilla-release']['enable_blocklist_update'] = False
 BRANCHES['mozilla-release']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-release']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-release'
+del BRANCHES['mozilla-release']['platforms']['win64']
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['repo_path'] = 'releases/mozilla-beta'
 BRANCHES['mozilla-beta']['l10n_repo_path'] = 'releases/l10n/mozilla-beta'
 BRANCHES['mozilla-beta']['enable_weekly_bundle'] = True
+BRANCHES['mozilla-beta']['update_channel'] = 'beta'
 BRANCHES['mozilla-beta']['start_hour'] = [3]
 BRANCHES['mozilla-beta']['start_minute'] = [2]
 # Enable XULRunner / SDK builds
@@ -1208,19 +1239,10 @@ BRANCHES['mozilla-beta']['enable_mobile_nightly'] = False
 # If True, a complete update snippet for this branch will be generated and
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
-BRANCHES['mozilla-beta']['create_snippet'] = True
-BRANCHES['mozilla-beta']['create_mobile_snippet'] = True
-BRANCHES['mozilla-beta']['create_partial'] = True
-BRANCHES['mozilla-beta']['create_partial_l10n'] = True
-BRANCHES['mozilla-beta']['aus2_user'] = 'ffxbld'
-BRANCHES['mozilla-beta']['aus2_ssh_key'] = 'ffxbld_dsa'
-BRANCHES['mozilla-beta']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-beta'
-BRANCHES['mozilla-beta']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-beta'
-BRANCHES['mozilla-beta']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-beta'
-BRANCHES['mozilla-beta']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-beta'
 BRANCHES['mozilla-beta']['enable_blocklist_update'] = True
 BRANCHES['mozilla-beta']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-beta']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
+del BRANCHES['mozilla-beta']['platforms']['win64']
 
 ######## mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = 'releases/mozilla-aurora'
@@ -1260,20 +1282,21 @@ BRANCHES['mozilla-aurora']['upload_mobile_symbols'] = True
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
 BRANCHES['mozilla-aurora']['create_snippet'] = True
+BRANCHES['mozilla-aurora']['update_channel'] = 'aurora'
 BRANCHES['mozilla-aurora']['create_mobile_snippet'] = True
 BRANCHES['mozilla-aurora']['create_partial'] = True
 BRANCHES['mozilla-aurora']['create_partial_l10n'] = True
 BRANCHES['mozilla-aurora']['aus2_user'] = 'ffxbld'
 BRANCHES['mozilla-aurora']['aus2_ssh_key'] = 'ffxbld_dsa'
 # use mozilla-aurora-test when disabling updates for merges
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora-test'
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora-test'
-BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora-test'
-BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora-test'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
 BRANCHES['mozilla-aurora']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-aurora'
 BRANCHES['mozilla-aurora']['enable_blocklist_update'] = True
 BRANCHES['mozilla-aurora']['blocklist_update_on_closed_tree'] = False
-
+del BRANCHES['mozilla-aurora']['platforms']['win64']
 
 ######## mozilla-1.9.1
 # mozilla-1.9.1 can be removed once we're no longer refreshing MUs from 3.5.18,
@@ -1422,6 +1445,7 @@ BRANCHES['mozilla-1.9.2']['allLocalesFile'] = 'browser/locales/all-locales'
 BRANCHES['mozilla-1.9.2']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-1.9.2' % (GLOBAL_VARS['hgurl'])
 BRANCHES['mozilla-1.9.2']['create_snippet'] = True
+BRANCHES['mozilla-1.9.2']['update_channel'] = 'nightly'
 BRANCHES['mozilla-1.9.2']['create_partial'] = True
 BRANCHES['mozilla-1.9.2']['create_partial_l10n'] = True
 BRANCHES['mozilla-1.9.2']['aus2_user'] = 'ffxbld'
@@ -1473,6 +1497,7 @@ BRANCHES['try']['platforms']['linux-rpm']['slaves'] = TRY_SLAVES['linux']
 BRANCHES['try']['platforms']['linux64-rpm']['slaves'] = TRY_SLAVES['linux64']
 BRANCHES['try']['platforms']['linuxqt']['slaves'] = TRY_SLAVES['linux']
 BRANCHES['try']['platforms']['win32']['slaves'] = TRY_SLAVES['win32']
+BRANCHES['try']['platforms']['win64']['slaves'] = TRY_SLAVES['win64']
 BRANCHES['try']['platforms']['macosx64']['slaves'] = TRY_SLAVES['macosx64']
 BRANCHES['try']['platforms']['linux-debug']['slaves'] = TRY_SLAVES['linux']
 BRANCHES['try']['platforms']['linux64-debug']['slaves'] = TRY_SLAVES['linux64']
@@ -1501,6 +1526,7 @@ BRANCHES['try']['platforms']['win32']['upload_symbols'] = True
 BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_USER'] = 'trybld'
 BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_PATH'] = '/symbols/windows'
 BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_SSH_KEY'] = '/c/Documents and Settings/cltbld/.ssh/trybld_dsa'
+BRANCHES['try']['platforms']['win64']['upload_symbols'] = False
 for platform in BRANCHES['try']['platforms'].keys():
     # Sadly, the rule that mobile builds go to /mobile/
     # isn't true for try :(
@@ -1540,6 +1566,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['l10nDatedDirs'] = branchConfig.get('l10nDatedDirs', False)
     # nightly updates
     BRANCHES[branch]['create_snippet'] = branchConfig.get('create_snippet', False)
+    BRANCHES[branch]['update_channel'] = branchConfig.get('update_channel', 'nightly-%s' % branch)
     BRANCHES[branch]['create_partial'] = branchConfig.get('create_partial', False)
     BRANCHES[branch]['create_partial_l10n'] = branchConfig.get('create_partial_l10n', False)
     BRANCHES[branch]['create_mobile_snippet'] = branchConfig.get('create_mobile_snippet', False)
@@ -1563,6 +1590,8 @@ for branch in ACTIVE_PROJECT_BRANCHES:
         BRANCHES[branch]['platforms']['linux64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'linux64-' + branch
     if BRANCHES[branch]['platforms'].has_key('win32'):
         BRANCHES[branch]['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
+    if BRANCHES[branch]['platforms'].has_key('win64'):
+        BRANCHES[branch]['platforms']['win64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'win64-' + branch
     if BRANCHES[branch]['platforms'].has_key('macosx64'):
         BRANCHES[branch]['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-' + branch
     # point to the mozconfigs, default is generic

@@ -9,6 +9,8 @@ SLAVES = {
     'tegra_android': dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(1,4)]),
 }
 
+TRY_SLAVES = {}
+
 GRAPH_CONFIG = ['--resultsServer', 'graphs.mozilla.org',
     '--resultsLink', '/server/collect.cgi']
 
@@ -49,10 +51,6 @@ BRANCHES = {
     'mozilla-1.9.2': {
         'tinderbox_tree': 'Firefox3.6',
         'mobile_tinderbox_tree': 'Mobile1.1',
-    },
-    'tracemonkey': {
-        'tinderbox_tree': 'TraceMonkey',
-        'mobile_tinderbox_tree': 'TraceMonkey',
     },
     'places': {
         'tinderbox_tree': 'Places',
