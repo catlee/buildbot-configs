@@ -68,6 +68,7 @@ PROJECT_BRANCHES = {
         'enable_talos': False,
     },
     'ionmonkey': {
+        'disable_tinderbox_mail': False,
         'mozconfig_dir': 'mozilla-central',
         'enable_talos' : False,
     },
@@ -158,7 +159,11 @@ PROJECT_BRANCHES = {
         },
     },
     #####  TWIGS aka RENTABLE BRANCHES
-    'alder': {},
+    # customizations while booked for bug 687570 - WebRTC project
+    'alder': {
+        'enable_unittests': False,
+        'enable_talos': False,
+    },
     'birch': {},
     'cedar': {},
     'holly': {},

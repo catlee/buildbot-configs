@@ -1,4 +1,5 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
@@ -14,26 +15,26 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '6.0.2'
+releaseConfig['version']             = '7.0'
 releaseConfig['appVersion']          = releaseConfig['version']
 releaseConfig['milestone']           = releaseConfig['version']
 releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'FENNEC_6_0_2'
+releaseConfig['baseTag']             = 'FENNEC_7_0'
 #  Old version info
-releaseConfig['oldVersion']          = '6.0.1'
+releaseConfig['oldVersion']          = '6.0.2'
 releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
-releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FENNEC_6_0_1'
+releaseConfig['oldBuildNumber']      = 2
+releaseConfig['oldBaseTag']          = 'FENNEC_6_0_2'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '6.0.2'
-releaseConfig['nextMilestone']       = '6.0.2'
+releaseConfig['nextAppVersion']      = '7.0'
+releaseConfig['nextMilestone']       = '7.0'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '14452010e012',
-        'relbranch': 'MOBILE602_2011083111_RELBRANCH',
+        'revision': 'd4f603adb72c',
+        'relbranch': 'MOBILE70_2011092210_RELBRANCH',
         'bumpFiles': {
             'mobile/confvars.sh': {
                 'version': releaseConfig['appVersion'],

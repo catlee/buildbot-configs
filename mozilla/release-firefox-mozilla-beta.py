@@ -1,4 +1,5 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
@@ -14,16 +15,16 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '7.0b5'
+releaseConfig['version']             = '7.0b6'
 releaseConfig['appVersion']          = '7.0'
 releaseConfig['milestone']           = '7.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_7_0b5'
+releaseConfig['baseTag']             = 'FIREFOX_7_0b6'
 #  Old version info
-releaseConfig['oldVersion']          = '7.0b4'
+releaseConfig['oldVersion']          = '7.0b5'
 releaseConfig['oldAppVersion']       = '7.0'
-releaseConfig['oldBuildNumber']      = 2
-releaseConfig['oldBaseTag']          = 'FIREFOX_7_0b4'
+releaseConfig['oldBuildNumber']      = 1
+releaseConfig['oldBaseTag']          = 'FIREFOX_7_0b5'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = '7.0'
 releaseConfig['nextMilestone']       = '7.0'
@@ -32,7 +33,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '922315e4df83',
+        'revision': 'e5566280b79d',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {

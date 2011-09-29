@@ -1,5 +1,5 @@
-TEGRAS     = dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(1,65)])
-TRY_TEGRAS = dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(65,95)])
+TEGRAS     = dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(1,65) + range(105,124)])
+TRY_TEGRAS = dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(65,105)])
 
 SLAVES = {
     'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(3,10) + range(11,64)]),
@@ -18,6 +18,7 @@ GRAPH_CONFIG = ['--resultsServer', 'graphs.mozilla.org',
     '--resultsLink', '/server/collect.cgi']
 
 GLOBAL_VARS = {
+    'disable_tinderbox_mail': True,
     'build_tools_repo_path': 'build/tools',
     'stage_server': 'stage.mozilla.org',
     'stage_username': 'ffxbld',
@@ -69,7 +70,6 @@ BRANCHES = {
         'mobile_tinderbox_tree': 'AddonTester',
     },
     'try': {
-        'disable_tinderbox_mail': True,
         'tinderbox_tree': 'Try',
         'mobile_tinderbox_tree': 'Try',
         'enable_mail_notifier': True,
