@@ -58,11 +58,13 @@ GLOBAL_VARS = {
     'graph_server': 'graphs.mozilla.org',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://build.mozilla.org/clobberer/index.php',
+    'disable_tinderbox_mail': True,
     # List of talos masters to notify of new builds,
     # and if a failure to notify the talos master should result in a warning,
     # and sendchange retry count before give up
     'talos_masters': [
         ('buildbot-master10.build.mozilla.org:9301', True, 5),
+        ('dev-master01.build.mozilla.org:9060', False, 2),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
@@ -70,6 +72,7 @@ GLOBAL_VARS = {
     'unittest_masters': [
         ('buildbot-master10.build.mozilla.org:9301', True, 5),
         ('geriatric-master.build.mozilla.org:9989', False, 1),
+        ('dev-master01.build.mozilla.org:9060', False, 2),
     ],
     'xulrunner_tinderbox_tree': 'XULRunner',
     'weekly_tinderbox_tree': 'Testing',
@@ -144,7 +147,6 @@ BRANCHES = {
         'packaged_unittest_tinderbox_tree': 'Jaegermonkey',
     },
     'try': {
-        'disable_tinderbox_mail': True,
         'tinderbox_tree': 'Try',
         'mobile_tinderbox_tree': 'Try',
         'packaged_unittest_tinderbox_tree': 'Try',
@@ -185,20 +187,24 @@ PROJECTS = {
         # Path needs extra leading slash due to optparse expansion on Win32
         'fuzzing_base_dir': '//mnt/pvt_builds/fuzzing/',
         'idle_slaves': 3,
+        'disable_tinderbox_mail': False,
     },
     'nanojit': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 3,
         'tinderbox_tree': 'Nanojit',
+        'disable_tinderbox_mail': False,
     },
     'valgrind': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 3, # 3 slaves have to be idle before we start
         'tinderbox_tree': 'Firefox',
+        'disable_tinderbox_mail': False,
     },
     'spidermonkey': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'tinderbox_tree': 'Mozilla-Inbound',
+        'disable_tinderbox_mail': False,
     },
 }
