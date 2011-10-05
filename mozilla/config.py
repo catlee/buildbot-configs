@@ -613,6 +613,7 @@ PLATFORM_VARS = {
             'stage_product': 'firefox',
             'stage_platform': 'win32-debug',
             'enable_shared_checkouts': True,
+            'enable_pymake': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
