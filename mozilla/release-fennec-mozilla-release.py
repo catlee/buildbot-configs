@@ -1,4 +1,5 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
@@ -14,28 +15,32 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '6.0.2'
+releaseConfig['version']             = '7.0.1'
 releaseConfig['appVersion']          = releaseConfig['version']
 releaseConfig['milestone']           = releaseConfig['version']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_6_0_2'
+releaseConfig['baseTag']             = 'FENNEC_7_0_1'
 #  Old version info
-releaseConfig['oldVersion']          = '6.0.1'
+releaseConfig['oldVersion']          = '7.0'
 releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
-releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FENNEC_6_0_1'
+releaseConfig['oldBuildNumber']      = 2
+releaseConfig['oldBaseTag']          = 'FENNEC_7_0'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '6.0.2'
-releaseConfig['nextMilestone']       = '6.0.2'
+releaseConfig['nextAppVersion']      = releaseConfig['version']
+releaseConfig['nextMilestone']       = releaseConfig['version']
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '80716c319d2a',
+        'revision': 'a494b8cd79bf',
         'relbranch': None,
         'bumpFiles': {
             'mobile/confvars.sh': {
+                'version': releaseConfig['appVersion'],
+                'nextVersion': releaseConfig['nextAppVersion']
+            },
+            'browser/config/version.txt': {
                 'version': releaseConfig['appVersion'],
                 'nextVersion': releaseConfig['nextAppVersion']
             },
@@ -107,9 +112,17 @@ releaseConfig['disableVirusCheck']        = True
 releaseConfig['disablePushToMirrors']     = True
 
 releaseConfig['mozharness_config'] = {
-    'linux-android':
-    'multi_locale/release_mozilla-release_linux-android.json',
-    'linux-maemo5-gtk':
-    'multi_locale/release_mozilla-release_linux-maemo5-gtk.json',
+    'platforms': {
+        'linux-android':
+            'multi_locale/release_mozilla-release_linux-android.json',
+        'linux-maemo5-gtk':
+            'multi_locale/release_mozilla-release_linux-maemo5-gtk.json',
+    },
+    'multilocaleOptions': [
+        '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
+        '--only-pull-build-source',
+        '--only-pull-locale-source',
+        '--only-add-locales',
+        '--only-package-multi',
+    ]
 }
-

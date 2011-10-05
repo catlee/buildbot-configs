@@ -3,9 +3,7 @@ ac_add_options --host=x86_64-pc-mingw32
 
 ac_add_options --enable-application=browser
 ac_add_options --enable-jemalloc
-
-# needed because of bug 680277
-ac_add_options --enable-profiling
+ac_add_options --disable-optimize
 ac_add_options --enable-debug
 ac_add_options --enable-libxul
 ac_add_options --enable-trace-malloc
@@ -13,4 +11,4 @@ ac_add_options --enable-trace-malloc
 # Needed to enable breakpad in application.ini
 export MOZILLA_OFFICIAL=1
 
-. $topsrcdir/configs/mozilla2/win32/include/choose-make-flags
+mk_add_options MOZ_MAKE_FLAGS=-j1

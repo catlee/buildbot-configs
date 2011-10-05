@@ -1,4 +1,5 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
@@ -14,25 +15,25 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '7.0b4'
-releaseConfig['appVersion']          = '7.0'
-releaseConfig['milestone']           = '7.0'
+releaseConfig['version']             = '8.0b1'
+releaseConfig['appVersion']          = '8.0'
+releaseConfig['milestone']           = '8.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_7_0b4'
+releaseConfig['baseTag']             = 'FIREFOX_8_0b1'
 #  Old version info
-releaseConfig['oldVersion']          = '7.0b3'
+releaseConfig['oldVersion']          = '7.0b6'
 releaseConfig['oldAppVersion']       = '7.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_7_0b3'
+releaseConfig['oldBaseTag']          = 'FIREFOX_7_0b6'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '7.0'
-releaseConfig['nextMilestone']       = '7.0'
+releaseConfig['nextAppVersion']      = '8.0'
+releaseConfig['nextMilestone']       = '8.0'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '6791db28b82f',
+        'revision': '7b8d7d4b1c90',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -112,6 +113,8 @@ releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
 releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-sparc',
                                           'opensolaris-i386')
+releaseConfig['releaseUptake']       = 3
+releaseConfig['releasetestUptake']   = 1
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

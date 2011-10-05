@@ -1,3 +1,6 @@
+TEGRAS     = dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(1,65) + range(105,124)])
+TRY_TEGRAS = dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(65,105)])
+
 SLAVES = {
     'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(3,10) + range(11,64)]),
     'fedora64' : dict([("talos-r3-fed64-%03i" % x, {}) for x in range (3,10) + range(11,60)]),
@@ -6,13 +9,16 @@ SLAVES = {
     'w764': dict([("t-r3-w764-%03i" % x, {}) for x in range(1,6)]),
     'leopard': dict([("talos-r3-leopard-%03i" % x, {}) for x in range(3,10) + range(11,60)]),
     'snowleopard': dict([("talos-r3-snow-%03i" % x, {}) for x in range(3,10) + range(11,60)]),
-    'tegra_android': dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(1,95)]),
+    'tegra_android': TEGRAS,
 }
+
+TRY_SLAVES = {'tegra_android': TRY_TEGRAS}
 
 GRAPH_CONFIG = ['--resultsServer', 'graphs.mozilla.org',
     '--resultsLink', '/server/collect.cgi']
 
 GLOBAL_VARS = {
+    'disable_tinderbox_mail': True,
     'build_tools_repo_path': 'build/tools',
     'stage_server': 'stage.mozilla.org',
     'stage_username': 'ffxbld',
@@ -64,12 +70,12 @@ BRANCHES = {
         'mobile_tinderbox_tree': 'AddonTester',
     },
     'try': {
-        'disable_tinderbox_mail': True,
         'tinderbox_tree': 'Try',
         'mobile_tinderbox_tree': 'Try',
         'enable_mail_notifier': True,
         'notify_real_author': True,
         'enable_merging': False,
+        'slave_key': 'try_slaves',
         'package_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds',
         'package_dir': '%(who)s-%(got_revision)s',
         'stage_username': 'trybld',

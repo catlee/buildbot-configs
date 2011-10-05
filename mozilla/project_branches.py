@@ -18,11 +18,6 @@ PROJECT_BRANCHES = {
             'svg': 0,
             'paint': 0,
         },
-        'platforms': {
-            'win64': {
-                'dont_build': True,
-            },
-        },
         'add_test_suites': [
             ('macosx64', 'snowleopard', 'opt', 'mochitest-other', 'mochitest-a11y'),
             ('macosx64', 'snowleopard', 'debug', 'mochitest-other', 'mochitest-a11y'),
@@ -49,9 +44,6 @@ PROJECT_BRANCHES = {
                 'enable_debug_unittests': False,
                 'tegra_android': {},
             },
-            'win64': {
-                'dont_build': True,
-            },
         },
     },
     'electrolysis': {
@@ -76,6 +68,7 @@ PROJECT_BRANCHES = {
         'enable_talos': False,
     },
     'ionmonkey': {
+        'disable_tinderbox_mail': False,
         'mozconfig_dir': 'mozilla-central',
         'enable_talos' : False,
     },
@@ -90,11 +83,6 @@ PROJECT_BRANCHES = {
             'remote-tsvg': 1,
             'remote-tsspider': 1,
             'remote-twinopen': 1,
-        },
-        'platforms': {
-            'win64': {
-                'dont_build': True,
-            },
         },
     },
     'mozilla-inbound': {
@@ -111,9 +99,6 @@ PROJECT_BRANCHES = {
             },
             'linuxqt': {
                 'build_space': 7,
-            },
-            'win64': {
-                'dont_build': True,
             },
         },
         'talos_suites': {
@@ -171,13 +156,14 @@ PROJECT_BRANCHES = {
             'win32-debug': {
                 'dont_build': True,
             },
-            'win64': {
-                'dont_build': True,
-            },
         },
     },
     #####  TWIGS aka RENTABLE BRANCHES
-    'alder': {},
+    # customizations while booked for bug 687570 - WebRTC project
+    'alder': {
+        'enable_unittests': False,
+        'enable_talos': False,
+    },
     'birch': {},
     'cedar': {},
     'holly': {},

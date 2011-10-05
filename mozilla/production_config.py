@@ -36,7 +36,7 @@ TRY_XSERVES    = ['bm-xserve%02i' % x for x in [8,10,20,23,24]]
 TRY_MAC64      = ['try-mac64-slave%02i' % x for x in range(1,32)] + \
                  ['moz2-darwin10-slave%02i' % x for x in range(11,15)]
 TRY_WIN32_IXS  = ['mw32-ix-slave%02i' % x for x in range(16,19) + range(22,26)] + \
-                 ['w32-ix-slave%02i' % x for x in range(2,23)]
+                 ['w32-ix-slave%02i' % x for x in range(2,24)]
 TRY_WIN64_IXS  = ['w64-ix-slave%02i' % x for x in range(25,43)]
 TRY_SLAVES = {
     'linux':       TRY_LINUX + TRY_LINUX_IXS,
@@ -58,12 +58,12 @@ GLOBAL_VARS = {
     'graph_server': 'graphs.mozilla.org',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://build.mozilla.org/clobberer/index.php',
+    'disable_tinderbox_mail': True,
     # List of talos masters to notify of new builds,
     # and if a failure to notify the talos master should result in a warning,
     # and sendchange retry count before give up
     'talos_masters': [
         ('buildbot-master10.build.mozilla.org:9301', True, 5),
-        ('talos-master.mozilla.org:9010', True, 5),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
@@ -145,7 +145,6 @@ BRANCHES = {
         'packaged_unittest_tinderbox_tree': 'Jaegermonkey',
     },
     'try': {
-        'disable_tinderbox_mail': True,
         'tinderbox_tree': 'Try',
         'mobile_tinderbox_tree': 'Try',
         'packaged_unittest_tinderbox_tree': 'Try',
@@ -173,6 +172,9 @@ BRANCHES = {
 }
 
 PLATFORM_VARS = {
+    'macosx': {
+        'talos_masters': GLOBAL_VARS['talos_masters'] + [('talos-master.mozilla.org:9010', True, 5)]
+    }
 }
 
 PROJECTS = {
@@ -183,20 +185,24 @@ PROJECTS = {
         # Path needs extra leading slash due to optparse expansion on Win32
         'fuzzing_base_dir': '//mnt/pvt_builds/fuzzing/',
         'idle_slaves': 3,
+        'disable_tinderbox_mail': False,
     },
     'nanojit': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 3,
         'tinderbox_tree': 'Nanojit',
+        'disable_tinderbox_mail': False,
     },
     'valgrind': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 3, # 3 slaves have to be idle before we start
         'tinderbox_tree': 'Firefox',
+        'disable_tinderbox_mail': False,
     },
     'spidermonkey': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'tinderbox_tree': 'Mozilla-Inbound',
+        'disable_tinderbox_mail': False,
     },
 }

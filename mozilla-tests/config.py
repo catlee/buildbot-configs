@@ -8,7 +8,7 @@ from project_branches import PROJECT_BRANCHES, ACTIVE_PROJECT_BRANCHES
 
 import localconfig
 reload(localconfig)
-from localconfig import SLAVES, GLOBAL_VARS, GRAPH_CONFIG
+from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS, GRAPH_CONFIG
 
 REMOTE_PROCESS_NAMES = { 'default':         'org.mozilla.fennec',
                          'mozilla-beta':    'org.mozilla.firefox_beta',
@@ -22,11 +22,11 @@ TALOS_ADDON_CMD = ['python', 'run_tests.py', '--noisy', '--amo', WithProperties(
 
 TALOS_DIRTY_OPTS = {'talosAddOns': ['profiles/dirtyDBs.zip', 'profiles/dirtyMaxDBs.zip']}
 
-TALOS_TP_OPTS = {'plugins': 'zips/plugins.zip', 'pagesets': ['zips/tp5.zip']}
-TALOS_TP4_OPTS = {'plugins': 'zips/plugins.zip', 'pagesets': ['zips/tp4.zip',]}
+TALOS_TP_OPTS = {'plugins': {'32':'zips/flash32_10_3_183_5.zip', '64': 'zips/flash64_11_0_d1_98.zip'}, 'pagesets': ['zips/tp5.zip']}
+TALOS_TP4_OPTS = {'plugins': {'32':'zips/flash32_10_3_183_5.zip', '64': 'zips/flash64_11_0_d1_98.zip'}, 'pagesets': ['zips/tp4.zip']}
 
-TALOS_ADDON_OPTS = {'addonTester' : True, 'releaseTester' : True, 'plugins': 'zips/plugins.zip'}
-TALOS_BASELINE_ADDON_OPTS = {'releaseTester' : True, 'plugins': 'zips/plugins.zip'}
+TALOS_ADDON_OPTS = {'addonTester' : True, 'releaseTester' : True}
+TALOS_BASELINE_ADDON_OPTS = {'releaseTester' : True}
 
 TALOS_REMOTE_FENNEC_OPTS = { 'productName':  'fennec',
                              'remoteTests':  True,
@@ -116,20 +116,25 @@ PLATFORMS['linux-android']['stage_platform'] = 'android'
 for platform, platform_config in PLATFORMS.items():
     for slave_platform in platform_config['slave_platforms']:
         platform_config[slave_platform]['slaves'] = sorted(SLAVES[slave_platform.split('-')[0]])
+        if slave_platform in TRY_SLAVES:
+            platform_config[slave_platform]['try_slaves'] = sorted(TRY_SLAVES[slave_platform.split('-')[0]])
+        else:
+            platform_config[slave_platform]['try_slaves'] = platform_config[slave_platform]['slaves']
 
 MOBILE_PLATFORMS = PLATFORMS['linux-android']['slave_platforms']
 
 ALL_PLATFORMS = PLATFORMS['linux']['slave_platforms'] + \
                 PLATFORMS['linux64']['slave_platforms'] + \
                 PLATFORMS['win32']['slave_platforms'] + \
-                PLATFORMS['win64']['slave_platforms'] + \
                 PLATFORMS['macosx64']['slave_platforms']
 
 WIN7_ONLY = ['win7']
 
 NO_WIN = PLATFORMS['macosx64']['slave_platforms'] + PLATFORMS['linux']['slave_platforms'] + PLATFORMS['linux64']['slave_platforms']
 
-NO_MAC = PLATFORMS['linux']['slave_platforms'] + PLATFORMS['linux64']['slave_platforms'] + PLATFORMS['win32']['slave_platforms'] + PLATFORMS['win64']['slave_platforms']
+NO_MAC = PLATFORMS['linux']['slave_platforms'] + \
+         PLATFORMS['linux64']['slave_platforms'] + \
+         PLATFORMS['win32']['slave_platforms']
 
 MAC_ONLY = PLATFORMS['macosx64']['slave_platforms']
 
@@ -139,23 +144,23 @@ ADDON_TESTER_PLATFORMS = ['win7', 'fedora', 'snowleopard']
 
 SUITES = {
     'chrome': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:tsspider'],
+        'enable_by_default': False,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:tsspider', '--mozAfterPaint'],
         'options': ({}, NO_MAC),
     },
     'chrome_mac': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts:tdhtml:twinopen:tsspider'],
+        'enable_by_default': False,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts:tdhtml:twinopen:tsspider', '--mozAfterPaint'],
         'options': ({}, MAC_ONLY),
     },
     'chrome_twinopen': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:twinopen:tsspider'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:twinopen:tsspider', '--mozAfterPaint'],
         'options': ({}, NO_MAC),
     },
     'nochrome': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml:tsspider', '--noChrome'],
+        'enable_by_default': False,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml:tsspider', '--noChrome', '--mozAfterPaint'],
         'options': ({}, ALL_PLATFORMS),
     },
     'dirty': {
@@ -164,8 +169,8 @@ SUITES = {
         'options': (TALOS_DIRTY_OPTS, ALL_PLATFORMS),
     },
     'tp': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tp5'],
+        'enable_by_default': False,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tp5', '--mozAfterPaint'],
         'options': (TALOS_TP_OPTS, ALL_PLATFORMS),
     },
     'tp4': {
@@ -257,6 +262,32 @@ SUITES = {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tzoom'],
         'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
+    },
+    # These old suites will be remove once the newer ones are enabled by default everywhere
+    'old_chrome': {
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:tsspider'],
+        'options': ({}, NO_MAC),
+    },
+    'old_chrome_mac': {
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts:tdhtml:twinopen:tsspider'],
+        'options': ({}, MAC_ONLY),
+    },
+    'old_chrome_twinopen': {
+        'enable_by_default': False,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:twinopen:tsspider'],
+        'options': ({}, NO_MAC),
+    },
+    'old_nochrome': {
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml:tsspider', '--noChrome'],
+        'options': ({}, ALL_PLATFORMS),
+    },
+    'old_tp': {
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tp5'],
+        'options': (TALOS_TP_OPTS, ALL_PLATFORMS),
     },
 }
 
@@ -445,6 +476,7 @@ PLATFORM_UNITTEST_VARS = {
                 'opt_unittest_suites' : \
                     UNITTEST_SUITES['opt_unittest_suites'][:] + \
                     [('reftest-ipc', ['reftest-ipc'])] + \
+                    [('reftest-no-accel', ['opengl-no-accel'])] + \
                     [('crashtest-ipc', ['crashtest-ipc'])],
                 'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
                 'mobile_unittest_suites' : UNITTEST_SUITES['mobile_unittest_suites'][:],
@@ -479,7 +511,7 @@ PLATFORM_UNITTEST_VARS = {
         'win64': {
             'builds_before_reboot': 1,
             'download_symbols': False,
-            'enable_opt_unittests': True,
+            'enable_opt_unittests': False,
             # We can't yet run unit tests on debug builds - see bug 562459
             'enable_debug_unittests': False,
             'w764': {
@@ -754,9 +786,29 @@ BRANCHES['mozilla-central']['repo_path'] = "mozilla-central"
 BRANCHES['mozilla-central']['mobile_branch_name'] = "Mobile"
 BRANCHES['mozilla-central']['mobile_talos_branch'] = "mobile"
 BRANCHES['mozilla-central']['build_branch'] = "1.9.2"
-BRANCHES['mozilla-central']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('reftest-no-accel', ['opengl-no-accel'])]
+# Let's add win64 tests only for mozilla-central until we have enough capacity - see bug 667024
+# XXX hacking warning - this code could get out of date easily
+BRANCHES['mozilla-central']['platforms']['win64']['enable_opt_unittests'] = True
+for suite in SUITES.keys():
+    options = SUITES[suite]['options']
+    if options[1] == ALL_PLATFORMS:
+        options = (options[0], ALL_PLATFORMS + PLATFORMS['win64']['slave_platforms'])
+    if options[1] == NO_MAC:
+        options = (options[0], NO_MAC + PLATFORMS['win64']['slave_platforms'])
+    if not SUITES[suite]['enable_by_default']:
+        # Suites that are turned off by default
+        BRANCHES['mozilla-central'][suite + '_tests'] = (0, True) + options
+    else:
+        # Suites that are turned on by default
+        BRANCHES['mozilla-central'][suite + '_tests'] = (1, True) + options
 BRANCHES['mozilla-central']['platforms']['linux-android']['enable_debug_unittests'] = True
 BRANCHES['mozilla-central']['xperf_tests'] = (1, True, {}, WIN7_ONLY)
+
+# These are the newer suites that use --mozAfterPaint; they will be gone once they become the default
+BRANCHES['mozilla-central']['chrome_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-central']['chrome_mac_tests'] = (1, True, {}, MAC_ONLY)
+BRANCHES['mozilla-central']['nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-central']['tp_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
 
 ######## shadow-central
 BRANCHES['shadow-central']['repo_path'] = "shadow-central"
@@ -765,14 +817,14 @@ BRANCHES['shadow-central']['repo_path'] = "shadow-central"
 BRANCHES['mozilla-1.9.2']['branch_name'] = "Firefox3.6"
 BRANCHES['mozilla-1.9.2']['mobile_branch_name'] = "Mobile1.1"
 BRANCHES['mozilla-1.9.2']['build_branch'] = "1.9.2"
-BRANCHES['mozilla-1.9.2']['chrome_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
-BRANCHES['mozilla-1.9.2']['chrome_twinopen_tests'] = (1, True, {}, OLD_BRANCH_NO_MAC)
-BRANCHES['mozilla-1.9.2']['chrome_mac_tests'] = (1, True, {}, OLD_BRANCH_MAC_ONLY)
-BRANCHES['mozilla-1.9.2']['nochrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
+BRANCHES['mozilla-1.9.2']['old_chrome_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
+BRANCHES['mozilla-1.9.2']['old_chrome_twinopen_tests'] = (1, True, {}, OLD_BRANCH_NO_MAC)
+BRANCHES['mozilla-1.9.2']['old_chrome_mac_tests'] = (1, True, {}, OLD_BRANCH_MAC_ONLY)
+BRANCHES['mozilla-1.9.2']['old_nochrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['dromaeo_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['dirty_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['tp4_tests'] = (1, True, TALOS_TP4_OPTS, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['mozilla-1.9.2']['tp_tests'] = (0, True, TALOS_TP_OPTS, OLD_BRANCH_ALL_PLATFORMS)
+BRANCHES['mozilla-1.9.2']['old_tp_tests'] = (0, True, TALOS_TP_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_NO_WIN)
 BRANCHES['mozilla-1.9.2']['svg_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['scroll_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
@@ -786,70 +838,25 @@ BRANCHES['addontester']['mobile_branch_name'] = "AddonTester"
 BRANCHES['addontester']['build_branch'] = "N/A"
 BRANCHES['addontester']['talos_command'] = TALOS_ADDON_CMD
 BRANCHES['addontester']['fetch_symbols'] = False
-BRANCHES['addontester']['support_url_base'] = 'http://build.mozilla.org/talos'
-BRANCHES['addontester']['fetch_release_symbols'] = False
-BRANCHES['addontester']['chrome_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['nochrome_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['chrome_mac_tests'] = (0, True, {}, OLD_BRANCH_MAC_ONLY)
-BRANCHES['addontester']['dromaeo_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['dirty_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['tp4_tests'] = (0, True, TALOS_TP4_OPTS, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['tp_tests'] = (0, True, TALOS_TP_OPTS, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_NO_WIN)
-BRANCHES['addontester']['remote-ts_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addontester']['svg_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['v8_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addontester']['scroll_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
+for suite in SUITES.keys():
+    BRANCHES['addontester'][suite + '_tests'] = (0, True, {}, [])
 BRANCHES['addontester']['addon_tests'] = (1, False, TALOS_ADDON_OPTS, OLD_BRANCH_ADDON_TESTER_PLATFORMS)
-BRANCHES['addontester']['addon-baseline_tests'] = (0, False, TALOS_BASELINE_ADDON_OPTS, OLD_BRANCH_ADDON_TESTER_PLATFORMS)
-BRANCHES['addontester']['a11y_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
-BRANCHES['addontester']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['addontester']['enable_unittests'] = False
+
 ######## addonbaselinetester - tests against 1.9.2
 BRANCHES['addonbaselinetester']['branch_name'] = "AddonTester"
 BRANCHES['addonbaselinetester']['mobile_branch_name'] = "AddonTester"
 BRANCHES['addonbaselinetester']['build_branch'] = "N/A"
 BRANCHES['addonbaselinetester']['talos_command'] = TALOS_ADDON_CMD
 BRANCHES['addonbaselinetester']['fetch_symbols'] = False
-BRANCHES['addonbaselinetester']['support_url_base'] = 'http://build.mozilla.org/talos'
-BRANCHES['addonbaselinetester']['fetch_release_symbols'] = False
-BRANCHES['addonbaselinetester']['chrome_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['chrome_mac_tests'] = (0, True, {}, OLD_BRANCH_MAC_ONLY)
-BRANCHES['addonbaselinetester']['nochrome_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['dromaeo_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['dirty_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['tp4_tests'] = (0, True, TALOS_TP4_OPTS, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['tp_tests'] = (0, True, TALOS_TP_OPTS, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_NO_WIN)
-BRANCHES['addonbaselinetester']['remote-ts_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tdhtml_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tsvg_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tsspider_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tpan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tp4m_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tp4m_nochrome_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-twinopen_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['remote-tzoom_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['addonbaselinetester']['svg_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['v8_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['scroll_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['addonbaselinetester']['addon_tests'] = (0, False, TALOS_ADDON_OPTS, OLD_BRANCH_ADDON_TESTER_PLATFORMS)
+for suite in SUITES.keys():
+    BRANCHES['addonbaselinetester'][suite + '_tests'] = (0, True, {}, [])
 BRANCHES['addonbaselinetester']['addon-baseline_tests'] = (1, False, TALOS_BASELINE_ADDON_OPTS, OLD_BRANCH_ADDON_TESTER_PLATFORMS)
-BRANCHES['addonbaselinetester']['a11y_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
-BRANCHES['addonbaselinetester']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['addonbaselinetester']['enable_unittests'] = False
 
 ######## try
 BRANCHES['try']['tp4_tests'] = (1, False, TALOS_TP4_OPTS, ALL_PLATFORMS)
-BRANCHES['try']['platforms']['linux']['fedora']['opt_unittest_suites'] += [('reftest-no-accel', ['opengl-no-accel'])]
+BRANCHES['try']['xperf_tests'] = (1, False, {}, WIN7_ONLY)
 BRANCHES['try']['platforms']['linux-android']['enable_debug_unittests'] = True
 BRANCHES['try']['platforms']['win32']['win7']['opt_unittest_suites'] += [('reftest-no-accel', ['reftest-no-d2d-d3d'])]
 
