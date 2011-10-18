@@ -75,6 +75,9 @@ GLOBAL_VARS = {
         'win32-mobile': {},
         'macosx-mobile': {},
     },
+    'enable_pgo': False,
+    'pgo_platforms': ('linux', 'linux64', 'win32'),
+    'periodic_pgo_interval': 6, # in hours
     'product_name': 'firefox', # Not valid for mobile builds
     'app_name': 'browser',     # Not valid for mobile builds
     'brand_name': 'Minefield', # Not valid for mobile builds
@@ -84,6 +87,8 @@ GLOBAL_VARS = {
     'blocklist_update_on_closed_tree': False,
     'enable_nightly': True,
     'enabled_products': ['firefox', 'mobile'],
+    'enable_valgrind': True,
+    'valgrind_platforms': ('linux', 'linux64'),
 
     # if true, this branch will get bundled and uploaded to ftp.m.o for users
     # to download and thereby accelerate their cloning
@@ -126,6 +131,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'linux',
             'update_platform': 'Linux_x86-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
@@ -158,7 +164,7 @@ PLATFORM_VARS = {
             'mozconfig': 'linux/%(branch)s/qt',
             'src_mozconfig': 'browser/config/mozconfigs/linux32/qt',
             'xr_mozconfig': 'linux/%(branch)s/xulrunner-qt',
-            'src_xulrunner_mozconfig': 'browser/config/mozconfigs/linux32/xulrunner-qt',
+            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner-qt',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -168,6 +174,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'linuxqt',
             'update_platform': 'Linux_x86-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
@@ -202,7 +209,6 @@ PLATFORM_VARS = {
             'mc_patches': [],
             'create_snippet': False,
             'create_partial': False,
-            'test_pretty_names': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -253,6 +259,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'linux64',
             'update_platform': 'Linux_x86_64-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
@@ -291,7 +298,6 @@ PLATFORM_VARS = {
             'mc_patches': [],
             'create_snippet': False,
             'create_partial': False,
-            'test_pretty_names': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
@@ -342,6 +348,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['macosx'],
             'platform_objdir': "%s/ppc" % OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'macosx',
             'update_platform': 'Darwin_Universal-gcc3',
             'enable_shared_checkouts': True,
             'enable_shark': True,
@@ -378,6 +385,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['macosx64'],
             'platform_objdir': "%s/i386" % OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'macosx64',
             'update_platform': 'Darwin_x86_64-gcc3',
             'enable_shared_checkouts': True,
             'enable_shark': True,
@@ -406,7 +414,7 @@ PLATFORM_VARS = {
             'mozconfig': 'win32/%(branch)s/nightly',
             'src_mozconfig': 'browser/config/mozconfigs/win32/nightly',
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/win32/xulrunner',
-            'profiled_build': True,
+            'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 12,
             'upload_symbols': True,
@@ -415,6 +423,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['win32'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'win32',
             'mochitest_leak_threshold': 484,
             'crashtest_leak_threshold': 484,
             'update_platform': 'WINNT_x86-msvc',
@@ -441,6 +450,7 @@ PLATFORM_VARS = {
         },
         'win64': {
             'base_name': 'WINNT 6.1 x86-64 %(branch)s',
+            'src_mozconfig': 'browser/config/mozconfigs/win64/nightly',
             'mozconfig': 'win64/%(branch)s/nightly',
             # XXX we cannot build xulrunner on Win64 -- see bug 575912
             'enable_xulrunner': False,
@@ -452,9 +462,10 @@ PLATFORM_VARS = {
             'slaves': SLAVES['win64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'win64',
             'mochitest_leak_threshold': 484,
             'crashtest_leak_threshold': 484,
-            'update_platform': 'WINNT_x86_64-msvc',
+            'update_platform': 'WINNT_x86_64-msvc.disabled_bug695161',
             'enable_shared_checkouts': True,
             'env': {
                 'CVS_RSH': 'ssh',
@@ -488,6 +499,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'linux-debug',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
             'env': {
@@ -518,6 +530,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'linux64-debug',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
             'env': {
@@ -548,6 +561,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['macosx'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'macosx-debug',
             'enable_shared_checkouts': True,
             'enable_shark': True,
             'env': {
@@ -573,6 +587,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['macosx64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'macosx64-debug',
             'enable_shared_checkouts': True,
             'enable_shark': True,
             'env': {
@@ -598,6 +613,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['win32'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
+            'stage_platform': 'win32-debug',
             'enable_shared_checkouts': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
@@ -926,14 +942,7 @@ PROJECTS = {
         'hgurl': 'http://hg.mozilla.org',
         'repo_path': 'projects/nanojit-central',
     },
-    'valgrind': {
-        'platforms': ['linux', 'linux64'],
-        'job_interval': 24*3600, # Once a day
-        'linux': {'env': PLATFORM_VARS['linux']['env']},
-        'linux64': {'env': PLATFORM_VARS['linux64']['env']},
-        'repo_path': 'mozilla-central',
-    },
-    'spidermonkey': {
+    'spidermonkey_mozilla-inbound': {
         'platforms': {
             'linux':          ['warnaserr'],
             'linux-debug':    ['nomethodjit', 'notracejit', 'warnaserrdebug'],
@@ -958,8 +967,36 @@ PROJECTS = {
             'macosx': PLATFORM_VARS['macosx']['env'],
             'macosx-debug': PLATFORM_VARS['macosx-debug']['env'],
         },
-        'hgurl': 'http://hg.mozilla.org',
+        'hgurl': 'http://hg.mozilla.org/',
         'repo_path': 'integration/mozilla-inbound',
+    },
+    'spidermonkey_ionmonkey': {
+        'platforms': {
+            'linux':          ['warnaserr'],
+            'linux-debug':    ['nomethodjit', 'notracejit', 'warnaserrdebug'],
+            'linux64':        ['warnaserr'],
+            'linux64-debug':  ['nomethodjit', 'notracejit', 'warnaserrdebug'],
+            'win32':          ['warnaserr'],
+            'win32-debug':    ['nomethodjit', 'notracejit', 'warnaserrdebug'],
+            'macosx64':       ['warnaserr'],
+            'macosx64-debug': ['nomethodjit', 'notracejit', 'dtrace', 'shark', 'warnaserrdebug'],
+            'macosx':         ['warnaserr'],
+            'macosx-debug':   ['nomethodjit', 'notracejit', 'dtrace', 'shark', 'warnaserrdebug'],
+        },
+        'env': {
+            'linux': PLATFORM_VARS['linux']['env'],
+            'linux-debug': PLATFORM_VARS['linux-debug']['env'],
+            'linux64': PLATFORM_VARS['linux64']['env'],
+            'linux64-debug': PLATFORM_VARS['linux64-debug']['env'],
+            'win32': PLATFORM_VARS['win32']['env'],
+            'win32-debug': PLATFORM_VARS['win32-debug']['env'],
+            'macosx64': PLATFORM_VARS['macosx64']['env'],
+            'macosx64-debug': PLATFORM_VARS['macosx64-debug']['env'],
+            'macosx': PLATFORM_VARS['macosx']['env'],
+            'macosx-debug': PLATFORM_VARS['macosx-debug']['env'],
+        },
+        'hgurl': 'http://hg.mozilla.org/',
+        'repo_path': 'projects/ionmonkey',
     },
 }
 
@@ -1084,6 +1121,8 @@ BRANCHES['mozilla-central']['start_hour'] = [3]
 BRANCHES['mozilla-central']['start_minute'] = [2]
 # Enable XULRunner / SDK builds
 BRANCHES['mozilla-central']['enable_xulrunner'] = True
+# Enable PGO Builds on this branch
+BRANCHES['mozilla-central']['enable_pgo'] = True
 # Enable unit tests
 BRANCHES['mozilla-central']['geriatric_masters'] = [
     ('10.250.48.137:9989', False),
@@ -1128,6 +1167,7 @@ BRANCHES['mozilla-central']['enable_blocklist_update'] = True
 BRANCHES['mozilla-central']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-central']['platforms']['linux-rpm']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['linux64-rpm']['enable_nightly'] = True
+BRANCHES['mozilla-central']['platforms']['linux-android-debug']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-central'
 
 ######## shadow-central
@@ -1142,7 +1182,6 @@ BRANCHES['shadow-central']['start_hour'] = [3]
 BRANCHES['shadow-central']['start_minute'] = [2]
 BRANCHES['shadow-central']['create_snippet'] = False
 BRANCHES['shadow-central']['enable_nightly'] = False
-BRANCHES['shadow-central']['enable_mobile_nightly'] = False
 # Enable XULRunner / SDK builds
 BRANCHES['shadow-central']['enable_xulrunner'] = False
 # Enable unit tests
@@ -1160,6 +1199,7 @@ BRANCHES['shadow-central']['platforms']['linux64']['env']['MOZ_SYMBOLS_EXTRA_BUI
 BRANCHES['shadow-central']['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'shadow-central'
 BRANCHES['shadow-central']['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-shadow-central'
 BRANCHES['shadow-central']['platforms']['win64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'win64-shadow-central'
+BRANCHES['shadow-central']['enable_valgrind'] = False
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['repo_path'] = 'releases/mozilla-release'
@@ -1193,11 +1233,11 @@ BRANCHES['mozilla-release']['enable_multi_locale'] = True
 BRANCHES['mozilla-release']['upload_mobile_symbols'] = True
 # temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
 BRANCHES['mozilla-release']['enable_nightly'] = False
-BRANCHES['mozilla-release']['enable_mobile_nightly'] = False
 BRANCHES['mozilla-release']['enable_blocklist_update'] = False
 BRANCHES['mozilla-release']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-release']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-release'
 del BRANCHES['mozilla-release']['platforms']['win64']
+BRANCHES['mozilla-release']['enable_valgrind'] = False
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['repo_path'] = 'releases/mozilla-beta'
@@ -1208,6 +1248,8 @@ BRANCHES['mozilla-beta']['start_hour'] = [3]
 BRANCHES['mozilla-beta']['start_minute'] = [2]
 # Enable XULRunner / SDK builds
 BRANCHES['mozilla-beta']['enable_xulrunner'] = True
+# Enable PGO Builds on this branch
+BRANCHES['mozilla-beta']['enable_pgo'] = True
 # Enable unit tests
 BRANCHES['mozilla-beta']['geriatric_masters'] = [
     ('10.250.48.137:9989', False),
@@ -1236,7 +1278,6 @@ BRANCHES['mozilla-beta']['enable_multi_locale'] = True
 BRANCHES['mozilla-beta']['upload_mobile_symbols'] = True
 # temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
 BRANCHES['mozilla-beta']['enable_nightly'] = False
-BRANCHES['mozilla-beta']['enable_mobile_nightly'] = False
 # If True, a complete update snippet for this branch will be generated and
 # uploaded to. Any platforms with 'debug' in them will not have snippets
 # generated.
@@ -1244,6 +1285,7 @@ BRANCHES['mozilla-beta']['enable_blocklist_update'] = True
 BRANCHES['mozilla-beta']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-beta']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
 del BRANCHES['mozilla-beta']['platforms']['win64']
+BRANCHES['mozilla-beta']['enable_valgrind'] = False
 
 ######## mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = 'releases/mozilla-aurora'
@@ -1253,6 +1295,8 @@ BRANCHES['mozilla-aurora']['start_hour'] = [4]
 BRANCHES['mozilla-aurora']['start_minute'] = [20]
 # Enable XULRunner / SDK builds
 BRANCHES['mozilla-aurora']['enable_xulrunner'] = True
+# Enable PGO Builds on this branch
+BRANCHES['mozilla-aurora']['enable_pgo'] = True
 # Enable unit tests
 BRANCHES['mozilla-aurora']['geriatric_masters'] = [
     ('10.250.48.137:9989', False),
@@ -1298,6 +1342,7 @@ BRANCHES['mozilla-aurora']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXT
 BRANCHES['mozilla-aurora']['enable_blocklist_update'] = True
 BRANCHES['mozilla-aurora']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['mozilla-aurora']['platforms']['win64']
+BRANCHES['mozilla-aurora']['enable_valgrind'] = False
 
 ######## mozilla-1.9.1
 # mozilla-1.9.1 can be removed once we're no longer refreshing MUs from 3.5.18,
@@ -1381,6 +1426,7 @@ BRANCHES['mozilla-1.9.1']['platforms']['linux']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.1']['platforms']['linux64']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.1']['platforms']['macosx']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.1']['platforms']['win32']['l10n_check_test'] = False
+BRANCHES['mozilla-1.9.1']['enable_valgrind'] = False
 
 ######## mozilla-1.9.2
 BRANCHES['mozilla-1.9.2']['repo_path'] = 'releases/mozilla-1.9.2'
@@ -1459,6 +1505,7 @@ BRANCHES['mozilla-1.9.2']['platforms']['linux']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['platforms']['linux64']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['platforms']['macosx']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['platforms']['win32']['l10n_check_test'] = False
+BRANCHES['mozilla-1.9.2']['enable_valgrind'] = False
 
 ######## try
 # Try-specific configs
@@ -1478,7 +1525,6 @@ BRANCHES['try']['start_hour'] = [3]
 BRANCHES['try']['start_minute'] = [2]
 # Disable Nightly builds
 BRANCHES['try']['enable_nightly'] = False
-BRANCHES['try']['enable_mobile_nightly'] = False
 # Disable XULRunner / SDK builds
 BRANCHES['try']['enable_xulrunner'] = False
 BRANCHES['try']['enable_mac_a11y'] = True
@@ -1541,8 +1587,8 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['enabled_products'] = branchConfig.get('enabled_products',
                                                             GLOBAL_VARS['enabled_products'])
     BRANCHES[branch]['enable_nightly'] =  branchConfig.get('enable_nightly', False)
-    BRANCHES[branch]['enable_mobile_nightly'] = branchConfig.get('enable_mobile_nightly', False)
     BRANCHES[branch]['enable_mobile'] = branchConfig.get('enable_mobile', True)
+    BRANCHES[branch]['enable_pgo'] = branchConfig.get('enable_pgo', False)
     if BRANCHES[branch]['enable_mobile']:
         if branchConfig.get('mobile_platforms'):
             for platform, platform_config in branchConfig['mobile_platforms'].items():
@@ -1557,7 +1603,6 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     # Disable XULRunner / SDK builds
     BRANCHES[branch]['enable_xulrunner'] = branchConfig.get('enable_xulrunner', False)
     # Enable unit tests
-    BRANCHES[branch]['platforms']['linux64']['enable_checktests'] = True
     BRANCHES[branch]['enable_mac_a11y'] = branchConfig.get('enable_mac_a11y', True)
     BRANCHES[branch]['unittest_build_space'] = branchConfig.get('unittest_build_space', 6)
     BRANCHES[branch]['enable_shark'] = branchConfig.get('enable_shark', False)
@@ -1603,6 +1648,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
             BRANCHES[branch]['platforms'][platform]['mozconfig'] = 'linux/' + branchConfig.get('mozconfig_dir', 'generic') + '/qt'
         else:
             BRANCHES[branch]['platforms'][platform]['mozconfig'] = platform + '/' + branchConfig.get('mozconfig_dir', 'generic') + '/nightly'
+    BRANCHES[branch]['enable_valgrind'] = False
 
 # Bug 578880, remove the following block after gcc-4.5 switch
 branches = BRANCHES.keys()

@@ -1,4 +1,5 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
@@ -14,25 +15,25 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '7.0b5'
-releaseConfig['appVersion']          = '7.0'
-releaseConfig['milestone']           = '7.0'
+releaseConfig['version']             = '8.0b3'
+releaseConfig['appVersion']          = '8.0'
+releaseConfig['milestone']           = '8.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_7_0b5'
+releaseConfig['baseTag']             = 'FENNEC_8_0b3'
 #  Old version info
-releaseConfig['oldVersion']          = '7.0b4'
-releaseConfig['oldAppVersion']       = '7.0'
-releaseConfig['oldBuildNumber']      = 2
-releaseConfig['oldBaseTag']          = 'FENNEC_7_0b4'
+releaseConfig['oldVersion']          = '8.0b2'
+releaseConfig['oldAppVersion']       = '8.0'
+releaseConfig['oldBuildNumber']      = 1
+releaseConfig['oldBaseTag']          = 'FENNEC_8_0b2'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '7.0'
-releaseConfig['nextMilestone']       = '7.0'
+releaseConfig['nextAppVersion']      = '8.0'
+releaseConfig['nextMilestone']       = '8.0'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '922315e4df83',
+        'revision': '890a66b91702',
         'relbranch': None,
         'bumpFiles': {
             'mobile/confvars.sh': {
@@ -66,7 +67,7 @@ releaseConfig['otherReposToTag']     = {
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']        = ('linux-maemo5-gtk', 'linux-android',
+releaseConfig['enUSPlatforms']        = ('linux-android',
                                          'linux-mobile', 'macosx-mobile',
                                          'win32-mobile')
 releaseConfig['signedPlatforms']      = ('linux-android',)
@@ -88,14 +89,14 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 # Update-specific configuration
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage.mozilla.org'
-releaseConfig['ausServerUrl']        = 'https://aus2.mozilla.org'
+releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']       = False
 releaseConfig['partnersRepoPath']       = 'build/partner-repacks'
-releaseConfig['partnerRepackPlatforms'] = ('linux-maemo5-gtk',)
+releaseConfig['partnerRepackPlatforms'] = ()
 
 # Misc configuration
 releaseConfig['enable_repo_setup']       = False
@@ -110,8 +111,14 @@ releaseConfig['disableVirusCheck']        = True
 releaseConfig['disablePushToMirrors']     = True
 
 releaseConfig['mozharness_config'] = {
-    'linux-android':
-    'multi_locale/release_mozilla-beta_linux-android.json',
-    'linux-maemo5-gtk':
-    'multi_locale/release_mozilla-beta_linux-maemo5-gtk.json',
+    'platforms': {
+        'linux-android':
+            'multi_locale/release_mozilla-beta_linux-android.json',
+    },
+    'multilocaleOptions': [
+        '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
+        '--only-pull-locale-source',
+        '--only-add-locales',
+        '--only-package-multi',
+    ]
 }

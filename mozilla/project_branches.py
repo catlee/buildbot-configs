@@ -13,6 +13,7 @@ PROJECT_BRANCHES = {
             'tp': 0,
             'chrome_twinopen': 0,
             'chrome_mac': 0,
+            'chrome': 0,
             'nochrome': 0,
             'dromaeo': 0,
             'svg': 0,
@@ -68,6 +69,7 @@ PROJECT_BRANCHES = {
         'enable_talos': False,
     },
     'ionmonkey': {
+        'disable_tinderbox_mail': False,
         'mozconfig_dir': 'mozilla-central',
         'enable_talos' : False,
     },
@@ -89,6 +91,9 @@ PROJECT_BRANCHES = {
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': True,
         'enable_weekly_bundle': True,
+        'enable_pgo': True,
+        'add_pgo_builders': True,
+        'pgo_platforms': ['linux', 'linux64', 'win32'],
         'platforms': {
             'linux64': {
                 'build_space': 7,
@@ -158,8 +163,21 @@ PROJECT_BRANCHES = {
         },
     },
     #####  TWIGS aka RENTABLE BRANCHES
-    'alder': {},
-    'birch': {},
+    # customizations while booked for bug 687570 - WebRTC project
+    'alder': {
+        'enable_unittests': False,
+        'enable_talos': False,
+    },
+    # customizations while booked for native mobile UI project
+    'birch': {
+        'enable_nightly': True,
+        'create_snippet': True,
+        'create_partial': True,
+        'lock_platforms': True,
+        'platforms': {
+            'linux-android': {},
+        },
+    },
     'cedar': {},
     'holly': {},
     'larch': {},
