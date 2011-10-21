@@ -1508,6 +1508,9 @@ BRANCHES['mozilla-1.9.2']['enable_valgrind'] = False
 
 ######## try
 # Try-specific configs
+BRANCHES['try']['disable_hgpoller'] = True
+BRANCHES['try']['hgurl'] = "http://hg.build.scl1.mozilla.com"
+BRANCHES['try']['hghost'] = "hg.build.scl1.mozilla.com"
 BRANCHES['try']['stage_username'] = 'trybld'
 BRANCHES['try']['stage_username_mobile'] = 'trybld'
 BRANCHES['try']['stage_ssh_key'] = 'trybld_dsa'
