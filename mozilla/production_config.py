@@ -193,16 +193,15 @@ PROJECTS = {
         'tinderbox_tree': 'Nanojit',
         'disable_tinderbox_mail': False,
     },
-    'valgrind': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
-        'idle_slaves': 3, # 3 slaves have to be idle before we start
-        'tinderbox_tree': 'Firefox',
-        'disable_tinderbox_mail': False,
-    },
-    'spidermonkey': {
+    'spidermonkey_mozilla-inbound': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'tinderbox_tree': 'Mozilla-Inbound',
         'disable_tinderbox_mail': False,
+    },
+    'spidermonkey_ionmonkey': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+        'tinderbox_tree': 'Ionmonkey',
     },
 }
