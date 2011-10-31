@@ -65,6 +65,7 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
+    'build/mozharness': 'default',
 }
 
 # Platform configuration
@@ -120,7 +121,6 @@ releaseConfig['mozharness_config'] = {
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
-        '--only-pull-build-source',
         '--only-pull-locale-source',
         '--only-add-locales',
         '--only-package-multi',

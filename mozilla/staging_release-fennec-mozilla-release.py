@@ -67,6 +67,7 @@ releaseConfig['otherReposToTag']     = {
     'users/stage-ffxbld/compare-locales': 'RELEASE_AUTOMATION',
     'users/stage-ffxbld/buildbot': 'production-0.8',
     'users/stage-ffxbld/partner-repacks': 'default',
+    'users/stage-ffxbld/mozharness': 'default',
 }
 
 # Platform configuration
@@ -114,7 +115,6 @@ releaseConfig['mozharness_config'] = {
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
         '--user-repo-override=users/stage-ffxbld',
-        '--only-pull-build-source',
         '--only-pull-locale-source',
         '--only-add-locales',
         '--only-package-multi',
