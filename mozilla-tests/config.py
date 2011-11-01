@@ -167,7 +167,7 @@ SUITES = {
     },
     'dirty': {
         'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'ts_places_generated_min:ts_places_generated_med:ts_places_generated_max'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'ts_places_generated_med:ts_places_generated_max'],
         'options': (TALOS_DIRTY_OPTS, ALL_PLATFORMS),
     },
     'tp': {
@@ -630,19 +630,34 @@ PLATFORM_UNITTEST_VARS = {
                          'thisChunk': 2,
                         },
                     )),
-                    ('crashtest', (
-                        {'suite': 'crashtest'},
+                    ('crashtest-1', (
+                        {'suite': 'crashtest',
+                         'totalChunks': 2,
+                         'thisChunk': 1,
+                        },
+                    )),
+                    ('crashtest-2', (
+                        {'suite': 'crashtest',
+                         'totalChunks': 2,
+                         'thisChunk': 2,
+                        },
                     )),
                     ('jsreftest-1', (
                         {'suite': 'jsreftest',
-                         'totalChunks': 2,
+                         'totalChunks': 3,
                          'thisChunk': 1,
                         },
                     )),
                     ('jsreftest-2', (
                         {'suite': 'jsreftest',
-                         'totalChunks': 2,
+                         'totalChunks': 3,
                          'thisChunk': 2,
+                        },
+                    )),
+                    ('jsreftest-3', (
+                        {'suite': 'jsreftest',
+                         'totalChunks': 3,
+                         'thisChunk': 3,
                         },
                     )),
                 ],
@@ -715,26 +730,29 @@ for branch in BRANCHES.keys():
 ### PROJECTS ###
 PROJECTS = {
     'jetpack': {
+        'branches': ['mozilla-central', 'mozilla-aurora', 'mozilla-beta', 'mozilla-release'],
         'platforms': {
-            'w764': {'ext':'win64-x86_64.zip',}, 
-            'fedora64': {'ext':'linux-x86_64.tar.bz2',}, 
-            'fedora':{'ext':'linux-i686.tar.bz2'}, 
-            'leopard':{'ext':'mac.dmg'}, 
-            'snowleopard':{'ext':'mac.dmg'},   
+            'w764': {'ext':'win64-x86_64.zip', 'debug':True}, 
+            'fedora64': {'ext':'linux-x86_64.tar.bz2', 'debug':True}, 
+            'fedora':{'ext':'linux-i686.tar.bz2', 'debug':True}, 
+            'leopard':{'ext':'(mac|mac64).dmg', 'debug':True}, 
+            'snowleopard':{'ext':'(mac|mac64).dmg', 'debug':True},   
             'xp':{
                 'ext':'win32.zip',
                 'env':PLATFORM_UNITTEST_VARS['win32']['env_name'],
+                'debug':True,
                 }, 
             'win7':{
                 'ext':'win32.zip',
                 'env':PLATFORM_UNITTEST_VARS['win32']['env_name'],
-                }, 
-
+                'debug':True,
+                },
             },
         'hgurl': 'http://hg.mozilla.org',
         'repo_path': 'projects/addon-sdk',
         'jetpack_tarball': 'archive/tip.tar.bz2',
         'ftp_url': 'ftp://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-mozilla-central',
+        'ftp_url': 'ftp://ftp.mozilla.org/pub/mozilla.org/firefox/tinderbox-builds/%(branch)s-%(platform)s',
     },
 }
 for k, v in localconfig.PROJECTS.items():
@@ -797,11 +815,6 @@ BRANCHES['mozilla-central']['xperf_tests'] = (1, True, {}, WIN7_ONLY)
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['add_pgo_builders'] = True
-# Don't run the mozafterconfig on the mozilla-release branch
-BRANCHES['mozilla-release']['old_chrome_tests'] = (1, True, {}, NO_MAC)
-BRANCHES['mozilla-release']['old_chrome_mac_tests'] = (1, True, {}, MAC_ONLY)
-BRANCHES['mozilla-release']['old_nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['old_tp_tests'] = (1, True, {}, ALL_PLATFORMS)
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['add_pgo_builders'] = True
