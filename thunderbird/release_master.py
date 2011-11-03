@@ -67,7 +67,7 @@ gloConfig = {
         'cvsroot'                    : ':ext:tbirdbld@cvs.mozilla.org:/cvsroot', # for patcher, etc.
         'productVersionFile'         : 'mail/config/version-192.txt',
         'productName'                : 'thunderbird',
-        'binaryName'                 : 'thunderbird',
+        'binaryName'                 : 'Thunderbird',
         'brandName'                  : 'Thunderbird',
         'appName'                    : APP_NAME,
         'ftpName'                    : APP_NAME,
@@ -88,13 +88,14 @@ gloConfig = {
         #'oldAppVersion'              : oldVersion,
         'oldBuildNumber'             : 1,
         'oldBaseTag'                 : 'THUNDERBIRD_3_1_15',
-        'oldBinaryName'              : 'thunderbird',
+        'oldBinaryName'              : 'Thunderbird',
         'enable_weekly_bundle'       : False,
         'enUSPlatforms'              : ('linux', 'win32', 'macosx'),
         'unittestPlatforms'          : (),
         'xulrunnerPlatforms'         : (),
         'patcherConfig'              : 'moz192-thunderbird-branch-patcher2.cfg',
         'patcherToolsTag'            : 'UPDATE_PACKAGING_R11_1_MU',
+        'snippetSchema'              : 1,
         'ftpServer'                  : 'ftp.mozilla.org',
         'stagingServer'              : 'stage-old.mozilla.org',
         'bouncerServer'              : 'download.mozilla.org',
@@ -133,15 +134,15 @@ gloConfig = {
         'sourceRepoName'             : 'comm-beta', # buildbot branch name
         'sourceRepoPath'             : 'releases/comm-beta',
         'oldRepoPath'                : 'releases/comm-beta',
-        'sourceRepoRevision'         : '2d6c6de72c8b',
+        'sourceRepoRevision'         : '7d3a510fc227',
         # 'If' blank, automation will create its own branch based on COMM_<date>_RELBRANCH
-        'relbranchOverride'          : '',
+        'relbranchOverride'          : 'COMM80_20111031_RELBRANCH',
         'mozillaRepoPath'            : 'releases/mozilla-beta',
-        'mozillaRepoRevision'        : '317fabbef86b',
+        'mozillaRepoRevision'        : '92635f5299af',
         # 'If' blank, automation will create its own branch based on COMM_<date>_RELBRANCH
         # 'You' typically want to set this to the gecko relbranch if doing a release off
         # 'a' specific gecko version.
-        'mozillaRelbranchOverride'   : 'GECKO80_2011102619_RELBRANCH', # put Gecko relbranch here that we base upon
+        'mozillaRelbranchOverride'   : 'GECKO80_2011103118_RELBRANCH', # put Gecko relbranch here that we base upon
         'inspectorRepoPath'          : '', #'dom-inspector', # leave empty if inspector is not to be tagged
         'inspectorRepoRevision'      : '',
         'inspectorRelbranchOverride' : '',
@@ -162,8 +163,8 @@ gloConfig = {
         'cvsroot'                    : ':ext:tbirdbld@cvs.mozilla.org:/cvsroot', # for patcher, etc.
         'productVersionFile'         : 'mail/config/version.txt',
         'productName'                : 'thunderbird',
-        'binaryName'                 : 'thunderbird',
-        'oldBinaryName'              : 'thunderbird',
+        'binaryName'                 : 'Thunderbird',
+        'oldBinaryName'              : 'Thunderbird',
         'brandName'                  : 'Thunderbird',
         'appName'                    : APP_NAME,
         'ftpName'                    : APP_NAME,
@@ -176,7 +177,7 @@ gloConfig = {
         'oldVersion'                 : '8.0b3',
         'appVersion'                 : '8.0', # no 'b1' suffix for betas
         'oldAppVersion'              : '8.0',
-        'buildNumber'                : 1,
+        'buildNumber'                : 2,
         'oldBuildNumber'             : 2,
         'baseTag'                    : 'THUNDERBIRD_8_0b4',
         'oldBaseTag'                 : 'THUNDERBIRD_8_0b3',
@@ -189,7 +190,8 @@ gloConfig = {
         #'l10nPlatforms'              : (),
         'xulrunnerPlatforms'         : (),
         'patcherConfig'              : 'mozBeta-thunderbird-branch-patcher2.cfg',
-        'patcherToolsTag'            : 'UPDATE_PACKAGING_R14',
+        'patcherToolsTag'            : 'UPDATE_PACKAGING_R15',
+        'snippetSchema'              : 1,
         'ftpServer'                  : 'ftp.mozilla.org',
         'stagingServer'              : 'stage-old.mozilla.org',
         'bouncerServer'              : 'download.mozilla.org',
@@ -262,8 +264,8 @@ gloConfig = {
         'cvsroot'                    : ':ext:tbirdbld@cvs.mozilla.org:/cvsroot', # for patcher, etc.
         'productVersionFile'         : 'mail/config/version.txt',
         'productName'                : 'thunderbird',
-        'binaryName'                 : 'thunderbird',
-        'oldBinaryName'              : 'thunderbird',
+        'binaryName'                 : 'Thunderbird',
+        'oldBinaryName'              : 'Thunderbird',
         'brandName'                  : 'Thunderbird',
         'appName'                    : APP_NAME,
         'ftpName'                    : APP_NAME,
@@ -288,7 +290,8 @@ gloConfig = {
         #'l10nPlatforms'              : (),
         'xulrunnerPlatforms'         : (),
         'patcherConfig'              : 'mozRelease-thunderbird-branch-patcher2.cfg',
-        'patcherToolsTag'            : 'UPDATE_PACKAGING_R14',
+        'patcherToolsTag'            : 'UPDATE_PACKAGING_R15',
+        'snippetSchema'              : 1,
         'ftpServer'                  : 'ftp.mozilla.org',
         'stagingServer'              : 'stage-old.mozilla.org',
         'bouncerServer'              : 'download.mozilla.org',
@@ -420,6 +423,7 @@ for gloKey in gloConfig:
     packageTests               = gloConfig[gloKey]['packageTests']
     unittestMasters            = gloConfig[gloKey]['unittestMasters']
     mergeLocales               = gloConfig[gloKey]['mergeLocales']
+    snippetSchema              = gloConfig[gloKey]['snippetSchema']
 
     branchConfig = nightly_config.BRANCHES[sourceRepoName]
 
@@ -932,6 +936,7 @@ for gloKey in gloConfig:
         oldRepoPath=oldRepoPath,
         releaseNotesUrl=releaseNotesUrl,
         testOlderPartials=testOlderPartials,
+        schema=snippetSchema,
     )
     
     builders.append({
@@ -1012,7 +1017,8 @@ for gloKey in gloConfig:
             oldRepoPath=oldRepoPath,
             triggerSchedulers=['major_update_verify_%s' % gloKey],
             releaseNotesUrl=majorUpdateReleaseNotesUrl,
-            testOlderPartials=testOlderPartials
+            testOlderPartials=testOlderPartials,
+            schema=snippetSchema,
         )
         
         builders.append({
