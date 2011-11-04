@@ -107,6 +107,8 @@ GLOBAL_VARS = {
     'scratchbox_path': '/builds/scratchbox/moz_scratchbox',
     'scratchbox_home': '/scratchbox/users/cltbld/home/cltbld',
     'use_old_updater': False,
+ #   'signing_servers': ['fake', 'dev-stage01.build.scl1.mozilla.com', 'dev-master01.build.scl1.mozilla.com:8080']
+    'signing_servers': ['dev-master01.build.scl1.mozilla.com:8080'],
 }
 GLOBAL_VARS.update(localconfig.GLOBAL_VARS.copy())
 
@@ -150,6 +152,7 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
+                'MOZ_EXTERNAL_SIGNING_FORMAT': 'gpg',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
@@ -278,6 +281,7 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
+                'MOZ_EXTERNAL_SIGNING_FORMAT': 'gpg',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
@@ -364,6 +368,7 @@ PLATFORM_VARS = {
                 'CHOWN_ROOT': '~/bin/chown_root',
                 'CHOWN_REVERT': '~/bin/chown_revert',
                 'LC_ALL': 'C',
+                'MOZ_EXTERNAL_SIGNING_FORMAT': 'gpg',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
@@ -402,6 +407,7 @@ PLATFORM_VARS = {
                 'CHOWN_ROOT': '~/bin/chown_root',
                 'CHOWN_REVERT': '~/bin/chown_revert',
                 'LC_ALL': 'C',
+                'MOZ_EXTERNAL_SIGNING_FORMAT': 'gpg',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
@@ -440,6 +446,8 @@ PLATFORM_VARS = {
                 # Source server support, bug 506702
                 'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows/srcsrv/pdbstr.exe',
                 'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+                'MOZ_INTERNAL_SIGNING_FORMAT': 'signcode',
+                'MOZ_EXTERNAL_SIGNING_FORMAT': 'signcode,gpg',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
@@ -479,6 +487,8 @@ PLATFORM_VARS = {
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
                 'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+                'MOZ_INTERNAL_SIGNING_FORMAT': 'signcode',
+                'MOZ_EXTERNAL_SIGNING_FORMAT': 'signcode,gpg',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
