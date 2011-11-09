@@ -653,6 +653,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
             'update_platform': 'Android_arm-eabi-gcc3',
+            'enable_shared_checkouts': True,
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
@@ -699,6 +700,7 @@ PLATFORM_VARS = {
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
             'update_platform': 'Android_arm-eabi-gcc3',
+            'enable_shared_checkouts': True,
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
@@ -832,6 +834,7 @@ PLATFORM_VARS = {
             'enable_codesighs': False,
             'create_snippet': False,
             'create_partial': False,
+            'enable_shared_checkouts': True,
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
@@ -874,6 +877,7 @@ PLATFORM_VARS = {
             'enable_codesighs': False,
             'create_snippet': False,
             'create_partial': False,
+            'enable_shared_checkouts': True,
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
@@ -918,6 +922,7 @@ PLATFORM_VARS = {
             'create_snippet': False,
             'create_partial': False,
             'enable_shark': False,
+            'enable_shared_checkouts': True,
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
@@ -1185,7 +1190,7 @@ BRANCHES['mozilla-central']['platforms']['linux-rpm']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['linux64-rpm']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['linux-android-debug']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-central'
-BRANCHES['mozilla-central']['platforms']['macosx64-debug']['enable_leaktests'] = True
+BRANCHES['mozilla-central']['platforms']['macosx64-debug']['enable_leaktests'] = False
 
 ######## shadow-central
 # custom settings for shadow-central repo
@@ -1351,10 +1356,10 @@ BRANCHES['mozilla-aurora']['create_partial_l10n'] = True
 BRANCHES['mozilla-aurora']['aus2_user'] = 'ffxbld'
 BRANCHES['mozilla-aurora']['aus2_ssh_key'] = 'ffxbld_dsa'
 # use mozilla-aurora-test when disabling updates for merges
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora'
-BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
-BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora-test'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-aurora-test'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora-test'
+BRANCHES['mozilla-aurora']['aus2_mobile_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Fennec/mozilla-aurora-test'
 BRANCHES['mozilla-aurora']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-aurora'
 BRANCHES['mozilla-aurora']['enable_blocklist_update'] = True
 BRANCHES['mozilla-aurora']['blocklist_update_on_closed_tree'] = False
@@ -1591,7 +1596,7 @@ BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_USER'] = 'trybld'
 BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_PATH'] = '/symbols/windows'
 BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_SSH_KEY'] = '/c/Documents and Settings/cltbld/.ssh/trybld_dsa'
 BRANCHES['try']['platforms']['win64']['upload_symbols'] = False
-BRANCHES['try']['platforms']['macosx64-debug']['enable_leaktests'] = True
+BRANCHES['try']['platforms']['macosx64-debug']['enable_leaktests'] = False
 for platform in BRANCHES['try']['platforms'].keys():
     # Sadly, the rule that mobile builds go to /mobile/
     # isn't true for try :(
