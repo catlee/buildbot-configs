@@ -198,7 +198,7 @@ PROJECT_BRANCHES = {
         'platforms': {
             'win32': {
                 'env': {
-                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/signed-binaries/updater.exe',
+                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/clobberer/updater.exe',
                 }
             },
             'win32-debug': {},
@@ -224,7 +224,7 @@ PROJECT_BRANCHES = {
         'platforms': {
             'win32': {
                 'env': {
-                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/signed-binraies/updater.exe',
+                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/clobberer/updater.exe',
                 }
             }
         },
