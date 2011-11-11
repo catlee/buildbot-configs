@@ -107,8 +107,6 @@ GLOBAL_VARS = {
     'scratchbox_path': '/builds/scratchbox/moz_scratchbox',
     'scratchbox_home': '/scratchbox/users/cltbld/home/cltbld',
     'use_old_updater': False,
- #   'signing_servers': ['fake', 'dev-stage01.build.scl1.mozilla.com', 'dev-master01.build.scl1.mozilla.com:8080']
-    'signing_servers': ['dev-master01.build.scl1.mozilla.com:8080'],
 }
 GLOBAL_VARS.update(localconfig.GLOBAL_VARS.copy())
 
@@ -1070,6 +1068,10 @@ for branch in BRANCHES.keys():
         # Don't override something that's set
         elif key in ('enable_weekly_bundle',) and key in BRANCHES[branch]:
             continue
+        # Project branches by default shouldn't be using a signing server with real certificates.
+        # This can be overridden in project_branches.py
+        elif key == 'nightly_signing_servers':
+            BRANCHES[branch][key] = BRANCHES[branch]['dep_signing_servers']
         else:
             BRANCHES[branch][key] = deepcopy(value)
 
@@ -1222,6 +1224,7 @@ BRANCHES['shadow-central']['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILD
 BRANCHES['shadow-central']['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-shadow-central'
 BRANCHES['shadow-central']['platforms']['win64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'win64-shadow-central'
 BRANCHES['shadow-central']['enable_valgrind'] = False
+BRANCHES['shadow-central']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['repo_path'] = 'releases/mozilla-release'
@@ -1260,6 +1263,7 @@ BRANCHES['mozilla-release']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-release']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-release'
 del BRANCHES['mozilla-release']['platforms']['win64']
 BRANCHES['mozilla-release']['enable_valgrind'] = False
+BRANCHES['mozilla-release']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['repo_path'] = 'releases/mozilla-beta'
@@ -1308,6 +1312,7 @@ BRANCHES['mozilla-beta']['blocklist_update_on_closed_tree'] = False
 BRANCHES['mozilla-beta']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
 del BRANCHES['mozilla-beta']['platforms']['win64']
 BRANCHES['mozilla-beta']['enable_valgrind'] = False
+BRANCHES['mozilla-beta']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 
 ######## mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = 'releases/mozilla-aurora'
@@ -1528,6 +1533,8 @@ BRANCHES['mozilla-1.9.2']['platforms']['linux64']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['platforms']['macosx']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['platforms']['win32']['l10n_check_test'] = False
 BRANCHES['mozilla-1.9.2']['enable_valgrind'] = False
+BRANCHES['mozilla-1.9.2']['nightly_signing_servers'] = None
+BRANCHES['mozilla-1.9.2']['dep_signing_servers'] = None
 
 ######## try
 # Try-specific configs
@@ -1601,6 +1608,7 @@ for platform in BRANCHES['try']['platforms'].keys():
     # Sadly, the rule that mobile builds go to /mobile/
     # isn't true for try :(
     BRANCHES['try']['platforms'][platform]['stage_product'] = 'firefox'
+BRANCHES['try']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 
 
 ######## generic branch configs

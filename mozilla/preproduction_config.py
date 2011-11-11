@@ -69,6 +69,8 @@ GLOBAL_VARS = {
     'packaged_unittest_tinderbox_tree': 'Releng-Preproduction',
     'tinderbox_tree': 'Releng-Preproduction',
     'mobile_tinderbox_tree': 'Releng-Preproduction',
+    'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
+    'dep_signing_servers': ['dep01.signing.build.scl1.mozilla.com:8080'],
 }
 
 BUILDS_BEFORE_REBOOT = 1
