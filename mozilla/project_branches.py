@@ -204,6 +204,7 @@ PROJECT_BRANCHES = {
             'win32-debug': {},
         },
         'enable_talos': False,
+        'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
     },
     'holly': {},
     'larch': {},
@@ -226,7 +227,8 @@ PROJECT_BRANCHES = {
                     'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/signed-binraies/updater.exe',
                 }
             }
-        }
+        },
+        'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
     },
     'pine': {},
 }
