@@ -1068,10 +1068,6 @@ for branch in BRANCHES.keys():
         # Don't override something that's set
         elif key in ('enable_weekly_bundle',) and key in BRANCHES[branch]:
             continue
-        # Project branches by default shouldn't be using a signing server with real certificates.
-        # This can be overridden in project_branches.py
-        elif key == 'nightly_signing_servers':
-            BRANCHES[branch][key] = BRANCHES[branch]['dep_signing_servers']
         else:
             BRANCHES[branch][key] = deepcopy(value)
 
@@ -1657,6 +1653,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['l10nUploadPath'] = \
         '/home/ftp/pub/mozilla.org/firefox/nightly/latest-' + branch + '-l10n/' 
     BRANCHES[branch]['enUS_binaryURL'] = GLOBAL_VARS['download_base_url'] + branchConfig.get('enUS_binaryURL', '')
+    BRANCHES[branch]['nightly_signing_servers'] = GLOBAL_VARS.get('dep_signing_servers', None)
     if BRANCHES[branch]['platforms'].has_key('linux'):
         BRANCHES[branch]['platforms']['linux']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
     if BRANCHES[branch]['platforms'].has_key('linux-mobile'):
