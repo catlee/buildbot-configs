@@ -91,8 +91,7 @@ PROJECT_BRANCHES = {
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': True,
         'enable_weekly_bundle': True,
-        'enable_pgo': True,
-        'add_pgo_builders': True,
+        'pgo_strategy': 'periodic',
         'pgo_platforms': ['linux', 'linux64', 'win32'],
         'platforms': {
             'linux64': {
@@ -103,6 +102,9 @@ PROJECT_BRANCHES = {
             },
             'linuxqt': {
                 'build_space': 7,
+            },
+            'macosx64-debug': {
+                'enable_leaktests': False,
             },
         },
         'talos_suites': {
@@ -178,12 +180,20 @@ PROJECT_BRANCHES = {
     # customizations while booked for native mobile UI project
     'birch': {
         'enable_nightly': True,
+        'enable_multi_locale': True,
+        'enable_l10n': True,
+        'enable_l10n_onchange': False,
+        'l10n_repo_path': 'l10n-central',
         'create_snippet': True,
         'create_mobile_snippet': True,
         'create_partial': True,
         'lock_platforms': True,
         'platforms': {
             'linux-android': {},
+        },
+        'l10n_platforms': [],
+        'talos_suites': {
+            'remote-tp4m': 0,
         },
     },
     'cedar': {},
@@ -194,7 +204,11 @@ PROJECT_BRANCHES = {
         'create_partial': True,
         'lock_platforms': True,
         'platforms': {
-            'win32': {},
+            'win32': {
+                'env': {
+                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/clobberer/updater.exe',
+                }
+            },
             'win32-debug': {},
         },
         'enable_talos': False,
@@ -214,6 +228,13 @@ PROJECT_BRANCHES = {
         'create_snippet': True,
         'create_partial': True,
         'enable_talos': False,
+        'platforms': {
+            'win32': {
+                'env': {
+                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/clobberer/updater.exe',
+                }
+            }
+        }
     },
     'pine': {},
 }

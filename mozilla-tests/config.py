@@ -73,11 +73,12 @@ PLATFORMS['macosx']['leopard-o'] = {'name': "Rev3 MacOSX Leopard 10.5.8"}
 PLATFORMS['macosx']['stage_product'] = 'firefox'
 
 PLATFORMS['macosx64']['slave_platforms'] = ['leopard', 'snowleopard',
-                                            'snowleopard-r4']
+                                            'snowleopard-r4', 'lion']
 PLATFORMS['macosx64']['env_name'] = 'mac-perf'
 PLATFORMS['macosx64']['leopard'] = {'name': "Rev3 MacOSX Leopard 10.5.8"}
 PLATFORMS['macosx64']['snowleopard'] = {'name': "Rev3 MacOSX Snow Leopard 10.6.2"}
 PLATFORMS['macosx64']['snowleopard-r4'] = {'name': "Rev4 MacOSX Snow Leopard 10.6"}
+PLATFORMS['macosx64']['lion'] = {'name': "Rev4 MacOSX Lion 10.7"}
 PLATFORMS['macosx64']['stage_product'] = 'firefox'
 
 PLATFORMS['win32']['slave_platforms'] = ['xp', 'win7']
@@ -147,18 +148,14 @@ ADDON_TESTER_PLATFORMS = ['win7', 'fedora', 'snowleopard']
 SUITES = {
     'chrome': {
         'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:tsspider', '--mozAfterPaint'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts_paint:tpaint:tdhtml:tsspider', '--mozAfterPaint'],
         'options': ({}, NO_MAC),
     },
+    # chrome_mac compared to chrome is that it does not contain a11y and only run on Mac
     'chrome_mac': {
         'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts:tdhtml:twinopen:tsspider', '--mozAfterPaint'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts_paint:tpaint:tdhtml:tsspider', '--mozAfterPaint'],
         'options': ({}, MAC_ONLY),
-    },
-    'chrome_twinopen': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:twinopen:tsspider', '--mozAfterPaint'],
-        'options': ({}, NO_MAC),
     },
     'nochrome': {
         'enable_by_default': True,
@@ -167,7 +164,7 @@ SUITES = {
     },
     'dirty': {
         'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'ts_places_generated_min:ts_places_generated_med:ts_places_generated_max'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'ts_places_generated_med:ts_places_generated_max', '--setPref', 'hangmonitor.timeout=0'],
         'options': (TALOS_DIRTY_OPTS, ALL_PLATFORMS),
     },
     'tp': {
@@ -209,11 +206,6 @@ SUITES = {
         'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'ts', '--noShutdown', '--sampleConfig', 'addon.config'],
         'options': (TALOS_BASELINE_ADDON_OPTS, ALL_PLATFORMS),
-    },
-    'paint': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'ts_paint:tpaint', '--setPref', 'dom.send_after_paint_to_content=true'],
-        'options': ({}, ALL_PLATFORMS),
     },
     'xperf': {
         'enable_by_default': False,
@@ -265,21 +257,18 @@ SUITES = {
         'suites': GRAPH_CONFIG + ['--activeTests', 'tzoom'],
         'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
-    # These old suites will be remove once the newer ones are enabled by default everywhere
+    # These old suites are only for 1.9.2 and do not use --mozAfterPaint 
+    # chrome VS old_chrome is:
+    # 1) without --mozAfterPaint, 2) use ts instead tpaint and 3) use twinopen instead of tpaint
     'old_chrome': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:tsspider'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:twinopen:tsspider'],
         'options': ({}, NO_MAC),
     },
     'old_chrome_mac': {
         'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts:tdhtml:twinopen:tsspider'],
         'options': ({}, MAC_ONLY),
-    },
-    'old_chrome_twinopen': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts:tdhtml:twinopen:tsspider'],
-        'options': ({}, NO_MAC),
     },
     'old_nochrome': {
         'enable_by_default': False,
@@ -407,6 +396,7 @@ def loadDefaultValues(BRANCHES, branch, branchConfig):
     BRANCHES[branch]['fetch_symbols'] = branchConfig.get('fetch_symbols', True)
     BRANCHES[branch]['support_url_base'] = branchConfig.get('support_url_base', 'http://build.mozilla.org/talos')
     BRANCHES[branch]['enable_unittests'] = branchConfig.get('enable_unittests', True)
+    BRANCHES[branch]['pgo_strategy'] = branchConfig.get('pgo_strategy', None)
 
 def loadCustomTalosSuites(BRANCHES, SUITES, branch, branchConfig):
     coallesceJobs = branchConfig.get('coallesce_jobs', True)
@@ -546,6 +536,10 @@ PLATFORM_UNITTEST_VARS = {
                 'opt_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['opt_unittest_suites'][:]),
                 'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
             },
+            'lion': {
+                'opt_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['opt_unittest_suites'][:]),
+                'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
+            },
         },
         'linux-android': {
             'is_remote': True,
@@ -620,14 +614,20 @@ PLATFORM_UNITTEST_VARS = {
                     )),
                     ('reftest-1', (
                         {'suite': 'reftest',
-                         'totalChunks': 2,
+                         'totalChunks': 3,
                          'thisChunk': 1,
                         },
                     )),
                     ('reftest-2', (
                         {'suite': 'reftest',
-                         'totalChunks': 2,
+                         'totalChunks': 3,
                          'thisChunk': 2,
+                        },
+                    )),
+                    ('reftest-3', (
+                        {'suite': 'reftest',
+                         'totalChunks': 3,
+                         'thisChunk': 3,
                         },
                     )),
                     ('crashtest-1', (
@@ -637,7 +637,7 @@ PLATFORM_UNITTEST_VARS = {
                         },
                     )),
                     ('crashtest-2', (
-                        {'suite': 'crashtest'
+                        {'suite': 'crashtest',
                          'totalChunks': 2,
                          'thisChunk': 2,
                         },
@@ -736,7 +736,8 @@ PROJECTS = {
             'fedora64': {'ext':'linux-x86_64.tar.bz2', 'debug':True}, 
             'fedora':{'ext':'linux-i686.tar.bz2', 'debug':True}, 
             'leopard':{'ext':'(mac|mac64).dmg', 'debug':True}, 
-            'snowleopard':{'ext':'(mac|mac64).dmg', 'debug':True},   
+            'snowleopard':{'ext':'(mac|mac64).dmg', 'debug':True},
+            'lion':{'ext':'(mac|mac64).dmg', 'debug':True},
             'xp':{
                 'ext':'win32.zip',
                 'env':PLATFORM_UNITTEST_VARS['win32']['env_name'],
@@ -751,7 +752,6 @@ PROJECTS = {
         'hgurl': 'http://hg.mozilla.org',
         'repo_path': 'projects/addon-sdk',
         'jetpack_tarball': 'archive/tip.tar.bz2',
-        'ftp_url': 'ftp://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-mozilla-central',
         'ftp_url': 'ftp://ftp.mozilla.org/pub/mozilla.org/firefox/tinderbox-builds/%(branch)s-%(platform)s',
     },
 }
@@ -784,6 +784,7 @@ for branch in BRANCHES.keys():
         BRANCHES[branch]['platforms']['linux']['enable_mobile_unittests'] = True
     BRANCHES[branch]['support_url_base'] = 'http://build.mozilla.org/talos'
     loadTalosSuites(BRANCHES, SUITES, branch)
+    BRANCHES[branch]['pgo_strategy'] = None
     BRANCHES[branch]['pgo_platforms'] = ['linux', 'linux64', 'win32']
 
 # The following are exceptions to the defaults
@@ -794,7 +795,7 @@ BRANCHES['mozilla-central']['repo_path'] = "mozilla-central"
 BRANCHES['mozilla-central']['mobile_branch_name'] = "Mobile"
 BRANCHES['mozilla-central']['mobile_talos_branch'] = "mobile"
 BRANCHES['mozilla-central']['build_branch'] = "1.9.2"
-BRANCHES['mozilla-central']['add_pgo_builders'] = True
+BRANCHES['mozilla-central']['pgo_strategy'] = 'periodic'
 # Let's add win64 tests only for mozilla-central until we have enough capacity - see bug 667024
 # XXX hacking warning - this code could get out of date easily
 BRANCHES['mozilla-central']['platforms']['win64']['enable_opt_unittests'] = True
@@ -814,18 +815,13 @@ BRANCHES['mozilla-central']['platforms']['linux-android']['enable_debug_unittest
 BRANCHES['mozilla-central']['xperf_tests'] = (1, True, {}, WIN7_ONLY)
 
 ######## mozilla-release
-BRANCHES['mozilla-release']['add_pgo_builders'] = True
-# Don't run the mozafterconfig on the mozilla-release branch
-BRANCHES['mozilla-release']['old_chrome_tests'] = (1, True, {}, NO_MAC)
-BRANCHES['mozilla-release']['old_chrome_mac_tests'] = (1, True, {}, MAC_ONLY)
-BRANCHES['mozilla-release']['old_nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['old_tp_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-release']['pgo_strategy'] = 'per-checkin'
 
 ######## mozilla-beta
-BRANCHES['mozilla-beta']['add_pgo_builders'] = True
+BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
 
 ######## mozilla-aurora
-BRANCHES['mozilla-aurora']['add_pgo_builders'] = True
+BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
 
 ######## shadow-central
 BRANCHES['shadow-central']['repo_path'] = "shadow-central"
@@ -834,12 +830,11 @@ BRANCHES['shadow-central']['repo_path'] = "shadow-central"
 BRANCHES['mozilla-1.9.2']['branch_name'] = "Firefox3.6"
 BRANCHES['mozilla-1.9.2']['mobile_branch_name'] = "Mobile1.1"
 BRANCHES['mozilla-1.9.2']['build_branch'] = "1.9.2"
-BRANCHES['mozilla-1.9.2']['old_chrome_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
+# Let's enable the old suites without mozAfterPaint and enable what we use in m-c
+BRANCHES['mozilla-1.9.2']['old_chrome_tests'] = (1, True, {}, OLD_BRANCH_NO_MAC)
 BRANCHES['mozilla-1.9.2']['old_chrome_mac_tests'] = (1, True, {}, OLD_BRANCH_MAC_ONLY)
-BRANCHES['mozilla-1.9.2']['old_chrome_twinopen_tests'] = (1, True, {}, OLD_BRANCH_NO_MAC)
 BRANCHES['mozilla-1.9.2']['old_nochrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['chrome_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
-BRANCHES['mozilla-1.9.2']['chrome_twinopen_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
 BRANCHES['mozilla-1.9.2']['chrome_mac_tests'] = (0, True, {}, OLD_BRANCH_MAC_ONLY)
 BRANCHES['mozilla-1.9.2']['nochrome_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['dromaeo_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
@@ -851,7 +846,6 @@ BRANCHES['mozilla-1.9.2']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH
 BRANCHES['mozilla-1.9.2']['svg_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['scroll_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['a11y_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
-BRANCHES['mozilla-1.9.2']['paint_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['enable_unittests'] = False
 
 ######## addontester 
