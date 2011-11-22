@@ -15,6 +15,8 @@ SLAVES = {
     'macosx':           MAC_MINIS + XSERVES,
     'macosx64':         MAC_SNOW_MINIS,
     'linux-android':    LINUX_VMS + LINUX_IXS,
+    'android':          LINUX_VMS + LINUX_IXS,
+    'android-xul':      LINUX_VMS + LINUX_IXS,
     'linux-mobile':     LINUX_VMS + LINUX_IXS,
     'macosx-mobile':    MAC_MINIS + XSERVES,
     'win32-mobile':     WIN32_IXS,
@@ -110,7 +112,7 @@ BRANCHES = {
         'platforms': {
             'win32': {
                 'env': {
-                    'SYMBOL_SERVER_HOST': 'build.mozilla.org',
+                    'SYMBOL_SERVER_HOST': 'dev-stage01.build.sjc1.mozilla.com',
                     'CVS_RSH': 'ssh',
                     'MOZ_OBJDIR': 'obj-firefox',
                     'TINDERBOX_OUTPUT': '1',
