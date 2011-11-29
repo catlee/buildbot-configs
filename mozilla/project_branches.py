@@ -211,7 +211,7 @@ PROJECT_BRANCHES = {
             'win32-debug': {},
         },
         'enable_talos': False,
-        'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
+        'nightly_signing_servers': "nightly-signing",
     },
     'holly': {},
     'larch': {},
@@ -235,7 +235,7 @@ PROJECT_BRANCHES = {
                 }
             }
         },
-        'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
+        'nightly_signing_servers': "nightly-signing",
     },
     'pine': {
         'enable_unittests': False,
