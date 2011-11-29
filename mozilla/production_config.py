@@ -82,8 +82,9 @@ GLOBAL_VARS = {
     'l10n_tinderbox_tree': 'Mozilla-l10n',
     'base_mirror_urls': ['http://hg.build.scl1.mozilla.com'],
     'base_bundle_urls': ['http://ftp.mozilla.org/pub/mozilla.org/firefox/bundles'],
-    'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
-    'dep_signing_servers': ['dep01.signing.build.scl1.mozilla.com:8080'],
+    # These refer to items in passwords.secrets
+    'nightly_signing_servers': "nightly-signing",
+    'dep_signing_servers': "dep-signing",
 }
 
 BUILDS_BEFORE_REBOOT = 1
