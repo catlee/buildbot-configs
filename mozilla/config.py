@@ -108,7 +108,6 @@ GLOBAL_VARS = {
     'scratchbox_path': '/builds/scratchbox/moz_scratchbox',
     'scratchbox_home': '/scratchbox/users/cltbld/home/cltbld',
     'use_old_updater': False,
-    'required_secrets': ['dep-signing'],
 }
 GLOBAL_VARS.update(localconfig.GLOBAL_VARS.copy())
 
