@@ -4,55 +4,55 @@
     "platforms": ["linux", "macosx", "win32"]
   },
   "be": {
-    "revision": "a30a17a738b9",
+    "revision": "447a755f50eb",
     "platforms": ["linux", "macosx", "win32"]
   },
   "ca": {
-    "revision": "8a67ece67494",
+    "revision": "7967c1997648",
     "platforms": ["linux", "macosx", "win32"]
   },
   "cs": {
-    "revision": "a80b0e312a38",
+    "revision": "d4f9eb0f0080",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "da": {
-    "revision": "cbfb81febf51",
+    "revision": "9984dbd39c61",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "de": {
-    "revision": "e93d3ac6a988",
+    "revision": "275dd00cbf95",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "el": {
-    "revision": "a3201c390bda",
+    "revision": "25c5f7604bb2",
     "platforms": ["linux", "macosx", "win32"]
   },
   "es-AR": {
-    "revision": "071cc3aaa701",
+    "revision": "1be14d7ddc24",
     "platforms": ["linux", "macosx", "win32"]
   },
   "es-ES": {
-    "revision": "e4bd7d4bf91a",
+    "revision": "ed138da58ee0",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "et": {
-    "revision": "9a968cd9fa92",
+    "revision": "820e46038013",
     "platforms": ["linux", "macosx", "win32"]
   },
   "eu": {
-    "revision": "2b7238fa2dbb",
+    "revision": "33e5213d4d67",
     "platforms": ["linux", "macosx", "win32"]
   },
   "fi": {
-    "revision": "0b45043111b4",
+    "revision": "bfa183a53d62",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "fr": {
-    "revision": "adb67cc54b46",
+    "revision": "b91b1db464f9",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "fy-NL": {
-    "revision": "f52ef82759fb",
+    "revision": "717a8d300894",
     "platforms": ["linux", "macosx", "win32"]
   },
   "ga-IE": {
@@ -68,15 +68,15 @@
     "platforms": ["linux", "macosx", "win32"]
   },
   "id": {
-    "revision": "6318eeecf950",
+    "revision": "f199ee7aa0d1",
     "platforms": ["linux", "macosx", "win32"]
   },
   "it": {
-    "revision": "a19fce2ca27a",
+    "revision": "eed73e1cb25f",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "ja": {
-    "revision": "d494288ef5e8",
+    "revision": "46de2bee9b23",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "ko": {
@@ -84,7 +84,7 @@
     "platforms": ["linux", "macosx", "win32"]
   },
   "lt": {
-    "revision": "57a8a6fa4a68",
+    "revision": "0a224ee83e4d",
     "platforms": ["linux", "macosx", "win32"]
   },
   "nb-NO": {
@@ -92,47 +92,47 @@
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "nl": {
-    "revision": "9e67e64cb7be",
+    "revision": "7894d8bd0a92",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "pa-IN": {
-    "revision": "3714747ad49e",
+    "revision": "1579a219f210",
     "platforms": ["linux", "macosx", "win32"]
   },
   "pl": {
-    "revision": "bfa5d85de4da",
+    "revision": "fb4356300f35",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "pt-BR": {
-    "revision": "f49147fa2cd6",
+    "revision": "47c45e0084b5",
     "platforms": ["linux", "macosx", "win32"]
   },
   "pt-PT": {
-    "revision": "141ed48de2f4",
+    "revision": "4ab8da4b9a60",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "ru": {
-    "revision": "bec566b52f65",
+    "revision": "d528f1a5f976",
     "platforms": ["linux", "macosx", "win32", "android-multilocale"]
   },
   "sk": {
-    "revision": "70abb637779b",
+    "revision": "14f050e4ee69",
     "platforms": ["linux", "macosx", "win32"]
   },
   "sq": {
-    "revision": "a4e305593340",
+    "revision": "76968a9dce41",
     "platforms": ["linux", "macosx", "win32"]
   },
   "uk": {
-    "revision": "70f098e57a4e",
+    "revision": "2b1459f7d503",
     "platforms": ["linux", "macosx", "win32"]
   },
   "zh-CN": {
-    "revision": "3a92a18564f9",
+    "revision": "b377f35ba469",
     "platforms": ["linux", "macosx", "win32"]
   },
   "zh-TW": {
-    "revision": "566c152a4924",
+    "revision": "7dcdfdc7e197",
     "platforms": ["linux", "macosx", "win32"]
   }
 }

@@ -1,17 +1,17 @@
 hgUsername                 = 'calbld'
 hgSshKey                   = '~cltbld/.ssh/calbld_dsa'
-relbranchPrefix            = 'COMM'
+relbranchPrefix            = 'CAL'
 sourceRepoName             = 'comm-beta' # buildbot branch name
 sourceRepoPath             = 'releases/comm-beta'
-sourceRepoRevision         = '05355991600d'
+sourceRepoRevision         = 'baaec1696e1b'
 # If blank, automation will create its own branch based on COMM_<date>_RELBRANCH
-relbranchOverride          = ''
+relbranchOverride          = 'CAL80_20111117_RELBRANCH'
 mozillaRepoPath            = 'releases/mozilla-beta'
-mozillaRepoRevision        = '4d8d9922dfca'
+mozillaRepoRevision        = '59962ec0942e'
 # If blank, automation will create its own branch based on COMM_<date>_RELBRANCH
 # You typically want to set this to the gecko relbranch if doing a release off
 # a specific gecko version.
-mozillaRelbranchOverride   = 'COMM80_20110929_RELBRANCH'
+mozillaRelbranchOverride   = 'COMM90_20111114_RELBRANCH'
 inspectorRepoPath          = '' # leave empty if inspector is not to be tagged
 inspectorRepoRevision      = ''
 inspectorRelbranchOverride = ''
@@ -23,30 +23,31 @@ venkmanRepoRevision        = ''
 venkmanRelbranchOverride   = ''
 chatzillaCVSRoot           = ''
 chatzillaTimestamp         = '' # leave empty if chatzilla is not to be tagged
-l10nRepoPath               = 'releases/l10n-miramar'
+l10nRepoPath               = 'releases/l10n/mozilla-beta'
 l10nRevisionFile           = 'l10n-calendar-changesets'
-l10nRevisionUrl            = 'http://hg.mozilla.org/build/buildbot-configs/raw-file/CALENDAR_1_0b7_RELEASE/calendar/l10n-calendar-changesets'
 toolsRepoPath              = 'build/tools'
 cvsroot                    = ':ext:calbld@cvs.mozilla.org:/cvsroot' # for patcher, etc.
 productVersionFile         = 'calendar/sunbird/config/version.txt'
-productName                = 'sunbird'
-brandName                  = 'Sunbird'
+# version-bump.pl needs an app name, which we have to hack a bit for Lightning.
+productBumpName            = 'calendar/sunbird'
+productName                = 'lightning'
+brandName                  = 'Lightning'
 appName                    = 'calendar'
-ftpName			   = 'calendar/sunbird'
-projectName                = 'sunbird'
+ftpName			   = 'calendar/lightning'
+projectName                = 'lightning'
 # Sometimes we need the application version to be different from what we "call"
 # the build, eg public release candidates for a major release (3.1 RC1).
 # appVersion and oldAppVersion are optional definitions used in places that
 # don't care about what we call it. Eg, when version bumping we will bump to
 # appVersion, not version.
-version                    = '1.0rc1'
-appVersion                 = '1.0rc1'
+version                    = '1.1b1'
+appVersion                 = '1.1b1'
 #XXX: Not entirely certain if/where this is used.
-milestone                  = '7.0'
-buildNumber                = 1
-baseTag                    = 'CALENDAR_1_0rc1'
+milestone                  = '8.0'
+buildNumber                = 2
+baseTag                    = 'CALENDAR_1_1b1'
 # The old version is the revision from which we should generate update snippets.
-oldVersion                 = '1.0b7'
+oldVersion                 = '1.0'
 oldAppVersion              = oldVersion
 oldBuildNumber             = 1
 oldBaseTag                 = ''

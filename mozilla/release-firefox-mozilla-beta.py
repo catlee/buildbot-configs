@@ -15,25 +15,25 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '8.0b3'
-releaseConfig['appVersion']          = '8.0'
-releaseConfig['milestone']           = '8.0'
+releaseConfig['version']             = '9.0b3'
+releaseConfig['appVersion']          = '9.0'
+releaseConfig['milestone']           = '9.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_8_0b3'
+releaseConfig['baseTag']             = 'FIREFOX_9_0b3'
 #  Old version info
-releaseConfig['oldVersion']          = '8.0b2'
-releaseConfig['oldAppVersion']       = '8.0'
-releaseConfig['oldBuildNumber']      = 2
-releaseConfig['oldBaseTag']          = 'FIREFOX_8_0b2'
+releaseConfig['oldVersion']          = '9.0b2'
+releaseConfig['oldAppVersion']       = '9.0'
+releaseConfig['oldBuildNumber']      = 1
+releaseConfig['oldBaseTag']          = 'FIREFOX_9_0b2'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '8.0'
-releaseConfig['nextMilestone']       = '8.0'
+releaseConfig['nextAppVersion']      = '9.0'
+releaseConfig['nextMilestone']       = '9.0'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '890a66b91702',
+        'revision': "a8b9b7d98fb5",
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -58,7 +58,8 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-beta'
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
-    'build/buildbot': 'production-0.8'
+    'build/buildbot': 'production-0.8',
+    'build/mozharness': 'default',
 }
 
 # Platform configuration
@@ -84,7 +85,7 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 releaseConfig['cvsroot']             = ':ext:cltbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'mozBeta-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = True
-releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R14'
+releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R15'
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage-old.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
@@ -118,3 +119,4 @@ releaseConfig['releasetestUptake']   = 1
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False
+releaseConfig['enableAutomaticPushToMirrors'] = True

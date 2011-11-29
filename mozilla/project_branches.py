@@ -40,7 +40,7 @@ PROJECT_BRANCHES = {
             'macosx64': {
                 'slave_platforms': ['snowleopard'],
             },
-            'linux-android': {
+            'android': {
                 'enable_opt_unittests': False,
                 'enable_debug_unittests': False,
                 'tegra_android': {},
@@ -91,8 +91,7 @@ PROJECT_BRANCHES = {
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': True,
         'enable_weekly_bundle': True,
-        'enable_pgo': True,
-        'add_pgo_builders': True,
+        'pgo_strategy': 'periodic',
         'pgo_platforms': ['linux', 'linux64', 'win32'],
         'platforms': {
             'linux64': {
@@ -103,6 +102,9 @@ PROJECT_BRANCHES = {
             },
             'linuxqt': {
                 'build_space': 7,
+            },
+            'macosx64-debug': {
+                'enable_leaktests': False,
             },
         },
         'talos_suites': {
@@ -139,7 +141,6 @@ PROJECT_BRANCHES = {
         'mobile_tinderbox_tree': 'UX',
         'packaged_unittest_tinderbox_tree': 'UX',
         'enabled_products': ['firefox'],
-        'enable_mobile': False,
         'mozconfig_dir' : 'ux',
         'enable_nightly': True,
         'create_snippet': True,
@@ -168,17 +169,50 @@ PROJECT_BRANCHES = {
         'enable_unittests': False,
         'enable_talos': False,
     },
+    # customizations for updater.exe changes (bug 307181)
+    'ash': {
+        'enable_nightly': True,
+        'create_snippet': True,
+        'create_partial': True,
+        'enable_talos': False,
+    },
     # customizations while booked for native mobile UI project
     'birch': {
+        'enable_nightly': True,
+        'enable_multi_locale': False,
+        'enable_l10n': True,
+        'enable_l10n_onchange': False,
+        'l10n_repo_path': 'l10n-central',
+        'create_snippet': True,
+        'create_mobile_snippet': True,
+        'create_partial': True,
+        'lock_platforms': True,
+        'platforms': {
+            'android': {},
+        },
+        'l10n_platforms': [],
+        'talos_suites': {
+            'remote-tp4m': 0,
+        },
+    },
+    'cedar': {},
+    # customizations for windows update service changes (bug 481815)
+    'elm': {
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
         'lock_platforms': True,
         'platforms': {
-            'linux-android': {},
+            'win32': {
+                'env': {
+                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/clobberer/updater.exe',
+                }
+            },
+            'win32-debug': {},
         },
+        'enable_talos': False,
+        'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
     },
-    'cedar': {},
     'holly': {},
     'larch': {},
     # customizations while booked for bcp47 project as per bug 667734
@@ -187,6 +221,45 @@ PROJECT_BRANCHES = {
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
+    },
+    # customizations for integration work for bugs 481815 and 307181
+    'oak': {
+        'enable_nightly': True,
+        'create_snippet': True,
+        'create_partial': True,
+        'enable_talos': False,
+        'platforms': {
+            'win32': {
+                'env': {
+                    'MOCO_SIGNED_UPDATER_EXE': 'https://build.mozilla.org/clobberer/updater.exe',
+                }
+            }
+        },
+        'nightly_signing_servers': ['nightly01.signing.build.scl1.mozilla.com:8080'],
+    },
+    'pine': {
+        'enable_unittests': False,
+        'enabled_products': ['firefox'],
+        'talos_suites': {
+            'tp': [1, {'suites': ['--sampleConfig', 'cycles.config']}],
+            'chrome': [1, {'suites': ['--sampleConfig', 'cycles.config']}],
+            'chrome_mac': [1, {'suites': ['--sampleConfig', 'cycles.config']}],
+            'nochrome': [1, {'suites': ['--sampleConfig', 'cycles.config']}],
+            'dirty': 0,
+            'svg': [1, {'suites': ['--sampleConfig', 'cycles.config']}],
+            'dromaeo': 0,
+            # hate that remote talos still show up when mobile product is not being requested
+            # but that's not part of the bug i'm doing this for, so leaving for now
+            'remote-ts': 0,
+            'remote-tdhtml': 0,
+            'remote-tsvg': 0,
+            'remote-tsspider': 0,
+            'remote-tpan': 0,
+            'remote-tp4m': 0,
+            'remote-tp4m_nochrome': 0,
+            'remote-twinopen': 0,
+            'remote-tzoom': 0,
+        },
     },
 }
 
