@@ -70,8 +70,6 @@ GLOBAL_VARS = {
     'packaged_unittest_tinderbox_tree': 'Releng-Preproduction',
     'tinderbox_tree': 'Releng-Preproduction',
     'mobile_tinderbox_tree': 'Releng-Preproduction',
-    'nightly_signing_servers': 'nightly-signing',
-    'dep_signing_servers': 'dep-signing',
 }
 
 BUILDS_BEFORE_REBOOT = 1

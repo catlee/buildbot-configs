@@ -71,8 +71,6 @@ GLOBAL_VARS = {
     'hg_username': 'stage-ffxbld',
     'base_mirror_urls': ['http://hg.build.scl1.mozilla.com'],
     'base_bundle_urls': ['http://dev-stage01.build.mozilla.org/pub/mozilla.org/firefox/bundles'],
-    'nightly_signing_servers': 'nightly-signing',
-    'dep_signing_servers': 'dep-signing',
 }
 
 BUILDS_BEFORE_REBOOT = 5

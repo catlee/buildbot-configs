@@ -1281,7 +1281,6 @@ BRANCHES['shadow-central']['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILD
 BRANCHES['shadow-central']['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-shadow-central'
 BRANCHES['shadow-central']['platforms']['win64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'win64-shadow-central'
 BRANCHES['shadow-central']['enable_valgrind'] = False
-BRANCHES['shadow-central']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['repo_path'] = 'releases/mozilla-release'
@@ -1319,7 +1318,6 @@ BRANCHES['mozilla-release']['enable_blocklist_update'] = False
 BRANCHES['mozilla-release']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['mozilla-release']['platforms']['win64']
 BRANCHES['mozilla-release']['enable_valgrind'] = False
-BRANCHES['mozilla-release']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 #-------------------------------------------------------------------------
 # Delete the below lines when 11.0 merges into release
 #-------------------------------------------------------------------------
@@ -1390,7 +1388,6 @@ BRANCHES['mozilla-beta']['enable_blocklist_update'] = True
 BRANCHES['mozilla-beta']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['mozilla-beta']['platforms']['win64']
 BRANCHES['mozilla-beta']['enable_valgrind'] = False
-BRANCHES['mozilla-beta']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 #-------------------------------------------------------------------------
 # Delete the below lines when 11.0 merges into beta
 #-------------------------------------------------------------------------
@@ -1665,7 +1662,6 @@ for platform in BRANCHES['try']['platforms'].keys():
     # Sadly, the rule that mobile builds go to /mobile/
     # isn't true for try :(
     BRANCHES['try']['platforms'][platform]['stage_product'] = 'firefox'
-BRANCHES['try']['nightly_signing_servers'] = BRANCHES['shadow-central']['dep_signing_servers']
 
 
 ######## generic branch configs
@@ -1711,7 +1707,6 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['l10nUploadPath'] = \
         '/home/ftp/pub/mozilla.org/firefox/nightly/latest-' + branch + '-l10n/' 
     BRANCHES[branch]['enUS_binaryURL'] = GLOBAL_VARS['download_base_url'] + branchConfig.get('enUS_binaryURL', '')
-    BRANCHES[branch]['nightly_signing_servers'] = GLOBAL_VARS.get('dep_signing_servers', None)
     if BRANCHES[branch]['platforms'].has_key('linux'):
         BRANCHES[branch]['platforms']['linux']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
     if BRANCHES[branch]['platforms'].has_key('linux-mobile'):

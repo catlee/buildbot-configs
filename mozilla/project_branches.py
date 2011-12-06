@@ -214,7 +214,6 @@ PROJECT_BRANCHES = {
             },
         },
         'enable_talos': False,
-        'nightly_signing_servers': "nightly-signing",
     },
     'holly': {},
     'larch': {},
