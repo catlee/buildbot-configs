@@ -2,8 +2,8 @@ releaseConfig = {}
 releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
-releaseConfig['AllRecipients']       = ['release@mozilla.com',]
-releaseConfig['PassRecipients']      = ['release-drivers@mozilla.org',]
+releaseConfig['AllRecipients']       = ['release@mozilla.com', 'aki@escapewindow.com', 'john@oduinn.com']
+releaseConfig['PassRecipients']      = ['release-drivers@mozilla.org', 'aki@escapewindow.com', 'john@oduinn.com']
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
 
@@ -15,16 +15,16 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '9.0b3'
+releaseConfig['version']             = '9.0b5'
 releaseConfig['appVersion']          = '9.0'
 releaseConfig['milestone']           = '9.0'
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_9_0b3'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'FENNEC_9_0b5'
 #  Old version info
-releaseConfig['oldVersion']          = '9.0b2'
+releaseConfig['oldVersion']          = '9.0b4'
 releaseConfig['oldAppVersion']       = '9.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FENNEC_9_0b2'
+releaseConfig['oldBaseTag']          = 'FENNEC_9_0b4'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = '9.0'
 releaseConfig['nextMilestone']       = '9.0'
@@ -33,8 +33,8 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': "a8b9b7d98fb5",
-        'relbranch': None,
+        'revision': "938d0e6afa57",
+        'relbranch': "MOBILE90_2011120622_RELBRANCH",
         'bumpFiles': {
             'mobile/confvars.sh': {
                 'version': releaseConfig['appVersion'],
