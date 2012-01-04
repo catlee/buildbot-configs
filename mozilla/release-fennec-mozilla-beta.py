@@ -2,8 +2,8 @@ releaseConfig = {}
 releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
-releaseConfig['AllRecipients']       = ['release@mozilla.com', 'aki@escapewindow.com', 'john@oduinn.com']
-releaseConfig['PassRecipients']      = ['release-drivers@mozilla.org', 'aki@escapewindow.com', 'john@oduinn.com']
+releaseConfig['AllRecipients']       = ['release@mozilla.com',]
+releaseConfig['PassRecipients']      = ['release-drivers@mozilla.org',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
 
@@ -15,26 +15,26 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '9.0b5'
-releaseConfig['appVersion']          = '9.0'
-releaseConfig['milestone']           = '9.0'
-releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'FENNEC_9_0b5'
+releaseConfig['version']             = '10.0b3'
+releaseConfig['appVersion']          = '10.0'
+releaseConfig['milestone']           = '10.0'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'FENNEC_10_0b3'
 #  Old version info
-releaseConfig['oldVersion']          = '9.0b4'
-releaseConfig['oldAppVersion']       = '9.0'
+releaseConfig['oldVersion']          = '10.0b2'
+releaseConfig['oldAppVersion']       = '10.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FENNEC_9_0b4'
+releaseConfig['oldBaseTag']          = 'FENNEC_10_0b2'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '9.0'
-releaseConfig['nextMilestone']       = '9.0'
+releaseConfig['nextAppVersion']      = '10.0'
+releaseConfig['nextMilestone']       = '10.0'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': "938d0e6afa57",
-        'relbranch': "MOBILE90_2011120622_RELBRANCH",
+        'revision': '5a9562481681',
+        'relbranch': None,
         'bumpFiles': {
             'mobile/confvars.sh': {
                 'version': releaseConfig['appVersion'],
@@ -98,6 +98,14 @@ releaseConfig['ausSshKey']           = 'cltbld_dsa'
 releaseConfig['doPartnerRepacks']       = False
 releaseConfig['partnersRepoPath']       = 'build/partner-repacks'
 releaseConfig['partnerRepackPlatforms'] = ()
+
+# mozconfigs
+releaseConfig['mozconfigs']          = {
+    'linux-android': 'mobile/config/mozconfigs/android/release',
+    'linux-mobile': 'mobile/config/mozconfigs/linux-desktop/release',
+    'macosx-mobile': 'mobile/config/mozconfigs/macosx-desktop/release',
+    'win32-mobile': 'mobile/config/mozconfigs/win32-desktop/release',
+}
 
 # Misc configuration
 releaseConfig['enable_repo_setup']       = False

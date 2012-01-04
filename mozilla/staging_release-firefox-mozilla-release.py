@@ -1,4 +1,5 @@
 releaseConfig = {}
+releaseConfig['skip_repo_setup']        = True
 releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
@@ -15,19 +16,19 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '6.0'
-releaseConfig['appVersion']          = '6.0'
-releaseConfig['milestone']           = '6.0'
+releaseConfig['version']             = '9.0'
+releaseConfig['appVersion']          = releaseConfig['version']
+releaseConfig['milestone']           = releaseConfig['version']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_6_0'
+releaseConfig['baseTag']             = 'FIREFOX_9_0'
 #  Old version info
-releaseConfig['oldVersion']          = '5.0.1'
+releaseConfig['oldVersion']          = '8.0.1'
 releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
-releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_5_0_1'
+releaseConfig['oldBuildNumber']      = 2
+releaseConfig['oldBaseTag']          = 'FIREFOX_8_0_1'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '6.0'
-releaseConfig['nextMilestone']       = '6.0'
+releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
+releaseConfig['nextMilestone']       = releaseConfig['milestone']
 #  Repository configuration, for tagging
 ## Staging repository path
 releaseConfig['userRepoRoot'] = 'users/stage-ffxbld'
@@ -36,7 +37,7 @@ releaseConfig['sourceRepositories']  = {
         'name': 'mozilla-release',
         'clonePath': 'releases/mozilla-release',
         'path': 'users/stage-ffxbld/mozilla-release',
-        'revision': 'FIXME',
+        'revision': 'default',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -105,6 +106,18 @@ releaseConfig['verifyConfigs']       = {
     'linux64':  'mozRelease-firefox-linux64.cfg',
     'macosx64': 'mozRelease-firefox-mac64.cfg',
     'win32':  'mozRelease-firefox-win32.cfg'
+}
+releaseConfig['mozconfigs']          = {
+    'linux': 'browser/config/mozconfigs/linux/release',
+    'linux64': 'browser/config/mozconfigs/linux64/release',
+    'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
+    'win32': 'browser/config/mozconfigs/win32/release',
+}
+releaseConfig['xulrunner_mozconfigs']          = {
+    'linux': 'xulrunner/config/mozconfigs/linux/release',
+    'linux64': 'xulrunner/config/mozconfigs/linux64/release',
+    'macosx64': 'xulrunner/config/mozconfigs/macosx-universal/release',
+    'win32': 'xulrunner/config/mozconfigs/win32/release',
 }
 
 # Partner repack configuration

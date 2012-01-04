@@ -94,7 +94,8 @@ releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = True
-releaseConfig['useBetaChannel']      = 1
+releaseConfig['useBetaChannel']      = True
+releaseConfig['useBetaChannelForRelease'] = True
 releaseConfig['verifyConfigs']       = {
     'linux':  'moz192-firefox-linux.cfg',
     'macosx': 'moz192-firefox-mac.cfg',
@@ -108,10 +109,10 @@ releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Major update configuration
 releaseConfig['majorUpdateRepoPath'] = 'releases/mozilla-release'
-releaseConfig['majorUpdateToVersion']   = '9.0'
+releaseConfig['majorUpdateToVersion']   = '9.0.1'
 releaseConfig['majorUpdateAppVersion']  = releaseConfig['majorUpdateToVersion']
 releaseConfig['majorUpdateBuildNumber'] = 1
-releaseConfig['majorUpdateBaseTag']     = 'FIREFOX_9_0'
+releaseConfig['majorUpdateBaseTag']     = 'FIREFOX_9_0_1'
 releaseConfig['majorUpdateReleaseNotesUrl']  = 'https://www.mozilla.org/%locale%/firefox/latest/details/from-3.6.html'
 releaseConfig['majorUpdatePatcherConfig']    = 'moz192-branch-major-update-patcher2.cfg'
 releaseConfig['majorPatcherToolsTag']        = 'UPDATE_PACKAGING_R11_1_MU'
