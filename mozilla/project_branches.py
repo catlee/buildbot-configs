@@ -27,42 +27,39 @@ PROJECT_BRANCHES = {
     'build-system': {
         'enable_talos': True,
     },
-    'devtools':{
-        'enable_nightly': True,
-        'enabled_products': ['firefox'],
-        'platforms': {
-            'macosx-debug': {
-                'dont_build': True,
-            },
-            'macosx': {
-                'slave_platforms': [],
-            },
-            'macosx64': {
-                'slave_platforms': ['snowleopard'],
-            },
-            'android': {
-                'enable_opt_unittests': False,
-                'enable_debug_unittests': False,
-                'tegra_android': {},
-            },
-        },
-    },
-    'electrolysis': {
-        'mozconfig_dir': 'electrolysis',
-        'enable_talos': True,
-    },
+    # DISABLED because of builder limit problems - bug 721854
+#    'devtools':{
+#        'enable_nightly': True,
+#        'enabled_products': ['firefox'],
+#        'platforms': {
+#            'macosx-debug': {
+#                'dont_build': True,
+#                'enable_debug_unittests': False,
+#            },
+#            'macosx': {
+#                'slave_platforms': [],
+#            },
+#            'macosx64': {
+#                'slave_platforms': ['snowleopard'],
+#            },
+#            'android': {
+#                'enable_opt_unittests': False,
+#                'enable_debug_unittests': False,
+#                'tegra_android': {},
+#            },
+#        },
+#    },
+    # DISABLED because of builder limit problems - bug 721854
+    #'electrolysis': {
+    #    'mozconfig_dir': 'electrolysis',
+    #    'enable_talos': True,
+    #},
     'fx-team': {
         'repo_path': 'integration/fx-team',
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': True,
-        'enabled_products': ['firefox'],
-        'talos_suites': {
-            'remote-ts': 1,
-            'remote-tdhtml': 1,
-            'remote-tsvg': 1,
-            'remote-tsspider': 1,
-            'remote-twinopen': 1,
-        }
+        'pgo_strategy': 'periodic',
+        'pgo_platforms': ['linux', 'linux64', 'win32'],
     },
     'graphics':{
         'enable_unittests': False,
@@ -115,25 +112,54 @@ PROJECT_BRANCHES = {
             'v8': 1,
         }
     },
-    'places': {
-        'platforms': {
-            'linux64': {
-                'build_space': 6,
-            },
-            'linux': {
-                'build_space': 6,
-            },
-            'linuxqt': {
-                'build_space': 6,
-            },
-        },
-    },
+    # DISABLED because of builder limit problems - bug 721854
+#    'places': {
+#        'platforms': {
+#            'linux64': {
+#                'build_space': 6,
+#            },
+#            'linux': {
+#                'build_space': 6,
+#            },
+#            'linuxqt': {
+#                'build_space': 6,
+#            },
+#        },
+#    },
     'profiling': {
         'enable_talos': True,
         'enabled_products': ['firefox'],
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
+        'platforms': {
+            'macosx-debug': {
+                'dont_build': True,
+                'enable_debug_unittests': False,
+            },
+            'macosx64-debug': {
+                'dont_build': True,
+                'enable_debug_unittests': False,
+            },
+            'linux-debug': {
+                'dont_build': True,
+                'enable_debug_unittests': False,
+            },
+            'linux64-debug': {
+                'dont_build': True,
+                'enable_debug_unittests': False,
+            },
+            'win32-debug': {
+                'dont_build': True,
+                'enable_debug_unittests': False,
+            },
+            'win32': {
+                'nightly_signing_servers': 'nightly-signing',
+            },
+            'win64': {
+                'nightly_signing_servers': 'nightly-signing',
+            },
+        },
     },
     'services-central': {
         'repo_path': 'services/services-central',
@@ -154,18 +180,23 @@ PROJECT_BRANCHES = {
         'platforms': {
             'macosx-debug': {
                 'dont_build': True,
+                'enable_debug_unittests': False,
             },
             'macosx64-debug': {
                 'dont_build': True,
+                'enable_debug_unittests': False,
             },
             'linux-debug': {
                 'dont_build': True,
+                'enable_debug_unittests': False,
             },
             'linux64-debug': {
                 'dont_build': True,
+                'enable_debug_unittests': False,
             },
             'win32-debug': {
                 'dont_build': True,
+                'enable_debug_unittests': False,
             },
         },
     },
