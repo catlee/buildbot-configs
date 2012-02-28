@@ -71,18 +71,15 @@ releaseConfig['otherReposToTag']     = {
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']        = ('linux-android',
-                                         'linux-mobile', 'macosx-mobile',
-                                         'win32-mobile')
-releaseConfig['notifyPlatforms']        = ('linux-android',)
-releaseConfig['signedPlatforms']      = ('linux-android',)
+releaseConfig['enUSPlatforms']        = ('android', 'android-xul')
+releaseConfig['notifyPlatforms']      = ('android', 'android-xul')
+releaseConfig['signedPlatforms']      = ('android', 'android-xul')
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
 releaseConfig['enableUnittests']      = True
 
 # L10n configuration
-releaseConfig['l10nPlatforms']       = ('linux-mobile', 'macosx-mobile',
-                                        'win32-mobile')
+releaseConfig['l10nPlatforms']       = ('android',)
 releaseConfig['l10nChunks']          = 2
 releaseConfig['mergeLocales']        = True
 releaseConfig['enableMultiLocale']   = True
@@ -95,6 +92,7 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 releaseConfig['ftpServer']           = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['stagingServer']       = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['ausServerUrl']        = 'http://dev-stage01.build.sjc1.mozilla.com'
+releaseConfig['ausHost']             = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 
@@ -105,10 +103,8 @@ releaseConfig['partnerRepackPlatforms'] = ()
 
 # mozconfigs
 releaseConfig['mozconfigs']          = {
-    'linux-android': 'mobile/config/mozconfigs/android/release',
-    'linux-mobile': 'mobile/config/mozconfigs/linux-desktop/release',
-    'macosx-mobile': 'mobile/config/mozconfigs/macosx-desktop/release',
-    'win32-mobile': 'mobile/config/mozconfigs/win32-desktop/release',
+    'android': 'mobile/android/config/mozconfigs/android/release',
+    'android-xul': 'mobile/xul/config/mozconfigs/android/release',
 }
 
 # Misc configuration
@@ -116,8 +112,8 @@ releaseConfig['enable_repo_setup']       = False
 
 releaseConfig['mozharness_config'] = {
     'platforms': {
-        'linux-android':
-            'multi_locale/staging_release_mozilla-release_linux-android.json',
+        'android-xul':
+            'multi_locale/staging_release_mozilla-release_android-xul.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],

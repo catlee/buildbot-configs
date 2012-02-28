@@ -26,6 +26,7 @@ PROJECT_BRANCHES = {
     },
     'build-system': {
         'enable_talos': True,
+        'pgo_strategy': 'per-checkin',
     },
     # DISABLED because of builder limit problems - bug 721854
 #    'devtools':{
@@ -164,6 +165,8 @@ PROJECT_BRANCHES = {
     'services-central': {
         'repo_path': 'services/services-central',
         'enable_weekly_bundle': True,
+        'pgo_strategy': 'periodic',
+        'pgo_platforms': ['linux', 'linux64', 'win32'],
     },
     'ux': {
         'branch_name': 'UX',

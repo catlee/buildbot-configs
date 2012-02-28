@@ -70,11 +70,6 @@ GLOBAL_VARS = {
         'android': {},
         'android-debug': {},
         'android-xul': {},
-        'linux-android': {},
-        'linux-android-debug': {},
-        'linux-mobile': {},
-        'win32-mobile': {},
-        'macosx-mobile': {},
     },
     'pgo_strategy': None,
     'pgo_platforms': ('linux', 'linux64', 'win32', 'win64'),
@@ -727,8 +722,6 @@ PLATFORM_VARS = {
             'stage_product': 'mobile',
             'android_signing': True,
             'post_upload_include_platform': True,
-            'multi_locale': True,
-            'multi_locale_script': 'scripts/multil10n.py',
             'is_mobile_l10n': True,
             'l10n_chunks': 5,
         },
@@ -748,11 +741,10 @@ PLATFORM_VARS = {
             'download_symbols': False,
             'packageTests': True,
             'enable_codesighs': False,
-            'create_snippet': False,
             'create_partial': False,
             'slaves': SLAVES['linux'],
             'platform_objdir': OBJDIR,
-            'update_platform': 'Android_arm-eabi-gcc3',
+            'update_platform': 'Android_arm-eabi-gcc3-xul',
             'enable_shared_checkouts': True,
             'env': {
                 'DISPLAY': ':2',
@@ -781,8 +773,6 @@ PLATFORM_VARS = {
             'post_upload_include_platform': True,
             'multi_locale': True,
             'multi_locale_script': 'scripts/multil10n.py',
-            'is_mobile_l10n': True,
-            'l10n_chunks': 5,
         },
         'android-debug': {
             'product_name': 'firefox',
@@ -832,255 +822,6 @@ PLATFORM_VARS = {
             'stage_product': 'mobile',
             'android_signing': True,
             'post_upload_include_platform': True,
-        },
-        'linux-android': {
-            'product_name': 'firefox',
-            'app_name': 'browser',
-            'brand_name': 'Minefield',
-            'base_name': 'Android %(branch)s',
-            'mozconfig': 'linux-android/%(branch)s/nightly',
-            'src_mozconfig': 'mobile/config/mozconfigs/android/nightly',
-            'enable_nightly': False,
-            'enable_dep': False,
-            'enable_xulrunner': False,
-            'profiled_build': False,
-            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
-            'upload_symbols': True,
-            'download_symbols': False,
-            'packageTests': True,
-            'enable_codesighs': False,
-            'create_partial': False,
-            'slaves': SLAVES['linux'],
-            'platform_objdir': OBJDIR,
-            'update_platform': 'Android_arm-eabi-gcc3',
-            'enable_shared_checkouts': True,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'ffxbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-                'JAVA_HOME': '/tools/jdk6',
-                'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
-            },
-            'enable_opt_unittests': False,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
-            'unittest_masters': GLOBAL_VARS['unittest_masters'],
-            'stage_platform': "android",
-            'stage_product': 'mobile',
-            'android_signing': True,
-            'post_upload_include_platform': True,
-            'multi_locale': True,
-            'multi_locale_script': 'scripts/multil10n.py',
-        },
-        'linux-android-debug': {
-            'product_name': 'firefox',
-            'app_name': 'browser',
-            'brand_name': 'Minefield',
-            'base_name': 'Android Debug %(branch)s',
-            'mozconfig': 'linux-android-debug/%(branch)s/nightly',
-            'src_mozconfig': 'mobile/config/mozconfigs/android/debug',
-            'enable_nightly': False,
-            'enable_dep': False,
-            'enable_xulrunner': False,
-            'profiled_build': False,
-            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
-            'upload_symbols': True,
-            'download_symbols': False,
-            'packageTests': True,
-            'enable_codesighs': False,
-            'enable_leaktests': False,
-            'create_snippet': False,
-            'create_partial': False,
-            'slaves': SLAVES['linux'],
-            'platform_objdir': OBJDIR,
-            'update_platform': 'Android_arm-eabi-gcc3',
-            'enable_shared_checkouts': True,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'ffxbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-                'JAVA_HOME': '/tools/jdk6',
-                'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
-            },
-            'enable_opt_unittests': False,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
-            'unittest_masters': GLOBAL_VARS['unittest_masters'],
-            'stage_platform': "android-debug",
-            'stage_product': 'mobile',
-            'android_signing': True,
-            'post_upload_include_platform': True,
-        },
-        'linux-mobile': {
-            'product_name': 'firefox',
-            'app_name': 'browser',
-            'brand_name': 'Minefield',
-            'base_name': 'Linux Mobile Desktop %(branch)s',
-            'mozconfig': 'linux-mobile/%(branch)s/nightly',
-            'src_mozconfig': 'mobile/xul/config/mozconfigs/linux-desktop/nightly',
-            'mobile_dir': 'mobile/xul',
-            'profiled_build': False,
-            'enable_xulrunner': False,
-            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
-            'packageTests': True,
-            'upload_symbols': True,
-            'update_platform': 'Linux_x86-gcc3',
-            'create_partial': False,
-            'slaves': SLAVES['linux'],
-            'platform_objdir': OBJDIR,
-            'enable_ccache': True,
-            'enable_codesighs': False,
-            'create_snippet': False,
-            'create_partial': False,
-            'enable_shared_checkouts': True,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'ffxbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-            },
-            'is_mobile_l10n': True,
-            'l10n_chunks': 5,
-            'enable_opt_unittests': False,
-            'enable_checktests': True,
-            'talos_masters': [],#GLOBAL_VARS['talos_masters'],
-            'stage_platform': "linux",
-            'stage_product': 'mobile',
-            'post_upload_include_platform': True,
-            'enable_dep': False,
-        },
-        'win32-mobile': {
-            'product_name': 'firefox',
-            'app_name': 'browser',
-            'brand_name': 'Minefield',
-            'base_name': 'WINNT 5.2 Mobile Desktop %(branch)s',
-            'mozconfig': 'win32-mobile/%(branch)s/nightly',
-            'src_mozconfig': 'mobile/xul/config/mozconfigs/win32-desktop/nightly',
-            'mobile_dir': 'mobile/xul',
-            'profiled_build': False,
-            'enable_xulrunner': False,
-            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
-            'packageTests': True,
-            'upload_symbols': True,
-            'update_platform': 'WINNT_x86-msvc',
-            'slaves': SLAVES['win32'],
-            'platform_objdir': OBJDIR,
-            'enable_ccache': False,
-            'enable_codesighs': False,
-            'create_snippet': False,
-            'create_partial': False,
-            'enable_shared_checkouts': True,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'ffxbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-                'SYMBOL_SERVER_SSH_KEY': "/c/Documents and Settings/cltbld/.ssh/ffxbld_dsa",
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-                'BINSCOPE': 'C:\Program Files\Microsoft\SDL Binscope\Binscope.exe',
-                'PATH': "${MOZILLABUILD}buildbotve\\scripts;${PATH}",
-            },
-            'is_mobile_l10n': True,
-            'l10n_chunks': 5,
-            'enable_opt_unittests': False,
-            'enable_checktests': True,
-            'talos_masters': [],#GLOBAL_VARS['talos_masters'],
-            'stage_platform': "win32",
-            'stage_product': 'mobile',
-            'post_upload_include_platform': True,
-            'enable_dep': False,
-        },
-        'macosx-mobile': {
-            'product_name': 'firefox',
-            'app_name': 'browser',
-            'brand_name': 'Minefield',
-            'base_name': 'OS X 10.5.2 Mobile Desktop %(branch)s',
-            'mozconfig': 'macosx-mobile/%(branch)s/nightly',
-            'src_mozconfig': 'mobile/xul/config/mozconfigs/macosx-desktop/nightly',
-            'mobile_dir': 'mobile/xul',
-            'profiled_build': False,
-            'enable_xulrunner': False,
-            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
-            'packageTests': True,
-            'upload_symbols': True,
-            'update_platform': 'Darwin_x86_64-gcc3',
-            'platform_objdir': "%s/i386" % OBJDIR, #needed?
-            'slaves': SLAVES['macosx'],
-            'platform_objdir': OBJDIR,
-            'enable_ccache': False,
-            'enable_codesighs': False,
-            'create_snippet': False,
-            'create_partial': False,
-            'enable_shark': False,
-            'enable_shared_checkouts': True,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'ffxbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
-                'SYMBOL_SERVER_SSH_KEY': "/Users/cltbld/.ssh/ffxbld_dsa",
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-            },
-            'is_mobile_l10n': True,
-            'l10n_chunks': 5,
-            'enable_opt_unittests': False,
-            'enable_checktests': True,
-            'talos_masters': [],#GLOBAL_VARS['talos_masters'],
-            'stage_platform': "macosx",
-            'stage_product': 'mobile',
-            'post_upload_include_platform': True,
-            'enable_dep': False,
         },
 }
 
@@ -1172,6 +913,7 @@ BRANCHES = {
     'mozilla-aurora': {
     },
     'mozilla-esr10': {
+        'lock_platforms': True,
         'platforms': {
             'linux': {},
             'linux64': {},
@@ -1330,8 +1072,6 @@ BRANCHES['mozilla-central']['platforms']['linux-rpm']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['linux64-rpm']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-central'
 BRANCHES['mozilla-central']['platforms']['android-xul']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-xul-mozilla-central'
-del BRANCHES['mozilla-central']['platforms']['linux-android']
-del BRANCHES['mozilla-central']['platforms']['linux-android-debug']
 BRANCHES['mozilla-central']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['mozilla-central']['l10n_extra_configure_args']= ['--with-macbundlename-prefix=Firefox']
 
@@ -1402,31 +1142,14 @@ BRANCHES['mozilla-release']['enable_blocklist_update'] = False
 BRANCHES['mozilla-release']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['mozilla-release']['platforms']['win64']
 BRANCHES['mozilla-release']['enable_valgrind'] = False
+BRANCHES['mozilla-release']['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-release'
+BRANCHES['mozilla-release']['platforms']['android-xul']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-xul-mozilla-release'
 #-------------------------------------------------------------------------
-# Delete the below lines when 11.0 merges into release
+# Delete the below lines when 12.0 merges into release
 #-------------------------------------------------------------------------
-del BRANCHES['mozilla-release']['platforms']['android']
-del BRANCHES['mozilla-release']['platforms']['android-debug']
-del BRANCHES['mozilla-release']['platforms']['android-xul']
-BRANCHES['mozilla-release']['platforms']['macosx64-debug']['enable_leaktests'] = False 
-BRANCHES['mozilla-release']['platforms']['linux-android']['enable_dep'] = True
-BRANCHES['mozilla-release']['platforms']['linux-android-debug']['enable_dep'] = True
-BRANCHES['mozilla-release']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-release'
-BRANCHES['mozilla-release']['platforms']['linux-mobile']['src_mozconfig'] = 'mobile/config/mozconfigs/linux-desktop/nightly'
-BRANCHES['mozilla-release']['platforms']['linux-mobile']['mobile_dir'] = 'mobile'
-BRANCHES['mozilla-release']['platforms']['macosx-mobile']['src_mozconfig'] = 'mobile/config/mozconfigs/macosx-desktop/nightly'
-BRANCHES['mozilla-release']['platforms']['macosx-mobile']['mobile_dir'] = 'mobile'
-BRANCHES['mozilla-release']['platforms']['win32-mobile']['src_mozconfig'] = 'mobile/config/mozconfigs/win32-desktop/nightly'
-BRANCHES['mozilla-release']['platforms']['win32-mobile']['mobile_dir'] = 'mobile'
+BRANCHES['mozilla-release']['platforms']['macosx-debug']['slaves'] = SLAVES['macosx']
 #-------------------------------------------------------------------------
-# Uncomment the below lines when 11.0 merges into release
-#-------------------------------------------------------------------------
-#BRANCHES['mozilla-release']['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-release'
-#BRANCHES['mozilla-release']['platforms']['android-xul']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-xul-mozilla-release'
-#del BRANCHES['mozilla-release']['platforms']['linux-android']
-#del BRANCHES['mozilla-release']['platforms']['linux-android-debug']
-#-------------------------------------------------------------------------
-# End 11.0
+# End 12.0
 #-------------------------------------------------------------------------
 
 ######## mozilla-beta
@@ -1475,33 +1198,13 @@ BRANCHES['mozilla-beta']['enable_blocklist_update'] = True
 BRANCHES['mozilla-beta']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['mozilla-beta']['platforms']['win64']
 BRANCHES['mozilla-beta']['enable_valgrind'] = False
-#-------------------------------------------------------------------------
-# Delete the below lines when 11.0 merges into beta
-#-------------------------------------------------------------------------
-del BRANCHES['mozilla-beta']['platforms']['android']
-del BRANCHES['mozilla-beta']['platforms']['android-debug']
-del BRANCHES['mozilla-beta']['platforms']['android-xul']
 BRANCHES['mozilla-beta']['platforms']['macosx64-debug']['enable_leaktests'] = False 
-BRANCHES['mozilla-beta']['platforms']['linux-android']['enable_dep'] = True
-BRANCHES['mozilla-beta']['platforms']['linux-android-debug']['enable_dep'] = True
-BRANCHES['mozilla-beta']['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
-BRANCHES['mozilla-beta']['platforms']['linux-mobile']['src_mozconfig'] = 'mobile/config/mozconfigs/linux-desktop/nightly'
-BRANCHES['mozilla-beta']['platforms']['linux-mobile']['mobile_dir'] = 'mobile'
-BRANCHES['mozilla-beta']['platforms']['macosx-mobile']['src_mozconfig'] = 'mobile/config/mozconfigs/macosx-desktop/nightly'
-BRANCHES['mozilla-beta']['platforms']['macosx-mobile']['mobile_dir'] = 'mobile'
-BRANCHES['mozilla-beta']['platforms']['win32-mobile']['src_mozconfig'] = 'mobile/config/mozconfigs/win32-desktop/nightly'
-BRANCHES['mozilla-beta']['platforms']['win32-mobile']['mobile_dir'] = 'mobile'
+BRANCHES['mozilla-beta']['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
+BRANCHES['mozilla-beta']['platforms']['android-xul']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-xul-mozilla-beta'
+BRANCHES['mozilla-beta']['platforms']['android']['enable_dep'] = True
+BRANCHES['mozilla-beta']['platforms']['android-debug']['enable_dep'] = True
+BRANCHES['mozilla-beta']['platforms']['android-xul']['enable_dep'] = True
 BRANCHES['mozilla-beta']['platforms']['macosx-debug']['slaves'] = SLAVES['macosx']
-#-------------------------------------------------------------------------
-# Uncomment the below lines when 11.0 merges into beta
-#-------------------------------------------------------------------------
-#BRANCHES['mozilla-beta']['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-beta'
-#BRANCHES['mozilla-beta']['platforms']['android-xul']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-xul-mozilla-beta'
-#del BRANCHES['mozilla-beta']['platforms']['linux-android']
-#del BRANCHES['mozilla-beta']['platforms']['linux-android-debug']
-#-------------------------------------------------------------------------
-# End 11.0
-#-------------------------------------------------------------------------
 
 ######## mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = 'releases/mozilla-aurora'
@@ -1558,8 +1261,6 @@ BRANCHES['mozilla-aurora']['enable_blocklist_update'] = True
 BRANCHES['mozilla-aurora']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['mozilla-aurora']['platforms']['win64']
 BRANCHES['mozilla-aurora']['enable_valgrind'] = False
-del BRANCHES['mozilla-aurora']['platforms']['linux-android']
-del BRANCHES['mozilla-aurora']['platforms']['linux-android-debug']
 BRANCHES['mozilla-aurora']['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'mozilla-aurora'
 BRANCHES['mozilla-aurora']['platforms']['android-xul']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-xul-mozilla-aurora'
 # aurora nightlies should use our nightly signing server
@@ -1568,13 +1269,14 @@ BRANCHES['mozilla-aurora']['l10n_extra_configure_args']= ['--with-macbundlename-
 
 ######## mozilla-esr10
 BRANCHES['mozilla-esr10']['repo_path'] = 'releases/mozilla-esr10'
-BRANCHES['mozilla-esr10']['update_channel'] = 'esr'
+BRANCHES['mozilla-esr10']['update_channel'] = 'nightly-esr10'
 BRANCHES['mozilla-esr10']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
-BRANCHES['mozilla-esr10']['enable_weekly_bundle'] = False
+BRANCHES['mozilla-esr10']['enable_weekly_bundle'] = True
 BRANCHES['mozilla-esr10']['start_hour'] = [3]
-BRANCHES['mozilla-esr10']['start_minute'] = [2]
+BRANCHES['mozilla-esr10']['start_minute'] = [45]
 BRANCHES['mozilla-esr10']['enable_xulrunner'] = False
 BRANCHES['mozilla-esr10']['enable_mac_a11y'] = True
+BRANCHES['mozilla-esr10']['pgo_strategy'] = 'per-checkin'
 # L10n configuration
 BRANCHES['mozilla-esr10']['enable_l10n'] = False
 BRANCHES['mozilla-esr10']['enable_l10n_onchange'] = False
@@ -1583,18 +1285,78 @@ BRANCHES['mozilla-esr10']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                                  'macosx64']
 BRANCHES['mozilla-esr10']['l10nDatedDirs'] = True
 BRANCHES['mozilla-esr10']['l10n_tree'] = 'fxesr10'
+BRANCHES['mozilla-esr10']['enable_multi_locale'] = True
 BRANCHES['mozilla-esr10']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-esr10'
 BRANCHES['mozilla-esr10']['allLocalesFile'] = 'browser/locales/all-locales'
 BRANCHES['mozilla-esr10']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.mozilla-esr10' % (GLOBAL_VARS['hgurl'])
 # temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
-BRANCHES['mozilla-esr10']['enable_nightly'] = False
+BRANCHES['mozilla-esr10']['enable_nightly'] = True
+BRANCHES['mozilla-esr10']['create_snippet'] = True
+BRANCHES['mozilla-esr10']['create_partial'] = True
+BRANCHES['mozilla-esr10']['aus2_user'] = 'ffxbld'
+BRANCHES['mozilla-esr10']['aus2_ssh_key'] = 'ffxbld_dsa'
+# use mozilla-esr10-test when disabling updates for merges
+BRANCHES['mozilla-esr10']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr10'
+BRANCHES['mozilla-esr10']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr10'
 BRANCHES['mozilla-esr10']['enable_blocklist_update'] = False
 BRANCHES['mozilla-esr10']['blocklist_update_on_closed_tree'] = False
-del BRANCHES['mozilla-esr10']['platforms']['win64']
 BRANCHES['mozilla-esr10']['enable_valgrind'] = False
-BRANCHES['mozilla-esr10']['platforms']['macosx64-debug']['enable_leaktests'] = False
+BRANCHES['mozilla-esr10']['upload_mobile_symbols'] = True
+# TODO remove all traces of linux-android when we build
+# Android native releases off mozilla-release).
+BRANCHES['mozilla-esr10']['platforms']['linux-android'] = {
+    'product_name': 'firefox',
+    'app_name': 'browser',
+    'brand_name': 'Minefield',
+    'base_name': 'Android mozilla-esr10',
+    'mozconfig': 'linux-android/mozilla-esr10/nightly',
+    'src_mozconfig': 'mobile/config/mozconfigs/android/nightly',
+    'enable_nightly': True,
+    'enable_dep': True,
+    'enable_xulrunner': False,
+    'profiled_build': False,
+    'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+    'build_space': 6,
+    'upload_symbols': True,
+    'download_symbols': False,
+    'packageTests': True,
+    'enable_codesighs': False,
+    'create_partial': False,
+    'slaves': SLAVES['linux'],
+    'platform_objdir': OBJDIR,
+    'update_platform': 'Android_arm-eabi-gcc3',
+    'enable_shared_checkouts': True,
+    'env': {
+        'DISPLAY': ':2',
+        'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+        'MOZ_OBJDIR': OBJDIR,
+        'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
+        'SYMBOL_SERVER_USER': 'ffxbld',
+        'SYMBOL_SERVER_PATH': SYMBOL_SERVER_MOBILE_PATH,
+        'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/ffxbld_dsa",
+        'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
+        'TINDERBOX_OUTPUT': '1',
+        'MOZ_CRASHREPORTER_NO_REPORT': '1',
+        'CCACHE_DIR': '/builds/ccache',
+        'MOZ_SYMBOLS_EXTRA_BUILDID': 'android-mozilla-esr10',
+        'CCACHE_COMPRESS': '1',
+        'CCACHE_UMASK': '002',
+        'LC_ALL': 'C',
+        'JAVA_HOME': '/tools/jdk6',
+        'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
+    },
+    'enable_opt_unittests': False,
+    'talos_masters': GLOBAL_VARS['talos_masters'],
+    'unittest_masters': GLOBAL_VARS['unittest_masters'],
+    'stage_platform': "android",
+    'stage_product': 'mobile',
+    'android_signing': True,
+    'post_upload_include_platform': True,
+    'multi_locale': True,
+    'multi_locale_script': 'scripts/multil10n.py',
+}
 
 ######## mozilla-1.9.2
 BRANCHES['mozilla-1.9.2']['repo_path'] = 'releases/mozilla-1.9.2'
@@ -1740,9 +1502,6 @@ BRANCHES['try']['platforms']['macosx64-debug']['slaves'] = TRY_SLAVES['macosx64'
 BRANCHES['try']['platforms']['android']['slaves'] = TRY_SLAVES['linux']
 BRANCHES['try']['platforms']['android-debug']['slaves'] = TRY_SLAVES['linux']
 BRANCHES['try']['platforms']['android-xul']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['try']['platforms']['linux-mobile']['slaves'] = TRY_SLAVES['linux']
-BRANCHES['try']['platforms']['win32-mobile']['slaves'] = TRY_SLAVES['win32']
-BRANCHES['try']['platforms']['macosx-mobile']['slaves'] = TRY_SLAVES['macosx']
 BRANCHES['try']['platforms']['linux']['upload_symbols'] = False
 BRANCHES['try']['platforms']['linux64']['upload_symbols'] = False
 BRANCHES['try']['platforms']['linuxqt']['upload_symbols'] = False
@@ -1750,9 +1509,6 @@ BRANCHES['try']['platforms']['macosx64']['upload_symbols'] = False
 BRANCHES['try']['platforms']['android']['upload_symbols'] = False
 BRANCHES['try']['platforms']['android-xul']['upload_symbols'] = False
 BRANCHES['try']['platforms']['android-debug']['upload_symbols'] = False
-BRANCHES['try']['platforms']['linux-mobile']['upload_symbols'] = False
-BRANCHES['try']['platforms']['win32-mobile']['upload_symbols'] = False
-BRANCHES['try']['platforms']['macosx-mobile']['upload_symbols'] = False
 BRANCHES['try']['platforms']['win32']['upload_symbols'] = True
 BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_USER'] = 'trybld'
 BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_PATH'] = '/symbols/windows'
@@ -1813,14 +1569,10 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['enUS_binaryURL'] = GLOBAL_VARS['download_base_url'] + branchConfig.get('enUS_binaryURL', '')
     if BRANCHES[branch]['platforms'].has_key('linux'):
         BRANCHES[branch]['platforms']['linux']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
-    if BRANCHES[branch]['platforms'].has_key('linux-mobile'):
-        BRANCHES[branch]['platforms']['linux-mobile']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'linux-mobile-' + branch
     if BRANCHES[branch]['platforms'].has_key('android'):
         BRANCHES[branch]['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-' + branch
     if BRANCHES[branch]['platforms'].has_key('android-xul'):
         BRANCHES[branch]['platforms']['android-xul']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-xul-' + branch
-    if BRANCHES[branch]['platforms'].has_key('linux-android'):
-        BRANCHES[branch]['platforms']['linux-android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-' + branch
     if BRANCHES[branch]['platforms'].has_key('linuxqt'):
         BRANCHES[branch]['platforms']['linuxqt']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'linuxqt-' + branch
     if BRANCHES[branch]['platforms'].has_key('linux64'):
@@ -1859,11 +1611,6 @@ for branch in branches:
     if BRANCHES[branch]['platforms'].has_key('linux'):
         BRANCHES[branch]['platforms']['linux']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib'
         BRANCHES[branch]['platforms']['linux']['unittest-env'] = {
-            'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
-        }
-    if BRANCHES[branch]['platforms'].has_key('linux-mobile'):
-        BRANCHES[branch]['platforms']['linux-mobile']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib'
-        BRANCHES[branch]['platforms']['linux-mobile']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
         }
     if BRANCHES[branch]['platforms'].has_key('linuxqt'):

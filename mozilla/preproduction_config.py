@@ -17,9 +17,6 @@ SLAVES = {
     'linux-android':    LINUX_VMS + LINUX_IXS,
     'android':          LINUX_VMS + LINUX_IXS,
     'android-xul':      LINUX_VMS + LINUX_IXS,
-    'linux-mobile':     LINUX_VMS + LINUX_IXS,
-    'macosx-mobile':    MAC_MINIS + XSERVES,
-    'win32-mobile':     WIN32_IXS,
 }
 
 TRY_LINUX      = ['try-linux-slave%02i' % x for x in range (1,31)]
@@ -94,7 +91,7 @@ BRANCHES = {
                     # Source server support, bug 506702
                     'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows/srcsrv/pdbstr.exe',
                     'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
-
+                    'PATH': "${MOZILLABUILD}buildbotve\\scripts;${PATH}",
                 },
             },
         }

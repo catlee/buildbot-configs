@@ -15,16 +15,16 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '10.0esr'
-releaseConfig['appVersion']          = '10.0'
-releaseConfig['milestone']           = '10.0'
+releaseConfig['version']             = '10.0.2esr'
+releaseConfig['appVersion']          = '10.0.2'
+releaseConfig['milestone']           = '10.0.2'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_10_0esr'
+releaseConfig['baseTag']             = 'FIREFOX_10_0_2esr'
 #  Old version info
-releaseConfig['oldVersion']          = '9.0.1'
-releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
+releaseConfig['oldVersion']          = '10.0.1esr'
+releaseConfig['oldAppVersion']       = '10.0.1'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_9_0_1'
+releaseConfig['oldBaseTag']          = 'FIREFOX_10_0_1esr'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextMilestone']       = releaseConfig['milestone']
@@ -33,8 +33,8 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-esr10',
         'path': 'releases/mozilla-esr10',
-        'revision': '66745590c474',
-        'relbranch': None,
+        'revision': 'cc9013d9ffc1',
+        'relbranch': 'GECKO1001_2012020805_RELBRANCH',
         'bumpFiles': {
             'browser/config/version.txt': {
                 'version': releaseConfig['appVersion'],
@@ -57,7 +57,7 @@ releaseConfig['l10nRepoPath']        = 'releases/l10n/mozilla-release'
 releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-esr10'
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
-    'build/compare-locales': 'RELEASE_AUTOMATION',
+    'build/compare-locales': 'RELEASE_0_8_2',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
     'build/mozharness': 'default',
@@ -92,6 +92,7 @@ releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage-old.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
+releaseConfig['ausHost']             = 'aus2-staging.mozilla.org'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 releaseConfig['releaseNotesUrl']     = None
@@ -109,6 +110,7 @@ releaseConfig['mozconfigs']          = {
     'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
     'win32': 'browser/config/mozconfigs/win32/release',
 }
+releaseConfig['releaseChannel']      = 'esr'
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = False
@@ -122,6 +124,8 @@ releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
 releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-sparc',
                                           'opensolaris-i386')
+releaseConfig['releaseUptake']       = 3
+releaseConfig['releasetestUptake']   = 1
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

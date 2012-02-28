@@ -180,18 +180,18 @@ ADDON_TESTER_PLATFORMS = ['win7', 'fedora', 'snowleopard']
 
 SUITES = {
     'chrome': {
-        'enable_by_default': True,
+        'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts_paint:tpaint:tdhtml:tsspider', '--mozAfterPaint'],
         'options': ({}, NO_MAC),
     },
     # chrome_mac compared to chrome is that it does not contain a11y and only run on Mac
     'chrome_mac': {
-        'enable_by_default': True,
+        'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts_paint:tpaint:tdhtml:tsspider', '--mozAfterPaint'],
         'options': ({}, MAC_ONLY),
     },
     'nochrome': {
-        'enable_by_default': True,
+        'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml:tsspider', '--noChrome', '--mozAfterPaint'],
         'options': ({}, ALL_PLATFORMS),
     },
@@ -200,16 +200,8 @@ SUITES = {
         'suites': GRAPH_CONFIG + ['--activeTests', 'ts_places_generated_med:ts_places_generated_max', '--setPref', 'hangmonitor.timeout=0'],
         'options': (TALOS_DIRTY_OPTS, ALL_PLATFORMS),
     },
-    # Responsiveness requires patches to be on all branches, so off by default and on for m-c only
-    # We currently have a linux failure under investigation
-    # OSX will work on m-c, m-a as of Nov 2011
-    'tp_responsiveness': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tp5', '--mozAfterPaint', '--responsiveness'],
-        'options': (TALOS_TP_OPTS, ALL_PLATFORMS),
-    },
     'tp': {
-        'enable_by_default': True,
+        'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tp5', '--mozAfterPaint'],
         'options': (TALOS_TP_OPTS, ALL_PLATFORMS),
     },
@@ -240,34 +232,30 @@ SUITES = {
     },
     # New set of test that report numbers differently (https://wiki.mozilla.org/Auto-tools/Projects/Signal_From_Noise)
     # tp5 -> tpr instead of tp5.2.  This is osx only and we will consider switching linux and windows ot this as well.
+    # all these tests should be default on m-c/m-i/m-a and project branches.  Off for beta/release/1.9.2
     'tpr_responsiveness': {
-        'enable_by_default': False,
+        'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tp5r', '--mozAfterPaint', '--responsiveness', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
-        'options': (TALOS_TP_OPTS, MAC_ONLY),
+        'options': (TALOS_TP_OPTS, ALL_PLATFORMS),
     },
     'v8.2': {
         'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'v8.2', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
         'options': ({}, ALL_PLATFORMS),
     },
-    'svg.2': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tsvg.2:tsvg_opacity.2', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
-        'options': ({}, ALL_PLATFORMS),
-    },
     'chrome.2': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:a11y.2:tdhtml.2:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:a11y.2:ts_paint:tpaint:tdhtml.2:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
         'options': ({}, NO_MAC),
     },
     # chrome_mac compared to chrome is that it does not contain a11y and only run on Mac
     'chrome_mac.2': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:tdhtml.2:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:ts_paint:tpaint:tdhtml.2:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
         'options': ({}, MAC_ONLY),
     },
     'nochrome.2': {
-        'enable_by_default': False,
+        'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml.2:tsspider.2', '--noChrome', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
         'options': ({}, ALL_PLATFORMS),
     },
@@ -309,7 +297,7 @@ SUITES = {
         'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
     'remote-tpan': {
-        'enable_by_default': True,
+        'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tpan', '--noChrome'],
         'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_XUL),
     },
@@ -629,14 +617,20 @@ ANDROID_XUL_UNITTEST_DICT = {
         )),
         ('crashtest-1', (
             {'suite': 'crashtest',
-             'totalChunks': 2,
+             'totalChunks': 3,
              'thisChunk': 1,
             },
         )),
         ('crashtest-2', (
             {'suite': 'crashtest',
-             'totalChunks': 2,
+             'totalChunks': 3,
              'thisChunk': 2,
+            },
+        )),
+        ('crashtest-3', (
+            {'suite': 'crashtest',
+             'totalChunks': 3,
+             'thisChunk': 3,
             },
         )),
         ('jsreftest-1', (
@@ -718,11 +712,6 @@ ANDROID_UNITTEST_DICT = {
              'thisChunk': 8,
            },
         )),
-        ('browser-chrome', (
-            {'suite': 'mochitest-browser-chrome',
-             'testPaths': ['mobile']
-            },
-        )),
         ('reftest-1', (
             {'suite': 'reftest',
              'totalChunks': 3,
@@ -743,14 +732,20 @@ ANDROID_UNITTEST_DICT = {
         )),
         ('crashtest-1', (
             {'suite': 'crashtest',
-             'totalChunks': 2,
+             'totalChunks': 3,
              'thisChunk': 1,
             },
         )),
         ('crashtest-2', (
             {'suite': 'crashtest',
-             'totalChunks': 2,
+             'totalChunks': 3,
              'thisChunk': 2,
+            },
+        )),
+        ('crashtest-3', (
+            {'suite': 'crashtest',
+             'totalChunks': 3,
+             'thisChunk': 3,
             },
         )),
         ('jsreftest-1', (
@@ -769,6 +764,10 @@ ANDROID_UNITTEST_DICT = {
             {'suite': 'jsreftest',
              'totalChunks': 3,
              'thisChunk': 3,
+            },
+        )),
+        ('robocop', (
+            {'suite': 'mochitest-robocop',
             },
         )),
     ],
@@ -824,7 +823,9 @@ PLATFORM_UNITTEST_VARS = {
                 'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
             },
             'win7': {
-                'opt_unittest_suites' : UNITTEST_SUITES['opt_unittest_suites'][:],
+                'opt_unittest_suites' : \
+                    UNITTEST_SUITES['opt_unittest_suites'][:] + \
+                    [('reftest-no-accel', ['reftest-no-d2d-d3d'])],
                 'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
             }
         },
@@ -1058,21 +1059,45 @@ for suite in SUITES.keys():
 BRANCHES['mozilla-central']['platforms']['android']['enable_debug_unittests'] = True
 BRANCHES['mozilla-central']['xperf_tests'] = (1, True, {}, WIN7_ONLY)
 BRANCHES['mozilla-central']['tp_tests'] = (0, True, TALOS_TP_OPTS, ALL_PLATFORMS)
-BRANCHES['mozilla-central']['tp_responsiveness_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
-# Signal From Noise side by side staging
-BRANCHES['mozilla-central']['tpr_responsiveness_tests'] = (1, True, TALOS_TP_OPTS, MAC_ONLY)
-BRANCHES['mozilla-central']['chrome.2_tests'] = (1, True, {}, NO_MAC)
-BRANCHES['mozilla-central']['chrome_mac.2_tests'] = (1, True, {}, MAC_ONLY)
-BRANCHES['mozilla-central']['nochrome.2_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-central']['svg.2_tests'] = (1, True, {}, ALL_PLATFORMS)
+
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['pgo_strategy'] = 'per-checkin'
-BRANCHES['mozilla-release']['talos_from_source_code'] = False
+
+###########
+# When Firefox 12 is on mozilla-release we can remove these on/off switches
+###########
+BRANCHES['mozilla-release']['tpr_responsiveness_tests'] = (0, True, TALOS_TP_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-release']['tp_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-release']['chrome.2_tests'] = (0, True, {}, NO_MAC)
+BRANCHES['mozilla-release']['chrome_mac.2_tests'] = (0, True, {}, MAC_ONLY)
+BRANCHES['mozilla-release']['nochrome.2_tests'] = (0, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-release']['chrome_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-release']['chrome_mac_tests'] = (1, True, {}, MAC_ONLY)
+BRANCHES['mozilla-release']['nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
+###########
+# End Firefox 12 mozilla-release requirements
+###########
+
 
 ######## mozilla-beta
 BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
-BRANCHES['mozilla-beta']['talos_from_source_code'] = False
+
+###########
+# When Firefox 12 is on mozilla-beta we can remove these on/off switches
+###########
+BRANCHES['mozilla-beta']['tpr_responsiveness_tests'] = (0, True, TALOS_TP_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-beta']['tp_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-beta']['chrome.2_tests'] = (0, True, {}, NO_MAC)
+BRANCHES['mozilla-beta']['chrome_mac.2_tests'] = (0, True, {}, MAC_ONLY)
+BRANCHES['mozilla-beta']['nochrome.2_tests'] = (0, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-beta']['chrome_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-beta']['chrome_mac_tests'] = (1, True, {}, MAC_ONLY)
+BRANCHES['mozilla-beta']['nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
+###########
+# End Firefox 12 mozilla-beta requirements
+###########
+
 
 ######## mozilla-aurora
 BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
@@ -1080,6 +1105,14 @@ BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
 ######## mozilla-esr10
 BRANCHES['mozilla-esr10']['pgo_strategy'] = 'per-checkin'
 BRANCHES['mozilla-esr10']['talos_from_source_code'] = False
+BRANCHES['mozilla-esr10']['tpr_responsiveness_tests'] = (0, True, TALOS_TP_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['tp_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['chrome.2_tests'] = (0, True, {}, NO_MAC)
+BRANCHES['mozilla-esr10']['chrome_mac.2_tests'] = (0, True, {}, MAC_ONLY)
+BRANCHES['mozilla-esr10']['nochrome.2_tests'] = (0, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['chrome_tests'] = (1, True, {}, NO_MAC)
+BRANCHES['mozilla-esr10']['chrome_mac_tests'] = (1, True, {}, MAC_ONLY)
+BRANCHES['mozilla-esr10']['nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
 
 ######## shadow-central
 BRANCHES['shadow-central']['repo_path'] = "shadow-central"
@@ -1092,14 +1125,15 @@ BRANCHES['mozilla-1.9.2']['build_branch'] = "1.9.2"
 BRANCHES['mozilla-1.9.2']['old_chrome_tests'] = (1, True, {}, OLD_BRANCH_NO_MAC)
 BRANCHES['mozilla-1.9.2']['old_chrome_mac_tests'] = (1, True, {}, OLD_BRANCH_MAC_ONLY)
 BRANCHES['mozilla-1.9.2']['old_nochrome_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
-BRANCHES['mozilla-1.9.2']['chrome_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
-BRANCHES['mozilla-1.9.2']['chrome_mac_tests'] = (0, True, {}, OLD_BRANCH_MAC_ONLY)
-BRANCHES['mozilla-1.9.2']['nochrome_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
+BRANCHES['mozilla-1.9.2']['chrome.2_tests'] = (0, True, {}, OLD_BRANCH_NO_MAC)
+BRANCHES['mozilla-1.9.2']['chrome_mac.2_tests'] = (0, True, {}, OLD_BRANCH_MAC_ONLY)
+BRANCHES['mozilla-1.9.2']['nochrome.2_tests'] = (0, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['dromaeo_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['dirty_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['tp4_tests'] = (1, True, TALOS_TP4_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['old_tp_tests'] = (0, True, TALOS_TP_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['tp_tests'] = (0, True, TALOS_TP_OPTS, OLD_BRANCH_ALL_PLATFORMS)
+BRANCHES['mozilla-1.9.2']['tpr_responsiveness_tests'] = (0, True, TALOS_TP_OPTS, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['cold_tests'] = (0, True, TALOS_DIRTY_OPTS, OLD_BRANCH_NO_WIN)
 BRANCHES['mozilla-1.9.2']['svg_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
 BRANCHES['mozilla-1.9.2']['scroll_tests'] = (1, True, {}, OLD_BRANCH_ALL_PLATFORMS)
@@ -1133,7 +1167,6 @@ BRANCHES['addonbaselinetester']['enable_unittests'] = False
 BRANCHES['try']['tp4_tests'] = (1, False, TALOS_TP4_OPTS, ALL_PLATFORMS)
 BRANCHES['try']['xperf_tests'] = (1, False, {}, WIN7_ONLY)
 BRANCHES['try']['platforms']['android']['enable_debug_unittests'] = True
-BRANCHES['try']['platforms']['win32']['win7']['opt_unittest_suites'] += [('reftest-no-accel', ['reftest-no-d2d-d3d'])]
 
 # Let's load jetpack for the following branches:
 for branch in ('mozilla-central', 'mozilla-aurora', 'try',  ):
@@ -1154,9 +1187,7 @@ for branch in ('mozilla-central', 'mozilla-aurora', 'try',  ):
             BRANCHES[branch]['platforms'][pf][slave_pf]['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 
 # Let's load peptest for the following branches:
-# Disabling peptest for bug 719504.
-# for branch in ('try',  ):
-for branch in ():
+for branch in ('try',  ):
     for pf in PLATFORMS:
         if 'android' in pf:
             continue
@@ -1175,6 +1206,10 @@ for branch in ():
                 'extra_args': [
                     "--cfg", config_file
                 ],
+                'reboot_command': [PLATFORMS[pf]['mozharness_python'],
+                                   'build/tools/buildfarm/maintenance/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt',
+                                   '-n', '1', '-z'],
                 'hg_bin': hg_bin,
             })]
 
@@ -1186,12 +1221,10 @@ for projectBranch in ACTIVE_PROJECT_BRANCHES:
     loadCustomUnittestSuites(BRANCHES, projectBranch, branchConfig)
 
 #-------------------------------------------------------------------------
-# Remove a branch from this tuple when we merge Firefox 11.0 into it.
+# Delete all references to linux-android when Android native ships off
+# mozilla-release.
 #-------------------------------------------------------------------------
-LINUX_ANDROID_BRANCHES = ('mozilla-beta', 'mozilla-release')
-#-------------------------------------------------------------------------
-# Delete the following when 11.0 is released.
-#-------------------------------------------------------------------------
+LINUX_ANDROID_BRANCHES = ('mozilla-esr10',)
 for branch in BRANCHES.keys():
     if branch in LINUX_ANDROID_BRANCHES:
         for p in ('android', 'android-xul'):
@@ -1201,7 +1234,15 @@ for branch in BRANCHES.keys():
         if 'linux-android' in BRANCHES[branch]['platforms']:
             del BRANCHES[branch]['platforms']['linux-android']
 #-------------------------------------------------------------------------
-# End 11.0 hacks.
+# End Android native hacks.
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+# Delete the following when 12.0 moves to beta and then again to release
+#-------------------------------------------------------------------------
+BRANCHES['mozilla-beta']['talos_from_source_code'] = False
+BRANCHES['mozilla-release']['talos_from_source_code'] = False
+#-------------------------------------------------------------------------
+# End 12.0 hacks.
 #-------------------------------------------------------------------------
 
 if __name__ == "__main__":

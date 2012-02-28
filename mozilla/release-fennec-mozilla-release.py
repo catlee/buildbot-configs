@@ -15,16 +15,16 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '10.0'
+releaseConfig['version']             = '10.0.2'
 releaseConfig['appVersion']          = releaseConfig['version']
 releaseConfig['milestone']           = releaseConfig['version']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_10_0'
+releaseConfig['baseTag']             = 'FENNEC_10_0_2'
 #  Old version info
-releaseConfig['oldVersion']          = '9.0'
+releaseConfig['oldVersion']          = '10.0.1'
 releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FENNEC_9_0'
+releaseConfig['oldBaseTag']          = 'FENNEC_10_0_1'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['version']
 releaseConfig['nextMilestone']       = releaseConfig['version']
@@ -33,7 +33,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': 'acddb6b6a01c',
+        'revision': 'bd611a3115b0',
         'relbranch': None,
         'bumpFiles': {
             'mobile/confvars.sh': {
@@ -69,16 +69,15 @@ releaseConfig['otherReposToTag']     = {
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']        = ('linux-android', 'linux-mobile', 'macosx-mobile',
-                                         'win32-mobile')
-releaseConfig['notifyPlatforms']      = ('linux-android',)
-releaseConfig['signedPlatforms']      = ('linux-android',)
+releaseConfig['enUSPlatforms']        = ('android', 'android-xul')
+releaseConfig['notifyPlatforms']      = ('android', 'android-xul')
+releaseConfig['signedPlatforms']      = ('android', 'android-xul')
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
 releaseConfig['enableUnittests']      = True
 
 # L10n configuration
-releaseConfig['l10nPlatforms']       = ('linux-mobile', 'macosx-mobile', 'win32-mobile')
+releaseConfig['l10nPlatforms']       = ('android',)
 releaseConfig['l10nChunks']          = 6
 releaseConfig['mergeLocales']        = True
 releaseConfig['enableMultiLocale']   = True
@@ -91,6 +90,7 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage.mozilla.org'
 releaseConfig['ausServerUrl']        = 'https://aus2.mozilla.org'
+releaseConfig['ausHost']             = 'aus2-staging.mozilla.org'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 
@@ -101,10 +101,8 @@ releaseConfig['partnerRepackPlatforms'] = ()
 
 # mozconfigs
 releaseConfig['mozconfigs']          = {
-    'linux-android': 'mobile/config/mozconfigs/android/release',
-    'linux-mobile': 'mobile/config/mozconfigs/linux-desktop/release',
-    'macosx-mobile': 'mobile/config/mozconfigs/macosx-desktop/release',
-    'win32-mobile': 'mobile/config/mozconfigs/win32-desktop/release',
+    'android': 'mobile/android/config/mozconfigs/android/release',
+    'android-xul': 'mobile/xul/config/mozconfigs/android/release',
 }
 
 # Misc configuration
@@ -121,8 +119,8 @@ releaseConfig['disablePushToMirrors']     = True
 
 releaseConfig['mozharness_config'] = {
     'platforms': {
-        'linux-android':
-            'multi_locale/release_mozilla-release_linux-android.json',
+        'android-xul':
+            'multi_locale/release_mozilla-release_android-xul.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
