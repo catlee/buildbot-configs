@@ -1,17 +1,32 @@
+### This needs to be filled in ###
+
+branchSuffix               = 'beta'
+
+sourceRepoRevision         = 'e6773952ed93'
+mozillaRepoRevision        = 'THUNDERBIRD_11_0b2_RELEASE'
+
+milestone                  = '11.0'
+
+version                    = '1.3b2'
+buildNumber                = 1
+
+oldVersion                 = '1.3b1'
+oldBuildNumber             = 1
+
+### Nothing else needs to be changed ###
+
 hgUsername                 = 'calbld'
-hgSshKey                   = '~calbld/.ssh/calbld_dsa'
-relbranchPrefix            = 'COMM'
-sourceRepoName             = 'comm-miramar-lightning' # buildbot branch name
-sourceRepoPath             = 'releases/comm-miramar'
-sourceRepoRevision         = '653d6c77512a'
+hgSshKey                   = '~cltbld/.ssh/calbld_dsa'
+relbranchPrefix            = 'CAL'
+sourceRepoName             = 'comm-' + branchSuffix # buildbot branch name
+sourceRepoPath             = 'releases/' + sourceRepoName
 # If blank, automation will create its own branch based on COMM_<date>_RELBRANCH
-relbranchOverride          = 'COMM50_20110620_RELBRANCH'
-mozillaRepoPath            = 'releases/mozilla-miramar'
-mozillaRepoRevision        = '9dcd813b2fc8'
+relbranchOverride          = ''
+mozillaRepoPath            = 'releases/mozilla-' + branchSuffix
 # If blank, automation will create its own branch based on COMM_<date>_RELBRANCH
 # You typically want to set this to the gecko relbranch if doing a release off
 # a specific gecko version.
-mozillaRelbranchOverride   = 'COMM50_20110620_RELBRANCH'
+mozillaRelbranchOverride   = ''
 inspectorRepoPath          = '' # leave empty if inspector is not to be tagged
 inspectorRepoRevision      = ''
 inspectorRelbranchOverride = ''
@@ -23,41 +38,40 @@ venkmanRepoRevision        = ''
 venkmanRelbranchOverride   = ''
 chatzillaCVSRoot           = ''
 chatzillaTimestamp         = '' # leave empty if chatzilla is not to be tagged
-l10nRepoPath               = 'releases/l10n-miramar'
+l10nRepoPath               = 'releases/l10n/mozilla-' + branchSuffix
 l10nRevisionFile           = 'l10n-calendar-changesets'
 toolsRepoPath              = 'build/tools'
 cvsroot                    = ':ext:calbld@cvs.mozilla.org:/cvsroot' # for patcher, etc.
 productVersionFile         = 'calendar/sunbird/config/version.txt'
-productName                = 'sunbird'
-brandName                  = 'Sunbird'
+# version-bump.pl needs an app name, which we have to hack a bit for Lightning.
+productBumpName            = 'calendar/sunbird'
+productName                = 'lightning'
+brandName                  = 'Lightning'
 appName                    = 'calendar'
-ftpName			   = 'calendar/sunbird'
-projectName                = 'sunbird'
+ftpName			   = 'calendar/lightning'
+projectName                = 'lightning'
 # Sometimes we need the application version to be different from what we "call"
 # the build, eg public release candidates for a major release (3.1 RC1).
 # appVersion and oldAppVersion are optional definitions used in places that
 # don't care about what we call it. Eg, when version bumping we will bump to
 # appVersion, not version.
-version                    = '1.0b4'
-appVersion                 = '1.0b4'
+baseTag                    = 'CALENDAR_' + version.replace(".", "_")
+appVersion                 = version
 #XXX: Not entirely certain if/where this is used.
-milestone                  = '5.0'
-buildNumber                = 1
-baseTag                    = 'CALENDAR_1_0b4'
 # The old version is the revision from which we should generate update snippets.
-oldVersion                 = '1.0b2'
 oldAppVersion              = oldVersion
-oldBuildNumber             = 2
-oldBaseTag                 = ''
-releasePlatforms           = ('linux', 'win32', 'macosx')
+oldBaseTag                 = 'CALENDAR_' + oldVersion.replace(".", "_")
+releasePlatforms           = ('linux', 'linux64', 'win32', 'macosx64')
 patcherConfig              = 'moz19-calendar-branch-patcher2.cfg'
-patcherToolsTag            = 'UPDATE_PACKAGING_R11'
+patcherToolsTag            = 'UPDATE_PACKAGING_R14'
 ftpServer                  = 'ftp.mozilla.org'
 stagingServer              = 'stage-old.mozilla.org'
 bouncerServer              = 'download.mozilla.org'
 ausServerUrl               = 'https://aus2-community.mozilla.org'
 useBetaChannel             = 1
 l10nPlatforms              = ('linux', 'win32', 'macosx')
+l10nPlatforms              = ()
 verifyConfigs              = {'linux':  'moz19-calendar-linux.cfg',
-                              'macosx': 'moz19-calendar-mac.cfg',
+                              'linux64': 'moz19-calendar-linux.cfg',
+                              'macosx64': 'moz19-calendar-mac.cfg',
                               'win32':  'moz19-calendar-win32.cfg'}

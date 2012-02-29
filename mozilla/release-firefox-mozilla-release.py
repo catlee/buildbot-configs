@@ -1,8 +1,9 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
-releaseConfig['AllRecipients']       = ['release@mozilla.com',]
-releaseConfig['PassRecipients']      = ['release-drivers@mozilla.org',]
+releaseConfig['AllRecipients']       = ['release@mozilla.com','akeybl@mozilla.com','Callek@gmail.com']
+releaseConfig['ImportantRecipients'] = ['release-drivers@mozilla.org',]
 releaseConfig['AVVendorsRecipients'] = ['av-vendor-release-announce@mozilla.org',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
@@ -14,25 +15,25 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '5.0.1'
-releaseConfig['appVersion']          = '5.0.1'
-releaseConfig['milestone']           = '5.0.1'
+releaseConfig['version']             = '10.0.2'
+releaseConfig['appVersion']          = releaseConfig['version']
+releaseConfig['milestone']           = releaseConfig['version']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_5_0_1'
+releaseConfig['baseTag']             = 'FIREFOX_10_0_2'
 #  Old version info
-releaseConfig['oldVersion']          = '5.0'
+releaseConfig['oldVersion']          = '10.0.1'
 releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_5_0'
+releaseConfig['oldBaseTag']          = 'FIREFOX_10_0_1'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '5.0.1'
-releaseConfig['nextMilestone']       = '5.0.1'
+releaseConfig['nextAppVersion']      = releaseConfig['version']
+releaseConfig['nextMilestone']       = releaseConfig['version']
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '07cfee2cd139',
+        'revision': 'bd611a3115b0',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -59,10 +60,12 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
+    'build/mozharness': 'default',
 }
 
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
+releaseConfig['notifyPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
 releaseConfig['xulrunnerPlatforms']  = releaseConfig['enUSPlatforms']
 
@@ -84,21 +87,33 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 releaseConfig['cvsroot']             = ':ext:cltbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'mozRelease-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = True
-releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R14'
+releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R15'
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
-releaseConfig['stagingServer']       = 'stage-old.mozilla.org'
+releaseConfig['stagingServer']       = 'stage.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
+releaseConfig['ausHost']             = 'aus2-staging.mozilla.org'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
-releaseConfig['useBetaChannel']      = 0
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozRelease-firefox-linux.cfg',
     'linux64':  'mozRelease-firefox-linux64.cfg',
     'macosx64': 'mozRelease-firefox-mac64.cfg',
     'win32':  'mozRelease-firefox-win32.cfg'
+}
+releaseConfig['mozconfigs']          = {
+    'linux': 'browser/config/mozconfigs/linux32/release',
+    'linux64': 'browser/config/mozconfigs/linux64/release',
+    'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
+    'win32': 'browser/config/mozconfigs/win32/release',
+}
+releaseConfig['xulrunner_mozconfigs']          = {
+    'linux': 'xulrunner/config/mozconfigs/linux32/release',
+    'linux64': 'xulrunner/config/mozconfigs/linux64/release',
+    'macosx64': 'xulrunner/config/mozconfigs/macosx-universal/release',
+    'win32': 'xulrunner/config/mozconfigs/win32/release',
 }
 
 # Partner repack configuration
@@ -116,3 +131,5 @@ releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False
+releaseConfig['enableSigningAtBuildTime'] = False
+releaseConfig['enablePartialMarsAtBuildTime'] = False

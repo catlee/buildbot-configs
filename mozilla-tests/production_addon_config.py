@@ -9,7 +9,12 @@ SLAVES = {
     'tegra_android': dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(1,4)]),
 }
 
-GRAPH_CONFIG = ['--resultsServer', 'graphs.mozilla.org',
+SLAVES['tegra_android-xul'] = SLAVES['tegra_android']
+SLAVES['tegra_android-o'] = SLAVES['tegra_android']
+
+TRY_SLAVES = {}
+
+GRAPH_CONFIG = ['--resultsServer', 'graphs-old.mozilla.org',
     '--resultsLink', '/server/collect.cgi']
 
 GLOBAL_VARS = {
@@ -49,10 +54,6 @@ BRANCHES = {
     'mozilla-1.9.2': {
         'tinderbox_tree': 'Firefox3.6',
         'mobile_tinderbox_tree': 'Mobile1.1',
-    },
-    'tracemonkey': {
-        'tinderbox_tree': 'TraceMonkey',
-        'mobile_tinderbox_tree': 'TraceMonkey',
     },
     'places': {
         'tinderbox_tree': 'Places',

@@ -1,8 +1,9 @@
 releaseConfig = {}
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
-releaseConfig['AllRecipients']       = ['release@mozilla.com',]
-releaseConfig['PassRecipients']      = ['release-drivers@mozilla.org',]
+releaseConfig['AllRecipients']       = ['release@mozilla.com','akeybl@mozilla.com','Callek@gmail.com']
+releaseConfig['ImportantRecipients'] = ['release-drivers@mozilla.org',]
 releaseConfig['AVVendorsRecipients'] = ['av-vendor-release-announce@mozilla.org',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
@@ -14,25 +15,25 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '3.6.20'
+releaseConfig['version']             = '3.6.27'
 releaseConfig['appVersion']          = releaseConfig['version']
-releaseConfig['milestone']           = '1.9.2.20'
+releaseConfig['milestone']           = '1.9.2.27'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_3_6_20'
+releaseConfig['baseTag']             = 'FIREFOX_3_6_27'
 #  Old version info
-releaseConfig['oldVersion']          = '3.6.19'
+releaseConfig['oldVersion']          = '3.6.26'
 releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
-releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_3_6_19'
+releaseConfig['oldBuildNumber']      = 2
+releaseConfig['oldBaseTag']          = 'FIREFOX_3_6_26'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '3.6.21pre'
-releaseConfig['nextMilestone']       = '1.9.2.21pre'
+releaseConfig['nextAppVersion']      = '3.6.28pre'
+releaseConfig['nextMilestone']       = '1.9.2.28pre'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-1.9.2',
         'path': 'releases/mozilla-1.9.2',
-        'revision': '48b6fb82a960',
+        'revision': 'fd6d19a5ae84',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -56,12 +57,13 @@ releaseConfig['l10nRepoPath']        = 'releases/l10n-mozilla-1.9.2'
 releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-1.9.2'
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
-    'build/compare-locales': 'RELEASE_AUTOMATION',
+    'build/compare-locales': 'RELEASE_0_8_2',
     'build/buildbot': 'production-0.8',
 }
 
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'win32', 'macosx')
+releaseConfig['notifyPlatforms']      = ('linux', 'win32', 'macosx')
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
 releaseConfig['xulrunnerPlatforms']  = releaseConfig['enUSPlatforms']
 
@@ -86,19 +88,22 @@ releaseConfig['patcherConfig']       = 'moz192-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = True
 releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R11_1'
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
-releaseConfig['stagingServer']       = 'stage-old.mozilla.org'
+releaseConfig['stagingServer']       = 'stage.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'https://aus2.mozilla.org'
+releaseConfig['ausHost']             = 'aus2-staging.mozilla.org'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = True
-releaseConfig['useBetaChannel']      = 1
+releaseConfig['useBetaChannelForRelease'] = True
 releaseConfig['verifyConfigs']       = {
     'linux':  'moz192-firefox-linux.cfg',
     'macosx': 'moz192-firefox-mac.cfg',
     'win32':  'moz192-firefox-win32.cfg'
 }
+releaseConfig['snippetSchema']       = 1
+releaseConfig['releaseChannel']      = 'release'
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = False
@@ -106,11 +111,11 @@ releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Major update configuration
 releaseConfig['majorUpdateRepoPath'] = 'releases/mozilla-release'
-releaseConfig['majorUpdateToVersion']   = '5.0.1'
+releaseConfig['majorUpdateToVersion']   = '10.0.2'
 releaseConfig['majorUpdateAppVersion']  = releaseConfig['majorUpdateToVersion']
 releaseConfig['majorUpdateBuildNumber'] = 1
-releaseConfig['majorUpdateBaseTag']     = 'FIREFOX_5_0_1'
-releaseConfig['majorUpdateReleaseNotesUrl']  = 'https://www.mozilla.com/%locale%/firefox/5.0/details/'
+releaseConfig['majorUpdateBaseTag']     = 'FIREFOX_10_0_2'
+releaseConfig['majorUpdateReleaseNotesUrl']  = 'https://www.mozilla.org/%locale%/firefox/latest/details/from-3.6.html'
 releaseConfig['majorUpdatePatcherConfig']    = 'moz192-branch-major-update-patcher2.cfg'
 releaseConfig['majorPatcherToolsTag']        = 'UPDATE_PACKAGING_R11_1_MU'
 releaseConfig['majorUpdateVerifyConfigs']    = {
@@ -119,6 +124,8 @@ releaseConfig['majorUpdateVerifyConfigs']    = {
     'win32':  'moz192-firefox-win32-major.cfg'
 }
 releaseConfig['majorFakeMacInfoTxt'] = True
+releaseConfig['majorSnippetSchema']  = 1
+
 # Tuxedo/Bouncer configuration
 releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
 releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
@@ -128,3 +135,5 @@ releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False
+releaseConfig['enableSigningAtBuildTime'] = False
+releaseConfig['enablePartialMarsAtBuildTime'] = False

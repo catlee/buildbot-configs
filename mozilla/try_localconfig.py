@@ -31,8 +31,11 @@ SLAVES = TRY_SLAVES
 # No need to reload, this is reloaded by builder_master.cfg
 import buildbotcustom.misc
 buildbotcustom.misc.fastRegexes.extend([
-    '-ix-',
+    'linux-ix-',
+    'linux64-ix-',
     'xserve',
     ])
 ENABLE_RELEASES = False
 RESERVED_SLAVES = None
+
+QUEUEDIR = "/dev/shm/queue"

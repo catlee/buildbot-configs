@@ -1,8 +1,10 @@
 releaseConfig = {}
+releaseConfig['skip_repo_setup']        = True
+releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com',]
-releaseConfig['PassRecipients']      = ['release@mozilla.com',]
+releaseConfig['ImportantRecipients'] = ['release@mozilla.com',]
 releaseConfig['AVVendorsRecipients'] = ['release@mozilla.com',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[staging-release] '
@@ -14,19 +16,19 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '5.0.1'
-releaseConfig['appVersion']          = '5.0'
-releaseConfig['milestone']           = '5.0'
+releaseConfig['version']             = '9.0'
+releaseConfig['appVersion']          = releaseConfig['version']
+releaseConfig['milestone']           = releaseConfig['version']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_5_0_1'
+releaseConfig['baseTag']             = 'FIREFOX_9_0'
 #  Old version info
-releaseConfig['oldVersion']          = '5.0'
+releaseConfig['oldVersion']          = '8.0.1'
 releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
-releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FIREFOX_5_0'
+releaseConfig['oldBuildNumber']      = 2
+releaseConfig['oldBaseTag']          = 'FIREFOX_8_0_1'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '5.0'
-releaseConfig['nextMilestone']       = '5.0'
+releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
+releaseConfig['nextMilestone']       = releaseConfig['milestone']
 #  Repository configuration, for tagging
 ## Staging repository path
 releaseConfig['userRepoRoot'] = 'users/stage-ffxbld'
@@ -35,7 +37,7 @@ releaseConfig['sourceRepositories']  = {
         'name': 'mozilla-release',
         'clonePath': 'releases/mozilla-release',
         'path': 'users/stage-ffxbld/mozilla-release',
-        'revision': 'FIXME',
+        'revision': 'default',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -63,10 +65,12 @@ releaseConfig['otherReposToTag']     = {
     'users/stage-ffxbld/compare-locales': 'RELEASE_AUTOMATION',
     'users/stage-ffxbld/buildbot': 'production-0.8',
     'users/stage-ffxbld/partner-repacks': 'default',
+    'users/stage-ffxbld/mozharness': 'default',
 }
 
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
+releaseConfig['notifyPlatforms']     = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
 releaseConfig['xulrunnerPlatforms']  = releaseConfig['enUSPlatforms']
 
@@ -88,21 +92,33 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 releaseConfig['cvsroot']             = ':ext:stgbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'mozRelease-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = False
-releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R14'
+releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R15'
 releaseConfig['ftpServer']           = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['stagingServer']       = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'http://dev-stage01.build.sjc1.mozilla.com'
+releaseConfig['ausHost']             = 'dev-stage01.build.sjc1.mozilla.com'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
-releaseConfig['useBetaChannel']      = 1
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozRelease-firefox-linux.cfg',
     'linux64':  'mozRelease-firefox-linux64.cfg',
     'macosx64': 'mozRelease-firefox-mac64.cfg',
     'win32':  'mozRelease-firefox-win32.cfg'
+}
+releaseConfig['mozconfigs']          = {
+    'linux': 'browser/config/mozconfigs/linux32/release',
+    'linux64': 'browser/config/mozconfigs/linux64/release',
+    'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
+    'win32': 'browser/config/mozconfigs/win32/release',
+}
+releaseConfig['xulrunner_mozconfigs']          = {
+    'linux': 'xulrunner/config/mozconfigs/linux32/release',
+    'linux64': 'xulrunner/config/mozconfigs/linux64/release',
+    'macosx64': 'xulrunner/config/mozconfigs/macosx-universal/release',
+    'win32': 'xulrunner/config/mozconfigs/win32/release',
 }
 
 # Partner repack configuration
@@ -121,3 +137,5 @@ releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False
 releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
+releaseConfig['enableSigningAtBuildTime'] = False
+releaseConfig['enablePartialMarsAtBuildTime'] = False

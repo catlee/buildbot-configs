@@ -27,6 +27,7 @@ ACTIVE_BRANCHES.extend([
     'mozilla-beta',
     'mozilla-aurora',
     'mozilla-release',
+    'mozilla-esr10',
     ])
 ACTIVE_PROJECTS = PROJECTS.keys()
 
@@ -44,7 +45,11 @@ if 'mobile_release_branches' in master_config:
 # No need to reload, this is reloaded by builder_master.cfg
 import buildbotcustom.misc
 buildbotcustom.misc.fastRegexes.extend([
-    '-ix-',
+    'linux-ix-',
+    'linux64-ix-',
     'xserve',
     ])
 RESERVED_SLAVES = "reserved_slaves_%(name)s" % master_config
+
+QUEUEDIR = master_config.get("queuedir", "/dev/shm/queue")
+
