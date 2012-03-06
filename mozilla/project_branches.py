@@ -236,7 +236,13 @@ PROJECT_BRANCHES = {
         'enable_talos': True,
         'enable_nightly': True,
         'create_snippet': True,
+        'create_mobile_snippet': True,
         'create_partial': True,
+        'platforms': {
+            'win64': {
+                'dont_build': True,
+            },
+        },
     },
     # customizations for integration work for bugs 481815 and 307181
     'oak': {

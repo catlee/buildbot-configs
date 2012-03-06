@@ -15,32 +15,28 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '11.0b6'
-releaseConfig['appVersion']          = '11.0'
-releaseConfig['milestone']           = releaseConfig['appVersion']
+releaseConfig['version']             = '10.0.3esr'
+releaseConfig['appVersion']          = '10.0.3'
+releaseConfig['milestone']           = '10.0.3'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_11_0b6'
+releaseConfig['baseTag']             = 'FENNEC_10_0_3esr'
 #  Old version info
-releaseConfig['oldVersion']          = '11.0b5'
-releaseConfig['oldAppVersion']       = '11.0'
+releaseConfig['oldVersion']          = '10.0.2esr'
+releaseConfig['oldAppVersion']       = releaseConfig['oldVersion']
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'FENNEC_11_0b5'
+releaseConfig['oldBaseTag']          = 'FENNEC_10_0_2esr'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
-releaseConfig['nextMilestone']       = releaseConfig['milestone']
+releaseConfig['nextAppVersion']      = '10.0.4esrpre'
+releaseConfig['nextMilestone']       = '10.0.4esrpre'
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mobile': {
-        'name': 'mozilla-beta',
-        'path': 'releases/mozilla-beta',
-        'revision': '7b1df36b517c',
+        'name': 'mozilla-esr10',
+        'path': 'releases/mozilla-esr10',
+        'revision': '039e4d5bb2ce',
         'relbranch': None,
         'bumpFiles': {
-            'mobile/android/confvars.sh': {
-                'version': releaseConfig['appVersion'],
-                'nextVersion': releaseConfig['nextAppVersion']
-            },
-            'mobile/xul/confvars.sh': {
+            'mobile/confvars.sh': {
                 'version': releaseConfig['appVersion'],
                 'nextVersion': releaseConfig['nextAppVersion']
             },
@@ -61,20 +57,21 @@ releaseConfig['sourceRepositories']  = {
 }
 #  L10n repositories
 releaseConfig['l10nRelbranch']       = None
-releaseConfig['l10nRepoPath']        = 'releases/l10n/mozilla-beta'
-releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mobile-beta.json'
+releaseConfig['l10nRepoPath']        = 'releases/l10n/mozilla-release'
+releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mobile-esr10.json'
 releaseConfig['l10nJsonFile']        = releaseConfig['l10nRevisionFile']
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
-    'build/compare-locales': 'RELEASE_AUTOMATION',
+    'build/compare-locales': 'RELEASE_0_8_2',
     'build/buildbot': 'production-0.8',
+    'build/partner-repacks': 'default',
     'build/mozharness': 'default',
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']        = ('android-xul',)
-releaseConfig['notifyPlatforms']      = ('android-xul',)
-releaseConfig['signedPlatforms']      = releaseConfig['enUSPlatforms']
+releaseConfig['enUSPlatforms']        = ('linux-android',)
+releaseConfig['notifyPlatforms']      = ('linux-android',)
+releaseConfig['signedPlatforms']      = ('linux-android',)
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
 releaseConfig['enableUnittests']      = True
@@ -92,20 +89,19 @@ releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 # Update-specific configuration
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage.mozilla.org'
-releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
+releaseConfig['ausServerUrl']        = 'https://aus2.mozilla.org'
 releaseConfig['ausHost']             = 'aus2-staging.mozilla.org'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']       = False
+releaseConfig['doPartnerRepacks']       = True
 releaseConfig['partnersRepoPath']       = 'build/partner-repacks'
 releaseConfig['partnerRepackPlatforms'] = ()
 
 # mozconfigs
 releaseConfig['mozconfigs']          = {
-    'android': 'mobile/android/config/mozconfigs/android/release',
-    'android-xul': 'mobile/xul/config/mozconfigs/android/release',
+    'linux-android': 'mobile/config/mozconfigs/android/release',
 }
 
 # Misc configuration
@@ -122,10 +118,8 @@ releaseConfig['disablePushToMirrors']     = True
 
 releaseConfig['mozharness_config'] = {
     'platforms': {
-        'android':
-            'multi_locale/release_mozilla-beta_android.json',
-        'android-xul':
-            'multi_locale/release_mozilla-beta_android-xul.json',
+        'linux-android':
+            'multi_locale/release_mozilla-release_linux-android.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
