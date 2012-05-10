@@ -491,7 +491,6 @@ PLATFORM_VARS = {
                 'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
                 'BINSCOPE': 'C:\Program Files\Microsoft\SDL BinScope\Binscope.exe',
                 'PATH': "${MOZILLABUILD}buildbotve\\scripts;${PATH}",
-                'PYTHON26': 'd:/mozilla-build/python27/python.exe',
             },
             'enable_opt_unittests': False,
             'enable_checktests': True,
@@ -759,7 +758,6 @@ PLATFORM_VARS = {
                 'LC_ALL': 'C',
                 'JAVA_HOME': '/tools/jdk6',
                 'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
-                'PYTHON26': '/tools/python-2.6.5/bin/python',
             },
             'enable_opt_unittests': False,
             'talos_masters': GLOBAL_VARS['talos_masters'],
@@ -809,7 +807,6 @@ PLATFORM_VARS = {
                 'LC_ALL': 'C',
                 'JAVA_HOME': '/tools/jdk6',
                 'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
-                'PYTHON26': '/tools/python-2.6.5/bin/python',
             },
             'enable_opt_unittests': False,
             'talos_masters': GLOBAL_VARS['talos_masters'],
@@ -1083,7 +1080,7 @@ BRANCHES['mozilla-central']['l10nNightlyUpdate'] = True
 BRANCHES['mozilla-central']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                                  'macosx64']
 BRANCHES['mozilla-central']['l10nDatedDirs'] = True
-BRANCHES['mozilla-central']['l10n_tree'] = 'fx37x'
+BRANCHES['mozilla-central']['l10n_tree'] = 'fxcentral'
 #make sure it has an ending slash
 BRANCHES['mozilla-central']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/firefox/nightly/latest-mozilla-central-l10n/'

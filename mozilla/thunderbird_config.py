@@ -745,7 +745,7 @@ BRANCHES['comm-central']['l10nNightlyUpdate'] = True
 BRANCHES['comm-central']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                               'macosx64']
 BRANCHES['comm-central']['l10nDatedDirs'] = True
-BRANCHES['comm-central']['l10n_tree'] = 'fx37x'
+BRANCHES['comm-central']['l10n_tree'] = 'tbcentral'
 #make sure it has an ending slash
 BRANCHES['comm-central']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/thunderbird/nightly/latest-comm-central-l10n/'
@@ -786,7 +786,7 @@ BRANCHES['comm-release']['l10nNightlyUpdate'] = False
 BRANCHES['comm-release']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                               'macosx64']
 BRANCHES['comm-release']['l10nDatedDirs'] = True
-BRANCHES['comm-release']['l10n_tree'] = 'fxrel'
+BRANCHES['comm-release']['l10n_tree'] = 'tbrel'
 BRANCHES['comm-release']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-release'
 BRANCHES['comm-release']['allLocalesFile'] = 'mail/locales/all-locales'
@@ -817,7 +817,7 @@ BRANCHES['comm-esr10']['l10nNightlyUpdate'] = False
 BRANCHES['comm-esr10']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                                  'macosx64']
 BRANCHES['comm-esr10']['l10nDatedDirs'] = True
-BRANCHES['comm-esr10']['l10n_tree'] = 'fxesr10'
+BRANCHES['comm-esr10']['l10n_tree'] = 'tbesr10'
 BRANCHES['comm-esr10']['enable_multi_locale'] = True
 BRANCHES['comm-esr10']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-esr10'
@@ -861,7 +861,7 @@ BRANCHES['comm-beta']['l10nNightlyUpdate'] = False
 BRANCHES['comm-beta']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                            'macosx64']
 BRANCHES['comm-beta']['l10nDatedDirs'] = True
-BRANCHES['comm-beta']['l10n_tree'] = 'fxbeta'
+BRANCHES['comm-beta']['l10n_tree'] = 'tbbeta'
 #make sure it has an ending slash
 BRANCHES['comm-beta']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/thunderbird-test/nightly/latest-comm-beta-l10n/'
@@ -907,7 +907,7 @@ BRANCHES['comm-aurora']['l10nNightlyUpdate'] = True
 BRANCHES['comm-aurora']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                              'macosx64']
 BRANCHES['comm-aurora']['l10nDatedDirs'] = True
-BRANCHES['comm-aurora']['l10n_tree'] = 'fxaurora'
+BRANCHES['comm-aurora']['l10n_tree'] = 'tbaurora'
 #make sure it has an ending slash
 BRANCHES['comm-aurora']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/thunderbird-test/nightly/latest-comm-aurora-l10n/'
@@ -925,8 +925,8 @@ BRANCHES['comm-aurora']['update_channel'] = 'aurora'
 BRANCHES['comm-aurora']['create_partial'] = True
 BRANCHES['comm-aurora']['create_partial_l10n'] = True
 # use comm-aurora-test when disabling updates for merges
-BRANCHES['comm-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Thunderbird/comm-aurora-test'
-BRANCHES['comm-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Thunderbird/comm-aurora-test'
+BRANCHES['comm-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Thunderbird/comm-aurora'
+BRANCHES['comm-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Thunderbird/comm-aurora'
 BRANCHES['comm-aurora']['enable_blocklist_update'] = True
 BRANCHES['comm-aurora']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['comm-aurora']['platforms']['win64']
@@ -988,7 +988,7 @@ for platform in BRANCHES['try-comm-central']['platforms'].keys():
     BRANCHES['try-comm-central']['platforms'][platform]['stage_product'] = 'thunderbird-test'
 
 # MAKE COMM-CENTRAL & TRY LIVE
-for branch in ['try-comm-central', 'comm-central']: 
+for branch in ['try-comm-central', 'comm-central', 'comm-aurora']: 
     BRANCHES[branch]['product_name'] = 'thunderbird'
     BRANCHES[branch]['enabled_products'] = ['thunderbird']
     BRANCHES[branch]['symbol_server_path'] = '/mnt/netapp/breakpad/symbols_tbrd/'
