@@ -31,7 +31,7 @@ PROJECT_BRANCHES = {
         'pgo_strategy': 'per-checkin',
         'platforms': {
             'win32': {
-                'pgo_slaves': SLAVES['win64'],
+                'pgo_platform': 'win64',
             },
         },
     },
