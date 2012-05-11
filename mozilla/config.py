@@ -1,15 +1,14 @@
 from copy import deepcopy
 
+import project_branches
+reload(project_branches)
+from project_branches import PROJECT_BRANCHES, ACTIVE_PROJECT_BRANCHES
+
 import localconfig
 reload(localconfig)
 from localconfig import MAC_LION_MINIS, MAC_SNOW_MINIS, LINUX_VMS, \
                         LINUX_IXS, WIN32_IXS, SLAVES, \
                         TRY_SLAVES
-
-import project_branches
-reload(project_branches)
-from project_branches import PROJECT_BRANCHES, ACTIVE_PROJECT_BRANCHES
-
 
 GLOBAL_VARS = {
     # It's a little unfortunate to have both of these but some things (HgPoller)

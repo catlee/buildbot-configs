@@ -1,5 +1,3 @@
-from localconfig import SLAVES
-
 # Additional branches that start as identical (individual variables can be overriden here)
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
