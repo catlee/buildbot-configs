@@ -263,20 +263,8 @@ PROJECT_BRANCHES = {
         'enable_talos': False,
     },
     'holly': {},
-    'larch': {},
-    # customizations while booked for bcp47 project as per bug 667734
-    'maple': {
-        'enable_talos': True,
-        'enable_nightly': True,
-        'create_snippet': True,
-        'create_mobile_snippet': True,
-        'create_partial': True,
-        'platforms': {
-            'win64': {
-                'dont_build': True,
-            },
-        },
-    },
+    # 'larch': {},
+    'maple': {},
     # customizations for integration work for bugs 481815 and 307181
     'oak': {
         'enable_nightly': True,
@@ -295,8 +283,7 @@ PROJECT_BRANCHES = {
             },
         },
     },
-    #'pine': {
-    #},
+    'pine': {},
 }
 
 # All is the default

@@ -126,7 +126,6 @@ releaseConfig['enable_repo_setup']       = False
 releaseConfig['usePrettyNames']           = False
 releaseConfig['disableBouncerEntries']    = True
 releaseConfig['disableStandaloneRepacks'] = True
-releaseConfig['disableL10nVerification']  = True
 releaseConfig['disablePermissionCheck']   = True
 releaseConfig['disableVirusCheck']        = True
 releaseConfig['disablePushToMirrors']     = True
@@ -143,6 +142,8 @@ releaseConfig['multilocale_config'] = {
     'platforms': {
         'android-xul':
             'multi_locale/release_mozilla-release_android-xul.json',
+        'android':
+            'multi_locale/release_mozilla-release_android.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],

@@ -15,15 +15,15 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '13.0b3'
+releaseConfig['version']             = '13.0b2'
 releaseConfig['appVersion']          = '13.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_13_0b3'
+releaseConfig['buildNumber']         = 3
+releaseConfig['baseTag']             = 'FENNEC_13_0b2'
 #  Old version info
 releaseConfig['oldVersion']          = '13.0b2'
 releaseConfig['oldAppVersion']       = '13.0'
-releaseConfig['oldBuildNumber']      = 1
+releaseConfig['oldBuildNumber']      = 2
 releaseConfig['oldBaseTag']          = 'FENNEC_13_0b2'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
@@ -33,8 +33,8 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': 'aa323b98df36',
-        'relbranch': None,
+        'revision': '88ee14110a74',
+        'relbranch': 'MOBILE130_2012050119_RELBRANCH',
         'bumpFiles': {
             'mobile/android/confvars.sh': {
                 'version': releaseConfig['appVersion'],
@@ -116,7 +116,6 @@ releaseConfig['enable_repo_setup']       = False
 releaseConfig['usePrettyNames']           = False
 releaseConfig['disableBouncerEntries']    = True
 releaseConfig['disableStandaloneRepacks'] = True
-releaseConfig['disableL10nVerification']  = True
 releaseConfig['disablePermissionCheck']   = True
 releaseConfig['disableVirusCheck']        = True
 releaseConfig['disablePushToMirrors']     = True
@@ -133,6 +132,8 @@ releaseConfig['multilocale_config'] = {
     'platforms': {
         'android-xul':
             'multi_locale/release_mozilla-beta_android-xul.json',
+        'android':
+            'multi_locale/release_mozilla-beta_android.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],

@@ -3,7 +3,7 @@ releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com','akeybl@mozilla.com','Callek@gmail.com']
-releaseConfig['ImportantRecipients'] = ['release-drivers@mozilla.org',]
+releaseConfig['ImportantRecipients'] = ['thunderbird-drivers@mozilla.org',]
 releaseConfig['AVVendorsRecipients'] = ['av-vendor-release-announce@mozilla.org',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
@@ -12,6 +12,7 @@ releaseConfig['messagePrefix']       = '[release] '
 #  Names for the product/files
 releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
+releaseConfig['mozilla_dir']         = 'mozilla'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
@@ -104,9 +105,9 @@ releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
-releaseConfig['ausHost']             = 'aus2-staging.mozilla.org'
+releaseConfig['ausHost']             = 'aus3-staging.mozilla.org'
 releaseConfig['ausUser']             = 'tbirdbld'
-releaseConfig['ausSshKey']           = 'tbirdbld_dsa'
+releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=%locale%&platform=%platform%&version=%version%'
 releaseConfig['testOlderPartials']   = False
 releaseConfig['verifyConfigs']       = {
@@ -129,7 +130,7 @@ releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 # Major update configuration
 releaseConfig['majorUpdateRepoPath'] = None
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'thunderbird-tuxedo.ini'
+releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
 releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
 releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-sparc',
@@ -137,3 +138,4 @@ releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False
+releaseConfig['enableSigningAtBuildTime'] = False

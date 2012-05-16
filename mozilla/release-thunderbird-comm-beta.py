@@ -3,7 +3,7 @@ releaseConfig['disable_tinderbox_mail'] = True
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['release@mozilla.com','akeybl@mozilla.com','Callek@gmail.com']
-releaseConfig['ImportantRecipients'] = ['release-drivers@mozilla.org',]
+releaseConfig['ImportantRecipients'] = ['thunderbird-drivers@mozilla.org',]
 releaseConfig['AVVendorsRecipients'] = ['av-vendor-release-announce@mozilla.org',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
@@ -12,19 +12,20 @@ releaseConfig['messagePrefix']       = '[release] '
 #  Names for the product/files
 releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
+releaseConfig['mozilla_dir']         = 'mozilla'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '12.0b4'
-releaseConfig['appVersion']          = '12.0'
-releaseConfig['milestone']           = '12.0'
+releaseConfig['version']             = '13.0b2'
+releaseConfig['appVersion']          = '13.0'
+releaseConfig['milestone']           = '13.0'
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'THUNDERBIRD_12_0b4'
+releaseConfig['baseTag']             = 'THUNDERBIRD_13_0b2'
 #  Old version info
-releaseConfig['oldVersion']          = '12.0b3'
-releaseConfig['oldAppVersion']       = '12.0'
+releaseConfig['oldVersion']          = '13.0b1'
+releaseConfig['oldAppVersion']       = '13.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'THUNDERBIRD_12_0b3'
+releaseConfig['oldBaseTag']          = 'THUNDERBIRD_13_0b1'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextMilestone']       = releaseConfig['milestone']
@@ -33,7 +34,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-beta',
         'path': 'releases/comm-beta',
-        'revision': 'fa4685b8588e',
+        'revision': 'b4e8ce60d23f',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -45,22 +46,9 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '3182caa7f19a',
-        'relbranch': None,
-        'bumpFiles': {
-            'browser/config/version.txt': {
-                'version': releaseConfig['appVersion'],
-                'nextVersion': releaseConfig['nextAppVersion']
-            },
-            'config/milestone.txt': {
-                'version': releaseConfig['milestone'],
-                'nextVersion': releaseConfig['nextMilestone']
-            },
-            'js/src/config/milestone.txt': {
-                'version': releaseConfig['milestone'],
-                'nextVersion': releaseConfig['nextMilestone']
-            },
-        }
+        'revision': 'f40f8e40bae8',
+        'relbranch': 'GECKO130_2012050817_RELBRANCH',
+        'bumpFiles': {},
     }
 }
 #  L10n repositories
@@ -103,9 +91,9 @@ releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
-releaseConfig['ausHost']             = 'aus2-staging.mozilla.org'
+releaseConfig['ausHost']             = 'aus3-staging.mozilla.org'
 releaseConfig['ausUser']             = 'tbirdbld'
-releaseConfig['ausSshKey']           = 'tbirdbld_dsa'
+releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=%locale%&platform=%platform%&version=%version%'
 releaseConfig['testOlderPartials']   = False
 releaseConfig['verifyConfigs']       = {
@@ -129,7 +117,7 @@ releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 # Major update configuration
 releaseConfig['majorUpdateRepoPath'] = None
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'thunderbird-tuxedo.ini'
+releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
 releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
 releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-sparc',
@@ -140,3 +128,4 @@ releaseConfig['releasetestUptake']   = 1
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False
 releaseConfig['enableAutomaticPushToMirrors'] = True
+releaseConfig['enableSigningAtBuildTime'] = False

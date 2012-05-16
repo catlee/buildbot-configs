@@ -93,10 +93,10 @@ releaseConfig['hgUsername']          = 'stage-ffxbld'
 releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 
 # Update-specific configuration
-releaseConfig['ftpServer']           = 'dev-stage01.build.sjc1.mozilla.com'
-releaseConfig['stagingServer']       = 'dev-stage01.build.sjc1.mozilla.com'
-releaseConfig['ausServerUrl']        = 'http://dev-stage01.build.sjc1.mozilla.com'
-releaseConfig['ausHost']             = 'dev-stage01.build.sjc1.mozilla.com'
+releaseConfig['ftpServer']           = 'dev-stage01.srv.releng.scl3.mozilla.com'
+releaseConfig['stagingServer']       = 'dev-stage01.srv.releng.scl3.mozilla.com'
+releaseConfig['ausServerUrl']        = 'http://dev-stage01.srv.releng.scl3.mozilla.com'
+releaseConfig['ausHost']             = 'dev-stage01.srv.releng.scl3.mozilla.com'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 
@@ -127,7 +127,6 @@ releaseConfig['enable_repo_setup']       = False
 releaseConfig['usePrettyNames']           = False
 releaseConfig['disableBouncerEntries']    = True
 releaseConfig['disableStandaloneRepacks'] = True
-releaseConfig['disableL10nVerification']  = True
 releaseConfig['disablePermissionCheck']   = True
 releaseConfig['disableVirusCheck']        = True
 releaseConfig['disablePushToMirrors']     = True
@@ -145,6 +144,8 @@ releaseConfig['multilocale_config'] = {
     'platforms': {
         'android-xul':
             'multi_locale/staging_release_mozilla-release_android-xul.json',
+        'android':
+            'multi_locale/staging_release_mozilla-release_android.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],

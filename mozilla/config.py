@@ -767,6 +767,8 @@ PLATFORM_VARS = {
             'post_upload_include_platform': True,
             'is_mobile_l10n': True,
             'l10n_chunks': 5,
+            'multi_locale': True,
+            'multi_locale_script': 'scripts/multil10n.py',
         },
         'android-xul': {
             'product_name': 'firefox',

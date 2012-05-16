@@ -13,6 +13,7 @@ releaseConfig['messagePrefix']       = '[staging-release] '
 #  Names for the product/files
 releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
+releaseConfig['mozilla_dir']         = 'mozilla'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
@@ -105,11 +106,11 @@ releaseConfig['cvsroot']             = ':ext:stgbld@cvs.mozilla.org:/cvsroot'
 releaseConfig['patcherConfig']       = 'mozBeta-thunderbird-branch-patcher2.cfg'
 releaseConfig['commitPatcherConfig'] = False
 releaseConfig['patcherToolsTag']     = 'UPDATE_PACKAGING_R16'
-releaseConfig['ftpServer']           = 'dev-stage01.build.sjc1.mozilla.com'
-releaseConfig['stagingServer']       = 'dev-stage01.build.sjc1.mozilla.com'
+releaseConfig['ftpServer']           = 'dev-stage01.srv.releng.scl3.mozilla.com'
+releaseConfig['stagingServer']       = 'dev-stage01.srv.releng.scl3.mozilla.com'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
-releaseConfig['ausServerUrl']        = 'http://dev-stage01.build.sjc1.mozilla.com'
-releaseConfig['ausHost']             = 'dev-stage01.build.sjc1.mozilla.com'
+releaseConfig['ausServerUrl']        = 'http://dev-stage01.srv.releng.scl3.mozilla.com'
+releaseConfig['ausHost']             = 'dev-stage01.srv.releng.scl3.mozilla.com'
 releaseConfig['ausUser']             = 'cltbld'
 releaseConfig['ausSshKey']           = 'cltbld_dsa'
 releaseConfig['releaseNotesUrl']     = None
@@ -135,7 +136,7 @@ releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
 # Major update configuration
 releaseConfig['majorUpdateRepoPath'] = None
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'thunderbird-tuxedo.ini'
+releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
 releaseConfig['tuxedoServerUrl']     = 'https://tuxedo.stage.mozilla.com/api/'
 releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-sparc',
