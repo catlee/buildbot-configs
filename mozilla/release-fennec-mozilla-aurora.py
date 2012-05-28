@@ -15,16 +15,16 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '14.0b2'
+releaseConfig['version']             = '14.0b3'
 releaseConfig['appVersion']          = '14.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_14_0b2'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'FENNEC_14_0b3'
 #  Old version info
-releaseConfig['oldVersion']          = '14.0b1'
+releaseConfig['oldVersion']          = '14.0b2'
 releaseConfig['oldAppVersion']       = '14.0'
-releaseConfig['oldBuildNumber']      = 3
-releaseConfig['oldBaseTag']          = 'FENNEC_14_0b1'
+releaseConfig['oldBuildNumber']      = 1
+releaseConfig['oldBaseTag']          = 'FENNEC_14_0b2'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = '14.0a2'
 releaseConfig['nextMilestone']       = '14.0a2'
@@ -33,8 +33,8 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-aurora',
         'path': 'releases/mozilla-aurora',
-        'revision': '319fc8878b6e',
-        'relbranch': None,
+        'revision': 'fcd3d27d53c6',
+        'relbranch': 'MOBILE140_2012052310_RELBRANCH',
         'bumpFiles': {
             'mobile/android/confvars.sh': {
                 'version': releaseConfig['appVersion'],
@@ -74,7 +74,7 @@ releaseConfig['otherReposToTag']     = {
 # Platform configuration
 releaseConfig['enUSPlatforms']        = ('android-xul', 'android')
 releaseConfig['notifyPlatforms']      = releaseConfig['enUSPlatforms']
-releaseConfig['signedPlatforms']      = releaseConfig['enUSPlatforms']
+releaseConfig['manuallySignedPlatforms']      = releaseConfig['enUSPlatforms']
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
 releaseConfig['enableUnittests']      = True
@@ -144,3 +144,4 @@ releaseConfig['multilocale_config'] = {
 }
 releaseConfig['enableSigningAtBuildTime'] = False
 releaseConfig['enablePartialMarsAtBuildTime'] = False
+releaseConfig['autoGenerateChecksums'] = False

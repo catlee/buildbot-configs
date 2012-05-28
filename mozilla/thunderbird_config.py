@@ -62,7 +62,7 @@ GLOBAL_VARS.update({
     'blocklist_update_on_closed_tree': False,
     'enable_nightly': True,
     'enabled_products': ['thunderbird'],
-    'enable_valgrind': True,
+    'enable_valgrind': False,
     'valgrind_platforms': ('linux', 'linux64'),
 
     # if true, this branch will get bundled and uploaded to ftp.m.o for users
@@ -141,6 +141,8 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'test_pretty_names': True,
             'l10n_check_test': False,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
         },
         'linuxqt': {
             'product_name': 'thunderbird',
@@ -282,6 +284,8 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'test_pretty_names': True,
             'l10n_check_test': False,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
         },
         'linux64-rpm': {
             'product_name': 'thunderbird',
@@ -419,6 +423,8 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'test_pretty_names': True,
             'l10n_check_test': False,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
         },
         'win64': {
             'product_name': 'thunderbird',
@@ -546,7 +552,7 @@ PLATFORM_VARS = {
             'packageTests': True,
             'leak_target': 'mailbloat',
             'build_space': 10,
-            'slaves': SLAVES['macosx'],
+            'slaves': SLAVES['macosx64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'thunderbird',
             'stage_platform': 'macosx-debug',
@@ -621,6 +627,8 @@ PLATFORM_VARS = {
             'enable_unittests': False,
             'enable_checktests': True,
             'talos_masters': None,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
         },
 }
 
@@ -757,6 +765,9 @@ BRANCHES['comm-central']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Thunder
 BRANCHES['comm-central']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Thunderbird/comm-central'
 BRANCHES['comm-central']['enable_blocklist_update'] = True
 BRANCHES['comm-central']['blocklist_update_on_closed_tree'] = False
+BRANCHES['comm-central']['platforms']['linux']['nightly_signing_servers'] = 'nightly-signing'
+BRANCHES['comm-central']['platforms']['linux64']['nightly_signing_servers'] = 'nightly-signing'
+BRANCHES['comm-central']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
 
 ######## comm-release
 BRANCHES['comm-release']['repo_path'] = 'releases/comm-release'
@@ -800,7 +811,6 @@ BRANCHES['comm-esr10']['start_hour'] = [3]
 BRANCHES['comm-esr10']['start_minute'] = [45]
 BRANCHES['comm-esr10']['enable_xulrunner'] = False
 BRANCHES['comm-esr10']['enable_mac_a11y'] = True
-BRANCHES['comm-esr10']['pgo_strategy'] = 'per-checkin'
 # L10n configuration
 BRANCHES['comm-esr10']['enable_l10n'] = False
 BRANCHES['comm-esr10']['enable_l10n_onchange'] = False
@@ -922,6 +932,9 @@ BRANCHES['comm-aurora']['enable_blocklist_update'] = True
 BRANCHES['comm-aurora']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['comm-aurora']['platforms']['win64']
 BRANCHES['comm-aurora']['enable_valgrind'] = False
+BRANCHES['comm-aurora']['platforms']['linux']['nightly_signing_servers'] = 'nightly-signing'
+BRANCHES['comm-aurora']['platforms']['linux64']['nightly_signing_servers'] = 'nightly-signing'
+BRANCHES['comm-aurora']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
 
 ######## try
 # Try-specific configs
