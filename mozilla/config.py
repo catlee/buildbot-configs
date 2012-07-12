@@ -1024,6 +1024,7 @@ PROJECTS = {
     'dxr_mozilla-central': {
         'platform': 'mock',
         'repo_path': 'mozilla-central',
+        'env': {'HG_SHARE_BASE_DIR': '/builds/hg-shared'},
     },
 }
 
