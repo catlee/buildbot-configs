@@ -1021,6 +1021,10 @@ PROJECTS = {
         'hgurl': 'http://hg.mozilla.org/',
         'repo_path': 'projects/ionmonkey',
     },
+    'dxr_mozilla-central': {
+        'platform': 'mock',
+        'repo_path': 'mozilla-central',
+    },
 }
 
 for k, v in localconfig.PROJECTS.items():

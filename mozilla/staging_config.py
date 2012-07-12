@@ -151,4 +151,7 @@ PROJECTS = {
         'idle_slaves': 0,
         'tinderbox_tree': 'MozillaTest',
     },
+    'dxr_mozilla-central': {
+        'scripts_repo': 'http://hg.mozilla.org/users/catlee_mozilla.com/tools',
+    },
 }

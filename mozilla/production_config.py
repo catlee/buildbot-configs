@@ -192,6 +192,9 @@ PROJECTS = {
         'idle_slaves': 0,
         'tinderbox_tree': 'Ionmonkey',
     },
+    'dxr_mozilla-central': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+    },
 }
 
 if __name__ == "__main__":
