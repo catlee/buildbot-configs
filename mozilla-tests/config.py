@@ -308,6 +308,12 @@ SUITES = {
         'suites': GRAPH_CONFIG + ['--activeTests', 'tspaint_places_generated_med:tspaint_places_generated_max', '--setPref', 'hangmonitor.timeout=0', '--mozAfterPaint'],
         'options': (TALOS_DIRTY_OPTS, ALL_PLATFORMS),
     },
+    #run in staging for a week to get a baseline of numbers, then merge in with the dromaeo suite
+    'jstests': {
+        'enable_by_default': False,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'sunspider:kraken:v8_7', '--mozAfterPaint'],
+        'options': ({}, ALL_PLATFORMS),
+    },
 
     # Mobile specific talos tests
     'remote-ts': {
@@ -1086,13 +1092,8 @@ BRANCHES['mozilla-central']['platforms']['android']['enable_debug_unittests'] = 
 BRANCHES['mozilla-central']['xperf_tests'] = (1, True, {}, WIN7_ONLY)
 
 # Side by side staging on m-c only
-BRANCHES['mozilla-central']['chromer_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-central']['other_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-central']['nochromer_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-central']['svgr_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-central']['tpn_tests'] = (1, True, TALOS_TP_NEW_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-central']['dirtypaint_tests'] = (1, True, TALOS_DIRTY_OPTS, ALL_PLATFORMS)
-
+BRANCHES['mozilla-central']['jstests_tests'] = (1, True, {}, ALL_PLATFORMS)
 
 # pgo-strategy
 BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
@@ -1100,19 +1101,7 @@ BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
 BRANCHES['mozilla-release']['pgo_strategy'] = 'per-checkin'
 
 #### MERGE DAY - EXCEPTIONS
-# When Firefox 16 is on mozilla-aurora we can remove these
-BRANCHES['mozilla-aurora']['chrome.2_tests'] = (1, True, {}, NO_MAC)
-BRANCHES['mozilla-aurora']['chrome_mac.2_tests'] = (1, True, {}, MAC_ONLY)
-BRANCHES['mozilla-aurora']['nochrome.2_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['tprow_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['svg_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['chromer_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['other_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['nochromer_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['svgr_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-aurora']['tpn_tests'] = (0, True, TALOS_TP_NEW_OPTS, ALL_PLATFORMS)
-# end Firefox16/aurora
-
+# When Firefox 16 is on mozilla-beta we can remove these
 # Firefox 16/beta
 BRANCHES['mozilla-beta']['chrome.2_tests'] = (1, True, {}, NO_MAC)
 BRANCHES['mozilla-beta']['chrome_mac.2_tests'] = (1, True, {}, MAC_ONLY)
@@ -1138,13 +1127,6 @@ BRANCHES['mozilla-release']['nochromer_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-release']['svgr_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-release']['tpn_tests'] = (0, True, TALOS_TP_NEW_OPTS, ALL_PLATFORMS)
 # end Firefox 16/release
-
-# When Firefox 14 is on mozilla-release we can remove these on/off switches
-BRANCHES['mozilla-release']['remote-trobopan_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE)
-BRANCHES['mozilla-release']['remote-trobocheck_tests'] = (0, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE)
-BRANCHES['mozilla-release']['tprow_tests'] = (0, True, TALOS_TP_OPTS, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['tpr_responsiveness_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
-
 #### END OF MERGE DAY - EXCEPTIONS
 
 ######## mozilla-esr10

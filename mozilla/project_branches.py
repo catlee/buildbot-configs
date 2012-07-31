@@ -36,13 +36,6 @@ PROJECT_BRANCHES = {
         'enable_nightly': True,
         'enabled_products': ['firefox'],
         'platforms': {
-            'macosx-debug': {
-                'dont_build': True,
-                'enable_debug_unittests': False,
-            },
-            'macosx': {
-                'slave_platforms': [],
-            },
             'macosx64': {
                 'slave_platforms': ['snowleopard', 'lion'],
             },
@@ -88,7 +81,7 @@ PROJECT_BRANCHES = {
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
         'mozconfig_dir': 'mozilla-central',
-        'enable_nightly': True,
+        'enable_nightly': False,
         'enable_weekly_bundle': True,
         'pgo_strategy': 'periodic',
         'periodic_pgo_interval': 3,
@@ -101,14 +94,8 @@ PROJECT_BRANCHES = {
                 'build_space': 7,
                 'nightly_signing_servers': 'nightly-signing',
             },
-            'linuxqt': {
-                'build_space': 7,
-            },
             'macosx64-debug': {
                 'enable_leaktests': True,
-                'nightly_signing_servers': 'mac-nightly-signing',
-            },
-            'macosx-debug': {
                 'nightly_signing_servers': 'mac-nightly-signing',
             },
             'macosx64': {
@@ -131,19 +118,11 @@ PROJECT_BRANCHES = {
 #            'linux': {
 #                'build_space': 6,
 #            },
-#            'linuxqt': {
-#                'build_space': 6,
-#            },
 #        },
 #    },
     'profiling': {
         'enable_talos': False,
         'platforms': {
-            'macosx-debug': {
-                'dont_build': True,
-                'enable_debug_unittests': False,
-                'nightly_signing_servers': 'mac-nightly-signing',
-            },
             'macosx64-debug': {
                 'dont_build': True,
                 'enable_debug_unittests': False,
@@ -200,11 +179,6 @@ PROJECT_BRANCHES = {
         'create_snippet': True,
         'create_partial': True,
         'platforms': {
-            'macosx-debug': {
-                'dont_build': True,
-                'enable_debug_unittests': False,
-                'nightly_signing_servers': 'mac-nightly-signing',
-            },
             'macosx64-debug': {
                 'dont_build': True,
                 'enable_debug_unittests': False,
