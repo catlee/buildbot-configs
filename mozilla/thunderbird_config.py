@@ -140,100 +140,7 @@ PLATFORM_VARS = {
             'l10n_check_test': False,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
-        },
-        'linuxqt': {
-            'product_name': 'thunderbird',
-            'app_name': 'mail',
-            'base_name': builder_prefix + 'Linux QT %(branch)s',
-            'mozconfig': 'linux/%(branch)s/qt',
-            'run_alive_tests': False,
-            'src_mozconfig': 'mail/config/mozconfigs/linux32/qt',
-            'xr_mozconfig': 'linux/%(branch)s/xulrunner-qt',
-            'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner-qt',
-            'profiled_build': False,
-            'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
-            'leak_target': 'mailbloat',
-            'build_space': 6,
-            'upload_symbols': True,
-            'download_symbols': True,
-            'packageTests': True,
-            'slaves': SLAVES['linux'],
-            'platform_objdir': OBJDIR,
-            'stage_product': 'thunderbird',
-            'stage_platform': 'linuxqt',
-            'update_platform': 'Linux_x86-gcc3',
-            'enable_ccache': True,
-            'enable_shared_checkouts': True,
-            'enable_nightly': False,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': thunderbird_localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'tbirdbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
-                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/tbirdbld_dsa",
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-            },
-            'enable_opt_unittests': False,
-            'enable_checktests': True,
-            'talos_masters': None,
-        },
-        'linux-rpm': {
-            'product_name': 'thunderbird',
-            'app_name': 'mail',
-            'base_name': builder_prefix + 'Linux RPM %(branch)s',
-            'mozconfig': 'linux/%(branch)s/nightly-rpm',
-            'run_alive_tests': False,
-            'src_mozconfig': 'mail/config/mozconfigs/linux32/rpm',
-            'enable_nightly': False, # We will explicitly enable for m-c
-            'enable_dep': False,
-            'enable_xulrunner': False,
-            'stage_platform': 'linux-rpm',
-            'leak_target': 'mailbloat',
-            'mc_patches': [],
-            'create_snippet': False,
-            'create_partial': False,
-            'profiled_build': False,
-            'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
-            'upload_symbols': False,
-            'download_symbols': False,
-            'packageTests': False, #Done in rpm spec file
-            'slaves': SLAVES['linux'],
-            'platform_objdir': OBJDIR,
-            'stage_product': 'thunderbird',
-            'update_platform': 'Linux_x86-gcc3',
-            'enable_ccache': True,
-            'enable_shared_checkouts': True,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': thunderbird_localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'tbirdbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/tbirdbld_dsa",
-                'MOZ_SYMBOLS_EXTRA_BUILDID': 'linux-rpm',
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-                'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
-            },
-            'enable_opt_unittests': False,
-            'enable_checktests': True,
-            'talos_masters': None,
-            'unittest_masters': [],
-            'test_pretty_names': False,
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux32/releng.manifest',
         },
         'linux64': {
             'product_name': 'thunderbird',
@@ -283,56 +190,7 @@ PLATFORM_VARS = {
             'l10n_check_test': False,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
-        },
-        'linux64-rpm': {
-            'product_name': 'thunderbird',
-            'app_name': 'mail',
-            'base_name': builder_prefix + 'Linux RPM x86-64 %(branch)s',
-            'mozconfig': 'linux64/%(branch)s/nightly-rpm',
-            'run_alive_tests': False,
-            'src_mozconfig': 'mail/config/mozconfigs/linux64/rpm',
-            'enable_nightly': False, # We will explicitly enable for m-c
-            'enable_dep': False,
-            'enable_xulrunner': False,
-            'stage_platform': 'linux64-rpm',
-            'leak_target': 'mailbloat',
-            'mc_patches': [],
-            'create_snippet': False,
-            'create_partial': False,
-            'profiled_build': False,
-            'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
-            'upload_symbols': False,
-            'download_symbols': False,
-            'packageTests': False, #Done in rpm spec file
-            'slaves': SLAVES['linux64'],
-            'platform_objdir': OBJDIR,
-            'stage_product': 'thunderbird',
-            'update_platform': 'Linux_x86_64-gcc3',
-            'enable_shared_checkouts': True,
-            'env': {
-                'DISPLAY': ':2',
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': thunderbird_localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'tbirdbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'SYMBOL_SERVER_SSH_KEY': "/home/cltbld/.ssh/tbirdbld_dsa",
-                'MOZ_SYMBOLS_EXTRA_BUILDID': 'linux64-rpm',
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-                'LC_ALL': 'C',
-                'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
-            },
-            'enable_opt_unittests': False,
-            'enable_checktests': True,
-            'talos_masters': None,
-            'unittest_masters': [],
-            'test_pretty_names': False,
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux64/releng.manifest',
         },
         'macosx64': {
             'product_name': 'thunderbird',
@@ -379,6 +237,7 @@ PLATFORM_VARS = {
             'test_pretty_names': True,
             'nightly_signing_servers': 'mac-dep-signing',
             'dep_signing_servers': 'mac-dep-signing',
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/macosx64/releng.manifest',
         },
         'win32': {
             'product_name': 'thunderbird',
@@ -505,6 +364,7 @@ PLATFORM_VARS = {
             'enable_unittests': False,
             'enable_checktests': True,
             'talos_masters': None,
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux32/releng.manifest',
         },
         'linux64-debug': {
             'product_name': 'thunderbird',
@@ -540,6 +400,7 @@ PLATFORM_VARS = {
             'enable_unittests': False,
             'enable_checktests': True,
             'talos_masters': None,
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux64/releng.manifest',
         },
         'macosx-debug': {
             'product_name': 'thunderbird',
@@ -573,6 +434,7 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'nightly_signing_servers': 'mac-dep-signing',
             'dep_signing_servers': 'mac-dep-signing',
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/macosx32/releng.manifest',
         },
         'macosx64-debug': {
             'product_name': 'thunderbird',
@@ -606,6 +468,7 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'nightly_signing_servers': 'mac-dep-signing',
             'dep_signing_servers': 'mac-dep-signing',
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/macosx64/releng.manifest',
         },
         'win32-debug': {
             'product_name': 'thunderbird',
@@ -835,7 +698,7 @@ BRANCHES['comm-release']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['comm-release']['platforms']['win64']
 BRANCHES['comm-release']['enable_valgrind'] = False
 
-# Delete these four lines when Thunderbird 15 merges in
+# MERGE day - Delete these four lines when Thunderbird 15 merges in
 BRANCHES['comm-release']['platforms']['win32']['slaves'] = SLAVES['win32']
 BRANCHES['comm-release']['platforms']['win32']['env'] = WIN32_ENV
 BRANCHES['comm-release']['platforms']['win32-debug']['slaves'] = SLAVES['win32']
@@ -875,7 +738,7 @@ BRANCHES['comm-esr10']['enable_blocklist_update'] = False
 BRANCHES['comm-esr10']['blocklist_update_on_closed_tree'] = False
 BRANCHES['comm-esr10']['enable_valgrind'] = False
 
-# Delete these four lines for esr17
+# MERGE DAY - Delete these four lines for esr17
 BRANCHES['comm-esr10']['platforms']['win32']['slaves'] = SLAVES['win32']
 BRANCHES['comm-esr10']['platforms']['win32']['env'] = WIN32_ENV
 BRANCHES['comm-esr10']['platforms']['win32-debug']['slaves'] = SLAVES['win32']
@@ -926,13 +789,6 @@ BRANCHES['comm-beta']['enable_blocklist_update'] = True
 BRANCHES['comm-beta']['blocklist_update_on_closed_tree'] = False
 del BRANCHES['comm-beta']['platforms']['win64']
 BRANCHES['comm-beta']['enable_valgrind'] = False
-
-# Delete these four lines when Thunderbird 15 merges in
-BRANCHES['comm-beta']['platforms']['win32']['slaves'] = SLAVES['win32']
-BRANCHES['comm-beta']['platforms']['win32']['env'] = WIN32_ENV
-BRANCHES['comm-beta']['platforms']['win32-debug']['slaves'] = SLAVES['win32']
-BRANCHES['comm-beta']['platforms']['win32-debug']['env'] = WIN32_DEBUG_ENV
-# End delete
 
 ######## comm-aurora
 BRANCHES['comm-aurora']['moz_repo_path'] = 'releases/mozilla-aurora'
@@ -988,13 +844,6 @@ BRANCHES['comm-aurora']['platforms']['win32']['nightly_signing_servers'] = 'nigh
 BRANCHES['comm-aurora']['platforms']['macosx64-debug']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['comm-aurora']['platforms']['macosx64']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['comm-aurora']['platforms']['macosx-debug']['nightly_signing_servers'] = 'mac-nightly-signing'
-
-# Delete these four lines when Thunderbird 15 merges in
-BRANCHES['comm-aurora']['platforms']['win32']['slaves'] = SLAVES['win32']
-BRANCHES['comm-aurora']['platforms']['win32']['env'] = WIN32_ENV
-BRANCHES['comm-aurora']['platforms']['win32-debug']['slaves'] = SLAVES['win32']
-BRANCHES['comm-aurora']['platforms']['win32-debug']['env'] = WIN32_DEBUG_ENV
-# End delete
 
 ######## try
 # Try-specific configs
@@ -1059,11 +908,6 @@ for branch in branches:
     if BRANCHES[branch]['platforms'].has_key('linux-mobile'):
         BRANCHES[branch]['platforms']['linux-mobile']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib'
         BRANCHES[branch]['platforms']['linux-mobile']['unittest-env'] = {
-            'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
-        }
-    if BRANCHES[branch]['platforms'].has_key('linuxqt'):
-        BRANCHES[branch]['platforms']['linuxqt']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib'
-        BRANCHES[branch]['platforms']['linuxqt']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
         }
     if BRANCHES[branch]['platforms'].has_key('linux64'):

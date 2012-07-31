@@ -1,6 +1,6 @@
 releaseConfig = {}
 releaseConfig['disable_tinderbox_mail'] = True
-releaseConfig['base_clobber_url'] = 'http://build.mozilla.org/clobberer/always_clobber.php'
+releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/always_clobber.php'
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>','<release-mgmt@mozilla.com>','<Callek@gmail.com>']
@@ -16,16 +16,16 @@ releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '14.0b12'
-releaseConfig['appVersion']          = '14.0'
+releaseConfig['version']             = '15.0b2'
+releaseConfig['appVersion']          = '15.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1 
-releaseConfig['baseTag']             = 'FENNEC_14_0b12'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'FENNEC_15_0b2'
 #  Old version info
-releaseConfig['oldVersion']          = '14.0b11'
-releaseConfig['oldAppVersion']       = '14.0'
-releaseConfig['oldBuildNumber']      = 1 
-releaseConfig['oldBaseTag']          = 'FENNEC_14_0b11'
+releaseConfig['oldVersion']          = '15.0b1'
+releaseConfig['oldAppVersion']       = '15.0'
+releaseConfig['oldBuildNumber']      = 2
+releaseConfig['oldBaseTag']          = 'FENNEC_15_0b1'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextMilestone']       = releaseConfig['milestone']
@@ -34,7 +34,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '58fc5e165c31',
+        'revision': 'a35ec00d86b5',
         'relbranch': None,
         'bumpFiles': {
             'mobile/android/confvars.sh': {

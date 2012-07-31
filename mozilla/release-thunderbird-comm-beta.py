@@ -1,6 +1,6 @@
 releaseConfig = {}
 releaseConfig['disable_tinderbox_mail'] = True
-releaseConfig['base_clobber_url'] = 'http://build.mozilla.org/clobberer/always_clobber.php'
+releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/always_clobber.php'
 
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>',
@@ -20,16 +20,16 @@ releaseConfig['mozilla_dir']         = 'mozilla'
 releaseConfig['binaryName']          = releaseConfig['productName'].capitalize()
 releaseConfig['oldBinaryName']       = releaseConfig['binaryName']
 #  Current version info
-releaseConfig['version']             = '14.0b5'
-releaseConfig['appVersion']          = '14.0'
+releaseConfig['version']             = '15.0b1'
+releaseConfig['appVersion']          = '15.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'THUNDERBIRD_14_0b5'
+releaseConfig['baseTag']             = 'THUNDERBIRD_15_0b1'
 #  Old version info
-releaseConfig['oldVersion']          = '14.0b4'
+releaseConfig['oldVersion']          = '14.0b5'
 releaseConfig['oldAppVersion']       = '14.0'
 releaseConfig['oldBuildNumber']      = 1
-releaseConfig['oldBaseTag']          = 'THUNDERBIRD_14_0b4'
+releaseConfig['oldBaseTag']          = 'THUNDERBIRD_14_0b5'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextMilestone']       = releaseConfig['milestone']
@@ -38,7 +38,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-beta',
         'path': 'releases/comm-beta',
-        'revision': '89070f84365e',
+        'revision': '3040a56de881',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -50,7 +50,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '58fc5e165c31',
+        'revision': 'eb421f1dd8ef',
         'relbranch': None,
         'bumpFiles': {},
     }
