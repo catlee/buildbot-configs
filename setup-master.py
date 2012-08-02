@@ -117,8 +117,9 @@ class MasterConfig:
             if error_logs:
                 self.logFile(create_log_filename)
             return (300, create_log_filename, None)
-        rc = subprocess.call([buildbot, 'checkconfig'],
-                             cwd=test_dir, stdout=test_log, stderr=subprocess.STDOUT)
+        rc = subprocess.call(['coverage', 'run', '-a', '--rcfile', '/home/catlee/mozilla/buildbot-configs/.coveragerc', '/home/catlee/.virtualenvs/buildbot-mozilla-080/bin/buildbot', 'checkconfig'], cwd=test_dir, stdout=test_log, stderr=subprocess.STDOUT)
+        #rc = subprocess.call([buildbot, 'checkconfig'],
+                             #cwd=test_dir, stdout=test_log, stderr=subprocess.STDOUT)
         test_log.close()
         log = open(test_log_filename)
         log_size = os.path.getsize(test_log_filename)
