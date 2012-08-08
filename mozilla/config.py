@@ -715,7 +715,7 @@ PLATFORM_VARS = {
             'packageTests': True,
             'enable_codesighs': False,
             'create_partial': False,
-            'slaves': SLAVES['linux'],
+            'slaves': SLAVES['mock'],
             'platform_objdir': OBJDIR,
             'update_platform': 'Android_arm-eabi-gcc3-xul',
             'enable_shared_checkouts': True,
