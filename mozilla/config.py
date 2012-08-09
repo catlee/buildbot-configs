@@ -721,7 +721,7 @@ PLATFORM_VARS = {
             'enable_shared_checkouts': True,
             'use_mock': True,
             'mock_target': 'mozilla-centos6-i386',
-            'mock_packages': ['autoconf213', 'mozilla-python27-mercurial', 'ccache', 'android-sdk15', 'android-ndk5', 'zip', 'java-1.6.0-openjdk-devel', 'zlib-devel', 'glibc-static', 'openssh-clients', "mpfr", "bc"],
+            'mock_packages': ['autoconf213', 'mozilla-python27-mercurial', 'ccache', 'android-sdk13', 'android-ndk5', 'zip', 'java-1.6.0-openjdk-devel', 'zlib-devel', 'glibc-static', 'openssh-clients', "mpfr", "bc"],
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
