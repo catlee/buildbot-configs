@@ -1547,6 +1547,18 @@ for b in BRANCHES.keys():
                 BRANCHES[b]['platforms'][p]['env']['CCACHE_UMASK'] = '002'
                 BRANCHES[b]['platforms'][p]['enable_shark'] = False
 
+# MERGE DAY
+# When Firefox 17 merges into these branches, they can be removed from the list
+for b in ('mozilla-aurora', 'mozilla-beta', 'mozilla-release', 'mozilla-esr10'):
+    for p in ('android', 'android-debug', 'android-armv6'):
+        if p not in BRANCHES[b]['platforms']:
+            continue
+        BRANCHES[b]['platforms'][p]['slaves'] = SLAVES['linux']
+        BRANCHES[b]['platforms'][p]['env']['SYMBOL_SERVER_SSH_KEY'] = "/home/cltbld/.ssh/ffxbld_dsa"
+        BRANCHES[b]['platforms'][p]['env']['PATH'] = "/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/"
+        del BRANCHES[b]['platforms'][p]['use_mock']
+        del BRANCHES[b]['platforms'][p]['mock_target']
+        del BRANCHES[b]['platforms'][p]['mock_packages']
 
 if __name__ == "__main__":
     import sys, pprint
