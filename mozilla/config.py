@@ -1549,6 +1549,7 @@ for b in BRANCHES.keys():
 
 # MERGE DAY
 # When Firefox 17 merges into these branches, they can be removed from the list
+# NB. mozharness configs will also need updating
 for b in ('mozilla-aurora', 'mozilla-beta', 'mozilla-release', 'mozilla-esr10'):
     for p in ('android', 'android-debug', 'android-armv6'):
         if p not in BRANCHES[b]['platforms']:
