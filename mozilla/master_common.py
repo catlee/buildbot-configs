@@ -57,7 +57,6 @@ BRANCH_PRIORITIES = {
 # earlier.
 BUILDER_PRIORITIES = [
     (re.compile('^b2g.*test'), 50),
-    (re.compile('unagi_eng_dep'), 50),
 ]
 
 
