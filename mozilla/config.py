@@ -173,8 +173,6 @@ PLATFORM_VARS = {
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
         },
@@ -244,8 +242,6 @@ PLATFORM_VARS = {
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
         },
@@ -450,8 +446,6 @@ PLATFORM_VARS = {
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
         },
@@ -507,8 +501,6 @@ PLATFORM_VARS = {
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
         },
@@ -649,6 +641,8 @@ PLATFORM_VARS = {
             'update_platform': 'Android_arm-eabi-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
             'use_mock': True,
             'mock_target': 'mozilla-centos6-i386',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
@@ -659,8 +653,6 @@ PLATFORM_VARS = {
                               'wget'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
             'env': {
@@ -687,7 +679,7 @@ PLATFORM_VARS = {
             'unittest_masters': GLOBAL_VARS['unittest_masters'],
             'stage_platform': "android",
             'stage_product': 'mobile',
-            'android_signing': True,
+            'android_signing': False,
             'post_upload_include_platform': True,
             'is_mobile_l10n': True,
             'l10n_chunks': 5,
@@ -713,6 +705,8 @@ PLATFORM_VARS = {
             'update_platform': 'Android_arm-eabi-gcc3-armv6',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
             'use_mock': True,
             'mock_target': 'mozilla-centos6-i386',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
@@ -723,8 +717,6 @@ PLATFORM_VARS = {
                               'wget'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
             'env': {
@@ -751,7 +743,7 @@ PLATFORM_VARS = {
             'unittest_masters': GLOBAL_VARS['unittest_masters'],
             'stage_platform': "android-armv6",
             'stage_product': 'mobile',
-            'android_signing': True,
+            'android_signing': False,
             'post_upload_include_platform': True,
             'is_mobile_l10n': False,
             'multi_locale': True,
@@ -777,6 +769,8 @@ PLATFORM_VARS = {
             'enable_ccache': True,
             'enable_shared_checkouts': True,
             'use_mock': True,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
             'mock_target': 'mozilla-centos6-i386',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
                               'ccache', 'android-sdk15', 'android-sdk16',
@@ -785,8 +779,6 @@ PLATFORM_VARS = {
                               'glibc-static', 'openssh-clients', 'mpfr', 'bc'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
             'env': {
@@ -812,7 +804,7 @@ PLATFORM_VARS = {
             'unittest_masters': GLOBAL_VARS['unittest_masters'],
             'stage_platform': "android-x86",
             'stage_product': 'mobile',
-            'android_signing': True,
+            'android_signing': False,
             'post_upload_include_platform': True,
             'is_mobile_l10n': False,
             'multi_locale': True,
@@ -843,6 +835,8 @@ PLATFORM_VARS = {
             'create_snippet': False,
             'create_partial': False,
             'use_mock': True,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
             'mock_target': 'mozilla-centos6-i386',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
                               'ccache', 'android-sdk15', 'android-sdk16',
@@ -852,8 +846,6 @@ PLATFORM_VARS = {
                               'wget'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
             'env': {
@@ -881,7 +873,7 @@ PLATFORM_VARS = {
             'unittest_masters': GLOBAL_VARS['unittest_masters'],
             'stage_platform': "android-noion",
             'stage_product': 'mobile',
-            'android_signing': True,
+            'android_signing': False,
             'post_upload_include_platform': True,
             'is_mobile_l10n': False,
             'multi_locale': False,
@@ -910,6 +902,8 @@ PLATFORM_VARS = {
             'update_platform': 'Android_arm-eabi-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
             'use_mock': True,
             'mock_target': 'mozilla-centos6-i386',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
@@ -920,8 +914,6 @@ PLATFORM_VARS = {
                               'wget'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
-                ('/home/cltbld/.android', '/builds/.android'),
-                ('/home/cltbld/.mozpass.cfg', '/builds/.mozpass.cfg'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
             'env': {
@@ -948,7 +940,7 @@ PLATFORM_VARS = {
             'unittest_masters': GLOBAL_VARS['unittest_masters'],
             'stage_platform': "android-debug",
             'stage_product': 'mobile',
-            'android_signing': True,
+            'android_signing': False,
             'post_upload_include_platform': True,
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android/releng.manifest',
         },
@@ -1268,6 +1260,8 @@ BRANCHES['mozilla-central']['platforms']['linux']['nightly_signing_servers'] = '
 
 BRANCHES['mozilla-central']['platforms']['linux64']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['mozilla-central']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
+BRANCHES['mozilla-central']['platforms']['android']['nightly_signing_servers'] = 'nightly-signing'
+BRANCHES['mozilla-central']['platforms']['android-armv6']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['mozilla-central']['platforms']['macosx64-debug']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['mozilla-central']['platforms']['macosx64']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['mozilla-central']['l10n_extra_configure_args']= ['--with-macbundlename-prefix=Firefox']
