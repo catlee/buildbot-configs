@@ -1889,6 +1889,13 @@ for b in BRANCHES.keys():
         if 'android-noion' in BRANCHES[b]['platforms']:
             del BRANCHES[b]['platforms']['android-noion']
 
+# ASan builds are only on mozilla-central and try
+for b in BRANCHES:
+    if b not in ('mozilla-central', 'try'):
+        for p in 'linux64-asan', 'linux64-dbg-asan':
+            if p in BRANCHES[b]['platforms']:
+                del BRANCHES[b]['platforms'][p]
+
 if __name__ == "__main__":
     import sys
     import pprint
