@@ -255,7 +255,7 @@ PLATFORM_VARS = {
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
-            'base_name': 'Linux x86-64 %(branch)s ASan',
+            'base_name': 'Linux x86-64 %(branch)s asan',
             'mozconfig': 'in_tree',
             'src_mozconfig': 'browser/config/mozconfigs/linux64/nightly-asan',
             'enable_xulrunner': False,
@@ -293,6 +293,8 @@ PLATFORM_VARS = {
             'enable_opt_unittests': False,
             'enable_checktests': True,
             'enable_build_analysis': False,
+            'create_snippet': False,
+            'create_partial': False,
             'test_pretty_names': False,
             'l10n_check_test': False,
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux64/clang.manifest',
@@ -321,7 +323,7 @@ PLATFORM_VARS = {
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
-            'base_name': 'Linux x86-64 %(branch)s Debug ASan',
+            'base_name': 'Linux x86-64 %(branch)s debug asan',
             'mozconfig': 'in_tree',
             'src_mozconfig': 'browser/config/mozconfigs/linux64/debug-asan',
             'enable_xulrunner': False,
@@ -359,6 +361,8 @@ PLATFORM_VARS = {
             'enable_opt_unittests': False,
             'enable_checktests': True,
             'enable_build_analysis': False,
+            'create_snippet': False,
+            'create_partial': False,
             'test_pretty_names': False,
             'l10n_check_test': False,
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux64/clang.manifest',
@@ -1252,6 +1256,7 @@ BRANCHES = {
             'linux64-debug': {},
             'macosx64-debug': {},
             'win32-debug': {},
+            'android-noion': {},
         },
     },
     'try': {
@@ -1763,7 +1768,7 @@ for platform in BRANCHES['try']['platforms'].keys():
 # MERGE day - when FF17 moves into such branch remove it from the list
 # MERGE day - when FF17 moves into mozilla-release (and esr10 is gone) remove the whole block
 for branch in BRANCHES:
-    if branch not in ('mozilla-release', 'mozilla-esr10',) and \
+    if branch not in ('mozilla-esr10',) and \
         'macosx-debug' in BRANCHES[branch]['platforms']:
         del BRANCHES[branch]['platforms']['macosx-debug']
 
@@ -1875,7 +1880,7 @@ for branch in branches:
 
 # MERGE DAY
 # When Firefox 18 merges into these branches, they can be removed from the list
-for b in ('mozilla-beta', 'mozilla-release', 'mozilla-esr10', 'mozilla-esr17'):
+for b in ('mozilla-esr10', 'mozilla-esr17'):
     # Disable pymake
     for p in ('win32', 'win32-debug', 'win64'):
         if p not in BRANCHES[b]['platforms']:
@@ -1883,15 +1888,15 @@ for b in ('mozilla-beta', 'mozilla-release', 'mozilla-esr10', 'mozilla-esr17'):
         BRANCHES[b]['platforms'][p]['enable_pymake'] = False
 
 # XXX bug 789373 hack until we get b2g testing going.
-# Delete all references to android-noion once we have b2g tests.
+# Delete all references to android-noion once we have b2g jsreftests not in an emulator.
 for b in BRANCHES.keys():
-    if b not in ('mozilla-central', 'mozilla-inbound', 'mozilla-aurora', 'try'):
+    if b not in ('mozilla-central', 'mozilla-inbound', 'mozilla-b2g18', 'try'):
         if 'android-noion' in BRANCHES[b]['platforms']:
             del BRANCHES[b]['platforms']['android-noion']
 
-# ASan builds are only on mozilla-central and try
+# ASan builds are only on mozilla-central for now
 for b in BRANCHES:
-    if b not in ('mozilla-central', 'try'):
+    if b not in ('mozilla-central',):
         for p in 'linux64-asan', 'linux64-dbg-asan':
             if p in BRANCHES[b]['platforms']:
                 del BRANCHES[b]['platforms'][p]
