@@ -1,4 +1,4 @@
-from staging_config import SLAVES
+from localconfig import SLAVES
 
 GLOBAL_VARS = {
     'staging': True,
@@ -55,6 +55,10 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
+    'comm-esr17': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
     'try-comm-central': {
         'download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/thunderbird',
         'enable_mail_notifier': False, # Set to True when testing
@@ -65,14 +69,13 @@ BRANCHES = {
             'win32': {
                 'env': {
                     'SYMBOL_SERVER_HOST': 'dev-stage01.srv.releng.scl3.mozilla.com',
-                    'CVS_RSH': 'ssh',
                     'MOZ_OBJDIR': 'objdir-tb',
                     'TINDERBOX_OUTPUT': '1',
                     'MOZ_CRASHREPORTER_NO_REPORT': '1',
                     # Source server support, bug 506702
                     'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows/srcsrv/pdbstr.exe',
                     'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
-                    'PATH': "${MOZILLABUILD}buildbotve\\scripts;${PATH}",
+                    'PATH': "${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
                 }
             }
         }

@@ -1,24 +1,30 @@
 SLAVES = {
-    'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(3,10) + range(11,18) + range(19,77)]),
+    'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(3,10) + range(11,18) + range(19,59) + range(60,87)]),
     'fedora64' : dict([("talos-r3-fed64-%03i" % x, {}) for x in range (3,10) + range(11,35) + range(36,72)]),
-    'xp': dict([("talos-r3-xp-%03i" % x, {}) for x in range(4,10) + range(11,76) \
-          if x not in [45, 59]]), # bug 661377, bug 753357
-    'win7': dict([("talos-r3-w7-%03i" % x, {}) for x in range(4,10) + range(11,80)]),
-    'w764': dict([("t-r3-w764-%03i" % x, {}) for x in range(1,6)]),
-    'leopard': dict([("talos-r3-leopard-%03i" % x, {}) for x in range(3,10) + range(11,67) \
+    'xp': dict([("talos-r3-xp-%03i" % x, {}) for x in range(4,10) + range(11,101) \
+          if x not in [45, 58, 59]]), # bug 661377, bug 780515, bug 753357
+    'win7': dict([("talos-r3-w7-%03i" % x, {}) for x in range(4,10) + range(11,17) + range(18,105)]),
+    'leopard': dict([("talos-r3-leopard-%03i" % x, {}) for x in range(3,10) + range(11,27) \
           if x not in [7]]), # bug 655437
     'snowleopard': dict([("talos-r4-snow-%03i" % x, {}) for x in range(4,10) + range(11,81) + [82,84]]),
     'lion': dict([("talos-r4-lion-%03i" % x, {}) for x in range(4,10) + range(11,83) + [84]]),
+    'mountainlion': dict([("talos-mtnlion-r5-%03i" % x, {}) for x in range(4,10) + range(11,90)]),
     'tegra_android': dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
-        for x in range(31,289) \
-        if x not in range(122,129) + [30,31,33,34,43,44,49,65,69,77,131,137,143,147,\
+        for x in range(31,371) \
+        if x not in range(122,129) + [30,33,34,43,44,49,65,69,77,131,137,143,147,\
             153,156,161,175,176,180,184,185,186,193,197,198,202,203,204,205,222,224,\
-            226,239,241,268,275,289]]), # decommissioned tegras
+            226,241,268,275,289,291,292,301]]), # decommissioned tegras
+    'panda_android': dict(
+        [('panda-%04i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(22,81) + range(522,874)]
+    ),
+    'b2g_panda': dict([("panda-%04i" % x, {}) for x in range(82,522)]),
 }
 
 SLAVES['leopard-o'] = SLAVES['leopard']
-SLAVES['tegra_android-xul'] = SLAVES['tegra_android']
-SLAVES['tegra_android-o'] = SLAVES['tegra_android']
+SLAVES['tegra_android-armv6'] = SLAVES['tegra_android']
+SLAVES['tegra_android-noion'] = SLAVES['tegra_android']
+SLAVES['fedora-b2g'] = SLAVES['fedora']
+SLAVES['b2g_panda_gaia_central'] = SLAVES['b2g_panda']
 
 TRY_SLAVES = {}
 
@@ -31,7 +37,9 @@ GLOBAL_VARS = {
     'stage_server': 'stage.mozilla.org',
     'stage_username': 'ffxbld',
     'stage_ssh_key': 'ffxbld_dsa',
+    'datazilla_url': 'https://datazilla.mozilla.org/talos',
 }
+
 
 # Local branch overrides
 BRANCHES = {
@@ -46,6 +54,14 @@ BRANCHES = {
     'mozilla-esr10': {
         'tinderbox_tree': 'Mozilla-Esr10',
         'mobile_tinderbox_tree': 'Mozilla-Esr10',
+    },
+    'mozilla-esr17': {
+        'tinderbox_tree': 'Mozilla-Esr17',
+        'mobile_tinderbox_tree': 'Mozilla-Esr17',
+    },
+    'mozilla-b2g18': {
+        'tinderbox_tree': 'Mozilla-B2g18',
+        'mobile_tinderbox_tree': 'Mozilla-B2g18',
     },
     'mozilla-beta': {
         'tinderbox_tree': 'Mozilla-Beta',

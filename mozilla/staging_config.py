@@ -1,25 +1,31 @@
+from copy import deepcopy
 import production_config as pc
 
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(89,95)]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(87, 95) if x not in [88]]
 MAC_SNOW_MINIS = ['moz2-darwin10-slave02']
 LINUX_IXS      = ['mv-moz2-linux-ix-slave01'] + \
                  ['linux-ix-slave%02i' % x for x in (3,4,5)]
 LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in (1,2)]
 WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in (1, 19, 21)]
-WIN64_IXS      = ['w64-ix-slave%02i' % x for x in (4, 5)]
+WIN64_IXS      = ['w64-ix-slave%02i' % x for x in (3, 4, 5, 22, 80)]
 MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(1, 6)]
+LINUX64_EC2    = ['dev-linux64-ec2-%03d' % x for x in range(1, 50)]
 
-SLAVES = {
+STAGING_SLAVES = {
     'linux':            LINUX_IXS,
     'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
+    'macosx':           [],
+    'macosx64':         MAC_SNOW_MINIS,
     'macosx64-lion':    MAC_LION_MINIS,
-    'linux-android':    LINUX_IXS,
     'android':          LINUX_IXS,
-    'android-xul':      LINUX_IXS,
-    'mock':             MOCK_DL120G7
+    'android-armv6':    LINUX_IXS,
+    'android-x86':      MOCK_DL120G7,
+    'mock':             MOCK_DL120G7 + LINUX64_EC2,
 }
+
+SLAVES = deepcopy(STAGING_SLAVES)
 
 for p, slaves in pc.SLAVES.items() + pc.TRY_SLAVES.items():
     if p not in SLAVES:
@@ -28,7 +34,7 @@ for p, slaves in pc.SLAVES.items() + pc.TRY_SLAVES.items():
         SLAVES[p].extend(slaves)
 
 
-TRY_SLAVES = SLAVES.copy()
+TRY_SLAVES = deepcopy(SLAVES)
 
 GLOBAL_VARS = {
     'staging': True,
@@ -95,6 +101,14 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
+    'mozilla-esr17': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
+    'mozilla-b2g18': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
     'try': {
         'download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox',
         'mobile_download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/mobile',
@@ -106,22 +120,21 @@ BRANCHES = {
             'win32': {
                 'env': {
                     'SYMBOL_SERVER_HOST': 'dev-stage01.srv.releng.scl3.mozilla.com',
-                    'CVS_RSH': 'ssh',
                     'MOZ_OBJDIR': 'obj-firefox',
                     'TINDERBOX_OUTPUT': '1',
                     'MOZ_CRASHREPORTER_NO_REPORT': '1',
                     # Source server support, bug 506702
                     'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
                     'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
-                    'PATH': "${MOZILLABUILD}buildbotve\\scripts;${PATH}",
+                    'BINSCOPE': 'C:\Program Files\Microsoft\SDL BinScope\Binscope.exe',
+                    'PATH': "${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
                 }
             }
         }
     },
 }
 
-PLATFORM_VARS = {
-}
+PLATFORM_VARS = {}
 
 PROJECTS = {
     'fuzzing': {
@@ -156,5 +169,9 @@ PROJECTS = {
         'upload_host': GLOBAL_VARS['stage_server'],
         'upload_user': 'ffxbld',
         'upload_sshkey': '/home/cltbld/.ssh/ffxbld_dsa',
+    },
+    'spidermonkey_try': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
     },
 }

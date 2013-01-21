@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from production_config import \
+from localconfig import \
     GLOBAL_VARS, MAC_LION_MINIS, MAC_SNOW_MINIS, \
     LINUX_VMS, LINUX_IXS, LINUX64_VMS, LINUX64_IXS, WIN32_IXS, WIN64_IXS, \
     WIN64_IXS, MOCK_DL120G7, \
@@ -43,7 +43,7 @@ GLOBAL_VARS['unittest_masters'] = [
 ]
 GLOBAL_VARS['xulrunner_tinderbox_tree'] = None
 GLOBAL_VARS['weekly_tinderbox_tree'] = 'Thunderbird'
-GLOBAL_VARS['l10n_tinderbox_tree'] = 'MozillaTest'
+GLOBAL_VARS['l10n_tinderbox_tree'] = 'Mozilla-l10n'
 GLOBAL_VARS['base_mirror_urls'] = ['http://hg-internal.dmz.scl3.mozilla.com']
 GLOBAL_VARS['base_bundle_urls'] = ['http://ftp.mozilla.org/pub/mozilla.org/thunderbird/bundles']
 GLOBAL_VARS['aus2_user'] = 'tbirdbld'
@@ -63,6 +63,10 @@ BRANCHES = {
     'comm-esr10': {
         'packaged_unittest_tinderbox_tree': 'Thunderbird-Esr10',
         'tinderbox_tree': 'Thunderbird-Esr10',
+    },
+    'comm-esr17': {
+        'packaged_unittest_tinderbox_tree': 'Thunderbird-Esr17',
+        'tinderbox_tree': 'Thunderbird-Esr17',
     },
     'comm-beta': {
         'packaged_unittest_tinderbox_tree': 'Thunderbird-Beta',
@@ -84,7 +88,6 @@ BRANCHES = {
             'win32': {
                 'env': {
                     'SYMBOL_SERVER_HOST': 'build.mozilla.org',
-                    'CVS_RSH': 'ssh',
                     'MOZ_OBJDIR': 'objdir-tb',
                     'TINDERBOX_OUTPUT': '1',
                     'MOZ_CRASHREPORTER_NO_REPORT': '1',
@@ -92,7 +95,7 @@ BRANCHES = {
                     'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
                     'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
                     'BINSCOPE': 'C:\Program Files\Microsoft\SDL BinScope\Binscope.exe',
-                    'PATH': "${MOZILLABUILD}buildbotve\\scripts;${PATH}",
+                    'PATH': "${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
                 }
             }
         }

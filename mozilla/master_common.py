@@ -1,4 +1,6 @@
 import time
+import random
+import re
 from twisted.python import log
 
 c = BuildmasterConfig = {}
@@ -19,31 +21,44 @@ c['change_source'] = []
 
 # Builders from these branches are given custom priority, default is 2 for unlisted branches
 BRANCH_PRIORITIES = {
-    'mozilla-central': 1,
-    'comm-central': 1,
-    'mozilla-aurora': 1,
-    'comm-aurora': 1,
-    'mozilla-beta': 0,
-    'comm-beta': 0,
+    'mozilla-central': 3,
+    'comm-central': 3,
+    'mozilla-aurora': 3,
+    'comm-aurora': 3,
+    'mozilla-beta': 2,
+    'comm-beta': 2,
     'mozilla-release': 0,
     'comm-release': 0,
-    'mozilla-esr10': 0,
-    'comm-esr10': 0,
-    'try': 3,
-    'try-comm-central': 3,
-    'addontester': 4,
-    'addonbaselinetester': 4,
-    'alder': 4,
-    'ash': 4,
-    'birch': 4,
-    'cedar': 4,
-    'elm': 4,
-    'holly': 4,
-    'larch': 4,
-    'maple': 4,
-    'oak': 1, # Priority bumped up temporarily in bug 756463
-    'pine': 4,
+    'mozilla-esr10': 1,
+    'mozilla-esr17': 1,
+    'mozilla-b2g18': 1,
+    'comm-esr10': 1,
+    'comm-esr17': 1,
+    'try': 4,
+    'try-comm-central': 4,
+    'alder': 5,
+    'ash': 5,
+    'birch': 5,
+    'cedar': 5,
+    'date': 5,
+    'elm': 5,
+    'fig': 5,
+    'gum': 5,
+    'holly': 5,
+    'jamun': 5,
+    'larch': 5,
+    'maple': 5,
+    'oak': 5,
+    'pine': 5,
 }
+
+# List of (regular expression, priority) tuples. If no expression matches the
+# builder name, a priority of 100 is used. Lower priority values get run
+# earlier.
+BUILDER_PRIORITIES = [
+    (re.compile('b2g(-debug)?_test'), 50),
+]
+
 
 # Give the release builders priority over other builders
 def prioritizeBuilders(botmaster, builders):
@@ -76,17 +91,27 @@ def prioritizeBuilders(botmaster, builders):
         req_priority = request[1]
         submitted_at = request[2]
 
-        # Default priority is 2
-        priority = 2
+        # Default branch priority is 2
+        branch_priority = 2
         if builder.builder_status.category.startswith('release'):
-            priority = 0
+            branch_priority = 0
         elif builder.properties and builder.properties.has_key('branch'):
             for branch, p in BRANCH_PRIORITIES.iteritems():
                 if branch in builder.properties['branch']:
-                    priority = p
+                    branch_priority = p
                     break
 
-        return priority, req_priority, submitted_at
+        # Default builder priority is 100
+        builder_priority = 100
+        for exp, p in BUILDER_PRIORITIES:
+            if exp.search(builder.name):
+                builder_priority = p
+                break
+
+        # Add some randomness here so that builders with the same priority,
+        # req_priority, builder_priority, submitted_at get processed in a
+        # different order each time
+        return branch_priority, req_priority, builder_priority, submitted_at, random.random()
 
     builders.sort(key=sortkey)
     log.msg("Sorted %i builders in %.2fs" % (len(builders), time.time() - s))

@@ -14,10 +14,12 @@ REMOTE_PROCESS_NAMES = { 'default':         'org.mozilla.fennec',
                          'mozilla-beta':    'org.mozilla.firefox_beta',
                          'mozilla-aurora':  'org.mozilla.fennec_aurora',
                          'mozilla-release': 'org.mozilla.firefox',
-                         'mozilla-esr10':   'org.mozilla.firefox',
                        }
 
 MOZHARNESS_REPO = "http://hg.mozilla.org/build/mozharness"
+MOZHARNESS_REBOOT_CMD = ['scripts/external_tools/count_and_reboot.py',
+                         '-f', '../reboot_count.txt',
+                         '-n', '1', '-z']
 
 TALOS_CMD = ['python', 'run_tests.py', '--noisy', WithProperties('%(configFile)s')]
 
@@ -48,10 +50,45 @@ ANDROID_UNITTEST_REMOTE_EXTRAS['cmdOptions'] = ['--bootstrap']
 
 BRANCHES = {
     'mozilla-central':     {},
-    'mozilla-release':     { 'release_branch': True },
-    'mozilla-beta':        { 'release_branch': True },
     'mozilla-aurora':      {},
-    'mozilla-esr10':       { 'release_branch': True },
+    'mozilla-release':     {},
+    'mozilla-beta':        {},
+    'mozilla-esr10':       {
+        'datazilla_url': None,
+        'platforms': {
+            'macosx': {},
+            'macosx64': {},
+            'win32': {},
+            'linux': {},
+            'linux64' : {},
+        },
+        'lock_platforms': True,
+    },
+    'mozilla-esr17':       {
+        'datazilla_url': None,
+        'platforms': {
+            'macosx': {},
+            'macosx64': {},
+            'win32': {},
+            'linux': {},
+            'linux64' : {},
+        },
+        'lock_platforms': True,
+    },
+    'mozilla-b2g18':       {
+        'datazilla_url': None,
+        'platforms': {
+            # desktop per sicking in Bug 829513
+            'macosx64': {},
+            'win32': {},
+            'linux': {},
+            'linux64' : {},
+            'android-noion' : {},
+            'ics_armv7a_gecko': {},
+            'b2g_panda': {},
+        },
+        'lock_platforms': True,
+    },
     'try':                 { 'coallesce_jobs': False},
 }
 
@@ -60,12 +97,11 @@ PLATFORMS = {
     'macosx': {},
     'macosx64': {},
     'win32': {},
-    'win64': {},
     'linux': {},
     'linux64' : {},
     'android': {},
-    'android-xul': {},
-    'linux-android': {},
+    'android-armv6': {},
+    'android-noion': {},
 }
 
 # work around path length problem bug 599795
@@ -74,65 +110,82 @@ PLATFORMS['macosx']['slave_platforms'] = ['leopard-o']
 PLATFORMS['macosx']['env_name'] = 'mac-perf'
 PLATFORMS['macosx']['leopard-o'] = {'name': "Rev3 MacOSX Leopard 10.5.8"}
 PLATFORMS['macosx']['stage_product'] = 'firefox'
-PLATFORMS['macosx']['mozharness_python'] = '/tools/buildbot/bin/python'
+PLATFORMS['macosx']['mozharness_config'] = {
+    'mozharness_python': '/tools/buildbot/bin/python',
+    'mozharness_repo': MOZHARNESS_REPO,
+    'hg_bin': 'hg',
+    'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,}
 
 PLATFORMS['macosx64']['slave_platforms'] = ['leopard', 'snowleopard',
-                                            'lion']
+                                            'lion', 'mountainlion']
 PLATFORMS['macosx64']['env_name'] = 'mac-perf'
 PLATFORMS['macosx64']['leopard'] = {'name': "Rev3 MacOSX Leopard 10.5.8"}
 PLATFORMS['macosx64']['snowleopard'] = {'name': "Rev4 MacOSX Snow Leopard 10.6"}
 PLATFORMS['macosx64']['lion'] = {'name': "Rev4 MacOSX Lion 10.7"}
+PLATFORMS['macosx64']['mountainlion'] = {'name': "Rev5 MacOSX Mountain Lion 10.8"}
 PLATFORMS['macosx64']['stage_product'] = 'firefox'
-PLATFORMS['macosx64']['mozharness_python'] = '/tools/buildbot/bin/python'
+PLATFORMS['macosx64']['mozharness_config'] = {
+    'mozharness_python': '/tools/buildbot/bin/python',
+    'mozharness_repo': MOZHARNESS_REPO,
+    'hg_bin': 'hg',
+    'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,
+}
 
 PLATFORMS['win32']['slave_platforms'] = ['xp', 'win7']
 PLATFORMS['win32']['env_name'] = 'win32-perf'
 PLATFORMS['win32']['xp'] = {'name': "Rev3 WINNT 5.1"}
 PLATFORMS['win32']['win7'] = {'name': "Rev3 WINNT 6.1"}
 PLATFORMS['win32']['stage_product'] = 'firefox'
-PLATFORMS['win32']['mozharness_python'] = ['c:/mozilla-build/python25/python', '-u']
-
-PLATFORMS['win64']['slave_platforms'] = ['w764']
-PLATFORMS['win64']['env_name'] = 'win64-perf'
-PLATFORMS['win64']['w764'] = {'name': "Rev3 WINNT 6.1 x64",
-                              'download_symbols': False,
-                             }
-PLATFORMS['win64']['stage_product'] = 'firefox'
-PLATFORMS['win64']['mozharness_python'] = ['c:/mozilla-build/python25/python', '-u']
+PLATFORMS['win32']['mozharness_config'] = {
+    'mozharness_python': ['c:/mozilla-build/python27/python', '-u'],
+    'mozharness_repo': MOZHARNESS_REPO,
+    'hg_bin': 'c:\\mozilla-build\\hg\\hg',
+    'reboot_command': ['c:/mozilla-build/python27/python', '-u'] + MOZHARNESS_REBOOT_CMD,
+}
 
 PLATFORMS['linux']['slave_platforms'] = ['fedora']
 PLATFORMS['linux']['env_name'] = 'linux-perf'
 PLATFORMS['linux']['fedora'] = {'name': "Rev3 Fedora 12"}
 PLATFORMS['linux']['stage_product'] = 'firefox'
-PLATFORMS['linux']['mozharness_python'] = '/tools/buildbot/bin/python'
+PLATFORMS['linux']['mozharness_config'] = {
+    'mozharness_python': '/tools/buildbot/bin/python',
+    'mozharness_repo': MOZHARNESS_REPO,    'hg_bin': 'hg',
+    'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,
+}
 
 PLATFORMS['linux64']['slave_platforms'] = ['fedora64']
 PLATFORMS['linux64']['env_name'] = 'linux-perf'
 PLATFORMS['linux64']['fedora64'] = {'name': "Rev3 Fedora 12x64"}
 PLATFORMS['linux64']['stage_product'] = 'firefox'
-PLATFORMS['linux64']['mozharness_python'] = '/tools/buildbot/bin/python'
+PLATFORMS['linux64']['mozharness_config'] = {
+    'mozharness_python': '/tools/buildbot/bin/python',
+    'mozharness_repo': MOZHARNESS_REPO,
+    'hg_bin': 'hg',
+    'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,
+}
 
-PLATFORMS['linux-android']['slave_platforms'] = ['tegra_android-o']
-PLATFORMS['linux-android']['env_name'] = 'android-perf'
-PLATFORMS['linux-android']['is_mobile'] = True
-PLATFORMS['linux-android']['tegra_android-o'] = {'name': "Android Tegra 250"}
-PLATFORMS['linux-android']['stage_platform'] = 'android'
-PLATFORMS['linux-android']['stage_product'] = 'mobile'
-PLATFORMS['linux-android']['mozharness_python'] = '/tools/buildbot/bin/python'
-
-PLATFORMS['android']['slave_platforms'] = ['tegra_android']
+PLATFORMS['android']['slave_platforms'] = ['tegra_android', 'panda_android']
 PLATFORMS['android']['env_name'] = 'android-perf'
 PLATFORMS['android']['is_mobile'] = True
 PLATFORMS['android']['tegra_android'] = {'name': "Android Tegra 250"}
+PLATFORMS['android']['panda_android'] = {'name': "Android 4.0 Panda"}
 PLATFORMS['android']['stage_product'] = 'mobile'
-PLATFORMS['android']['mozharness_python'] = '/tools/buildbot/bin/python'
+PLATFORMS['android']['mozharness_config'] = {}
 
-PLATFORMS['android-xul']['slave_platforms'] = ['tegra_android-xul']
-PLATFORMS['android-xul']['env_name'] = 'android-perf'
-PLATFORMS['android-xul']['is_mobile'] = True
-PLATFORMS['android-xul']['tegra_android-xul'] = {'name': "Android XUL Tegra 250"}
-PLATFORMS['android-xul']['stage_product'] = 'mobile'
-PLATFORMS['android-xul']['mozharness_python'] = '/tools/buildbot/bin/python'
+PLATFORMS['android-armv6']['slave_platforms'] = ['tegra_android-armv6']
+PLATFORMS['android-armv6']['env_name'] = 'android-perf'
+PLATFORMS['android-armv6']['is_mobile'] = True
+PLATFORMS['android-armv6']['tegra_android-armv6'] = {'name': "Android Armv6 Tegra 250"}
+PLATFORMS['android-armv6']['stage_product'] = 'mobile'
+PLATFORMS['android-armv6']['mozharness_config'] = {}
+
+PLATFORMS['android-noion']['slave_platforms'] = ['tegra_android-noion']
+PLATFORMS['android-noion']['env_name'] = 'android-perf'
+PLATFORMS['android-noion']['is_mobile'] = True
+PLATFORMS['android-noion']['tegra_android-noion'] = {'name': "Android no-ionmonkey Tegra 250"}
+PLATFORMS['android-noion']['stage_product'] = 'mobile'
+PLATFORMS['android-noion']['mozharness_python'] = '/tools/buildbot/bin/python'
+
 
 # Lets be explicit instead of magical.  leopard-o should be a second
 # entry in the SLAVE dict
@@ -143,10 +196,6 @@ for platform, platform_config in PLATFORMS.items():
             platform_config[slave_platform]['try_slaves'] = sorted(TRY_SLAVES[slave_platform])
         else:
             platform_config[slave_platform]['try_slaves'] = platform_config[slave_platform]['slaves']
-
-MOBILE_PLATFORMS = PLATFORMS['android']['slave_platforms'] + \
-                   PLATFORMS['android-xul']['slave_platforms'] + \
-                   PLATFORMS['linux-android']['slave_platforms']
 
 ALL_PLATFORMS = PLATFORMS['linux']['slave_platforms'] + \
                 PLATFORMS['linux64']['slave_platforms'] + \
@@ -163,34 +212,31 @@ NO_MAC = PLATFORMS['linux']['slave_platforms'] + \
 
 MAC_ONLY = PLATFORMS['macosx64']['slave_platforms']
 
-ANDROID = PLATFORMS['android']['slave_platforms'] + \
-          PLATFORMS['linux-android']['slave_platforms']
+ANDROID = PLATFORMS['android']['slave_platforms']
 
-ANDROID_NATIVE = PLATFORMS['android']['slave_platforms']
-
-ANDROID_XUL = PLATFORMS['linux-android']['slave_platforms']
+ANDROID_ARMV6 = PLATFORMS['android-armv6']['slave_platforms']
 
 ADDON_TESTER_PLATFORMS = ['win7', 'fedora', 'snowleopard']
 
 SUITES = {
     'chrome': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts_paint:tpaint:tdhtml:tsspider', '--mozAfterPaint'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:a11y:ts_paint:tpaint:tsspider', '--mozAfterPaint'],
         'options': ({}, NO_MAC),
     },
     # chrome_mac compared to chrome is that it does not contain a11y and only run on Mac
     'chrome_mac': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts_paint:tpaint:tdhtml:tsspider', '--mozAfterPaint'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll:ts_paint:tpaint:tsspider', '--mozAfterPaint'],
         'options': ({}, MAC_ONLY),
     },
     'nochrome': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml:tsspider', '--noChrome', '--mozAfterPaint'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tsspider', '--noChrome', '--mozAfterPaint'],
         'options': ({}, ALL_PLATFORMS),
     },
     'dirty': {
-        'enable_by_default': True,
+        'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'ts_places_generated_med:ts_places_generated_max', '--setPref', 'hangmonitor.timeout=0'],
         'options': (TALOS_DIRTY_OPTS, ALL_PLATFORMS),
     },
@@ -204,46 +250,36 @@ SUITES = {
         'suites': GRAPH_CONFIG + ['--activeTests', 'ts_cold:ts_cold_generated_min:ts_cold_generated_med:ts_cold_generated_max'],
         'options': (TALOS_DIRTY_OPTS, NO_WIN),
     },
-    'v8': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'v8'],
-        'options': ({}, ALL_PLATFORMS),
-    },
     'svg': {
         'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tsvg:tsvg_opacity'],
         'options': ({}, ALL_PLATFORMS),
     },
     'dromaeo': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'dromaeo_css:dromaeo_dom'],
-        'options': ({}, ALL_PLATFORMS),
-    },
-    'v8.2': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'v8.2', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'dromaeo_css:dromaeo_dom'],
         'options': ({}, ALL_PLATFORMS),
     },
     'chrome.2': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:a11y.2:ts_paint:tpaint:tdhtml.2:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:a11y.2:ts_paint:tpaint:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
         'options': ({}, NO_MAC),
     },
     # chrome_mac compared to chrome is that it does not contain a11y and only run on Mac
     'chrome_mac.2': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:ts_paint:tpaint:tdhtml.2:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tscroll.2:ts_paint:tpaint:tsspider.2', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
         'options': ({}, MAC_ONLY),
     },
     'nochrome.2': {
         'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml.2:tsspider.2', '--noChrome', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tsspider.2', '--noChrome', '--mozAfterPaint', '--ignoreFirst', '--sampleConfig', 'sample.2.config'],
         'options': ({}, ALL_PLATFORMS),
     },
     'xperf': {
         'enable_by_default': False,
-        'suites': ['--activeTests', 'ts_paint:tpaint', '--sampleConfig', 'xperf.config', '--setPref', 'dom.send_after_paint_to_content=true', '--xperf_path', '"c:/Program Files/Microsoft Windows Performance Toolkit/xperf.exe"'],
-        'options': ({}, WIN7_ONLY),
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tp5n', '--sampleConfig', 'xperf.config', '--mozAfterPaint', '--xperf_path', '"c:/Program Files/Microsoft Windows Performance Toolkit/xperf.exe"', '--filter', 'ignore_first:5', '--filter', 'median'],
+        'options': (TALOS_TP_NEW_OPTS, WIN7_ONLY),
     },
     'tprow': {
         'enable_by_default': False,
@@ -254,16 +290,6 @@ SUITES = {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tp5n', '--mozAfterPaint', '--responsiveness', '--filter', 'ignore_first:5', '--filter', 'median'],
         'options': (TALOS_TP_NEW_OPTS, ALL_PLATFORMS),
-    },
-    'chromer': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtmlr', '--mozAfterPaint', '--filter', 'ignore_first:5', '--filter', 'median'],
-        'options': ({}, ALL_PLATFORMS),
-    },
-    'nochromer': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtmlr', '--noChrome', '--mozAfterPaint', '--filter', 'ignore_first:5', '--filter', 'median'],
-        'options': ({}, ALL_PLATFORMS),
     },
     'other': {
         'enable_by_default': True,
@@ -276,14 +302,18 @@ SUITES = {
         'options': ({}, ALL_PLATFORMS),
     },
     'dirtypaint': {
-        'enable_by_default': False,
+        'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tspaint_places_generated_med:tspaint_places_generated_max', '--setPref', 'hangmonitor.timeout=0', '--mozAfterPaint'],
         'options': (TALOS_DIRTY_OPTS, ALL_PLATFORMS),
     },
-    #run in staging for a week to get a baseline of numbers, then merge in with the dromaeo suite
-    'jstests': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'sunspider:kraken:v8_7', '--mozAfterPaint'],
+    'dromaeojs': {
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'dromaeo_css:dromaeo_dom:kraken:v8_7'],
+        'options': ({}, ALL_PLATFORMS),
+    },
+    'chromez': {
+        'enable_by_default': True,
+        'suites': GRAPH_CONFIG + ['--activeTests', 'tresize', '--mozAfterPaint', '--filter', 'ignore_first:5', '--filter', 'median'],
         'options': ({}, ALL_PLATFORMS),
     },
 
@@ -291,11 +321,6 @@ SUITES = {
     'remote-ts': {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'ts', '--mozAfterPaint', '--noChrome'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
-    },
-    'remote-tdhtml': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tdhtml', '--noChrome'],
         'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
     'remote-tsvg': {
@@ -308,55 +333,30 @@ SUITES = {
         'suites': GRAPH_CONFIG + ['--activeTests', 'tsspider', '--noChrome'],
         'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
-    'remote-tpan': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tpan', '--noChrome'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_XUL),
-    },
     'remote-trobopan': {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'trobopan', '--noChrome', '--fennecIDs', '../fennec_ids.txt'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE),
+        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
     'remote-trobocheck': {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tcheckerboard', '--noChrome', '--fennecIDs', '../fennec_ids.txt'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE),
+        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
     'remote-troboprovider': {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tprovider', '--noChrome', '--fennecIDs', '../fennec_ids.txt'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE),
+        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
     'remote-trobocheck2': {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tcheck2', '--noChrome', '--fennecIDs', '../fennec_ids.txt'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE),
-    },
-    'remote-trobocheck3': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tcheck3', '--noChrome', '--fennecIDs', '../fennec_ids.txt'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE),
-    },
-    'remote-tp4m': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tp4m', '--rss'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_XUL),
+        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
     },
     'remote-tp4m_nochrome': {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tp4m', '--noChrome', '--rss'],
         'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID),
-    },
-    'remote-twinopen': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'twinopen'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_XUL),
-    },
-    'remote-tzoom': {
-        'enable_by_default': True,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tzoom'],
-        'options': (TALOS_REMOTE_FENNEC_OPTS, ANDROID_XUL),
     },
 }
 
@@ -369,20 +369,19 @@ BRANCH_UNITTEST_VARS = {
         'macosx': {},
         'macosx64': {},
         'win32': {},
-        'win64': {},
         'android': {},
-        'android-xul': {},
-        'linux-android': {},
+        'android-armv6': {},
+        'android-noion': {},
     },
 }
 
 # Default set of unit tests
 UNITTEST_SUITES = {
     'opt_unittest_suites': [
-        # Turn on chunks for mochitests
-        ('mochitests', dict(suite='mochitest-plain', chunkByDir=4, totalChunks=5)),
-        ('mochitest-other', ['mochitest-chrome', 'mochitest-browser-chrome',
-                             'mochitest-a11y', 'mochitest-ipcplugins']),
+        # Turn on chunks for mochitest
+        ('mochitest', dict(suite='mochitest-plain', chunkByDir=4, totalChunks=5)),
+        ('mochitest-browser-chrome', ['mochitest-browser-chrome']),
+        ('mochitest-other', ['mochitest-chrome', 'mochitest-a11y', 'mochitest-ipcplugins']),
         ('reftest', ['reftest']),
         ('crashtest', ['crashtest']),
         ('xpcshell', ['xpcshell']),
@@ -391,10 +390,10 @@ UNITTEST_SUITES = {
         #('mozmill-all', ['mozmill']),
     ],
     'debug_unittest_suites': [
-        # Turn on chunks for mochitests
-        ('mochitests', dict(suite='mochitest-plain', chunkByDir=4, totalChunks=5)),
-        ('mochitest-other', ['mochitest-chrome', 'mochitest-browser-chrome',
-                             'mochitest-a11y', 'mochitest-ipcplugins']),
+        # Turn on chunks for mochitest
+        ('mochitest', dict(suite='mochitest-plain', chunkByDir=4, totalChunks=5)),
+        ('mochitest-browser-chrome', ['mochitest-browser-chrome']),
+        ('mochitest-other', ['mochitest-chrome', 'mochitest-a11y', 'mochitest-ipcplugins']),
         ('reftest', ['reftest']),
         ('crashtest', ['crashtest']),
         ('xpcshell', ['xpcshell']),
@@ -405,7 +404,7 @@ UNITTEST_SUITES = {
     'mobile_unittest_suites': [
         # The disabled test suites are only disabled until we can get
         # to 100% green
-        #('mochitests', dict(suite='mochitest-plain', chunkByDir=4, totalChunks=5)),
+        #('mochitest', dict(suite='mochitest-plain', chunkByDir=4, totalChunks=5)),
         #('mochitest-other', ['mochitest-chrome', 'mochitest-a11y',
         #                     'mochitest-ipcplugins']),
         ('mobile-mochitest-browser-chrome', ['mobile-mochitest-browser-chrome']),
@@ -441,20 +440,20 @@ def addSuite(suiteGroupName, newSuiteName, suiteList):
     #     e.g. suiteGroup = ('reftest', ['reftest])
     newSuiteList = []
     added = False
-    for tuple in suiteList:
-        name, suites = tuple
+    for tup in suiteList:
+        name, suites = tup
         if suiteGroupName == name:
             suites.append(newSuiteName)
             added = True
         newSuiteList.append((name, suites))
 
     if not added:
-        newSuiteList.append((name, suites))
+        newSuiteList.append((suiteGroupName, [newSuiteName]))
 
     return newSuiteList
 
 def loadDefaultValues(BRANCHES, branch, branchConfig):
-    BRANCHES[branch]['repo_path'] = branchConfig.get('repo_path', 'projects/' + branch) 
+    BRANCHES[branch]['repo_path'] = branchConfig.get('repo_path', 'projects/' + branch)
     BRANCHES[branch]['branch_name'] = branchConfig.get('branch_name', branch.title())
     BRANCHES[branch]['mobile_branch_name'] = branchConfig.get('mobile_branch_name', branch.title())
     BRANCHES[branch]['build_branch'] = branchConfig.get('build_branch', branch.title())
@@ -474,7 +473,7 @@ def loadCustomTalosSuites(BRANCHES, SUITES, branch, branchConfig):
         for suite in SUITES.keys():
             branchConfig['talos_suites'][suite]  = 0
 
-    # Want to turn on/off a talos suite? Set it in the PROJECT_BRANCHES[branch]['talos_suites'] 
+    # Want to turn on/off a talos suite? Set it in the PROJECT_BRANCHES[branch]['talos_suites']
     # This is the default and will make all talosConfig.get(key,0) calls
     # to default to 0 a.k.a. disabled suite
     talosConfig = {}
@@ -533,130 +532,6 @@ def loadCustomUnittestSuites(BRANCHES, branch, branchConfig):
             addSuite( suiteGroupName=suiteToAdd[3], newSuiteName=suiteToAdd[4],
                       suiteList=BRANCHES[branch]['platforms'][suiteToAdd[0]][suiteToAdd[1]][type])
 
-ANDROID_XUL_UNITTEST_DICT = {
-    'opt_unittest_suites': [
-        ('mochitest-1', (
-            {'suite': 'mochitest-plain',
-             'testPaths': [
-                 'content/smil/test', 'content/xml/document/test',
-                 'content/xslt/tests/mochitest'
-             ]
-            },
-        )),
-        ('mochitest-2', (
-            {'suite': 'mochitest-plain',
-             'testPaths': [
-                 'dom/src/json/test', 'dom/src/jsurl/test',
-                 'dom/tests/mochitest/dom-level0', 'js'
-             ]
-            },
-        )),
-        ('mochitest-3', (
-            {'suite': 'mochitest-plain',
-             'testPaths': ['dom/tests/mochitest/dom-level1-core']
-            },
-        )),
-        ('mochitest-4', (
-            {'suite': 'mochitest-plain',
-             'testPaths': ['dom/tests/mochitest/dom-level2-core']
-            },
-        )),
-        ('mochitest-5', (
-            {'suite': 'mochitest-plain',
-             'testPaths': ['dom/tests/mochitest/ajax/mochikit',
-                           'dom/tests/mochitest/ajax/scriptaculous',
-                           'dom/tests/mochitest/ajax/jquery'],
-            },
-        )),
-        ('mochitest-6', (
-            {'suite': 'mochitest-plain',
-             'testPaths': ['dom/tests/mochitest/dom-level2-html'],
-            },
-        )),
-        ('mochitest-7', (
-            {'suite': 'mochitest-plain',
-             'testPaths': ['Harness_sanity',
-                           'editor/composer/test',
-                           'intl/uconv/tests',
-                           'dom/tests/mochitest/orientation',
-                           'dom/tests/mochitest/storageevent'],
-            },
-        )),
-        ('mochitest-8', (
-            {'suite': 'mochitest-plain',
-             'testPaths': ['layout/xul/test',
-                           'modules/libjar/test/mochitest',
-                           'layout/inspector/tests',
-                           'toolkit/xre/test',
-                           'toolkit/components/microformats/tests',
-                           'MochiKit-1.4.2/tests',
-                           'parser/htmlparser/tests/mochitest'],
-           },
-        )),
-# Disable browser-chrome for android-xul; bug 771421
-#        ('browser-chrome', (
-#            {'suite': 'mochitest-browser-chrome',
-#             'testPaths': ['mobile']
-#            },
-#        )),
-        ('reftest-1', (
-            {'suite': 'reftest',
-             'totalChunks': 3,
-             'thisChunk': 1,
-            },
-        )),
-        ('reftest-2', (
-            {'suite': 'reftest',
-             'totalChunks': 3,
-             'thisChunk': 2,
-            },
-        )),
-        ('reftest-3', (
-            {'suite': 'reftest',
-             'totalChunks': 3,
-             'thisChunk': 3,
-            },
-        )),
-        # disabled for constant timeouts, bug 728119
-        # ('crashtest-1', (
-        #     {'suite': 'crashtest',
-        #      'totalChunks': 3,
-        #      'thisChunk': 1,
-        #     },
-        # )),
-        ('crashtest-2', (
-            {'suite': 'crashtest',
-             'totalChunks': 3,
-             'thisChunk': 2,
-            },
-        )),
-        ('crashtest-3', (
-            {'suite': 'crashtest',
-             'totalChunks': 3,
-             'thisChunk': 3,
-            },
-        )),
-        ('jsreftest-1', (
-            {'suite': 'jsreftest',
-             'totalChunks': 3,
-             'thisChunk': 1,
-            },
-        )),
-        ('jsreftest-2', (
-            {'suite': 'jsreftest',
-             'totalChunks': 3,
-             'thisChunk': 2,
-            },
-        )),
-        ('jsreftest-3', (
-            {'suite': 'jsreftest',
-             'totalChunks': 3,
-             'thisChunk': 3,
-            },
-        )),
-    ],
-    'debug_unittest_suites': [],
-}
 ANDROID_UNITTEST_DICT = {
     'opt_unittest_suites': [
         ('mochitest-1', (
@@ -717,20 +592,26 @@ ANDROID_UNITTEST_DICT = {
         )),
         ('reftest-1', (
             {'suite': 'reftest',
-             'totalChunks': 3,
+             'totalChunks': 4,
              'thisChunk': 1,
             },
         )),
         ('reftest-2', (
             {'suite': 'reftest',
-             'totalChunks': 3,
+             'totalChunks': 4,
              'thisChunk': 2,
             },
         )),
         ('reftest-3', (
             {'suite': 'reftest',
-             'totalChunks': 3,
+             'totalChunks': 4,
              'thisChunk': 3,
+            },
+        )),
+        ('reftest-4', (
+            {'suite': 'reftest',
+             'totalChunks': 4,
+             'thisChunk': 4,
             },
         )),
         # disabled for constant timeouts, bug 728119
@@ -778,7 +659,73 @@ ANDROID_UNITTEST_DICT = {
     'debug_unittest_suites': [],
 }
 
-# You must define opt_unittest_suites when enable_opt_unittests is True for a 
+ANDROID_NOION_UNITTEST_DICT = {
+    'opt_unittest_suites': [],
+    'debug_unittest_suites': [],
+}
+for suite in ANDROID_UNITTEST_DICT['opt_unittest_suites']:
+    if not suite[0].startswith('jsreftest'):
+        continue
+    ANDROID_NOION_UNITTEST_DICT['opt_unittest_suites'].append(suite)
+
+ANDROID_ARMV6_UNITTEST_DICT = deepcopy(ANDROID_UNITTEST_DICT)
+
+ANDROID_PLAIN_UNITTEST_DICT = {
+    'opt_unittest_suites': [],
+    'debug_unittest_suites': [],
+}
+
+ANDROID_PLAIN_REFTEST_DICT = {
+    'opt_unittest_suites': [
+          ('plain-reftest-1', (
+            {'suite': 'reftestsmall',
+             'totalChunks': 4,
+             'thisChunk': 1,
+             'extra_args' : '--ignore-window-size'
+            },
+         )),
+         ('plain-reftest-2', (
+            {'suite': 'reftestsmall',
+             'totalChunks': 4,
+             'thisChunk': 2,
+             'extra_args' : '--ignore-window-size'
+            },
+         )),
+         ('plain-reftest-3', (
+            {'suite': 'reftestsmall',
+             'totalChunks': 4,
+             'thisChunk': 3,
+             'extra_args' : '--ignore-window-size'
+            },
+         )),
+         ('plain-reftest-4', (
+            {'suite': 'reftestsmall',
+             'totalChunks': 4,
+             'thisChunk': 4,
+             'extra_args' : '--ignore-window-size'
+            },
+         )),
+     ],
+}
+
+
+for suite in ANDROID_UNITTEST_DICT['opt_unittest_suites']:
+    if suite[0].startswith('reftest'):
+        continue
+    ANDROID_PLAIN_UNITTEST_DICT['opt_unittest_suites'].append(suite)
+
+for suite in ANDROID_PLAIN_REFTEST_DICT['opt_unittest_suites']:
+    ANDROID_PLAIN_UNITTEST_DICT['opt_unittest_suites'].append(suite)
+ANDROID_PANDA_UNITTEST_DICT = {
+    'opt_unittest_suites': [],
+    'debug_unittest_suites': [],
+}
+for suite in ANDROID_PLAIN_UNITTEST_DICT['opt_unittest_suites']:
+    if suite[0].startswith('reftest') or suite[0].startswith('plain-reftest'):
+        continue
+    ANDROID_PANDA_UNITTEST_DICT['opt_unittest_suites'].append(suite)
+
+# You must define opt_unittest_suites when enable_opt_unittests is True for a
 # platform. Likewise debug_unittest_suites for enable_debug_unittests
 PLATFORM_UNITTEST_VARS = {
         'linux': {
@@ -833,20 +780,6 @@ PLATFORM_UNITTEST_VARS = {
                 'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
             }
         },
-        'win64': {
-            'product_name': 'firefox',
-            'app_name': 'browser',
-            'brand_name': 'Minefield',
-            'builds_before_reboot': 1,
-            'download_symbols': False,
-            'enable_opt_unittests': False,
-            # We can't yet run unit tests on debug builds - see bug 562459
-            'enable_debug_unittests': False,
-            'w764': {
-                'opt_unittest_suites' : UNITTEST_SUITES['opt_unittest_suites'][:],
-                'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
-            },
-        },
         'macosx': {
             'product_name': 'firefox',
             'app_name': 'browser',
@@ -878,39 +811,44 @@ PLATFORM_UNITTEST_VARS = {
                 'opt_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['opt_unittest_suites'][:]),
                 'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
             },
+             'mountainlion': {
+                'opt_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['opt_unittest_suites'][:]),
+                'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
+            },
         },
         'android': {
             'product_name': 'fennec',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'is_remote': True,
-            'host_utils_url': 'http://bm-remote.build.mozilla.org/tegra/tegra-host-utils.742597.zip',
+            'host_utils_url': 'http://bm-remote.build.mozilla.org/tegra/tegra-host-utils.%%(foopy_type)s.742597.zip',
             'enable_opt_unittests': True,
             'enable_debug_unittests': False,
             'remote_extras': ANDROID_UNITTEST_REMOTE_EXTRAS,
-            'tegra_android': deepcopy(ANDROID_UNITTEST_DICT),
+            'tegra_android': deepcopy(ANDROID_PLAIN_UNITTEST_DICT),
+            'panda_android': deepcopy(ANDROID_PANDA_UNITTEST_DICT),
         },
-        'android-xul': {
+        'android-armv6': {
             'product_name': 'fennec',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'is_remote': True,
-            'host_utils_url': 'http://bm-remote.build.mozilla.org/tegra/tegra-host-utils.742597.zip',
+            'host_utils_url': 'http://bm-remote.build.mozilla.org/tegra/tegra-host-utils.%%(foopy_type)s.742597.zip',
             'enable_opt_unittests': True,
             'enable_debug_unittests': False,
-            'remote_extras': UNITTEST_REMOTE_EXTRAS,
-            'tegra_android-xul': deepcopy(ANDROID_XUL_UNITTEST_DICT),
+            'remote_extras': ANDROID_UNITTEST_REMOTE_EXTRAS,
+            'tegra_android-armv6': deepcopy(ANDROID_ARMV6_UNITTEST_DICT),
         },
-        'linux-android': {
+        'android-noion': {
             'product_name': 'fennec',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'is_remote': True,
-            'host_utils_url': 'http://bm-remote.build.mozilla.org/tegra/tegra-host-utils.742597.zip',
+            'host_utils_url': 'http://bm-remote.build.mozilla.org/tegra/tegra-host-utils.%%(foopy_type)s.742597.zip',
             'enable_opt_unittests': True,
             'enable_debug_unittests': False,
-            'remote_extras': UNITTEST_REMOTE_EXTRAS,
-            'tegra_android-o': deepcopy(ANDROID_XUL_UNITTEST_DICT),
+            'remote_extras': ANDROID_UNITTEST_REMOTE_EXTRAS,
+            'tegra_android-noion': deepcopy(ANDROID_NOION_UNITTEST_DICT),
         },
 }
 
@@ -921,8 +859,10 @@ for branch in ACTIVE_PROJECT_BRANCHES:
 # Copy unittest vars in first, then platform vars
 for branch in BRANCHES.keys():
     for key, value in GLOBAL_VARS.items():
-        # Don't override platforms if it's set
-        if key == 'platforms' and 'platforms' in BRANCHES[branch]:
+        # In order to have things ride the trains we need to be able to
+        # override "global" things. Therefore, we shouldn't override anything
+        # that's already been set.
+        if key in BRANCHES[branch]:
             continue
         BRANCHES[branch][key] = deepcopy(value)
 
@@ -956,7 +896,7 @@ for branch in BRANCHES.keys():
                         BRANCHES[branch]['platforms'][platform][key] = value
             else:
                 BRANCHES[branch][key] = deepcopy(value)
- 
+
     # Merge in any project branch config for platforms
     if branch in ACTIVE_PROJECT_BRANCHES and PROJECT_BRANCHES[branch].has_key('platforms'):
         for platform, platform_config in PROJECT_BRANCHES[branch]['platforms'].items():
@@ -980,17 +920,16 @@ PROJECTS = {
     'jetpack': {
         'branches': ['mozilla-central', 'mozilla-aurora', 'mozilla-beta', 'mozilla-release'],
         'platforms': {
-            'w764': {'ext':'win64-x86_64.zip', 'debug':True}, 
-            'fedora64': {'ext':'linux-x86_64.tar.bz2', 'debug':True}, 
-            'fedora':{'ext':'linux-i686.tar.bz2', 'debug':True}, 
-            'leopard':{'ext':'(mac|mac64).dmg', 'debug':True}, 
+            'fedora64': {'ext':'linux-x86_64.tar.bz2', 'debug':True},
+            'fedora':{'ext':'linux-i686.tar.bz2', 'debug':True},
             'snowleopard':{'ext':'(mac|mac64).dmg', 'debug':True},
             'lion':{'ext':'(mac|mac64).dmg', 'debug':True},
+            'mountainlion':{'ext':'(mac|mac64).dmg', 'debug':True},
             'xp':{
                 'ext':'win32.zip',
                 'env':PLATFORM_UNITTEST_VARS['win32']['env_name'],
                 'debug':True,
-                }, 
+                },
             'win7':{
                 'ext':'win32.zip',
                 'env':PLATFORM_UNITTEST_VARS['win32']['env_name'],
@@ -1027,10 +966,6 @@ for branch in BRANCHES.keys():
     BRANCHES[branch]['fetch_symbols'] = True
     BRANCHES[branch]['fetch_release_symbols'] = False
     BRANCHES[branch]['talos_from_source_code'] = True
-    if BRANCHES[branch].has_key('release_branch'):
-        BRANCHES[branch]['release_tests'] = 5
-        BRANCHES[branch]['repo_path'] = "releases/%s" % branch
-        BRANCHES[branch]['platforms']['linux']['enable_mobile_unittests'] = True
     BRANCHES[branch]['support_url_base'] = 'http://build.mozilla.org/talos'
     loadTalosSuites(BRANCHES, SUITES, branch)
     BRANCHES[branch]['pgo_strategy'] = None
@@ -1045,61 +980,24 @@ BRANCHES['mozilla-central']['mobile_branch_name'] = "Mobile"
 BRANCHES['mozilla-central']['mobile_talos_branch'] = "mobile"
 BRANCHES['mozilla-central']['build_branch'] = "1.9.2"
 BRANCHES['mozilla-central']['pgo_strategy'] = 'periodic'
-# Let's add win64 tests only for mozilla-central until we have enough capacity - see bug 667024
-# XXX hacking warning - this code could get out of date easily
-BRANCHES['mozilla-central']['platforms']['win64']['enable_opt_unittests'] = True
-for suite in SUITES.keys():
-    options = SUITES[suite]['options']
-    if options[1] == ALL_PLATFORMS:
-        options = (options[0], ALL_PLATFORMS + PLATFORMS['win64']['slave_platforms'])
-    if options[1] == NO_MAC:
-        options = (options[0], NO_MAC + PLATFORMS['win64']['slave_platforms'])
-    if not SUITES[suite]['enable_by_default']:
-        # Suites that are turned off by default
-        BRANCHES['mozilla-central'][suite + '_tests'] = (0, True) + options
-    else:
-        # Suites that are turned on by default
-        BRANCHES['mozilla-central'][suite + '_tests'] = (1, True) + options
 BRANCHES['mozilla-central']['platforms']['android']['enable_debug_unittests'] = True
-BRANCHES['mozilla-central']['xperf_tests'] = (1, True, {}, WIN7_ONLY)
+BRANCHES['mozilla-central']['xperf_tests'] = (1, True, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 
-# Side by side staging on m-c only
-BRANCHES['mozilla-central']['dirtypaint_tests'] = (1, True, TALOS_DIRTY_OPTS, ALL_PLATFORMS)
-BRANCHES['mozilla-central']['jstests_tests'] = (1, True, {}, ALL_PLATFORMS)
-
-# pgo-strategy
-BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
-BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
+######### mozilla-release
+BRANCHES['mozilla-release']['release_tests'] = 5
+BRANCHES['mozilla-release']['repo_path'] = "releases/mozilla-release"
+BRANCHES['mozilla-release']['platforms']['linux']['enable_mobile_unittests'] = True
 BRANCHES['mozilla-release']['pgo_strategy'] = 'per-checkin'
 
-#### MERGE DAY - EXCEPTIONS
-# When Firefox 16 is on mozilla-beta we can remove these
-# Firefox 16/beta
-BRANCHES['mozilla-beta']['chrome.2_tests'] = (1, True, {}, NO_MAC)
-BRANCHES['mozilla-beta']['chrome_mac.2_tests'] = (1, True, {}, MAC_ONLY)
-BRANCHES['mozilla-beta']['nochrome.2_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-beta']['tprow_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
-BRANCHES['mozilla-beta']['svg_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-beta']['chromer_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-beta']['other_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-beta']['nochromer_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-beta']['svgr_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-beta']['tpn_tests'] = (0, True, TALOS_TP_NEW_OPTS, ALL_PLATFORMS)
-# end Firefox 16/beta
+######### mozilla-beta
+BRANCHES['mozilla-beta']['release_tests'] = 5
+BRANCHES['mozilla-beta']['repo_path'] = "releases/mozilla-beta"
+BRANCHES['mozilla-beta']['platforms']['linux']['enable_mobile_unittests'] = True
+BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
 
-# Firefox 16/release
-BRANCHES['mozilla-release']['chrome.2_tests'] = (1, True, {}, NO_MAC)
-BRANCHES['mozilla-release']['chrome_mac.2_tests'] = (1, True, {}, MAC_ONLY)
-BRANCHES['mozilla-release']['nochrome.2_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['tprow_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['svg_tests'] = (1, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['chromer_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['other_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['nochromer_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['svgr_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-release']['tpn_tests'] = (0, True, TALOS_TP_NEW_OPTS, ALL_PLATFORMS)
-# end Firefox 16/release
-#### END OF MERGE DAY - EXCEPTIONS
+######### mozilla-aurora
+BRANCHES['mozilla-aurora']['repo_path'] = "releases/mozilla-aurora"
+BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
 
 ######## mozilla-esr10
 BRANCHES['mozilla-esr10']['pgo_strategy'] = 'per-checkin'
@@ -1107,22 +1005,39 @@ BRANCHES['mozilla-esr10']['talos_from_source_code'] = False
 BRANCHES['mozilla-esr10']['tpn_tests'] = (0, True, TALOS_TP_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-esr10']['svgr_tests'] = (0, True, TALOS_TP_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-esr10']['other_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-esr10']['nochromer_tests'] = (0, True, {}, ALL_PLATFORMS)
-BRANCHES['mozilla-esr10']['chromer_tests'] = (0, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['chromez_tests'] = (0, True, {}, ALL_PLATFORMS)
 BRANCHES['mozilla-esr10']['tp_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-esr10']['svg_tests'] = (1, True, TALOS_TP_OPTS, ALL_PLATFORMS)
 BRANCHES['mozilla-esr10']['chrome_tests'] = (1, True, {}, NO_MAC)
 BRANCHES['mozilla-esr10']['chrome_mac_tests'] = (1, True, {}, MAC_ONLY)
 BRANCHES['mozilla-esr10']['nochrome_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['dirtypaint_tests'] = (0, True, TALOS_DIRTY_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['dirty_tests'] = (1, True, TALOS_DIRTY_OPTS, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['dromaeojs_tests'] = (0, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['dromaeo_tests'] = (1, True, {}, ALL_PLATFORMS)
+BRANCHES['mozilla-esr10']['release_tests'] = 5
+BRANCHES['mozilla-esr10']['repo_path'] = "releases/mozilla-esr10"
+del BRANCHES['mozilla-esr10']['platforms']['macosx64']['mountainlion']
+BRANCHES['mozilla-esr10']['platforms']['macosx64']['slave_platforms'] = ['leopard', 'snowleopard', 'lion']
+
+######### mozilla-esr17
+BRANCHES['mozilla-esr17']['release_tests'] = 5
+BRANCHES['mozilla-esr17']['repo_path'] = "releases/mozilla-esr17"
+BRANCHES['mozilla-esr17']['pgo_strategy'] = 'per-checkin'
+
+######### mozilla-b2g18
+BRANCHES['mozilla-b2g18']['release_tests'] = 5
+BRANCHES['mozilla-b2g18']['repo_path'] = "releases/mozilla-b2g18"
+BRANCHES['mozilla-b2g18']['pgo_strategy'] = 'per-checkin'
 
 ######## try
-BRANCHES['try']['xperf_tests'] = (1, False, {}, WIN7_ONLY)
-BRANCHES['try']['remote-trobocheck3_tests'] = (1, False, TALOS_REMOTE_FENNEC_OPTS, ANDROID_NATIVE)
+BRANCHES['try']['xperf_tests'] = (1, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 BRANCHES['try']['platforms']['android']['enable_debug_unittests'] = True
 BRANCHES['try']['pgo_strategy'] = 'try'
+BRANCHES['try']['enable_try'] = True
 
 # Let's load jetpack for the following branches:
-for branch in ('mozilla-central', 'mozilla-aurora', 'try', 'mozilla-inbound', ):
+for branch in ('mozilla-central', 'mozilla-aurora', 'try', 'mozilla-inbound', 'ionmonkey', 'birch', ):
     for pf in PLATFORMS:
         if 'android' in pf:
             continue
@@ -1139,36 +1054,106 @@ for branch in ('mozilla-central', 'mozilla-aurora', 'try', 'mozilla-inbound', ):
             BRANCHES[branch]['platforms'][pf][slave_pf]['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
             BRANCHES[branch]['platforms'][pf][slave_pf]['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
 
-# Let's load peptest for the following branches:
-for branch in ('mozilla-central', 'mozilla-inbound', 'try', ):
+
+#-------------------------------------------------------------------------
+# MERGE day - Load reftests small for m-c based branches and exclude them for the rest
+#-------------------------------------------------------------------------
+for branch in ('mozilla-aurora', 'mozilla-beta', 'mozilla-release'):
+    BRANCHES[branch]["platforms"]["android"]["panda_android"]["opt_unittest_suites"] = deepcopy(ANDROID_UNITTEST_DICT["opt_unittest_suites"])
+    BRANCHES[branch]["platforms"]["android"]["tegra_android"]["opt_unittest_suites"] = deepcopy(ANDROID_UNITTEST_DICT["opt_unittest_suites"])
+#-------------------------------------------------------------------------
+# End Load reftests small for m-c based branches and exclude them for the rest
+#-------------------------------------------------------------------------
+
+
+#exclude android builds from running on non-cedar branches on pandas
+for branch in BRANCHES.keys():
+    if 'android' in BRANCHES[branch]['platforms'] and branch not in ("cedar","mozilla-central", "try", "mozilla-inbound") :
+        del BRANCHES[branch]['platforms']['android']['panda_android']
+        BRANCHES[branch]['platforms']['android']['slave_platforms'] = ['tegra_android']
+
+# Let's load Marionette for the following branches:
+for branch in ('mozilla-central', 'mozilla-inbound', 'try', 'fx-team', 'services-central', ):
     for pf in PLATFORMS:
         if 'android' in pf:
+            # this is just for desktop Firefox
             continue
-        hg_bin = 'hg'
-        if pf.startswith("win"):
-            hg_bin = 'c:\\mozilla-build\\hg\\hg'
-        if isinstance(PLATFORMS[pf]['mozharness_python'], list):
-            reboot_command = PLATFORMS[pf]['mozharness_python'][:]
-        else:
-            reboot_command = [PLATFORMS[pf]['mozharness_python']]
-        reboot_command.extend(['build/tools/buildfarm/maintenance/count_and_reboot.py',
-                               '-f', '../reboot_count.txt',
-                               '-n', '1', '-z'])
+        config_file = "marionette/prod_config.py"
+        if pf.startswith('win'):
+            if branch != 'try':
+                # for now, only run windows tests on try because of bug 795513
+                continue
+            config_file = "marionette/windows_config.py"
         for slave_pf in PLATFORMS[pf]['slave_platforms']:
-            config_file = "peptest/prod_config.py"
-            if pf == "macosx" and slave_pf == "leopard-o":
+            if pf == "macosx" and slave_pf in ("leopard-o", "leopard"):
+                # we don't run on OSX 10.5
+                continue
+            # Marionette is only enabled on debug builds
+            BRANCHES[branch]['platforms'][pf][slave_pf]['debug_unittest_suites'] += [('marionette',
+                { 'suite': 'marionette',
+                  'mozharness_repo': PLATFORMS[pf]['mozharness_config']['mozharness_repo'],
+                  'script_path': 'scripts/marionette.py',
+                  'extra_args': [
+                      "--cfg", config_file
+                  ],
+                  'reboot_command': PLATFORMS[pf]['mozharness_config']['reboot_command'],
+                  'hg_bin': PLATFORMS[pf]['mozharness_config']['hg_bin'],
+                })]
+
+### start of mozharness desktop unittests
+mozharness_unittest_suites = [
+    {'suite_name': 'mochitest-1', 'suite_category': 'mochitest', 'sub_categories': ['plain1']},
+    {'suite_name': 'mochitest-2', 'suite_category': 'mochitest', 'sub_categories': ['plain2']},
+    {'suite_name': 'mochitest-3', 'suite_category': 'mochitest', 'sub_categories': ['plain3']},
+    {'suite_name': 'mochitest-4', 'suite_category': 'mochitest', 'sub_categories': ['plain4']},
+    {'suite_name': 'mochitest-5', 'suite_category': 'mochitest', 'sub_categories': ['plain5']},
+    {'suite_name': 'mochitest-browser-chrome', 'suite_category': 'mochitest', 'sub_categories':
+        ['browser-chrome']},
+    {'suite_name': 'mochitest-other', 'suite_category': 'mochitest', 'sub_categories':
+        ['chrome', 'a11y', 'plugins']},
+    {'suite_name': 'reftest', 'suite_category': 'reftest', 'sub_categories': ['reftest']},
+    {'suite_name': 'jsreftest', 'suite_category': 'reftest', 'sub_categories': ['jsreftest']},
+    {'suite_name': 'crashtest', 'suite_category': 'reftest', 'sub_categories': ['crashtest']},
+    {'suite_name': 'xpcshell', 'suite_category': 'xpcshell', 'sub_categories': ['xpcshell']}
+]
+for branch in BRANCHES:
+    if BRANCHES[branch].get('mozharness_unittests'):
+        for pf in PLATFORMS:
+            hg_bin = 'hg'
+            if 'android' in pf:
                 continue
             if pf.startswith("win"):
-                config_file = "peptest/windows_config.py"
-            BRANCHES[branch]['platforms'][pf][slave_pf]['opt_unittest_suites'] += [('peptest', {'suite': 'peptest',
-                'mozharness_repo': MOZHARNESS_REPO,
-                'script_path': 'scripts/peptest.py',
-                'extra_args': [
-                    "--cfg", config_file
-                ],
-                'reboot_command': reboot_command,
-                'hg_bin': hg_bin,
-            })]
+                config_file = "unittests/win_unittest.py"
+            elif pf.startswith("mac"):
+                config_file = "unittests/mac_unittest.py"
+            else:
+                config_file = "unittests/linux_unittest.py"
+            for slave_pf in PLATFORMS[pf]['slave_platforms']:
+                if pf == "macosx" and slave_pf == "leopard-o":
+                    continue
+                for testtype in ("opt", "debug"):
+                    if not BRANCHES[branch]['platforms'][pf][slave_pf]['%s_unittest_suites' % testtype]:
+                        continue
+                    BRANCHES[branch]['platforms'][pf][slave_pf]['%s_unittest_suites' % testtype] = []
+                    for suite in mozharness_unittest_suites:
+                        extra_args = ["--cfg", config_file]
+                        for sub_category in suite['sub_categories']:
+                            extra_args += ["--%s-suite" % suite['suite_category'], sub_category]
+                        if BRANCHES[branch]['fetch_symbols'] and BRANCHES[branch]['platforms'][pf][slave_pf].get('download_symbols', True):
+                            if testtype == "debug":
+                                extra_args += ["--download-symbols", "true"]
+                            else:
+                                extra_args += ["--download-symbols", "ondemand"]
+                        BRANCHES[branch]['platforms'][pf][slave_pf]['%s_unittest_suites' % testtype] += [
+                            (suite['suite_name'], {
+                                'mozharness_repo': PLATFORMS[pf]['mozharness_config']['mozharness_repo'],
+                                'script_path': 'scripts/desktop_unittest.py',
+                                'extra_args': extra_args,
+                                'reboot_command': PLATFORMS[pf]['mozharness_config']['reboot_command'],
+                                'hg_bin': PLATFORMS[pf]['mozharness_config']['hg_bin'],
+                                'script_maxtime': 7200,
+                            })]
+###################### END OF MOZHARNESS UNITTEST CONFIGS
 
 ######## generic branch variables for project branches
 for projectBranch in ACTIVE_PROJECT_BRANCHES:
@@ -1178,20 +1163,37 @@ for projectBranch in ACTIVE_PROJECT_BRANCHES:
     loadCustomUnittestSuites(BRANCHES, projectBranch, branchConfig)
 
 #-------------------------------------------------------------------------
-# Delete all references to linux-android when mozilla-esr10 is retired.
+# MERGE day - disable leopard tests for FF17 onwards
 #-------------------------------------------------------------------------
-LINUX_ANDROID_BRANCHES = ('mozilla-esr10',)
-for branch in BRANCHES.keys():
-    if branch in LINUX_ANDROID_BRANCHES:
-        for p in ('android', 'android-xul'):
-            if p in BRANCHES[branch]['platforms']:
-                del BRANCHES[branch]['platforms'][p]
-    else:
-        if 'linux-android' in BRANCHES[branch]['platforms']:
-            del BRANCHES[branch]['platforms']['linux-android']
+for branch in ['mozilla-central', 'try', 'mozilla-aurora', 'mozilla-beta', 'mozilla-release',
+    'mozilla-esr17', 'mozilla-b2g18'] + ACTIVE_PROJECT_BRANCHES:
+    if 'macosx' in BRANCHES[branch]['platforms']:
+        del BRANCHES[branch]['platforms']['macosx']
+    if 'macosx64' in BRANCHES[branch]['platforms']:
+        del BRANCHES[branch]['platforms']['macosx64']['leopard']
+        BRANCHES[branch]['platforms']['macosx64']['slave_platforms'] = ['snowleopard', 'lion', 'mountainlion']
 #-------------------------------------------------------------------------
-# End Android native hacks.
+# End disable leopard tests for FF17 onwards
 #-------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
+# MERGE day - only enable android-armv6 tests for FF16 onwards
+# Delete whole block when we drop esr10
+#-------------------------------------------------------------------------
+for branch in ['mozilla-esr10']:
+    if 'android-armv6' in BRANCHES[branch]['platforms']:
+        del BRANCHES[branch]['platforms']['android-armv6']
+#-------------------------------------------------------------------------
+# End enable android-armv6 tests for FF16 onwards
+#-------------------------------------------------------------------------
+
+# XXX Bug 789373 hack - add android-noion until we have b2g testing
+# Delete all references to android-noion once we have b2g jsreftests not in an emulator.
+for branch in BRANCHES:
+    if branch not in ('mozilla-central', 'mozilla-inbound', 'mozilla-b2g18', 'try'):
+        if 'android-noion' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['android-noion']
+
 
 if __name__ == "__main__":
     import sys, pprint, re

@@ -1,8 +1,7 @@
 from copy import deepcopy
 
-from config import BRANCH_UNITTEST_VARS, MOZHARNESS_REPO
-from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS, GRAPH_CONFIG, \
-                        PLATFORM_VARS
+from config import BRANCH_UNITTEST_VARS
+from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS
 
 import thunderbird_localconfig
 reload(thunderbird_localconfig)
@@ -12,8 +11,6 @@ BRANCH_UNITTEST_VARS = deepcopy(BRANCH_UNITTEST_VARS)
 
 GLOBAL_VARS['stage_username'] = 'tbirdbld'
 GLOBAL_VARS.update(thunderbird_localconfig.GLOBAL_VARS.copy())
-
-BRANCH_UNITTEST_VARS
 
 BRANCHES = {
     'comm-central': {
@@ -26,6 +23,8 @@ BRANCHES = {
     },
     'comm-esr10': {
     },
+    'comm-esr17': {
+    },
     'try-comm-central': {
       'coallesce_jobs': False
     },
@@ -35,7 +34,6 @@ PLATFORMS = {
     'macosx': {},
     'macosx64': {},
     'win32': {},
-    'win64': {},
     'linux': {},
     'linux64' : {},
 }
@@ -51,11 +49,12 @@ PLATFORMS['macosx']['stage_product'] = 'thunderbird'
 PLATFORMS['macosx']['mozharness_python'] = '/tools/buildbot/bin/python'
 
 PLATFORMS['macosx64']['slave_platforms'] = ['leopard', 'snowleopard',
-                                            'lion']
+                                            'lion', 'mountainlion']
 PLATFORMS['macosx64']['env_name'] = 'mac-perf'
 PLATFORMS['macosx64']['leopard'] = {'name': builder_prefix + "Rev3 MacOSX Leopard 10.5.8"}
 PLATFORMS['macosx64']['snowleopard'] = {'name': builder_prefix + "Rev4 MacOSX Snow Leopard 10.6"}
 PLATFORMS['macosx64']['lion'] = {'name': builder_prefix + "Rev4 MacOSX Lion 10.7"}
+PLATFORMS['macosx64']['mountainlion'] = {'name': builder_prefix + "Rev5 MacOSX Mountain Lion 10.8"}
 PLATFORMS['macosx64']['stage_product'] = 'thunderbird'
 PLATFORMS['macosx64']['mozharness_python'] = '/tools/buildbot/bin/python'
 
@@ -65,14 +64,6 @@ PLATFORMS['win32']['xp'] = {'name': builder_prefix + "Rev3 WINNT 5.1"}
 PLATFORMS['win32']['win7'] = {'name': builder_prefix + "Rev3 WINNT 6.1"}
 PLATFORMS['win32']['stage_product'] = 'thunderbird'
 PLATFORMS['win32']['mozharness_python'] = ['c:/mozilla-build/python25/python', '-u']
-
-PLATFORMS['win64']['slave_platforms'] = ['w764']
-PLATFORMS['win64']['env_name'] = 'win64-perf'
-PLATFORMS['win64']['w764'] = {'name': builder_prefix + "Rev3 WINNT 6.1 x64",
-                              'download_symbols': False,
-                             }
-PLATFORMS['win64']['stage_product'] = 'thunderbird'
-PLATFORMS['win64']['mozharness_python'] = ['c:/mozilla-build/python25/python', '-u']
 
 PLATFORMS['linux']['slave_platforms'] = ['fedora']
 PLATFORMS['linux']['env_name'] = 'linux-perf'
@@ -145,7 +136,6 @@ BRANCH_UNITTEST_VARS = {
         'macosx': {},
         'macosx64': {},
         'win32': {},
-        'win64': {},
     },
 }
 
@@ -278,20 +268,6 @@ PLATFORM_UNITTEST_VARS = {
                 'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
             }
         },
-        'win64': {
-            'product_name': 'thunderbird',
-            'app_name': 'mail',
-            'brand_name': 'Daily',
-            'builds_before_reboot': 1,
-            'download_symbols': False,
-            'enable_opt_unittests': False,
-            # We can't yet run unit tests on debug builds - see bug 562459
-            'enable_debug_unittests': False,
-            'w764': {
-                'opt_unittest_suites' : UNITTEST_SUITES['opt_unittest_suites'][:],
-                'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
-            },
-        },
         'macosx': {
             'product_name': 'thunderbird',
             'app_name': 'mail',
@@ -320,6 +296,10 @@ PLATFORM_UNITTEST_VARS = {
                 'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
             },
             'lion': {
+                'opt_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['opt_unittest_suites'][:]),
+                'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
+            },
+            'mountainlion': {
                 'opt_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['opt_unittest_suites'][:]),
                 'debug_unittest_suites' : removeSuite('mochitest-a11y', UNITTEST_SUITES['debug_unittest_suites'][:]),
             },
@@ -402,9 +382,6 @@ for branch in BRANCHES.keys():
     BRANCHES[branch]['enable_unittests'] = True
     BRANCHES[branch]['fetch_symbols'] = True
     BRANCHES[branch]['fetch_release_symbols'] = False
-    if BRANCHES[branch].has_key('release_branch'):
-        BRANCHES[branch]['release_tests'] = 5
-        BRANCHES[branch]['repo_path'] = "releases/%s" % branch
     BRANCHES[branch]['pgo_strategy'] = None
     BRANCHES[branch]['pgo_platforms'] = []
 
@@ -415,36 +392,59 @@ BRANCHES['comm-central']['branch_name'] = "Thunderbird"
 BRANCHES['comm-central']['repo_path'] = "comm-central"
 #BRANCHES['comm-central']['build_branch'] = "1.9.2"
 BRANCHES['comm-central']['pgo_strategy'] = None
-# Let's add win64 tests only for comm-central until we have enough capacity - see bug 667024
-# XXX hacking warning - this code could get out of date easily
-BRANCHES['comm-central']['platforms']['win64']['enable_opt_unittests'] = True
-for suite in SUITES.keys():
-    options = SUITES[suite]['options']
-    if options[1] == ALL_PLATFORMS:
-        options = (options[0], ALL_PLATFORMS + PLATFORMS['win64']['slave_platforms'])
-    if options[1] == NO_MAC:
-        options = (options[0], NO_MAC + PLATFORMS['win64']['slave_platforms'])
-    if not SUITES[suite]['enable_by_default']:
-        # Suites that are turned off by default
-        BRANCHES['comm-central'][suite + '_tests'] = (0, True) + options
-    else:
-        # Suites that are turned on by default
-        BRANCHES['comm-central'][suite + '_tests'] = (1, True) + options
 
 ######## comm-release
 BRANCHES['comm-release']['pgo_strategy'] = None
+BRANCHES['comm-release']['repo_path'] = "releases/comm-release"
 
 ######## comm-beta
 BRANCHES['comm-beta']['pgo_strategy'] = None
+BRANCHES['comm-beta']['repo_path'] = "releases/comm-beta"
 
 ######## comm-aurora
 BRANCHES['comm-aurora']['pgo_strategy'] = None
+BRANCHES['comm-aurora']['repo_path'] = "releases/comm-aurora"
 
 ######## comm-esr10
 BRANCHES['comm-esr10']['pgo_strategy'] = None
+BRANCHES['comm-esr10']['repo_path'] = "releases/comm-esr10"
+
+######## comm-esr17
+BRANCHES['comm-esr17']['pgo_strategy'] = None
+BRANCHES['comm-esr17']['repo_path'] = "releases/comm-esr17"
+
+######## try
+BRANCHES['try-comm-central']['enable_try'] = True
+
+#-------------------------------------------------------------------------
+# MERGE day - disable leopard tests for TB17 onwards
+#-------------------------------------------------------------------------
+for branch in ['comm-central', 'try-comm-central', 'comm-aurora', 'comm-beta', 'comm-release', 'comm-esr17']:
+    if 'macosx' in BRANCHES[branch]['platforms']:
+        del BRANCHES[branch]['platforms']['macosx']
+    if 'macosx64' in BRANCHES[branch]['platforms']:
+        del BRANCHES[branch]['platforms']['macosx64']['leopard']
+        BRANCHES[branch]['platforms']['macosx64']['slave_platforms'] = ['snowleopard', 'lion', 'mountainlion']
+#-------------------------------------------------------------------------
+# End disable leopard tests for TB17 onwards
+#-------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
+# Temporary Hack for Bug 818833
+#-------------------------------------------------------------------------
+for branch in BRANCHES.keys():
+    if branch in ['comm-aurora', 'comm-beta', 'comm-release', 'comm-esr17', 'comm-esr10']:
+        continue # These branches are fine
+    if BRANCHES[branch]['platforms'].has_key("linux"):
+        del BRANCHES[branch]['platforms']['linux']
+#-------------------------------------------------------------------------
+# End Hack for Bug 818833
+#-------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    import sys, pprint, re
+    import sys
+    import pprint
+    from buildbot.process.properties import WithProperties
 
     class BBPrettyPrinter(pprint.PrettyPrinter):
         def format(self, object, context, maxlevels, level):

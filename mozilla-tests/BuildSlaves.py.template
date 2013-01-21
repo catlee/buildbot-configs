@@ -8,12 +8,31 @@ SlavePasswords = {
     "leopard-o": "pass",
     "snowleopard": "pass",
     "lion": "pass",
+    "mountainlion": "pass",
     "xp": "pass",
     "win7": "pass",
     "w764": "pass",
     "vista": "pass",
     "tegra_android": "pass",
-    "tegra_android-xul": "pass",
-    "tegra_android-o": "pass",
+    "tegra_android-armv6": "pass",
+    "tegra_android-noion": "pass",
+    "fedora-b2g": "pass",
+    "panda_android": "pass",
+    "b2g_panda": "pass",
+    "b2g_panda_gaia_central": "pass",
 }
 
+datazillaAuth = {
+    'talos': {
+        'oauthKey': 'blahblah',
+        'oauthSecret': 'blahblah',
+    },
+    'jetperf': {
+        'oauthKey': 'blahblah',
+        'oauthSecret': 'blahblah',
+    },
+    'test': {
+        'oauthKey': '84c76536-5bea-4858-990b-434ad3bbadc1',
+        'oauthSecret': '92e1d99d-fd5a-45a7-b07e-ec5a9f59c844',
+    },
+}

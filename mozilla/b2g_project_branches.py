@@ -24,31 +24,59 @@ PROJECT_BRANCHES = {
     },
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
+        'enable_perproduct_builds': True,
     },
     # Disabled because of builder limit problems - bug 721854
     #'places': {},
-    'profiling': {},
+    # B2G builds not required on the profiling branch
+    #'profiling': {},
     'services-central': {
         'repo_path': 'services/services-central'
     },
-    'ux': {
-        'branch_name': 'UX',
-        'mobile_branch_name': 'UX',
-        'build_branch': 'UX',
-        'enable_nightly': True,
-    },
+    # B2G builds not required on the UX branch
+    #'ux': {
+    #    'branch_name': 'UX',
+    #    'mobile_branch_name': 'UX',
+    #    'build_branch': 'UX',
+    #    'enable_nightly': True,
+    #},
     #####  TWIGS aka RENTABLE BRANCHES
     'alder': {},
-    'ash': {},
-    'birch': {},
+    'ash': {
+        'mozharness_repo_path': 'users/asasaki_mozilla.com/ash-mozharness',
+    },
+    # Only need to build on OS X (testing gcc OS X builds still work)
+    #'birch': {},
     'cedar': {},
+    # Customizations for b2g 1.1 work (bug 822783 & bug 819368)
+    'date': {
+        'enable_nightly': True,
+        'enable_l10n': False,
+        'enable_xulrunner': False,
+        'enabled_products': ['b2g'],
+        'product_prefix': 'b2g',
+        'unittest_suites': [],
+        # XXX: this seems like it should be at the platform level
+        'enable_multi_locale': True,
+        'lock_platforms': True,
+        'platforms': {
+            'unagi': {
+                'enable_nightly': True,
+            },
+        },
+    },
     # Customizations for windows update service changes (bug 481815)
     #'elm': {},
+    'fig': {},
+    'gum': {},
     'holly': {},
+    'jamun': {},
     'larch': {},
     'maple': {},
     # Customizations for integration work for bugs 481815 and 307181
-    #'oak': {},
+    'oak': {
+        'enable_nightly': True
+    },
     'pine': {},
 }
 
