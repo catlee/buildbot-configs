@@ -100,7 +100,7 @@ class MasterConfig:
         f.close()
         self.log.info("finished printing log file '%s'" % filename)
 
-    def testMaster(self, buildbot, universal=False, error_logs=False):
+    def testMaster(self, buildbot, universal=False, error_logs=False, run_coverage=False):
         test_output_dir = os.environ.get('TEMP', 'test-output')
         if not os.path.isdir(test_output_dir):
             os.mkdir(test_output_dir)
@@ -117,9 +117,12 @@ class MasterConfig:
             if error_logs:
                 self.logFile(create_log_filename)
             return (300, create_log_filename, None)
-        rc = subprocess.call(['coverage', 'run', '-a', '--rcfile', '/home/catlee/mozilla/buildbot-configs/.coveragerc', '/home/catlee/.virtualenvs/buildbot-mozilla-080/bin/buildbot', 'checkconfig'], cwd=test_dir, stdout=test_log, stderr=subprocess.STDOUT)
-        #rc = subprocess.call([buildbot, 'checkconfig'],
-                             #cwd=test_dir, stdout=test_log, stderr=subprocess.STDOUT)
+        if run_coverage:
+            cmd = ['coverage', 'run', '-a', '--branch', buildbot, 'checkconfig']
+        else:
+            cmd = [buildbot, 'checkconfig']
+        rc = subprocess.call(cmd,
+                             cwd=test_dir, stdout=test_log, stderr=subprocess.STDOUT)
         test_log.close()
         log = open(test_log_filename)
         log_size = os.path.getsize(test_log_filename)
@@ -380,6 +383,7 @@ if __name__ == "__main__":
     parser.add_option("-q", "--quiet", dest="quiet", action="store_true")
     parser.add_option("-e", "--error-logs", dest="error_logs", action="store_true")
     parser.add_option("-d", "--debug", dest="debug", action="store_true")
+    parser.add_option("--coverage", dest="coverage", action="store_true")
 
     options, args = parser.parse_args()
 
@@ -424,7 +428,9 @@ if __name__ == "__main__":
         failing_masters = []
         # Test the masters, once normally and onces as a universal master
         for m in filter_masters(master_list):
-            rc, logfile, dir = m.testMaster(options.buildbot, error_logs=options.error_logs)
+            rc, logfile, dir = m.testMaster(options.buildbot,
+                                            error_logs=options.error_logs,
+                                            run_coverage=options.coverage)
             if rc != 0:
                 failing_masters.append((m.name, logfile, dir))
         # Print a summary including a list of useful output
