@@ -12,24 +12,24 @@ from localconfig import \
 GLOBAL_VARS = deepcopy(GLOBAL_VARS)
 
 SLAVES = {
-    'linux':            LINUX_VMS + LINUX_IXS,
-    'linux64':          LINUX64_VMS + LINUX64_IXS,
-    'win32':            WIN32_IXS,
-    'win64':            WIN64_IXS,
-    'macosx':           [],
-    'macosx64':         MAC_SNOW_MINIS,
-    'macosx64-lion':    MAC_LION_MINIS,
-    'mock':             MOCK_DL120G7
+    'linux': LINUX_VMS + LINUX_IXS,
+    'linux64': LINUX64_VMS + LINUX64_IXS,
+    'win32': WIN32_IXS,
+    'win64': WIN64_IXS,
+    'macosx': [],
+    'macosx64': MAC_SNOW_MINIS,
+    'macosx64-lion': MAC_LION_MINIS,
+    'mock': MOCK_DL120G7
 }
 
 TRY_SLAVES = {
-    'linux':       TRY_LINUX + TRY_LINUX_IXS,
-    'linux64':     TRY_LINUX64 + TRY_LINUX64_IXS,
-    'win32':       TRY_WIN32_IXS,
-    'win64':       TRY_WIN64_IXS,
-    'macosx64':    TRY_MAC64,
+    'linux': TRY_LINUX + TRY_LINUX_IXS,
+    'linux64': TRY_LINUX64 + TRY_LINUX64_IXS,
+    'win32': TRY_WIN32_IXS,
+    'win64': TRY_WIN64_IXS,
+    'macosx64': TRY_MAC64,
     'macosx64-lion': TRY_LION,
-    'mock':        TRY_MOCK_DL120G7,
+    'mock': TRY_MOCK_DL120G7,
 }
 
 # Local overrides for default values
@@ -45,7 +45,8 @@ GLOBAL_VARS['xulrunner_tinderbox_tree'] = None
 GLOBAL_VARS['weekly_tinderbox_tree'] = 'Thunderbird'
 GLOBAL_VARS['l10n_tinderbox_tree'] = 'Mozilla-l10n'
 GLOBAL_VARS['base_mirror_urls'] = ['http://hg-internal.dmz.scl3.mozilla.com']
-GLOBAL_VARS['base_bundle_urls'] = ['http://ftp.mozilla.org/pub/mozilla.org/thunderbird/bundles']
+GLOBAL_VARS['base_bundle_urls'] = [
+    'http://ftp.mozilla.org/pub/mozilla.org/thunderbird/bundles']
 GLOBAL_VARS['aus2_user'] = 'tbirdbld'
 GLOBAL_VARS['aus2_ssh_key'] = 'auspush'
 GLOBAL_VARS['aus2_host'] = 'aus3-staging.mozilla.org'

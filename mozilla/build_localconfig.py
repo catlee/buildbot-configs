@@ -10,18 +10,19 @@ c['status'] = []
 
 if 'http_port' in master_config:
     c['status'].append(
-            WebStatus(http_port=master_config['http_port'], allowForce=True))
+        WebStatus(http_port=master_config['http_port'], allowForce=True))
     c['buildbotURL'] = 'http://%(hostname)s:%(http_port)i/' % master_config
 
 if 'ssh_port' in master_config:
     c['manhole'] = manhole.PasswordManhole(
-            "tcp:%(ssh_port)i:interface=127.0.0.1" % master_config,
-            "cltbld", "password")
+        "tcp:%(ssh_port)i:interface=127.0.0.1" % master_config,
+        "cltbld", "password")
 
 from config import BRANCHES, SLAVES, PROJECTS, ACTIVE_PROJECT_BRANCHES
 from b2g_config import ACTIVE_PROJECT_BRANCHES as ACTIVE_B2G_PROJECT_BRANCHES
 if 'limit_branches' in master_config:
-    ACTIVE_BRANCHES = [x.encode("utf-8") for x in master_config['limit_branches']]
+    ACTIVE_BRANCHES = [x.encode("utf-8") for x in master_config[
+        'limit_branches']]
 else:
     ACTIVE_BRANCHES = ACTIVE_PROJECT_BRANCHES[:]
     ACTIVE_BRANCHES.extend([
@@ -34,7 +35,8 @@ else:
         'mozilla-b2g18',
     ])
 if 'limit_tb_branches' in master_config:
-    ACTIVE_THUNDERBIRD_BRANCHES = [x.encode("utf-8") for x in master_config['limit_tb_branches']]
+    ACTIVE_THUNDERBIRD_BRANCHES = [x.encode(
+        "utf-8") for x in master_config['limit_tb_branches']]
 else:
     ACTIVE_THUNDERBIRD_BRANCHES = [
         'comm-central',
@@ -45,7 +47,8 @@ else:
         'comm-esr17',
     ]
 if 'limit_b2g_branches' in master_config:
-    ACTIVE_B2G_BRANCHES = [x.encode("utf-8") for x in master_config['limit_b2g_branches']]
+    ACTIVE_B2G_BRANCHES = [x.encode("utf-8") for x in master_config[
+        'limit_b2g_branches']]
 else:
     ACTIVE_B2G_BRANCHES = ACTIVE_B2G_PROJECT_BRANCHES[:]
     ACTIVE_B2G_BRANCHES.extend([
@@ -54,10 +57,12 @@ else:
     ])
 
 if 'limit_projects' in master_config:
-    ACTIVE_PROJECTS = [x.encode("utf-8") for x in master_config['limit_projects']]
+    ACTIVE_PROJECTS = [x.encode("utf-8") for x in master_config[
+        'limit_projects']]
 else:
     ACTIVE_PROJECTS = PROJECTS.keys()
-ACTIVE_PROJECTS = [ p for p in ACTIVE_PROJECTS if not PROJECTS[p].get('enable_try') ]
+ACTIVE_PROJECTS = [p for p in ACTIVE_PROJECTS if not PROJECTS[p].get(
+    'enable_try')]
 
 ACTIVE_RELEASE_BRANCHES = []
 ACTIVE_THUNDERBIRD_RELEASE_BRANCHES = []
@@ -67,10 +72,12 @@ if 'release_branches' in master_config:
     ACTIVE_RELEASE_BRANCHES.extend(master_config['release_branches'])
     ENABLE_RELEASES = True
 if 'thunderbird_release_branches' in master_config:
-    ACTIVE_THUNDERBIRD_RELEASE_BRANCHES.extend(master_config['thunderbird_release_branches'])
+    ACTIVE_THUNDERBIRD_RELEASE_BRANCHES.extend(
+        master_config['thunderbird_release_branches'])
     ENABLE_RELEASES = True
 if 'mobile_release_branches' in master_config:
-    ACTIVE_MOBILE_RELEASE_BRANCHES.extend(master_config['mobile_release_branches'])
+    ACTIVE_MOBILE_RELEASE_BRANCHES.extend(
+        master_config['mobile_release_branches'])
     ENABLE_RELEASES = True
 
 # Set up our fast slaves
@@ -79,7 +86,7 @@ import buildbotcustom.misc
 buildbotcustom.misc.fastRegexes.extend([
     'linux-ix-',
     'linux64-ix-',
-    ])
+])
 RESERVED_SLAVES = "reserved_slaves"
 
 QUEUEDIR = master_config.get("queuedir", "/dev/shm/queue")

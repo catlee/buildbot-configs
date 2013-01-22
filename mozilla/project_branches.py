@@ -1,5 +1,6 @@
 PROJECT_BRANCHES = {
-    ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
+    # PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also
+    # alphabetically)
     'accessibility': {
         'mozconfig_dir': 'accessibility',
         'enable_nightly': True,
@@ -19,8 +20,10 @@ PROJECT_BRANCHES = {
             'paint': 0,
         },
         'add_test_suites': [
-            ('macosx64', 'snowleopard', 'opt', 'mochitest-browser-chrome', 'mochitest-other', 'mochitest-a11y'),
-            ('macosx64', 'snowleopard', 'debug', 'mochitest-browser-chrome', 'mochitest-other', 'mochitest-a11y'),
+            ('macosx64', 'snowleopard', 'opt',
+             'mochitest-browser-chrome', 'mochitest-other', 'mochitest-a11y'),
+            ('macosx64', 'snowleopard', 'debug',
+             'mochitest-browser-chrome', 'mochitest-other', 'mochitest-a11y'),
         ]
     },
     'build-system': {
@@ -174,7 +177,7 @@ PROJECT_BRANCHES = {
         'mobile_tinderbox_tree': 'UX',
         'packaged_unittest_tinderbox_tree': 'UX',
         'enabled_products': ['firefox'],
-        'mozconfig_dir' : 'ux',
+        'mozconfig_dir': 'ux',
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
@@ -339,6 +342,8 @@ ACTIVE_PROJECT_BRANCHES = PROJECT_BRANCHES.keys()
 
 # Load up project branches' local values
 for branch in PROJECT_BRANCHES.keys():
-    PROJECT_BRANCHES[branch]['tinderbox_tree'] = PROJECT_BRANCHES[branch].get('tinderbox_tree', branch.title())
-    PROJECT_BRANCHES[branch]['mobile_tinderbox_tree'] = PROJECT_BRANCHES[branch].get('mobile_tinderbox_tree', branch.title())
+    PROJECT_BRANCHES[branch]['tinderbox_tree'] = PROJECT_BRANCHES[
+        branch].get('tinderbox_tree', branch.title())
+    PROJECT_BRANCHES[branch]['mobile_tinderbox_tree'] = PROJECT_BRANCHES[
+        branch].get('mobile_tinderbox_tree', branch.title())
     PROJECT_BRANCHES[branch]['packaged_unittest_tinderbox_tree'] = PROJECT_BRANCHES[branch].get('packaged_unittest_tinderbox_tree', branch.title())

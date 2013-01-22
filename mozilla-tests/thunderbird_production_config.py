@@ -46,4 +46,3 @@ BRANCHES = {
 PLATFORM_VARS = {}
 
 PROJECTS = {}
-

@@ -3,13 +3,14 @@ c['slavePortnum'] = 9020
 
 from buildbot.status.html import WebStatus
 c['status'] = [
-        WebStatus(http_port=8020, allowForce=True)
+    WebStatus(http_port=8020, allowForce=True)
 ]
 
 c['buildbotURL'] = 'http://preproduction-master.srv.releng.scl3.mozilla.com:8020/'
 
 from buildbot import manhole
-c['manhole'] = manhole.PasswordManhole("tcp:1245:interface=127.0.0.1", "cltbld", "password")
+c['manhole'] = manhole.PasswordManhole(
+    "tcp:1245:interface=127.0.0.1", "cltbld", "password")
 
 from config import BRANCHES, SLAVES, PROJECTS
 ACTIVE_BRANCHES = []
@@ -25,7 +26,7 @@ import buildbotcustom.misc
 buildbotcustom.misc.fastRegexes.extend([
     'linux-ix-',
     'linux64-ix-',
-    ])
+])
 ENABLE_RELEASES = True
 RESERVED_SLAVES = None
 

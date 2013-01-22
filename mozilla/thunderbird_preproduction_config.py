@@ -12,8 +12,8 @@ GLOBAL_VARS = {
     'graph_server': 'graphs.allizom.org',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://clobberer-preproduction.pvt.build.mozilla.org/index.php',
-    'pollInterval': 6*60*60,
-    'l10nPollInterval': 6*60*60,
+    'pollInterval': 6 * 60 * 60,
+    'l10nPollInterval': 6 * 60 * 60,
     'disable_tinderbox_mail': True,
     'talos_masters': [],
     # List of unittest masters to notify of new builds to test,
@@ -21,7 +21,7 @@ GLOBAL_VARS = {
     # and sendchange retry count before give up
     'unittest_masters': [
         ('preproduction-master.srv.releng.scl3.mozilla.com:9008', True, 1),
-        ],
+    ],
     'xulrunner_tinderbox_tree': 'MozillaTest',
     'weekly_tinderbox_tree': 'MozillaTest',
     'l10n_tinderbox_tree': 'MozillaStaging',
@@ -65,8 +65,8 @@ BRANCHES = {
     },
     'try-comm-central': {
         'download_base_url': 'http://preproduction-stage.srv.releng.scl3.mozilla.com/pub/mozilla.org/thunderbird/',
-        'enable_mail_notifier': False, # Set to True when testing
-        'email_override': [], # Set to your address when testing
+        'enable_mail_notifier': False,  # Set to True when testing
+        'email_override': [],  # Set to your address when testing
         'package_url': 'http://preproduction-stage.srv.releng.scl3.mozilla.com/pub/mozilla.org/thunderbird/try-builds',
         'talos_masters': [],
         'platforms': {

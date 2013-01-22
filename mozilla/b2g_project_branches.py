@@ -1,11 +1,13 @@
-# Additional branches that start as identical (individual variables can be overriden here)
+# Additional branches that start as identical (individual variables can be
+# overriden here)
 PROJECT_BRANCHES = {
-    ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
+    # PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also
+    # alphabetically)
     'accessibility': {
         'enable_nightly': True,
     },
     'build-system': {},
-    'devtools':{
+    'devtools': {
         'enable_nightly': True,
     },
     # Disabled because of builder limit problems - bug 721854

@@ -19,7 +19,8 @@ c['builders'] = []
 c['schedulers'] = []
 c['change_source'] = []
 
-# Builders from these branches are given custom priority, default is 2 for unlisted branches
+# Builders from these branches are given custom priority, default is 2 for
+# unlisted branches
 BRANCH_PRIORITIES = {
     'mozilla-central': 3,
     'comm-central': 3,
@@ -66,21 +67,21 @@ def prioritizeBuilders(botmaster, builders):
     # Get the list pending builds, at most one per builder
     db = botmaster.db
     q = ("SELECT br.buildername, max(br.priority), min(br.submitted_at)"
-            " FROM buildrequests AS br"
-            " WHERE br.complete=0"
-            " AND (br.claimed_at<?"
-            "      OR (br.claimed_by_name=?"
-            "          AND br.claimed_by_incarnation!=?))"
-            " GROUP BY br.buildername ")
+         " FROM buildrequests AS br"
+         " WHERE br.complete=0"
+         " AND (br.claimed_at<?"
+         "      OR (br.claimed_by_name=?"
+         "          AND br.claimed_by_incarnation!=?))"
+         " GROUP BY br.buildername ")
     requests = db.runQueryNow(db.quoteq(q),
-            (time.time() - 3600, botmaster.master_name, botmaster.master_incarnation))
+                             (time.time() - 3600, botmaster.master_name, botmaster.master_incarnation))
 
     # Filter out requests we're not running builders for
     allBuilderNames = set(builder.name for builder in builders)
     requests = filter(lambda request: request[0] in allBuilderNames, requests)
 
     # Turn into a dictionary keyed by buildername
-    requests = dict( (request[0], request) for request in requests )
+    requests = dict((request[0], request) for request in requests)
 
     # Remove builders we don't have requests for
     builders = filter(lambda builder: builder.name in requests, builders)
@@ -95,7 +96,7 @@ def prioritizeBuilders(botmaster, builders):
         branch_priority = 2
         if builder.builder_status.category.startswith('release'):
             branch_priority = 0
-        elif builder.properties and builder.properties.has_key('branch'):
+        elif builder.properties and 'branch' in builder.properties:
             for branch, p in BRANCH_PRIORITIES.iteritems():
                 if branch in builder.properties['branch']:
                     branch_priority = p

@@ -15,8 +15,8 @@ GLOBAL_VARS = {
     # XXX: should point at aus4-admin-dev once production is pointing elsewhere
     #'balrog_api_root': 'https://aus4-admin-dev.allizom.org',
     'base_clobber_url': 'http://clobberer-preproduction.pvt.build.mozilla.org/index.php',
-    'pollInterval': 6*60*60,
-    'l10nPollInterval': 6*60*60,
+    'pollInterval': 6 * 60 * 60,
+    'l10nPollInterval': 6 * 60 * 60,
     'disable_tinderbox_mail': True,
     # List of talos masters to notify of new builds,
     # and if a failure to notify the talos master should result in a warning,
@@ -29,7 +29,7 @@ GLOBAL_VARS = {
     # and sendchange retry count before give up
     'unittest_masters': [
         ('preproduction-master.srv.releng.scl3.mozilla.com:9008', True, 1),
-        ],
+    ],
     'xulrunner_tinderbox_tree': 'MozillaTest',
     'weekly_tinderbox_tree': 'MozillaTest',
     'l10n_tinderbox_tree': 'MozillaStaging',
@@ -76,7 +76,7 @@ BRANCHES = {
         'blocklist_update_on_closed_tree': False,
     },
     'try': {
-        'email_override': [], # Set to your address when testing
+        'email_override': [],  # Set to your address when testing
         'download_base_url': 'http://preproduction-stage.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox',
         'mobile_download_base_url': 'http://preproduction-stage.srv.releng.scl3.mozilla.com/pub/mozilla.org/mobile',
         'enable_mail_notifier': False,

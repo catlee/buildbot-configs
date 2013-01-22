@@ -10,13 +10,13 @@ c['status'] = []
 
 if 'http_port' in master_config:
     c['status'].append(
-            WebStatus(http_port=master_config['http_port'], allowForce=True))
+        WebStatus(http_port=master_config['http_port'], allowForce=True))
     c['buildbotURL'] = 'http://%(hostname)s:%(http_port)i/' % master_config
 
 if 'ssh_port' in master_config:
     c['manhole'] = manhole.PasswordManhole(
-            "tcp:%(ssh_port)i:interface=127.0.0.1" % master_config,
-            "cltbld", "password")
+        "tcp:%(ssh_port)i:interface=127.0.0.1" % master_config,
+        "cltbld", "password")
 
 from config import BRANCHES, PROJECTS, TRY_SLAVES
 ACTIVE_BRANCHES = ['try']
@@ -25,7 +25,7 @@ ACTIVE_B2G_BRANCHES = ['try']
 ACTIVE_RELEASE_BRANCHES = []
 ACTIVE_THUNDERBIRD_RELEASE_BRANCHES = []
 ACTIVE_MOBILE_RELEASE_BRANCHES = []
-ACTIVE_PROJECTS = [ k for k,v in PROJECTS.items() if v.get('enable_try') ]
+ACTIVE_PROJECTS = [k for k, v in PROJECTS.items() if v.get('enable_try')]
 
 # Override with TRY_SLAVES
 SLAVES = TRY_SLAVES
@@ -36,7 +36,7 @@ import buildbotcustom.misc
 buildbotcustom.misc.fastRegexes.extend([
     'linux-ix-',
     'linux64-ix-',
-    ])
+])
 ENABLE_RELEASES = False
 RESERVED_SLAVES = None
 

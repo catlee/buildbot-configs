@@ -1,28 +1,29 @@
 from copy import deepcopy
 import production_config as pc
 
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(87, 95) if x not in [88]]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(87, 95)
+                  if x not in [88]]
 MAC_SNOW_MINIS = ['moz2-darwin10-slave02']
 LINUX_IXS      = ['mv-moz2-linux-ix-slave01'] + \
-                 ['linux-ix-slave%02i' % x for x in (3,4,5)]
-LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in (1,2)]
-WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in (1, 19, 21)]
-WIN64_IXS      = ['w64-ix-slave%02i' % x for x in (3, 4, 5, 22, 80)]
-MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(1, 6)]
-LINUX64_EC2    = ['dev-linux64-ec2-%03d' % x for x in range(1, 50)]
+                 ['linux-ix-slave%02i' % x for x in (3, 4, 5)]
+LINUX64_IXS = ['linux64-ix-slave%02i' % x for x in (1, 2)]
+WIN32_IXS = ['mw32-ix-slave%02i' % x for x in (1, 19, 21)]
+WIN64_IXS = ['w64-ix-slave%02i' % x for x in (3, 4, 5, 22, 80)]
+MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(1, 6)]
+LINUX64_EC2 = ['dev-linux64-ec2-%03d' % x for x in range(1, 50)]
 
 STAGING_SLAVES = {
-    'linux':            LINUX_IXS,
-    'linux64':          LINUX64_IXS,
-    'win32':            WIN32_IXS,
-    'win64':            WIN64_IXS,
-    'macosx':           [],
-    'macosx64':         MAC_SNOW_MINIS,
-    'macosx64-lion':    MAC_LION_MINIS,
-    'android':          LINUX_IXS,
-    'android-armv6':    LINUX_IXS,
-    'android-x86':      MOCK_DL120G7,
-    'mock':             MOCK_DL120G7 + LINUX64_EC2,
+    'linux': LINUX_IXS,
+    'linux64': LINUX64_IXS,
+    'win32': WIN32_IXS,
+    'win64': WIN64_IXS,
+    'macosx': [],
+    'macosx64': MAC_SNOW_MINIS,
+    'macosx64-lion': MAC_LION_MINIS,
+    'android': LINUX_IXS,
+    'android-armv6': LINUX_IXS,
+    'android-x86': MOCK_DL120G7,
+    'mock': MOCK_DL120G7 + LINUX64_EC2,
 }
 
 SLAVES = deepcopy(STAGING_SLAVES)
@@ -63,7 +64,7 @@ GLOBAL_VARS = {
     # and sendchange retry count before give up
     'unittest_masters': [
         ('dev-master01.build.scl1.mozilla.com:9901', True, 1),
-        ],
+    ],
     'xulrunner_tinderbox_tree': 'MozillaTest',
     'weekly_tinderbox_tree': 'MozillaTest',
     'l10n_tinderbox_tree': 'MozillaStaging',
@@ -112,8 +113,8 @@ BRANCHES = {
     'try': {
         'download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox',
         'mobile_download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/mobile',
-        'enable_mail_notifier': False, # Set to True when testing
-        'email_override': [], # Set to your address when testing
+        'enable_mail_notifier': False,  # Set to True when testing
+        'email_override': [],  # Set to your address when testing
         'package_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox/try-builds',
         'talos_masters': [],
         'platforms': {

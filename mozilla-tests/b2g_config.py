@@ -2,7 +2,7 @@ from copy import deepcopy
 
 from config import MOZHARNESS_REPO, MOZHARNESS_REBOOT_CMD
 from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS, GRAPH_CONFIG, \
-                        PLATFORM_VARS
+    PLATFORM_VARS
 
 import b2g_localconfig
 reload(b2g_localconfig)
@@ -35,7 +35,8 @@ builder_prefix = "b2g"
 
 PLATFORMS['ics_armv7a_gecko']['slave_platforms'] = ['fedora-b2g']
 PLATFORMS['ics_armv7a_gecko']['env_name'] = 'linux-perf'
-PLATFORMS['ics_armv7a_gecko']['fedora-b2g'] = {'name': builder_prefix + "_ics_armv7a_gecko_emulator"}
+PLATFORMS['ics_armv7a_gecko']['fedora-b2g'] = {'name': builder_prefix +
+                                               "_ics_armv7a_gecko_emulator"}
 PLATFORMS['ics_armv7a_gecko']['stage_product'] = 'b2g'
 PLATFORMS['ics_armv7a_gecko']['mozharness_config'] = {
     'mozharness_python': '/tools/buildbot/bin/python',
@@ -57,9 +58,11 @@ PLATFORMS['b2g_panda']['mozharness_config'] = {
     'reboot_command': None,
 }
 
-PLATFORMS['b2g_panda_gaia_central']['slave_platforms'] = ['b2g_panda_gaia_central']
+PLATFORMS['b2g_panda_gaia_central']['slave_platforms'] = [
+    'b2g_panda_gaia_central']
 PLATFORMS['b2g_panda_gaia_central']['env_name'] = None
-PLATFORMS['b2g_panda_gaia_central']['b2g_panda_gaia_central'] = {'name': builder_prefix + "_panda_gaia_central"}
+PLATFORMS['b2g_panda_gaia_central']['b2g_panda_gaia_central'] = {'name':
+                                                                 builder_prefix + "_panda_gaia_central"}
 PLATFORMS['b2g_panda_gaia_central']['stage_product'] = 'b2g'
 PLATFORMS['b2g_panda_gaia_central']['mozharness_config'] = {
     'mozharness_python': '/tools/buildbot/bin/python',
@@ -74,11 +77,14 @@ PLATFORMS['b2g_panda_gaia_central']['mozharness_config'] = {
 # entry in the SLAVE dict
 for platform, platform_config in PLATFORMS.items():
     for slave_platform in platform_config['slave_platforms']:
-        platform_config[slave_platform]['slaves'] = sorted(SLAVES[slave_platform])
+        platform_config[slave_platform]['slaves'] = sorted(SLAVES[
+                                                           slave_platform])
         if slave_platform in TRY_SLAVES:
-            platform_config[slave_platform]['try_slaves'] = sorted(TRY_SLAVES[slave_platform])
+            platform_config[slave_platform][
+                'try_slaves'] = sorted(TRY_SLAVES[slave_platform])
         else:
-            platform_config[slave_platform]['try_slaves'] = platform_config[slave_platform]['slaves']
+            platform_config[slave_platform][
+                'try_slaves'] = platform_config[slave_platform]['slaves']
 
 BRANCH_UNITTEST_VARS = {
     'hghost': 'hg.mozilla.org',
@@ -96,119 +102,119 @@ MOCHITEST_ONLY = [
     ('mochitest-1', {'suite': 'mochitest-plain',
                      'mozharness_repo': MOZHARNESS_REPO,
                      'script_path': 'scripts/b2g_emulator_unittest.py',
-                    },
-    ),
+                     },
+     ),
     ('mochitest-2', {'suite': 'mochitest-plain',
                      'mozharness_repo': MOZHARNESS_REPO,
                      'script_path': 'scripts/b2g_emulator_unittest.py',
-                    },
-    ),
+                     },
+     ),
     ('mochitest-3', {'suite': 'mochitest-plain',
                      'mozharness_repo': MOZHARNESS_REPO,
                      'script_path': 'scripts/b2g_emulator_unittest.py',
-                    },
-    ),
+                     },
+     ),
     ('mochitest-4', {'suite': 'mochitest-plain',
                      'mozharness_repo': MOZHARNESS_REPO,
                      'script_path': 'scripts/b2g_emulator_unittest.py',
-                    },
-    ),
+                     },
+     ),
     ('mochitest-5', {'suite': 'mochitest-plain',
                      'mozharness_repo': MOZHARNESS_REPO,
                      'script_path': 'scripts/b2g_emulator_unittest.py',
-                    },
-    ),
+                     },
+     ),
     ('mochitest-6', {'suite': 'mochitest-plain',
                      'mozharness_repo': MOZHARNESS_REPO,
                      'script_path': 'scripts/b2g_emulator_unittest.py',
-                    },
-    ),
+                     },
+     ),
 ]
 REFTEST_ONLY = [
     ('reftest-1', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-2', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-3', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-4', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-5', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-6', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-7', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-8', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-9', {'suite': 'reftest',
                    'mozharness_repo': MOZHARNESS_REPO,
                    'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                   },
+     ),
     ('reftest-10', {'suite': 'reftest',
-                   'mozharness_repo': MOZHARNESS_REPO,
-                   'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                    'mozharness_repo': MOZHARNESS_REPO,
+                    'script_path': 'scripts/b2g_emulator_unittest.py',
+                    },
+     ),
 ]
 
 CRASHTEST_ONLY = [
     ('crashtest-1', {'suite': 'crashtest',
-                   'mozharness_repo': MOZHARNESS_REPO,
-                   'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                     'mozharness_repo': MOZHARNESS_REPO,
+                     'script_path': 'scripts/b2g_emulator_unittest.py',
+                     },
+     ),
     ('crashtest-2', {'suite': 'crashtest',
-                   'mozharness_repo': MOZHARNESS_REPO,
-                   'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                     'mozharness_repo': MOZHARNESS_REPO,
+                     'script_path': 'scripts/b2g_emulator_unittest.py',
+                     },
+     ),
     ('crashtest-3', {'suite': 'crashtest',
-                   'mozharness_repo': MOZHARNESS_REPO,
-                   'script_path': 'scripts/b2g_emulator_unittest.py',
-                  },
-    ),
+                     'mozharness_repo': MOZHARNESS_REPO,
+                     'script_path': 'scripts/b2g_emulator_unittest.py',
+                     },
+     ),
 ]
 
 XPCSHELL_ONLY = [
     ('xpcshell', {'suite': 'xpcshell',
-                   'mozharness_repo': MOZHARNESS_REPO,
-                   'script_path': 'scripts/b2g_emulator_unittest.py',
+                  'mozharness_repo': MOZHARNESS_REPO,
+                  'script_path': 'scripts/b2g_emulator_unittest.py',
                   },
-    ),
+     ),
 ]
 
 ALL_UNITTESTS = MOCHITEST_ONLY + REFTEST_ONLY + XPCSHELL_ONLY + [
     ('marionette-webapi', {'suite': 'marionette-webapi',
                            'mozharness_repo': MOZHARNESS_REPO,
                            'script_path': 'scripts/marionette.py',
-                          },
-    ),
+                           },
+     ),
 ]
 
 # Default set of unit tests
@@ -225,13 +231,13 @@ PLATFORM_UNITTEST_VARS = {
         'app_name': 'b2g',
         'brand_name': 'Gecko',
         'builds_before_reboot': 1,
-        'unittest-env' : {'DISPLAY': ':0'},
+        'unittest-env': {'DISPLAY': ':0'},
         'enable_opt_unittests': True,
         'enable_debug_unittests': False,
         'fedora-b2g': {
-            'opt_unittest_suites' : \
-                UNITTEST_SUITES['opt_unittest_suites'][:],
-            'debug_unittest_suites' : UNITTEST_SUITES['debug_unittest_suites'][:],
+            'opt_unittest_suites':
+    UNITTEST_SUITES['opt_unittest_suites'][:],
+            'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
             'suite_config': {
                 'crashtest-1': {
                     'extra_args': [
@@ -379,7 +385,7 @@ PLATFORM_UNITTEST_VARS = {
                 },
             },
         },
-    }, # end of ics_armv7a_gecko configs
+    },  # end of ics_armv7a_gecko configs
     'b2g_panda': {
         'product_name': 'b2g',
         'app_name': 'b2g',
@@ -387,8 +393,8 @@ PLATFORM_UNITTEST_VARS = {
         'enable_opt_unittests': True,
         'enable_debug_unittests': False,
         'b2g_panda': {
-            'opt_unittest_suites' : [],
-            'debug_unittest_suites' : [],
+            'opt_unittest_suites': [],
+            'debug_unittest_suites': [],
         },
     },
     'b2g_panda_gaia_central': {
@@ -398,8 +404,8 @@ PLATFORM_UNITTEST_VARS = {
         'enable_opt_unittests': True,
         'enable_debug_unittests': False,
         'b2g_panda_gaia_central': {
-            'opt_unittest_suites' : [],
-            'debug_unittest_suites' : [],
+            'opt_unittest_suites': [],
+            'debug_unittest_suites': [],
         },
     },
 }
@@ -488,8 +494,8 @@ BRANCHES['ash']['platforms']['b2g_panda']['b2g_panda']['opt_unittest_suites'] = 
     ('gaia-ui-test', {'suite': 'gaia-ui-test',
                       'mozharness_repo': MOZHARNESS_REPO,
                       'script_path': 'scripts/b2g_panda.py',
-                     },
-    )
+                      },
+     )
 ]
 BRANCHES['ash']['platforms']['b2g_panda']['b2g_panda']['suite_config'] = {
     'gaia-ui-test': {
@@ -503,7 +509,7 @@ BRANCHES['ash']['platforms']['b2g_panda_gaia_central']['b2g_panda_gaia_central']
         'suite': 'gaia-ui-test',
         'mozharness_repo': MOZHARNESS_REPO,
         'script_path': 'scripts/b2g_panda.py',
-        },
+    },
     )
 ]
 BRANCHES['ash']['platforms']['b2g_panda_gaia_central']['b2g_panda_gaia_central']['suite_config'] = {
@@ -513,16 +519,18 @@ BRANCHES['ash']['platforms']['b2g_panda_gaia_central']['b2g_panda_gaia_central']
         ],
     },
 }
-BRANCHES['ash']['platforms']['ics_armv7a_gecko']['fedora-b2g']['debug_unittest_suites'] = ALL_UNITTESTS[:]
-BRANCHES['ash']['platforms']['ics_armv7a_gecko']['enable_debug_unittests'] = True
+BRANCHES['ash']['platforms']['ics_armv7a_gecko']['fedora-b2g'][
+    'debug_unittest_suites'] = ALL_UNITTESTS[:]
+BRANCHES['ash']['platforms']['ics_armv7a_gecko'][
+    'enable_debug_unittests'] = True
 BRANCHES['cedar']['branch_name'] = "Cedar"
 BRANCHES['cedar']['repo_path'] = "projects/cedar"
 BRANCHES['cedar']['platforms']['b2g_panda']['b2g_panda']['opt_unittest_suites'] = [
     ('gaia-ui-test', {'suite': 'gaia-ui-test',
                       'mozharness_repo': MOZHARNESS_REPO,
                       'script_path': 'scripts/b2g_panda.py',
-                     },
-    )
+                      },
+     )
 ]
 BRANCHES['cedar']['platforms']['b2g_panda']['b2g_panda']['suite_config'] = {
     'gaia-ui-test': {
@@ -533,11 +541,11 @@ BRANCHES['cedar']['platforms']['b2g_panda']['b2g_panda']['suite_config'] = {
 }
 BRANCHES['cedar']['platforms']['b2g_panda_gaia_central']['b2g_panda_gaia_central']['opt_unittest_suites'] = [
     ('gaia-ui-test', {
-         'suite': 'gaia-ui-test',
-         'mozharness_repo': MOZHARNESS_REPO,
-         'script_path': 'scripts/b2g_panda.py',
-         },
-    )
+     'suite': 'gaia-ui-test',
+        'mozharness_repo': MOZHARNESS_REPO,
+        'script_path': 'scripts/b2g_panda.py',
+     },
+     )
 ]
 BRANCHES['cedar']['platforms']['b2g_panda_gaia_central']['b2g_panda_gaia_central']['suite_config'] = {
     'gaia-ui-test': {
@@ -546,13 +554,18 @@ BRANCHES['cedar']['platforms']['b2g_panda_gaia_central']['b2g_panda_gaia_central
         ],
     },
 }
-BRANCHES['cedar']['platforms']['ics_armv7a_gecko']['fedora-b2g']['opt_unittest_suites'] = ALL_UNITTESTS + CRASHTEST_ONLY
-BRANCHES['cedar']['platforms']['ics_armv7a_gecko']['fedora-b2g']['debug_unittest_suites'] = ALL_UNITTESTS + CRASHTEST_ONLY
-BRANCHES['cedar']['platforms']['ics_armv7a_gecko']['enable_debug_unittests'] = True
+BRANCHES['cedar']['platforms']['ics_armv7a_gecko']['fedora-b2g'][
+    'opt_unittest_suites'] = ALL_UNITTESTS + CRASHTEST_ONLY
+BRANCHES['cedar']['platforms']['ics_armv7a_gecko']['fedora-b2g'][
+    'debug_unittest_suites'] = ALL_UNITTESTS + CRASHTEST_ONLY
+BRANCHES['cedar']['platforms']['ics_armv7a_gecko'][
+    'enable_debug_unittests'] = True
 BRANCHES['fx-team']['repo_path'] = "integration/fx-team"
 BRANCHES['mozilla-b2g18']['repo_path'] = "releases/mozilla-b2g18"
-BRANCHES['mozilla-b2g18']['platforms']['ics_armv7a_gecko']['fedora-b2g']['debug_unittest_suites'] = MOCHITEST_ONLY + XPCSHELL_ONLY
-BRANCHES['mozilla-b2g18']['platforms']['ics_armv7a_gecko']['enable_debug_unittests'] = True
+BRANCHES['mozilla-b2g18']['platforms']['ics_armv7a_gecko']['fedora-b2g'][
+    'debug_unittest_suites'] = MOCHITEST_ONLY + XPCSHELL_ONLY
+BRANCHES['mozilla-b2g18']['platforms']['ics_armv7a_gecko'][
+    'enable_debug_unittests'] = True
 BRANCHES['mozilla-b2g18']['platforms']['ics_armv7a_gecko']['fedora-b2g']['suite_config']['reftest-1'] = {
     'extra_args': [
         '--cfg', 'b2g/emulator_automation_config.py',
@@ -640,7 +653,9 @@ BRANCHES['try']['pgo_strategy'] = "try"
 BRANCHES['try']['enable_try'] = True
 
 if __name__ == "__main__":
-    import sys, pprint, re
+    import sys
+    import pprint
+    import re
 
     class BBPrettyPrinter(pprint.PrettyPrinter):
         def format(self, object, context, maxlevels, level):

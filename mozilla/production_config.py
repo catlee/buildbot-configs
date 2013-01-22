@@ -1,50 +1,56 @@
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(41,87) + [88]]
-MAC_SNOW_MINIS = ['moz2-darwin10-slave%02i' % x for x in range(40,57) if x not in (51,52,)] # bug683792
-LINUX_VMS      = ['bld-centos5-32-vmw-%03i' % x for x in range(1,23)]
-LINUX_IXS      = ['mv-moz2-linux-ix-slave%02i' % x for x in range(2,22)] + \
-                 ['linux-ix-slave%02i' % x for x in [1,2,6] + range(12,32)]
-LINUX64_VMS    = ['bld-centos5-64-vmw-%03i' % x for x in range(1, 7)]
-LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in range(3,18)]
-WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(2,16) + [20, 26]]
-WIN64_IXS      = ['w64-ix-slave%02i' % x for x in range(6,25) + range(42,44) + range(64,100) if x not in [22,80,85,86]] + \
-                 ['w64-ix-slave%03i' % x for x in range(100,111)]
-MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,24)] # 5 staging, 17 prod, 17 try
-LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 101) + range(300, 401) + range(600, 701)]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(41, 87) + [88]]
+MAC_SNOW_MINIS = ['moz2-darwin10-slave%02i' % x for x in range(
+    40, 57) if x not in (51, 52,)]  # bug683792
+LINUX_VMS = ['bld-centos5-32-vmw-%03i' % x for x in range(1, 23)]
+LINUX_IXS      = ['mv-moz2-linux-ix-slave%02i' % x for x in range(2, 22)] + \
+                 ['linux-ix-slave%02i' % x for x in [1, 2, 6] + range(12, 32)]
+LINUX64_VMS = ['bld-centos5-64-vmw-%03i' % x for x in range(1, 7)]
+LINUX64_IXS = ['linux64-ix-slave%02i' % x for x in range(3, 18)]
+WIN32_IXS = ['mw32-ix-slave%02i' % x for x in range(2, 16) + [20, 26]]
+WIN64_IXS      = ['w64-ix-slave%02i' % x for x in range(6, 25) + range(42, 44) + range(64, 100) if x not in [22, 80, 85, 86]] + \
+                 ['w64-ix-slave%03i' % x for x in range(100, 111)]
+MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(
+    6, 24)]  # 5 staging, 17 prod, 17 try
+LINUX64_EC2 = ['bld-linux64-ec2-%03d' % x for x in range(
+    1, 101) + range(300, 401) + range(600, 701)]
 
 SLAVES = {
-    'linux':            LINUX_VMS + LINUX_IXS,
-    'linux64':          LINUX64_VMS + LINUX64_IXS,
-    'win32':            WIN32_IXS,
-    'win64':            WIN64_IXS,
-    'macosx':           [],
-    'macosx64':         MAC_SNOW_MINIS,
-    'macosx64-lion':    MAC_LION_MINIS,
-    'android':          LINUX_VMS + LINUX_IXS,
-    'android-armv6':    LINUX_VMS + LINUX_IXS,
-    'android-x86':      MOCK_DL120G7 + LINUX64_EC2,
-    'mock':             MOCK_DL120G7 + LINUX64_EC2,
+    'linux': LINUX_VMS + LINUX_IXS,
+    'linux64': LINUX64_VMS + LINUX64_IXS,
+    'win32': WIN32_IXS,
+    'win64': WIN64_IXS,
+    'macosx': [],
+    'macosx64': MAC_SNOW_MINIS,
+    'macosx64-lion': MAC_LION_MINIS,
+    'android': LINUX_VMS + LINUX_IXS,
+    'android-armv6': LINUX_VMS + LINUX_IXS,
+    'android-x86': MOCK_DL120G7 + LINUX64_EC2,
+    'mock': MOCK_DL120G7 + LINUX64_EC2,
 }
 
-TRY_LINUX      = []
-TRY_LINUX_IXS  = ['mv-moz2-linux-ix-slave%02i' % x for x in range(22,24)] + \
-                 ['linux-ix-slave%02i' % x for x in range(7,12)]
-TRY_LINUX64    = []
-TRY_LINUX64_IXS= ['linux64-ix-slave%02i' % x for x in range(22,42)]
-TRY_LINUX64_EC2= ['try-linux64-ec2-%03d' % x for x in range(1, 101) + range(300, 401) + range(600, 701)]
-TRY_MAC64      = ['try-mac64-slave%02i' % x for x in range(27,32)]
-TRY_WIN32_IXS  = ['mw32-ix-slave%02i' % x for x in range(16,19) + range(22,26)]
-TRY_WIN64_IXS  = ['w64-ix-slave%02i' % x for x in range(25,64) if x not in [42,43]]
-TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,43)]
-TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(1,41) + [95,96]]
+TRY_LINUX = []
+TRY_LINUX_IXS  = ['mv-moz2-linux-ix-slave%02i' % x for x in range(22, 24)] + \
+                 ['linux-ix-slave%02i' % x for x in range(7, 12)]
+TRY_LINUX64 = []
+TRY_LINUX64_IXS = ['linux64-ix-slave%02i' % x for x in range(22, 42)]
+TRY_LINUX64_EC2 = ['try-linux64-ec2-%03d' % x for x in range(
+    1, 101) + range(300, 401) + range(600, 701)]
+TRY_MAC64 = ['try-mac64-slave%02i' % x for x in range(27, 32)]
+TRY_WIN32_IXS = ['mw32-ix-slave%02i' % x for x in range(16, 19) + range(
+    22, 26)]
+TRY_WIN64_IXS = ['w64-ix-slave%02i' % x for x in range(25, 64)
+                 if x not in [42, 43]]
+TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24, 43)]
+TRY_LION = ['bld-lion-r5-%03d' % x for x in range(1, 41) + [95, 96]]
 
 TRY_SLAVES = {
-    'linux':       TRY_LINUX + TRY_LINUX_IXS,
-    'linux64':     TRY_LINUX64 + TRY_LINUX64_IXS,
-    'win32':       TRY_WIN32_IXS,
-    'win64':       TRY_WIN64_IXS,
-    'macosx64':    TRY_MAC64,
+    'linux': TRY_LINUX + TRY_LINUX_IXS,
+    'linux64': TRY_LINUX64 + TRY_LINUX64_IXS,
+    'win32': TRY_WIN32_IXS,
+    'win64': TRY_WIN64_IXS,
+    'macosx64': TRY_MAC64,
     'macosx64-lion': TRY_LION,
-    'mock':        TRY_MOCK_DL120G7 + TRY_LINUX64_EC2,
+    'mock': TRY_MOCK_DL120G7 + TRY_LINUX64_EC2,
 }
 
 # Local overrides for default values
@@ -231,4 +237,3 @@ if __name__ == "__main__":
         for host_platform in host_info[list_name]:
             for host_name in host_info[list_name][host_platform]:
                 print("%s,%s,%s" % (list_name, host_platform, host_name))
-

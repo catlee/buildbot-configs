@@ -11,7 +11,8 @@ STAGING_SLAVES = {
     'lion': dict([("talos-r4-lion-%03i" % x, {}) for x in [1, 2, 3, 10]]),
     'mountainlion': dict([("talos-mtnlion-r5-%03i" % x, {}) for x in [1, 2, 3, 10]]),
     'tegra_android': dict(
-        [('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(10,30)]
+        [('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port':
+          '31%03i' % x}) for x in range(10, 30)]
     ),
     'panda_android': dict(),
     'b2g_panda': dict(),
@@ -33,7 +34,7 @@ for p, slaves in pc.SLAVES.items() + pc.TRY_SLAVES.items():
 TRY_SLAVES = deepcopy(SLAVES)
 
 GRAPH_CONFIG = ['--resultsServer', 'graphs.allizom.org',
-    '--resultsLink', '/server/collect.cgi']
+                '--resultsLink', '/server/collect.cgi']
 
 GLOBAL_VARS = {
     'disable_tinderbox_mail': True,
@@ -47,14 +48,14 @@ GLOBAL_VARS = {
 }
 
 BRANCHES = {
-        'try': {
-            'enable_mail_notifier': False, # Set to True when testing
-            'email_override': [], # Set to your address when testing
-            'package_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox/try-builds',
-            'package_dir': '%(who)s-%(got_revision)s',
-            'stage_username': 'trybld',
-            'stage_ssh_key': 'trybld_dsa',
-        },
+    'try': {
+    'enable_mail_notifier': False,  # Set to True when testing
+    'email_override': [],  # Set to your address when testing
+    'package_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox/try-builds',
+    'package_dir': '%(who)s-%(got_revision)s',
+    'stage_username': 'trybld',
+    'stage_ssh_key': 'trybld_dsa',
+    },
 }
 
 PLATFORM_VARS = {

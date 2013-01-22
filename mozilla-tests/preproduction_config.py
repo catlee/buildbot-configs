@@ -1,7 +1,7 @@
 from staging_config import SLAVES, TRY_SLAVES
 
 GRAPH_CONFIG = ['--resultsServer', 'graphs.allizom.org',
-    '--resultsLink', '/server/collect.cgi']
+                '--resultsLink', '/server/collect.cgi']
 
 GLOBAL_VARS = {
     'disable_tinderbox_mail': True,
@@ -15,14 +15,14 @@ GLOBAL_VARS = {
 }
 
 BRANCHES = {
-        'try': {
-            'enable_mail_notifier': False, # Set to True when testing
-            'email_override': [], # Set to your address when testing
-            'package_url': 'http://preproduction-stage.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox/try-builds',
-            'package_dir': '%(who)s-%(got_revision)s',
-            'stage_username': 'trybld',
-            'stage_ssh_key': 'trybld_dsa',
-        },
+    'try': {
+    'enable_mail_notifier': False,  # Set to True when testing
+    'email_override': [],  # Set to your address when testing
+    'package_url': 'http://preproduction-stage.srv.releng.scl3.mozilla.com/pub/mozilla.org/firefox/try-builds',
+    'package_dir': '%(who)s-%(got_revision)s',
+    'stage_username': 'trybld',
+    'stage_ssh_key': 'trybld_dsa',
+    },
 }
 
 PLATFORM_VARS = {

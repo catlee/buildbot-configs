@@ -9,27 +9,28 @@ releaseConfig['disable_tinderbox_mail'] = True
 releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/always_clobber.php'
 
 # Release Notification
-releaseConfig['AllRecipients']       = ['<release@mozilla.com>','<release-mgmt@mozilla.com>']
-releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
-releaseConfig['releaseTemplates']    = 'release_templates'
-releaseConfig['messagePrefix']       = '[release] '
+releaseConfig['AllRecipients'] = ['<release@mozilla.com>',
+                                  '<release-mgmt@mozilla.com>']
+releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>', ]
+releaseConfig['releaseTemplates'] = 'release_templates'
+releaseConfig['messagePrefix'] = '[release] '
 
 # Basic product configuration
 #  Names for the product/files
-releaseConfig['productName']         = 'fennec'
-releaseConfig['appName']             = 'mobile'
-releaseConfig['relbranchPrefix']     = 'MOBILE'
+releaseConfig['productName'] = 'fennec'
+releaseConfig['appName'] = 'mobile'
+releaseConfig['relbranchPrefix'] = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '18.0'
-releaseConfig['appVersion']          = '18.0'
-releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_18_0'
+releaseConfig['version'] = '18.0'
+releaseConfig['appVersion'] = '18.0'
+releaseConfig['milestone'] = releaseConfig['appVersion']
+releaseConfig['buildNumber'] = 1
+releaseConfig['baseTag'] = 'FENNEC_18_0'
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = releaseConfig['version']
-releaseConfig['nextMilestone']       = releaseConfig['version']
+releaseConfig['nextAppVersion'] = releaseConfig['version']
+releaseConfig['nextMilestone'] = releaseConfig['version']
 #  Repository configuration, for tagging
-releaseConfig['sourceRepositories']  = {
+releaseConfig['sourceRepositories'] = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
@@ -56,12 +57,12 @@ releaseConfig['sourceRepositories']  = {
     }
 }
 #  L10n repositories
-releaseConfig['l10nRelbranch']       = None
-releaseConfig['l10nRepoPath']        = 'releases/l10n/mozilla-release'
-releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mobile-release.json'
-releaseConfig['l10nJsonFile']        = releaseConfig['l10nRevisionFile']
+releaseConfig['l10nRelbranch'] = None
+releaseConfig['l10nRepoPath'] = 'releases/l10n/mozilla-release'
+releaseConfig['l10nRevisionFile'] = 'l10n-changesets_mobile-release.json'
+releaseConfig['l10nJsonFile'] = releaseConfig['l10nRevisionFile']
 #  Support repositories
-releaseConfig['otherReposToTag']     = {
+releaseConfig['otherReposToTag'] = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
@@ -69,33 +70,33 @@ releaseConfig['otherReposToTag']     = {
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']        = ('android', 'android-armv6')
-releaseConfig['notifyPlatforms']      = releaseConfig['enUSPlatforms']
-releaseConfig['manuallySignedPlatforms']      = releaseConfig['enUSPlatforms']
-releaseConfig['unittestPlatforms']    = ()
-releaseConfig['talosTestPlatforms']   = ()
-releaseConfig['enableUnittests']      = True
+releaseConfig['enUSPlatforms'] = ('android', 'android-armv6')
+releaseConfig['notifyPlatforms'] = releaseConfig['enUSPlatforms']
+releaseConfig['manuallySignedPlatforms'] = releaseConfig['enUSPlatforms']
+releaseConfig['unittestPlatforms'] = ()
+releaseConfig['talosTestPlatforms'] = ()
+releaseConfig['enableUnittests'] = True
 
 # L10n configuration
-releaseConfig['l10nPlatforms']       = ('android',)
-releaseConfig['mergeLocales']        = True
-releaseConfig['enableMultiLocale']   = True
+releaseConfig['l10nPlatforms'] = ('android',)
+releaseConfig['mergeLocales'] = True
+releaseConfig['enableMultiLocale'] = True
 
 # Mercurial account
-releaseConfig['hgUsername']          = 'ffxbld'
-releaseConfig['hgSshKey']            = '/home/mock_mozilla/.ssh/ffxbld_dsa'
+releaseConfig['hgUsername'] = 'ffxbld'
+releaseConfig['hgSshKey'] = '/home/mock_mozilla/.ssh/ffxbld_dsa'
 
 # Update-specific configuration
-releaseConfig['ftpServer']           = 'ftp.mozilla.org'
-releaseConfig['stagingServer']       = 'stage.mozilla.org'
-releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
-releaseConfig['ausHost']             = 'aus3-staging.mozilla.org'
-releaseConfig['ausUser']             = 'ffxbld'
-releaseConfig['ausSshKey']           = 'auspush'
+releaseConfig['ftpServer'] = 'ftp.mozilla.org'
+releaseConfig['stagingServer'] = 'stage.mozilla.org'
+releaseConfig['ausServerUrl'] = 'https://aus3.mozilla.org'
+releaseConfig['ausHost'] = 'aus3-staging.mozilla.org'
+releaseConfig['ausUser'] = 'ffxbld'
+releaseConfig['ausSshKey'] = 'auspush'
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']       = True
-releaseConfig['partnersRepoPath']       = 'build/partner-repacks'
+releaseConfig['doPartnerRepacks'] = True
+releaseConfig['partnersRepoPath'] = 'build/partner-repacks'
 releaseConfig['partnerRepackPlatforms'] = ()
 releaseConfig['partnerRepackConfig'] = {
     'use_mozharness': True,
@@ -103,27 +104,27 @@ releaseConfig['partnerRepackConfig'] = {
         'android': {
             'script': 'scripts/mobile_partner_repack.py',
             'config_file': 'partner_repacks/release_mozilla-release_android.py',
-         },
+        },
     },
 }
 
 # mozconfigs
-releaseConfig['mozconfigs']          = {
+releaseConfig['mozconfigs'] = {
     'android': 'mobile/android/config/mozconfigs/android/release',
     'android-armv6': 'mobile/android/config/mozconfigs/android-armv6/release',
 }
 
 # Misc configuration
-releaseConfig['enable_repo_setup']       = False
+releaseConfig['enable_repo_setup'] = False
 
 # Fennec specific
-releaseConfig['usePrettyNames']           = False
-releaseConfig['disableBouncerEntries']    = True
+releaseConfig['usePrettyNames'] = False
+releaseConfig['disableBouncerEntries'] = True
 releaseConfig['disableStandaloneRepacks'] = True
-releaseConfig['disablePermissionCheck']   = True
-releaseConfig['disableVirusCheck']        = True
-releaseConfig['disablePushToMirrors']     = True
-releaseConfig['enableUpdatePackaging']    = False
+releaseConfig['disablePermissionCheck'] = True
+releaseConfig['disableVirusCheck'] = True
+releaseConfig['disablePushToMirrors'] = True
+releaseConfig['enableUpdatePackaging'] = False
 
 releaseConfig['single_locale_options'] = {
     'android': [
@@ -136,9 +137,9 @@ releaseConfig['single_locale_options'] = {
 releaseConfig['multilocale_config'] = {
     'platforms': {
         'android':
-            'multi_locale/release_mozilla-release_android.json',
+    'multi_locale/release_mozilla-release_android.json',
         'android-armv6':
-            'multi_locale/release_mozilla-release_android-armv6.json',
+    'multi_locale/release_mozilla-release_android-armv6.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
@@ -151,4 +152,4 @@ releaseConfig['enableSigningAtBuildTime'] = False
 releaseConfig['enablePartialMarsAtBuildTime'] = False
 releaseConfig['autoGenerateChecksums'] = False
 releaseConfig['use_mock'] = True
-releaseConfig['mock_platforms'] = ('android','android-armv6','linux')
+releaseConfig['mock_platforms'] = ('android', 'android-armv6', 'linux')

@@ -19,7 +19,7 @@ GLOBAL_VARS = {
     # and sendchange retry count before give up
     'unittest_masters': [
         ('dev-master01.build.scl1.mozilla.com:9901', True, 1),
-        ],
+    ],
     'xulrunner_tinderbox_tree': 'ThunderbirdTest',
     'weekly_tinderbox_tree': 'ThunderbirdTest',
     'l10n_tinderbox_tree': 'MozillaStaging',
@@ -61,8 +61,8 @@ BRANCHES = {
     },
     'try-comm-central': {
         'download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/thunderbird',
-        'enable_mail_notifier': False, # Set to True when testing
-        'email_override': [], # Set to your address when testing
+        'enable_mail_notifier': False,  # Set to True when testing
+        'email_override': [],  # Set to your address when testing
         'package_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/thunderbird/try-builds',
         'talos_masters': [],
         'platforms': {

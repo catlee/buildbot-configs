@@ -14,14 +14,15 @@ class SlaveCheck(unittest.TestCase):
             common_slaves = set(prod_slaves) & set(try_slaves)
             self.assertEqual(
                 common_slaves, set([]),
-                'Try slaves must not be used in production, however the ' + \
-                'following slaves used for both:\n%s' % \
+                'Try slaves must not be used in production, however the ' +
+                'following slaves used for both:\n%s' %
                 '\n'.join(common_slaves)
             )
 
     def test_stag_not_in_prod(self):
         prod_slaves = [x for k, s in prod.SLAVES.iteritems() for x in s]
-        stag_slaves = [x for k, s in stag.STAGING_SLAVES.iteritems() for x in s]
+        stag_slaves = [x for k, s in stag.STAGING_SLAVES.iteritems(
+        ) for x in s]
         if hasattr(prod, 'TRY_SLAVES'):
             prod_slaves.extend([x for k, s in prod.TRY_SLAVES.iteritems() for x
                                 in s])
