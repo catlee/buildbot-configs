@@ -112,6 +112,7 @@ SYMBOL_SERVER_MOBILE_PATH = GLOBAL_VARS['symbol_server_mobile_path']
 PLATFORM_VARS = {
         'linux': {
             'product_name': 'firefox',
+            'unittest_platform': 'linux-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'Linux %(branch)s',
@@ -180,6 +181,7 @@ PLATFORM_VARS = {
         },
         'linux64': {
             'product_name': 'firefox',
+            'unittest_platform': 'linux64-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'Linux x86-64 %(branch)s',
@@ -249,6 +251,7 @@ PLATFORM_VARS = {
         },
         'linux64-asan': {
             'product_name': 'firefox',
+            'unittest_platform': 'linux64-asan-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'Linux x86-64 %(branch)s asan',
@@ -318,6 +321,7 @@ PLATFORM_VARS = {
         },
         'linux64-dbg-asan': {
             'product_name': 'firefox',
+            'unittest_platform': 'linux64-dbg-asan',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'Linux x86-64 %(branch)s debug asan',
@@ -387,6 +391,7 @@ PLATFORM_VARS = {
         },
         'macosx64': {
             'product_name': 'firefox',
+            'unittest_platform': 'macosx64-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'OS X 10.7 %(branch)s',
@@ -440,6 +445,7 @@ PLATFORM_VARS = {
         },
         'win32': {
             'product_name': 'firefox',
+            'unittest_platform': 'win32-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'WINNT 5.2 %(branch)s',
@@ -492,6 +498,7 @@ PLATFORM_VARS = {
         },
         'win64': {
             'product_name': 'firefox',
+            'unittest_platform': 'win64-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'WINNT 6.1 x86-64 %(branch)s',
@@ -537,6 +544,7 @@ PLATFORM_VARS = {
         'linux-debug': {
             'enable_nightly': False,
             'enable_xulrunner': False,
+            'enable_leaktests': True,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -569,7 +577,7 @@ PLATFORM_VARS = {
             },
             'enable_unittests': False,
             'enable_checktests': True,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
+            'talos_masters': None,
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux32/releng.manifest',
             'use_mock': True,
             'mock_target': 'mozilla-centos6-i386',
@@ -594,6 +602,7 @@ PLATFORM_VARS = {
         'linux64-debug': {
             'enable_nightly': False,
             'enable_xulrunner': False,
+            'enable_leaktests': True,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -626,7 +635,7 @@ PLATFORM_VARS = {
             },
             'enable_unittests': False,
             'enable_checktests': True,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
+            'talos_masters': None,
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux64/releng.manifest',
             'use_mock': True,
             'mock_target': 'mozilla-centos6-x86_64',
@@ -651,6 +660,7 @@ PLATFORM_VARS = {
         'macosx-debug': {
             'enable_nightly': False,
             'enable_xulrunner': False,
+            'enable_leaktests': True,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -681,7 +691,7 @@ PLATFORM_VARS = {
             },
             'enable_unittests': False,
             'enable_checktests': True,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
+            'talos_masters': None,
             # These refer to items in passwords.secrets
             # nightly_signing_servers defaults to dep-signing because we don't want
             # random new branches to accidentally use nightly-signing, which signs
@@ -694,6 +704,7 @@ PLATFORM_VARS = {
         'macosx64-debug': {
             'enable_nightly': False,
             'enable_xulrunner': False,
+            'enable_leaktests': True,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -724,7 +735,7 @@ PLATFORM_VARS = {
             },
             'enable_unittests': False,
             'enable_checktests': True,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
+            'talos_masters': None,
             # These refer to items in passwords.secrets
             # nightly_signing_servers defaults to dep-signing because we don't want
             # random new branches to accidentally use nightly-signing, which signs
@@ -738,6 +749,7 @@ PLATFORM_VARS = {
         'win32-debug': {
             'enable_nightly': False,
             'enable_xulrunner': False,
+            'enable_leaktests': True,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -765,13 +777,14 @@ PLATFORM_VARS = {
             },
             'enable_unittests': False,
             'enable_checktests': True,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
+            'talos_masters': None,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'enable_pymake': True,
         },
         'android': {
             'product_name': 'firefox',
+            'unittest_platform': 'android-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'Android %(branch)s',
@@ -839,6 +852,7 @@ PLATFORM_VARS = {
         },
         'android-armv6': {
             'product_name': 'firefox',
+            'unittest_platform': 'android-armv6-opt',
             'app_name': 'browser',
             'base_name': 'Android Armv6 %(branch)s',
             'mozconfig': 'android-armv6/%(branch)s/nightly',
@@ -902,6 +916,7 @@ PLATFORM_VARS = {
         },
         'android-x86': {
             'product_name': 'firefox',
+            'unittest_platform': 'android-x86-opt',
             'app_name': 'browser',
             'base_name': 'Android X86 %(branch)s',
             'mozconfig': 'android-x86/%(branch)s/nightly',
@@ -963,6 +978,7 @@ PLATFORM_VARS = {
         },
         'android-noion': {
             'product_name': 'firefox',
+            'unittest_platform': 'android-noion-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'Android no-ionmonkey %(branch)s',
@@ -1086,7 +1102,7 @@ PLATFORM_VARS = {
                 'PATH': '/tools/buildbot/bin:/usr/local/bin:/bin:/usr/bin',
             },
             'enable_opt_unittests': False,
-            'talos_masters': GLOBAL_VARS['talos_masters'],
+            'talos_masters': None,
             'unittest_masters': GLOBAL_VARS['unittest_masters'],
             'stage_platform': "android-debug",
             'stage_product': 'mobile',

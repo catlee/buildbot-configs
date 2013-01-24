@@ -95,6 +95,7 @@ builder_prefix = "TB "
 PLATFORM_VARS = {
         'linux': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'linux-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly',
@@ -164,6 +165,7 @@ PLATFORM_VARS = {
         },
         'linux64': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'linux64-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly',
@@ -234,6 +236,7 @@ PLATFORM_VARS = {
         },
         'macosx64': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'macosx64-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 %(branch)s',
             'mozconfig': 'macosx64/%(branch)s/nightly',
@@ -283,6 +286,7 @@ PLATFORM_VARS = {
         },
         'win32': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'win32-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 5.2 %(branch)s',
             'mozconfig': 'win32/%(branch)s/nightly',
@@ -330,6 +334,7 @@ PLATFORM_VARS = {
         },
         'win64': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'win64-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 6.1 x86-64 %(branch)s',
             'src_mozconfig': 'mail/config/mozconfigs/win64/nightly',
@@ -375,6 +380,7 @@ PLATFORM_VARS = {
         },
         'linux-debug': {
             'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux %(branch)s leak test',
@@ -432,6 +438,7 @@ PLATFORM_VARS = {
         },
         'linux64-debug': {
             'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux x86-64 %(branch)s leak test',
@@ -489,6 +496,7 @@ PLATFORM_VARS = {
         },
         'macosx-debug': {
             'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 32-bit %(branch)s leak test',
@@ -527,6 +535,7 @@ PLATFORM_VARS = {
         },
         'macosx64-debug': {
             'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 64-bit %(branch)s leak test',
@@ -565,6 +574,7 @@ PLATFORM_VARS = {
         },
         'win32-debug': {
             'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 5.2 %(branch)s leak test',
