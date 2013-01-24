@@ -374,6 +374,7 @@ PLATFORM_VARS = {
             'enable_pymake': True,
         },
         'linux-debug': {
+            'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux %(branch)s leak test',
@@ -430,6 +431,7 @@ PLATFORM_VARS = {
             ],
         },
         'linux64-debug': {
+            'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux x86-64 %(branch)s leak test',
@@ -486,6 +488,7 @@ PLATFORM_VARS = {
             ],
         },
         'macosx-debug': {
+            'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 32-bit %(branch)s leak test',
@@ -523,6 +526,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mail/config/tooltool-manifests/macosx32/releng.manifest',
         },
         'macosx64-debug': {
+            'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 64-bit %(branch)s leak test',
@@ -560,6 +564,7 @@ PLATFORM_VARS = {
             'enable_ccache': True,
         },
         'win32-debug': {
+            'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 5.2 %(branch)s leak test',

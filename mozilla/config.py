@@ -535,6 +535,8 @@ PLATFORM_VARS = {
             'enable_pymake': True,
         },
         'linux-debug': {
+            'enable_nightly': False,
+            'enable_xulrunner': False,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -590,6 +592,8 @@ PLATFORM_VARS = {
             ],
         },
         'linux64-debug': {
+            'enable_nightly': False,
+            'enable_xulrunner': False,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -645,6 +649,8 @@ PLATFORM_VARS = {
             ],
         },
         'macosx-debug': {
+            'enable_nightly': False,
+            'enable_xulrunner': False,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -686,6 +692,8 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/macosx32/releng.manifest',
         },
         'macosx64-debug': {
+            'enable_nightly': False,
+            'enable_xulrunner': False,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -728,6 +736,8 @@ PLATFORM_VARS = {
             'enable_ccache': True,
         },
         'win32-debug': {
+            'enable_nightly': False,
+            'enable_xulrunner': False,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
@@ -1019,6 +1029,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android/releng.manifest',
         },
         'android-debug': {
+            'enable_nightly': False,
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
