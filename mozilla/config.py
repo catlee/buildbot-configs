@@ -321,7 +321,9 @@ PLATFORM_VARS = {
         },
         'linux64-dbg-asan': {
             'product_name': 'firefox',
-            'unittest_platform': 'linux64-dbg-asan',
+            # XXX Fix me before landing. This is here so our dump masters diff
+            # is clean.
+            'unittest_platform': 'linux64-dbg-asan-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
             'base_name': 'Linux x86-64 %(branch)s debug asan',
