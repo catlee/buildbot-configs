@@ -30,11 +30,13 @@ SLAVES['b2g_panda_gaia_central'] = SLAVES['b2g_panda']
 TRY_SLAVES = {}
 
 GRAPH_CONFIG = ['--resultsServer', 'graphs.mozilla.org',
-    '--resultsLink', '/server/collect.cgi']
+                '--resultsLink', '/server/collect.cgi']
 
 GLOBAL_VARS = {
     'disable_tinderbox_mail': True,
     'build_tools_repo_path': 'build/tools',
+    'mozharness_repo': 'http://hg.mozilla.org/build/mozharness',
+    'mozharness_tag': 'production',
     'stage_server': 'stage.mozilla.org',
     'stage_username': 'ffxbld',
     'stage_ssh_key': 'ffxbld_dsa',
@@ -63,6 +65,10 @@ BRANCHES = {
     'mozilla-b2g18': {
         'tinderbox_tree': 'Mozilla-B2g18',
         'mobile_tinderbox_tree': 'Mozilla-B2g18',
+    },
+    'mozilla-b2g18_v1_0_0': {
+        'tinderbox_tree': 'Mozilla-B2g18_v1_0_0',
+        'mobile_tinderbox_tree': 'Mozilla-B2g18_v1_0_0',
     },
     'mozilla-beta': {
         'tinderbox_tree': 'Mozilla-Beta',
