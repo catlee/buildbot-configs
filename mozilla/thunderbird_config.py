@@ -727,10 +727,6 @@ BRANCHES['comm-release']['platforms']['linux']['mock_packages'].remove('gcc45_0m
 BRANCHES['comm-release']['platforms']['linux']['mock_packages'].append('gcc45_0moz4')
 BRANCHES['comm-release']['platforms']['linux64']['mock_packages'].remove('gcc45_0moz3')
 BRANCHES['comm-release']['platforms']['linux64']['mock_packages'].append('gcc45_0moz4')
-BRANCHES['comm-release']['platforms']['linux-debug']['mock_packages'].remove('gcc45_0moz3')
-BRANCHES['comm-release']['platforms']['linux-debug']['mock_packages'].append('gcc45_0moz4')
-BRANCHES['comm-release']['platforms']['linux64-debug']['mock_packages'].remove('gcc45_0moz3')
-BRANCHES['comm-release']['platforms']['linux64-debug']['mock_packages'].append('gcc45_0moz4')
 
 ######## comm-esr17
 BRANCHES['comm-esr17']['moz_repo_path'] = 'releases/mozilla-esr17'
@@ -775,10 +771,6 @@ BRANCHES['comm-esr17']['platforms']['linux']['mock_packages'].remove('gcc45_0moz
 BRANCHES['comm-esr17']['platforms']['linux']['mock_packages'].append('gcc45_0moz4')
 BRANCHES['comm-esr17']['platforms']['linux64']['mock_packages'].remove('gcc45_0moz3')
 BRANCHES['comm-esr17']['platforms']['linux64']['mock_packages'].append('gcc45_0moz4')
-BRANCHES['comm-esr17']['platforms']['linux-debug']['mock_packages'].remove('gcc45_0moz3')
-BRANCHES['comm-esr17']['platforms']['linux-debug']['mock_packages'].append('gcc45_0moz4')
-BRANCHES['comm-esr17']['platforms']['linux64-debug']['mock_packages'].remove('gcc45_0moz3')
-BRANCHES['comm-esr17']['platforms']['linux64-debug']['mock_packages'].append('gcc45_0moz4')
 
 ######## comm-beta
 BRANCHES['comm-beta']['moz_repo_path'] = 'releases/mozilla-beta'
