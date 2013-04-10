@@ -21,17 +21,17 @@ releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
 releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '17.0.2'
-releaseConfig['appVersion']          = '17.0.2'
+releaseConfig['version']             = '17.0.5'
+releaseConfig['appVersion']          = '17.0.5'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'THUNDERBIRD_17_0_2'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'THUNDERBIRD_17_0_5'
 releaseConfig['partialUpdates']      = {
 
-    '17.0': {
-        'appVersion': '17.0',
-        'buildNumber': 2,
-        'baseTag': 'THUNDERBIRD_17_0',
+    '17.0.4': {
+        'appVersion': '17.0.4',
+        'buildNumber': 1,
+        'baseTag': 'THUNDERBIRD_17_0_4',
     },
 
 }
@@ -42,9 +42,9 @@ releaseConfig['nextMilestone']       = releaseConfig['milestone']
 releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-release',
-        'path': 'releases/comm-release',
-        'revision': 'b88ae0d86bec',
-        'relbranch': 'GECKO1701_2013010313_RELBRANCH',
+        'path': 'releases/comm-esr17',
+        'revision': '57e2f985b4bd',
+        'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
                 'version': releaseConfig['appVersion'],
@@ -54,9 +54,9 @@ releaseConfig['sourceRepositories']  = {
     },
     'mozilla': {
         'name': 'mozilla-release',
-        'path': 'releases/mozilla-release',
-        'revision': '0cdeaa290942',
-        'relbranch': 'GECKO1701_2013010313_RELBRANCH',
+        'path': 'releases/mozilla-esr17',
+        'revision': 'cd7d672b40ea',
+        'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
                 'version': releaseConfig['milestone'],
@@ -72,12 +72,12 @@ releaseConfig['sourceRepositories']  = {
 #  L10n repositories
 releaseConfig['l10nRelbranch']       = None
 releaseConfig['l10nRepoPath']        = 'releases/l10n/mozilla-release'
-releaseConfig['l10nRevisionFile']    = 'l10n-changesets_thunderbird-release'
+releaseConfig['l10nRevisionFile']    = 'l10n-changesets_thunderbird-esr17'
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
@@ -110,6 +110,7 @@ releaseConfig['ausUser']             = 'tbirdbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=%locale%&platform=%platform%&version=%version%'
 releaseConfig['testOlderPartials']   = False
+releaseConfig['promptWaitTime']      = None
 releaseConfig['updateVerifyChunks']  = 4
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozRelease-thunderbird-linux.cfg',

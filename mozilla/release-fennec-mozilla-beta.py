@@ -20,11 +20,11 @@ releaseConfig['productName']         = 'fennec'
 releaseConfig['appName']             = 'mobile'
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '19.0b2'
-releaseConfig['appVersion']          = '19.0'
+releaseConfig['version']             = '21.0b2'
+releaseConfig['appVersion']          = '21.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_19_0b2'
+releaseConfig['baseTag']             = 'FENNEC_21_0b2'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextMilestone']       = releaseConfig['milestone']
@@ -33,7 +33,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': 'aad6dcd323c3',
+        'revision': '875a71336901',
         'relbranch': None,
         'bumpFiles': {
             'mobile/android/confvars.sh': {
@@ -64,19 +64,19 @@ releaseConfig['l10nJsonFile']        = releaseConfig['l10nRevisionFile']
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
 releaseConfig['enUSPlatforms']        = ('android', 'android-armv6')
 releaseConfig['notifyPlatforms']      = releaseConfig['enUSPlatforms']
-releaseConfig['manuallySignedPlatforms']      = releaseConfig['enUSPlatforms']
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
-releaseConfig['enableUnittests']      = True
+releaseConfig['enableUnittests']      = False
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = ('android',)
+releaseConfig['l10nNotifyPlatforms'] = releaseConfig['l10nPlatforms']
 releaseConfig['mergeLocales']        = True
 releaseConfig['enableMultiLocale']   = True
 

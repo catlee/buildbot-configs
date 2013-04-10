@@ -29,9 +29,9 @@ else:
         'mozilla-beta',
         'mozilla-aurora',
         'mozilla-release',
-        'mozilla-esr10',
         'mozilla-esr17',
         'mozilla-b2g18',
+        'mozilla-b2g18_v1_0_1',
     ])
 if 'limit_tb_branches' in master_config:
     ACTIVE_THUNDERBIRD_BRANCHES = [x.encode("utf-8") for x in master_config['limit_tb_branches']]
@@ -41,7 +41,6 @@ else:
         'comm-beta',
         'comm-aurora',
         'comm-release',
-        'comm-esr10',
         'comm-esr17',
     ]
 if 'limit_b2g_branches' in master_config:
@@ -51,6 +50,7 @@ else:
     ACTIVE_B2G_BRANCHES.extend([
         'mozilla-central',
         'mozilla-b2g18',
+        'mozilla-b2g18_v1_0_1',
     ])
 
 if 'limit_projects' in master_config:
@@ -80,6 +80,5 @@ buildbotcustom.misc.fastRegexes.extend([
     'linux-ix-',
     'linux64-ix-',
     ])
-RESERVED_SLAVES = "reserved_slaves"
 
 QUEUEDIR = master_config.get("queuedir", "/dev/shm/queue")

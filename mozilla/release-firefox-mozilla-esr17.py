@@ -20,30 +20,30 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '17.0.2esr'
-releaseConfig['appVersion']          = '17.0.2'
+releaseConfig['version']             = '17.0.5esr'
+releaseConfig['appVersion']          = '17.0.5'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 3
-releaseConfig['baseTag']             = 'FIREFOX_17_0_2esr'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'FIREFOX_17_0_5esr'
 releaseConfig['partialUpdates']      = {
 
-    '17.0.1esr': {
-        'appVersion': '17.0.1',
+    '17.0.4esr': {
+        'appVersion': '17.0.4',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_17_0_1esr',
+        'baseTag': 'FIREFOX_17_0_4esr',
     },
 
 }
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '17.0.2esrpre'
+releaseConfig['nextAppVersion']      = '17.0.5esrpre'
 releaseConfig['nextMilestone']       = releaseConfig['nextAppVersion']
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-esr17',
         'path': 'releases/mozilla-esr17',
-        'revision': '023401f37090',
-        'relbranch': 'GECKO1702_2013010419_RELBRANCH',
+        'revision': 'cd7d672b40ea',
+        'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
                 'version': releaseConfig['appVersion'],
@@ -69,7 +69,7 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_0_9_5',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
@@ -102,6 +102,7 @@ releaseConfig['ausUser']             = 'ffxbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
+releaseConfig['promptWaitTime']      = None
 releaseConfig['useBetaChannel']      = 1
 releaseConfig['updateVerifyChunks']  = 4
 releaseConfig['verifyConfigs']       = {

@@ -7,16 +7,6 @@
 EMAIL_RECIPIENTS = []
 
 releaseConfig = {}
-# HACK ALERT
-# TODO for 17.0.1esr: the following line should be removed for 17.0.1esr build
-# to enable updates
-#####################################
-
-releaseConfig['skip_updates'] = True
-
-#####################################
-# END OF HACK ALERT
-
 releaseConfig['skip_repo_setup']        = True
 releaseConfig['disable_tinderbox_mail'] = True
 releaseConfig['base_clobber_url'] = 'http://clobberer-stage.pvt.build.mozilla.org/always_clobber.php'
@@ -124,10 +114,10 @@ releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunder
 releaseConfig['testOlderPartials']   = False
 releaseConfig['verifyConfigs']       = {}  # TODO for 17.0.1esr
 releaseConfig['mozconfigs']          = {
-    'linux': 'mail/config/mozconfigs/linux32/release',
-    'linux64': 'mail/config/mozconfigs/linux64/release',
-    'macosx64': 'mail/config/mozconfigs/macosx-universal/release',
-    'win32': 'mail/config/mozconfigs/win32/release',
+    'linux': 'mail/config/mozconfigs/linux32/esr',
+    'linux64': 'mail/config/mozconfigs/linux64/esr',
+    'macosx64': 'mail/config/mozconfigs/macosx-universal/esr',
+    'win32': 'mail/config/mozconfigs/win32/esr',
 }
 releaseConfig['releaseChannel']      = 'esr'
 

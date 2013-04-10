@@ -1,30 +1,7 @@
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
-    'accessibility': {
-        'mozconfig_dir': 'accessibility',
-        'enable_nightly': True,
-        'enabled_products': ['firefox'],
-        # only want a11y which is run within the "chrome" suite
-        # turn other suites off
-        'talos_suites': {
-            'dirty': 0,
-            'tp4': 0,
-            'tp': 0,
-            'chrome_twinopen': 0,
-            'chrome_mac': 0,
-            'chrome': 0,
-            'nochrome': 0,
-            'dromaeo': 0,
-            'svg': 0,
-            'paint': 0,
-        },
-        'add_test_suites': [
-            ('macosx64', 'snowleopard', 'opt', 'mochitest-browser-chrome', 'mochitest-other', 'mochitest-a11y'),
-            ('macosx64', 'snowleopard', 'debug', 'mochitest-browser-chrome', 'mochitest-other', 'mochitest-a11y'),
-        ]
-    },
     'build-system': {
-        'pgo_strategy': 'per-checkin',
+        'pgo_strategy': 'periodic',
         'platforms': {
             'win32': {
                 'pgo_platform': 'win64',
@@ -38,6 +15,8 @@ PROJECT_BRANCHES = {
             'macosx64': {
                 'slave_platforms': ['snowleopard', 'lion', 'mountainlion'],
             },
+        },
+        'mobile_platforms': {
             'android': {
                 'enable_opt_unittests': False,
                 'enable_debug_unittests': False,
@@ -58,14 +37,12 @@ PROJECT_BRANCHES = {
     'fx-team': {
         'repo_path': 'integration/fx-team',
         'mozconfig_dir': 'mozilla-central',
-        'enable_nightly': True,
+        'enable_nightly': False,
         'pgo_strategy': 'periodic',
     },
-    # Turning off graphics - bug 649507
-    #'graphics':{
-    #    'enable_unittests': False,
-    #    'enable_talos': False,
-    #},
+    'graphics': {
+        'enable_talos': False,
+    },
     'ionmonkey': {
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': True,
@@ -152,9 +129,8 @@ PROJECT_BRANCHES = {
             'win32': {
                 'nightly_signing_servers': 'nightly-signing',
             },
-            'win64': {
-                'nightly_signing_servers': 'nightly-signing',
-            },
+        },
+        'mobile_platforms': {
             'android-debug': {
                 'dont_build': True,
                 'enable_debug_unittests': False,
@@ -174,7 +150,7 @@ PROJECT_BRANCHES = {
         'mobile_tinderbox_tree': 'UX',
         'packaged_unittest_tinderbox_tree': 'UX',
         'enabled_products': ['firefox'],
-        'mozconfig_dir' : 'ux',
+        'mozconfig_dir': 'ux',
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
@@ -207,15 +183,13 @@ PROJECT_BRANCHES = {
                 'dont_build': True,
                 'enable_debug_unittests': False,
             },
-            'win64': {
-                'dont_build': True,
-            },
         },
     },
     #####  TWIGS aka RENTABLE BRANCHES
     # customizations while booked for bug 687570 - WebRTC project
     'alder': {
-        'platforms': {
+        'platforms': {},
+        'mobile_platforms': {
             'android': {
                 'enable_opt_unittests': False,
                 'enable_debug_unittests': False,
@@ -231,49 +205,44 @@ PROJECT_BRANCHES = {
         },
     },
     'ash': {
-        'mozharness_unittests': True,
         'mozharness_repo_path': 'users/asasaki_mozilla.com/ash-mozharness',
         'mozharness_repo': 'http://hg.mozilla.org/users/asasaki_mozilla.com/ash-mozharness',
+        'mozharness_tag': 'default',
         'mozharness_talos': True,
         'lock_platforms': True,
         'platforms': {
             'linux': {},
             'linux64': {},
             'win32': {},
-            'win64': {},
             'macosx64': {},
             'linux-debug': {},
             'linux64-debug': {},
-            'macosx-debug': {},
             'macosx64-debug': {},
             'win32-debug': {},
+        },
+        'mobile_platforms': {
             'android': {
                 'slave_platforms': ['panda_android'],
             },
         },
     },
-    'birch': {
-        'enable_talos': False,
-        'enabled_products': ['firefox'],
-    },
+    'birch': {},
     'cedar': {
-        'mozharness_unittests': True,
-        'mozharness_talos': True,
+        'mozharness_tag': 'default',
         'lock_platforms': True,
         'platforms': {
             'linux': {},
             'linux64': {},
             'win32': {},
-            'win64': {},
             'macosx64': {},
             'linux-debug': {},
             'linux64-debug': {},
-            'macosx-debug': {},
             'macosx64-debug': {},
             'win32-debug': {},
-            'android': {
-                'slave_platforms': ['panda_android'],
-            },
+        },
+        'mobile_platforms': {
+            'android': {},
+            'android-debug': {},
         },
     },
     # Customizations for b2g 1.1 work (bug 822783 & bug 819368)
@@ -288,6 +257,8 @@ PROJECT_BRANCHES = {
             'linux64-debug': {},
             'macosx64-debug': {},
             'win32-debug': {},
+        },
+        'mobile_platforms': {
             'android-noion': {},
         },
     },
@@ -310,6 +281,8 @@ PROJECT_BRANCHES = {
                 'nightly_signing_servers': 'nightly-signing',
             },
             'win32-debug': {},
+        },
+        'mobile_platforms': {
             'android': {},
             'android-debug': {},
             'android-armv6': {},
@@ -319,7 +292,21 @@ PROJECT_BRANCHES = {
     'fig': {},
     'gum': {},
     'holly': {},
-    'jamun': {},
+    # Bug 848025 - disable android builds for jamun
+    'jamun': {
+        'lock_platforms': True,
+        'platforms': {
+            'linux': {},
+            'linux-debug': {},
+            'linux64': {},
+            'linux64-debug': {},
+            'macosx64-debug': {},
+            'macosx64': {},
+            'win32': {},
+            'win32-debug': {},
+        },
+        'mobile_platforms': {},
+    },
     'larch': {},
     'maple': {},
     # customizations for integration work for bugs 481815 and 307181
@@ -341,6 +328,12 @@ PROJECT_BRANCHES = {
         },
     },
     'pine': {},
+    # gaia-master is b2g only; no desktop platforms are needed
+    'gaia-master': {
+        'poll_repo': 'integration/gaia-central',
+        'lock_platforms': True,
+        'platforms': {}
+    }
 }
 
 # All is the default

@@ -63,15 +63,15 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
-    'mozilla-esr10': {
-        'enable_blocklist_update': False,
-        'blocklist_update_on_closed_tree': False,
-    },
     'mozilla-esr17': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
     'mozilla-b2g18': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
+    'mozilla-b2g18_v1_0_1': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
@@ -106,6 +106,7 @@ PROJECTS = {
     'fuzzing': {
         'disable_tinderbox_mail': True,
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'fuzzing_bundle': 'http://pvtbuilds.pvt.build.mozilla.org/bundles/fuzzing.hg',
         'fuzzing_repo': 'ssh://stage-ffxbld@hg.mozilla.org/private/fuzzing',
         'fuzzing_remote_host': 'ffxbld@preproduction-stage.srv.releng.scl3.mozilla.com',
         # Path needs extra leading slash due to optparse expansion on Win32
@@ -137,6 +138,14 @@ PROJECTS = {
         'upload_sshkey': '/home/cltbld/.ssh/ffxbld_dsa',
     },
     'spidermonkey_try': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+    },
+    'spidermonkey_ggc_try': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+    },
+    'spidermonkey_exact_try': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
     },

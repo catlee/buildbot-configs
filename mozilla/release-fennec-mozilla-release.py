@@ -20,11 +20,11 @@ releaseConfig['productName']         = 'fennec'
 releaseConfig['appName']             = 'mobile'
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '18.0'
-releaseConfig['appVersion']          = '18.0'
+releaseConfig['version']             = '20.0'
+releaseConfig['appVersion']          = '20.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_18_0'
+releaseConfig['baseTag']             = 'FENNEC_20_0'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['version']
 releaseConfig['nextMilestone']       = releaseConfig['version']
@@ -33,7 +33,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '3a7b66445659',
+        'revision': '64d7b45c34e6',
         'relbranch': None,
         'bumpFiles': {
             'mobile/android/confvars.sh': {
@@ -65,19 +65,19 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
 releaseConfig['enUSPlatforms']        = ('android', 'android-armv6')
 releaseConfig['notifyPlatforms']      = releaseConfig['enUSPlatforms']
-releaseConfig['manuallySignedPlatforms']      = releaseConfig['enUSPlatforms']
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
-releaseConfig['enableUnittests']      = True
+releaseConfig['enableUnittests']      = False
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = ('android',)
+releaseConfig['l10nNotifyPlatforms'] = releaseConfig['l10nPlatforms']
 releaseConfig['mergeLocales']        = True
 releaseConfig['enableMultiLocale']   = True
 
@@ -144,10 +144,11 @@ releaseConfig['multilocale_config'] = {
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
         '--pull-locale-source',
         '--add-locales',
+        '--package-multi',
         '--summary',
     ]
 }
-releaseConfig['enableSigningAtBuildTime'] = False
+releaseConfig['enableSigningAtBuildTime'] = True
 releaseConfig['enablePartialMarsAtBuildTime'] = False
 releaseConfig['autoGenerateChecksums'] = False
 releaseConfig['use_mock'] = True

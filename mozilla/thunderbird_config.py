@@ -35,7 +35,6 @@ GLOBAL_VARS.update({
         ('xpcshell', ['xpcshell']),
         ('mozmill', ['mozmill']),
     ],
-    'geriatric_masters': [],
     'platforms': {
         'linux': {},
         'linux64': {},
@@ -44,7 +43,6 @@ GLOBAL_VARS.update({
         'macosx64': {},
         'linux-debug': {},
         'linux64-debug': {},
-        'macosx-debug': {},
         'macosx64-debug': {},
         'win32-debug': {},
     },
@@ -95,6 +93,7 @@ builder_prefix = "TB "
 PLATFORM_VARS = {
         'linux': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'linux-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly',
@@ -104,7 +103,6 @@ PLATFORM_VARS = {
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
-            'leak_target': 'mailbloat',
             'upload_symbols': True,
             'download_symbols': True,
             'packageTests': True,
@@ -156,6 +154,7 @@ PLATFORM_VARS = {
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
+                        'pulseaudio-libs-devel',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -164,6 +163,7 @@ PLATFORM_VARS = {
         },
         'linux64': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'linux64-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly',
@@ -173,7 +173,6 @@ PLATFORM_VARS = {
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 6,
-            'leak_target': 'mailbloat',
             'upload_symbols': True,
             'download_symbols': False,
             'packageTests': True,
@@ -226,6 +225,7 @@ PLATFORM_VARS = {
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
+                        'pulseaudio-libs-devel',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -234,6 +234,7 @@ PLATFORM_VARS = {
         },
         'macosx64': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'macosx64-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 %(branch)s',
             'mozconfig': 'macosx64/%(branch)s/nightly',
@@ -242,7 +243,6 @@ PLATFORM_VARS = {
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
             'packageTests': True,
             'profiled_build': False,
-            'leak_target': 'mailbloat',
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 12,
             'upload_symbols': True,
@@ -283,6 +283,7 @@ PLATFORM_VARS = {
         },
         'win32': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'win32-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 5.2 %(branch)s',
             'mozconfig': 'win32/%(branch)s/nightly',
@@ -292,13 +293,12 @@ PLATFORM_VARS = {
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 12,
-            'leak_target': 'mailbloat',
             'upload_symbols': True,
             'download_symbols': True,
             'enable_installer': True,
             'packageTests': True,
             'slaves': SLAVES['win64'],
-            'l10n_slaves': SLAVES['win32'],
+            'l10n_slaves': SLAVES['win64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'thunderbird',
             'stage_platform': 'win32',
@@ -326,10 +326,10 @@ PLATFORM_VARS = {
             'l10n_check_test': False,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
-            'enable_pymake': True,
         },
         'win64': {
             'product_name': 'thunderbird',
+            'unittest_platform': 'win64-opt',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 6.1 x86-64 %(branch)s',
             'src_mozconfig': 'mail/config/mozconfigs/win64/nightly',
@@ -340,10 +340,10 @@ PLATFORM_VARS = {
             'profiled_build': True,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'build_space': 12,
-            'leak_target': 'mailbloat',
             'upload_symbols': True,
             'enable_installer': True,
             'packageTests': True,
+            'try_by_default': False,
             'slaves': SLAVES['win64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'thunderbird',
@@ -371,9 +371,10 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'test_pretty_names': True,
             'l10n_check_test': False,
-            'enable_pymake': True,
         },
         'linux-debug': {
+            'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux %(branch)s leak test',
@@ -384,7 +385,6 @@ PLATFORM_VARS = {
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
             'packageTests': True,
-            'leak_target': 'mailbloat',
             'build_space': 7,
             'slaves': SLAVES['mock'],
             'platform_objdir': OBJDIR,
@@ -423,6 +423,7 @@ PLATFORM_VARS = {
                         'xorg-x11-font*', # fonts required for PGO
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
+                        'pulseaudio-libs-devel',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -430,6 +431,8 @@ PLATFORM_VARS = {
             ],
         },
         'linux64-debug': {
+            'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux x86-64 %(branch)s leak test',
@@ -440,7 +443,6 @@ PLATFORM_VARS = {
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': False,
             'packageTests': True,
-            'leak_target': 'mailbloat',
             'build_space': 7,
             'slaves': SLAVES['mock'],
             'platform_objdir': OBJDIR,
@@ -479,50 +481,16 @@ PLATFORM_VARS = {
                         'xorg-x11-font*', # fonts required for PGO
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
+                        'pulseaudio-libs-devel',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
             ],
         },
-        'macosx-debug': {
-            'product_name': 'thunderbird',
-            'app_name': 'mail',
-            'base_name': builder_prefix + 'OS X 10.7 32-bit %(branch)s leak test',
-            'mozconfig': 'macosx/%(branch)s/debug',
-            'run_alive_tests': False,
-            'src_mozconfig': 'mail/config/mozconfigs/macosx32/debug',
-            'profiled_build': False,
-            'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
-            'download_symbols': True,
-            'packageTests': True,
-            'leak_target': 'mailbloat',
-            'build_space': 10,
-            'slaves': SLAVES['macosx64-lion'],
-            'platform_objdir': OBJDIR,
-            'stage_product': 'thunderbird',
-            'stage_platform': 'macosx-debug',
-            'enable_shared_checkouts': True,
-            'enable_ccache': True,
-            'env': {
-                'MOZ_OBJDIR': OBJDIR,
-                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
-                'XPCOM_DEBUG_BREAK': 'stack-and-abort',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'LC_ALL': 'C',
-                'PATH': '/tools/python/bin:/tools/buildbot/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin',
-                'CCACHE_DIR': '/builds/ccache',
-                'CCACHE_COMPRESS': '1',
-                'CCACHE_UMASK': '002',
-            },
-            'enable_unittests': False,
-            'enable_checktests': True,
-            'talos_masters': None,
-            'nightly_signing_servers': 'mac-dep-signing',
-            'dep_signing_servers': 'mac-dep-signing',
-            'tooltool_manifest_src': 'mail/config/tooltool-manifests/macosx32/releng.manifest',
-        },
         'macosx64-debug': {
+            'enable_nightly': False,
+            'enable_leaktests': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 64-bit %(branch)s leak test',
@@ -533,7 +501,6 @@ PLATFORM_VARS = {
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
-            'leak_target': 'mailbloat',
             'build_space': 10,
             'slaves': SLAVES['macosx64-lion'],
             'platform_objdir': OBJDIR,
@@ -560,6 +527,8 @@ PLATFORM_VARS = {
             'enable_ccache': True,
         },
         'win32-debug': {
+            'enable_nightly': False,
+            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 5.2 %(branch)s leak test',
@@ -571,7 +540,6 @@ PLATFORM_VARS = {
             'download_symbols': True,
             'enable_installer': True,
             'packageTests': True,
-            'leak_target': 'mailbloat',
             'build_space': 9,
             'slaves': SLAVES['win64'],
             'platform_objdir': OBJDIR,
@@ -590,7 +558,6 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
-            'enable_pymake': True,
         },
 }
 
@@ -605,8 +572,6 @@ BRANCHES = {
     'comm-beta': {
     },
     'comm-release': {
-    },
-    'comm-esr10': {
         'lock_platforms': True,
         'platforms': {
             'linux': {},
@@ -615,7 +580,6 @@ BRANCHES = {
             'macosx64': {},
             'linux-debug': {},
             'linux64-debug': {},
-            'macosx-debug': {},
             'macosx64-debug': {},
             'win32-debug': {},
         },
@@ -687,30 +651,8 @@ for branch in BRANCHES.keys():
                     value = value % locals()
                 BRANCHES[branch]['platforms'][platform][key] = value
 
-# begin delete WIN32_ENV and WIN32_DEBUG_ENV for esr10 EOL
-WIN32_ENV = {
-                'MOZ_OBJDIR': OBJDIR,
-                'SYMBOL_SERVER_HOST': thunderbird_localconfig.SYMBOL_SERVER_HOST,
-                'SYMBOL_SERVER_USER': 'tbirdbld',
-                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
-                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
-                'SYMBOL_SERVER_SSH_KEY': "/c/Documents and Settings/cltbld/.ssh/tbirdbld_dsa",
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                # Source server support, bug 506702
-                'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows/srcsrv/pdbstr.exe',
-                'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
-                'PATH': "${MOZILLABUILD}nsis-2.46u;${PATH}",
-}
-
-WIN32_DEBUG_ENV = {
-                'MOZ_OBJDIR': OBJDIR,
-                'XPCOM_DEBUG_BREAK': 'stack-and-abort',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
-                'PATH': "${MOZILLABUILD}nsis-2.46u;${PATH}",
-}
-# end delete
+    if BRANCHES[branch]['platforms'].has_key('win64') and branch not in ('try', 'comm-central'):
+        del BRANCHES[branch]['platforms']['win64']
 
 ######## comm-central
 # This is a path, relative to HGURL, where the repository is located
@@ -764,9 +706,13 @@ BRANCHES['comm-central']['platforms']['macosx64-debug']['nightly_signing_servers
 BRANCHES['comm-central']['platforms']['macosx64']['nightly_signing_servers'] = 'mac-nightly-signing'
 
 ######## comm-release
-BRANCHES['comm-release']['repo_path'] = 'releases/comm-release'
+BRANCHES['comm-release']['repo_path'] = 'releases/comm-esr17'
+BRANCHES['comm-release']['moz_repo_path'] = 'releases/mozilla-esr17'
 BRANCHES['comm-release']['update_channel'] = 'release'
-BRANCHES['comm-release']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
+BRANCHES['comm-release']['mozilla_dir'] = 'mozilla'
+BRANCHES['comm-release']['skip_blank_repos'] = True
+BRANCHES['comm-release']['call_client_py'] = True
+BRANCHES['comm-release']['l10n_repo_path'] = 'releases/l10n/mozilla-esr17'
 BRANCHES['comm-release']['enable_weekly_bundle'] = True
 BRANCHES['comm-release']['start_hour'] = [3]
 BRANCHES['comm-release']['start_minute'] = [2]
@@ -775,7 +721,7 @@ BRANCHES['comm-release']['enable_xulrunner'] = False
 BRANCHES['comm-release']['enable_mac_a11y'] = True
 # L10n configuration
 BRANCHES['comm-release']['enable_l10n'] = False
-BRANCHES['comm-release']['enable_l10n_onchange'] = True
+BRANCHES['comm-release']['enable_l10n_onchange'] = False
 BRANCHES['comm-release']['l10nNightlyUpdate'] = False
 BRANCHES['comm-release']['l10n_platforms'] = ['linux', 'linux64', 'win32',
                                               'macosx64']
@@ -786,12 +732,10 @@ BRANCHES['comm-release']['enUS_binaryURL'] = \
 BRANCHES['comm-release']['allLocalesFile'] = 'mail/locales/all-locales'
 BRANCHES['comm-release']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.comm-release' % (GLOBAL_VARS['hgurl'])
-BRANCHES['comm-release']['enable_multi_locale'] = True
 # temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
 BRANCHES['comm-release']['enable_nightly'] = False
 BRANCHES['comm-release']['enable_blocklist_update'] = False
 BRANCHES['comm-release']['blocklist_update_on_closed_tree'] = False
-del BRANCHES['comm-release']['platforms']['win64']
 BRANCHES['comm-release']['enable_valgrind'] = False
 # mock disabled block start
 # linux platforms
@@ -812,72 +756,7 @@ del BRANCHES['comm-release']['platforms']['linux64']['env']['PATH']
 del BRANCHES['comm-release']['platforms']['linux-debug']['env']['PATH']
 del BRANCHES['comm-release']['platforms']['linux64-debug']['env']['PATH']
 # mock disabled block stop
-
-######## comm-esr10
-BRANCHES['comm-esr10']['repo_path'] = 'releases/comm-esr10'
-BRANCHES['comm-esr10']['update_channel'] = 'nightly-esr10'
-BRANCHES['comm-esr10']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
-BRANCHES['comm-esr10']['enable_weekly_bundle'] = True
-BRANCHES['comm-esr10']['start_hour'] = [3]
-BRANCHES['comm-esr10']['start_minute'] = [45]
-BRANCHES['comm-esr10']['enable_xulrunner'] = False
-BRANCHES['comm-esr10']['enable_mac_a11y'] = True
-# L10n configuration
-BRANCHES['comm-esr10']['enable_l10n'] = False
-BRANCHES['comm-esr10']['enable_l10n_onchange'] = False
-BRANCHES['comm-esr10']['l10nNightlyUpdate'] = False
-BRANCHES['comm-esr10']['l10n_platforms'] = ['linux', 'linux64', 'win32',
-                                            'macosx64']
-BRANCHES['comm-esr10']['l10nDatedDirs'] = True
-BRANCHES['comm-esr10']['l10n_tree'] = 'tbesr10'
-BRANCHES['comm-esr10']['enable_multi_locale'] = True
-BRANCHES['comm-esr10']['enUS_binaryURL'] = \
-    GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-esr10'
-BRANCHES['comm-esr10']['allLocalesFile'] = 'mail/locales/all-locales'
-BRANCHES['comm-esr10']['localesURL'] = \
-    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.comm-esr10' % (GLOBAL_VARS['hgurl'])
-# temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
-BRANCHES['comm-esr10']['enable_nightly'] = True
-BRANCHES['comm-esr10']['create_snippet'] = True
-BRANCHES['comm-esr10']['create_partial'] = True
-BRANCHES['comm-esr10']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Thunderbird/comm-esr10'
-BRANCHES['comm-esr10']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Thunderbird/comm-esr10'
-BRANCHES['comm-esr10']['enable_blocklist_update'] = False
-BRANCHES['comm-esr10']['blocklist_update_on_closed_tree'] = False
-BRANCHES['comm-esr10']['enable_valgrind'] = False
-
-BRANCHES['comm-esr10']['platforms']['win32']['slaves'] = SLAVES['win32']
-BRANCHES['comm-esr10']['platforms']['win32']['env'] = WIN32_ENV
-BRANCHES['comm-esr10']['platforms']['win32-debug']['slaves'] = SLAVES['win32']
-BRANCHES['comm-esr10']['platforms']['win32-debug']['env'] = WIN32_DEBUG_ENV
-
-BRANCHES['comm-esr10']['platforms']['macosx64']['base_name'] = builder_prefix + 'OS X 10.6.2 comm-esr10'
-BRANCHES['comm-esr10']['platforms']['macosx64']['slaves'] = SLAVES['macosx64']
-BRANCHES['comm-esr10']['platforms']['macosx64']['enable_ccache'] = False
-BRANCHES['comm-esr10']['platforms']['macosx-debug']['base_name'] = builder_prefix + 'OS X 10.5.2 comm-esr10 leak test'
-BRANCHES['comm-esr10']['platforms']['macosx-debug']['slaves'] = SLAVES['macosx64']
-BRANCHES['comm-esr10']['platforms']['macosx-debug']['enable_ccache'] = False
-BRANCHES['comm-esr10']['platforms']['macosx64-debug']['base_name'] = builder_prefix + 'OS X 10.6.2 comm-esr10 leak test'
-BRANCHES['comm-esr10']['platforms']['macosx64-debug']['slaves'] = SLAVES['macosx64']
-BRANCHES['comm-esr10']['platforms']['macosx64-debug']['enable_ccache'] = False
-# mock disabled block start
-BRANCHES['comm-esr10']['platforms']['linux']['use_mock'] = False
-BRANCHES['comm-esr10']['platforms']['linux64']['use_mock'] = False
-BRANCHES['comm-esr10']['platforms']['linux-debug']['use_mock'] = False
-BRANCHES['comm-esr10']['platforms']['linux64-debug']['use_mock'] = False
-BRANCHES['comm-esr10']['platforms']['linux']['slaves'] = SLAVES['linux']
-BRANCHES['comm-esr10']['platforms']['linux64']['slaves'] = SLAVES['linux64']
-BRANCHES['comm-esr10']['platforms']['linux-debug']['slaves'] = SLAVES['linux']
-BRANCHES['comm-esr10']['platforms']['linux64-debug']['slaves'] = SLAVES['linux64']
-BRANCHES['comm-esr10']['platforms']['linux']['env']['PYTHON26'] = '/tools/python-2.6.5/bin/python'
-BRANCHES['comm-esr10']['platforms']['linux64']['env']['PYTHON26'] = '/tools/python-2.6.5/bin/python'
-BRANCHES['comm-esr10']['platforms']['linux']['env']['SYMBOL_SERVER_SSH_KEY'] = "/home/cltbld/.ssh/tbirdbld_dsa"
-BRANCHES['comm-esr10']['platforms']['linux64']['env']['SYMBOL_SERVER_SSH_KEY'] = "/home/cltbld/.ssh/tbirdbld_dsa"
-del BRANCHES['comm-esr10']['platforms']['linux']['env']['PATH']
-del BRANCHES['comm-esr10']['platforms']['linux64']['env']['PATH']
-del BRANCHES['comm-esr10']['platforms']['linux-debug']['env']['PATH']
-del BRANCHES['comm-esr10']['platforms']['linux64-debug']['env']['PATH']
-# mock disabled block stop
+BRANCHES['comm-release']['platforms']['win32']['l10n_slaves'] = SLAVES['win32']
 
 ######## comm-esr17
 BRANCHES['comm-esr17']['moz_repo_path'] = 'releases/mozilla-esr17'
@@ -938,6 +817,7 @@ del BRANCHES['comm-esr17']['platforms']['linux64']['env']['PATH']
 del BRANCHES['comm-esr17']['platforms']['linux-debug']['env']['PATH']
 del BRANCHES['comm-esr17']['platforms']['linux64-debug']['env']['PATH']
 # mock disabled block stop
+BRANCHES['comm-esr17']['platforms']['win32']['l10n_slaves'] = SLAVES['win32']
 
 ######## comm-beta
 BRANCHES['comm-beta']['moz_repo_path'] = 'releases/mozilla-beta'
@@ -979,8 +859,8 @@ BRANCHES['comm-beta']['enable_nightly'] = False
 # generated.
 BRANCHES['comm-beta']['enable_blocklist_update'] = True
 BRANCHES['comm-beta']['blocklist_update_on_closed_tree'] = False
-del BRANCHES['comm-beta']['platforms']['win64']
 BRANCHES['comm-beta']['enable_valgrind'] = False
+BRANCHES['comm-beta']['platforms']['win32']['l10n_slaves'] = SLAVES['win32']
 
 ######## comm-aurora
 BRANCHES['comm-aurora']['moz_repo_path'] = 'releases/mozilla-aurora'
@@ -990,8 +870,8 @@ BRANCHES['comm-aurora']['call_client_py'] = True
 BRANCHES['comm-aurora']['repo_path'] = 'releases/comm-aurora'
 BRANCHES['comm-aurora']['l10n_repo_path'] = 'releases/l10n/mozilla-aurora'
 BRANCHES['comm-aurora']['enable_weekly_bundle'] = True
-BRANCHES['comm-aurora']['start_hour'] = [4]
-BRANCHES['comm-aurora']['start_minute'] = [20]
+BRANCHES['comm-aurora']['start_hour'] = [0]
+BRANCHES['comm-aurora']['start_minute'] = [40]
 # Enable XULRunner / SDK builds
 BRANCHES['comm-aurora']['enable_xulrunner'] = False
 # Enable unit tests
@@ -1026,7 +906,6 @@ BRANCHES['comm-aurora']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Thunderb
 BRANCHES['comm-aurora']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Thunderbird/comm-aurora'
 BRANCHES['comm-aurora']['enable_blocklist_update'] = True
 BRANCHES['comm-aurora']['blocklist_update_on_closed_tree'] = False
-del BRANCHES['comm-aurora']['platforms']['win64']
 BRANCHES['comm-aurora']['enable_valgrind'] = False
 BRANCHES['comm-aurora']['platforms']['linux']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['comm-aurora']['platforms']['linux64']['nightly_signing_servers'] = 'nightly-signing'
@@ -1063,28 +942,19 @@ BRANCHES['try-comm-central']['aus2_base_upload_dir'] = 'fake'
 BRANCHES['try-comm-central']['platforms']['linux']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try-comm-central']['platforms']['linux64']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try-comm-central']['platforms']['win32']['slaves'] = TRY_SLAVES['win64']
-BRANCHES['try-comm-central']['platforms']['win64']['slaves'] = TRY_SLAVES['win64']
 BRANCHES['try-comm-central']['platforms']['macosx64']['slaves'] = TRY_SLAVES['macosx64-lion']
 BRANCHES['try-comm-central']['platforms']['linux-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try-comm-central']['platforms']['linux64-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try-comm-central']['platforms']['win32-debug']['slaves'] = TRY_SLAVES['win64']
-BRANCHES['try-comm-central']['platforms']['macosx-debug']['slaves'] = TRY_SLAVES['macosx64']
 BRANCHES['try-comm-central']['platforms']['macosx64-debug']['slaves'] = TRY_SLAVES['macosx64-lion']
 BRANCHES['try-comm-central']['platforms']['linux']['upload_symbols'] = False
 BRANCHES['try-comm-central']['platforms']['linux64']['upload_symbols'] = False
 BRANCHES['try-comm-central']['platforms']['macosx64']['upload_symbols'] = False
 # Disabled due to issues, see bug 751559
 BRANCHES['try-comm-central']['platforms']['win32']['upload_symbols'] = False
-BRANCHES['try-comm-central']['platforms']['win64']['upload_symbols'] = False
 BRANCHES['try-comm-central']['platforms']['win32']['env']['SYMBOL_SERVER_USER'] = 'trybld'
 BRANCHES['try-comm-central']['platforms']['win32']['env']['SYMBOL_SERVER_PATH'] = '/symbols/windows'
 BRANCHES['try-comm-central']['platforms']['win32']['env']['SYMBOL_SERVER_SSH_KEY'] = '/c/Documents and Settings/cltbld/.ssh/trybld_dsa'
-
-# MERGE day - "macosx-debug" dies when esr10 is gone.
-# This block can be removed at that time.
-for branch in BRANCHES:
-    if branch not in ('comm-release', 'comm-esr10', 'comm-esr17'):
-        del BRANCHES[branch]['platforms']['macosx-debug']
 
 # Bug 578880, remove the following block after gcc-4.5 switch
 branches = BRANCHES.keys()
@@ -1117,12 +987,21 @@ for branch in branches:
 
 # MERGE DAY
 # When Thunderbird 18 merges into these branches, they can be removed from the list
-for b in ('comm-beta', 'comm-release', 'comm-esr10', 'comm-esr17'):
+for b in ('comm-esr17', 'comm-release'):
     # Disable pymake
     for p in ('win32', 'win32-debug', 'win64'):
         if p not in BRANCHES[b]['platforms']:
             continue
         BRANCHES[b]['platforms'][p]['enable_pymake'] = False
+
+# MERGE DAY - pulseaudio-libs-devel package rides the trains (bug 662417)
+# MERGE DAY - when FF21 reaches them remove them from this list
+for b in ['comm-release', 'comm-esr17']:
+    for p, pc in BRANCHES[b]['platforms'].items():
+        if 'mock_packages' in pc:
+            BRANCHES[b]['platforms'][p]['mock_packages'] = \
+                [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x != 'pulseaudio-libs-devel']
+
 
 if __name__ == "__main__":
     import sys
@@ -1134,7 +1013,7 @@ if __name__ == "__main__":
     else:
         items = BRANCHES
 
-    for k, v in items.iteritems():
+    for k, v in sorted(items.iteritems()):
         out = pprint.pformat(v)
         for l in out.splitlines():
-             print '%s: %s' % (k, l)
+            print '%s: %s' % (k, l)

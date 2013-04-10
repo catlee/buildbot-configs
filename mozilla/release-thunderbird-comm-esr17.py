@@ -5,17 +5,6 @@
 # editing the .template instead. This file should only by edited directly if
 # you're starting a release without Release Kickoff. You have been warned.
 releaseConfig = {}
-
-# HACK ALERT
-# TODO for 17.0.1esr: the following line should be removed for 17.0.1esr build
-# to enable updates
-#####################################
-
-releaseConfig['skip_updates'] = True
-
-#####################################
-# END OF HACK ALERT
-
 releaseConfig['disable_tinderbox_mail'] = True
 releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/always_clobber.php'
 
@@ -32,22 +21,30 @@ releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
 releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '17.0.2esr'
-releaseConfig['appVersion']          = '17.0.2'
+releaseConfig['version']             = '17.0.5esr'
+releaseConfig['appVersion']          = '17.0.5'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'THUNDERBIRD_17_0_2esr'
-releaseConfig['partialUpdates']      = {}  # TODO for 17.0.1esr
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'THUNDERBIRD_17_0_5esr'
+releaseConfig['partialUpdates']      = {
+
+    '17.0.4esr': {
+        'appVersion': '17.0.4',
+        'buildNumber': 1,
+        'baseTag': 'THUNDERBIRD_17_0_4esr',
+    },
+
+}
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '17.0.2esrpre'
+releaseConfig['nextAppVersion']      = '17.0.5esrpre'
 releaseConfig['nextMilestone']       = releaseConfig['nextAppVersion']
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-esr17',
         'path': 'releases/comm-esr17',
-        'revision': '489d7750fe04',
-        'relbranch': 'GECKO1702_2013010417_RELBRANCH',
+        'revision': '57e2f985b4bd',
+        'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
                 'version': releaseConfig['appVersion'],
@@ -58,8 +55,8 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-esr17',
         'path': 'releases/mozilla-esr17',
-        'revision': 'd30f6b14a4f9',
-        'relbranch': 'GECKO1702_2013010417_RELBRANCH',
+        'revision': 'cd7d672b40ea',
+        'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
                 'version': releaseConfig['milestone'],
@@ -81,7 +78,7 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_0_9_5',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
@@ -104,7 +101,7 @@ releaseConfig['hgUsername']          = 'tbirdbld'
 releaseConfig['hgSshKey']            = '~cltbld/.ssh/tbirdbld_dsa'
 
 # Update-specific configuration
-releaseConfig['patcherConfig']       = 'mozEsr17-thunderbird-branch-patcher2.cfg'  # TODO for 17.0.1esr
+releaseConfig['patcherConfig']       = 'mozEsr17-thunderbird-branch-patcher2.cfg'
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
@@ -114,14 +111,20 @@ releaseConfig['ausUser']             = 'tbirdbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=%locale%&platform=%platform%&version=%version%'
 releaseConfig['testOlderPartials']   = False
+releaseConfig['promptWaitTime']      = None
 releaseConfig['useBetaChannel']      = 1
 releaseConfig['updateVerifyChunks']  = 4
-releaseConfig['verifyConfigs']       = {}  # TODO for 17.0.1esr
+releaseConfig['verifyConfigs']       = {
+    'linux':  'mozEsr17-thunderbird-linux.cfg',
+    'linux64':  'mozEsr17-thunderbird-linux64.cfg',
+    'macosx64': 'mozEsr17-thunderbird-mac64.cfg',
+    'win32':  'mozEsr17-thunderbird-win32.cfg'
+}
 releaseConfig['mozconfigs']          = {
-    'linux': 'mail/config/mozconfigs/linux32/release',
-    'linux64': 'mail/config/mozconfigs/linux64/release',
-    'macosx64': 'mail/config/mozconfigs/macosx-universal/release',
-    'win32': 'mail/config/mozconfigs/win32/release',
+    'linux': 'mail/config/mozconfigs/linux32/esr',
+    'linux64': 'mail/config/mozconfigs/linux64/esr',
+    'macosx64': 'mail/config/mozconfigs/macosx-universal/esr',
+    'win32': 'mail/config/mozconfigs/win32/esr',
 }
 releaseConfig['releaseChannel']      = 'esr'
 

@@ -2,26 +2,15 @@ from copy import deepcopy
 import production_config as pc
 
 MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(87, 95) if x not in [88]]
-MAC_SNOW_MINIS = ['moz2-darwin10-slave02']
-LINUX_IXS      = ['mv-moz2-linux-ix-slave01'] + \
-                 ['linux-ix-slave%02i' % x for x in (3,4,5)]
-LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in (1,2)]
-WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in (1, 19, 21)]
+WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in (1,)]
 WIN64_IXS      = ['w64-ix-slave%02i' % x for x in (3, 4, 5, 22, 80)]
 MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(1, 6)]
 LINUX64_EC2    = ['dev-linux64-ec2-%03d' % x for x in range(1, 50)]
 
 STAGING_SLAVES = {
-    'linux':            LINUX_IXS,
-    'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
-    'macosx':           [],
-    'macosx64':         MAC_SNOW_MINIS,
     'macosx64-lion':    MAC_LION_MINIS,
-    'android':          LINUX_IXS,
-    'android-armv6':    LINUX_IXS,
-    'android-x86':      MOCK_DL120G7,
     'mock':             MOCK_DL120G7 + LINUX64_EC2,
 }
 
@@ -97,15 +86,15 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
-    'mozilla-esr10': {
-        'enable_blocklist_update': False,
-        'blocklist_update_on_closed_tree': False,
-    },
     'mozilla-esr17': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
     'mozilla-b2g18': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
+    'mozilla-b2g18_v1_0_1': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
@@ -140,6 +129,7 @@ PROJECTS = {
     'fuzzing': {
         'disable_tinderbox_mail': True,
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'fuzzing_bundle': 'http://pvtbuilds.pvt.build.mozilla.org/bundles/fuzzing.hg',
         'fuzzing_repo': 'ssh://stage-ffxbld@hg.mozilla.org/private/fuzzing',
         'fuzzing_remote_host': 'stage-ffxbld@pvtbuilds2.dmz.scl3.mozilla.com',
         # Path needs extra leading slash due to optparse expansion on Win32
@@ -171,6 +161,14 @@ PROJECTS = {
         'upload_sshkey': '/home/cltbld/.ssh/ffxbld_dsa',
     },
     'spidermonkey_try': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+    },
+    'spidermonkey_ggc_try': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+    },
+    'spidermonkey_exact_try': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
     },

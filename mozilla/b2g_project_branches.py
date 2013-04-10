@@ -1,9 +1,6 @@
 # Additional branches that start as identical (individual variables can be overriden here)
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
-    'accessibility': {
-        'enable_nightly': True,
-    },
     'build-system': {},
     'devtools':{
         'enable_nightly': True,
@@ -12,10 +9,9 @@ PROJECT_BRANCHES = {
     #'electrolysis': {},
     'fx-team': {
         'repo_path': 'integration/fx-team',
-        'enable_nightly': True,
+        'enable_nightly': False,
     },
-    # Turning off graphics - bug 649507
-    #'graphics': {},
+    'graphics': {},
     'ionmonkey': {
         'enable_nightly': True
     },
@@ -45,8 +41,7 @@ PROJECT_BRANCHES = {
     'ash': {
         'mozharness_repo_path': 'users/asasaki_mozilla.com/ash-mozharness',
     },
-    # Only need to build on OS X (testing gcc OS X builds still work)
-    #'birch': {},
+    'birch': {},
     'cedar': {},
     # Customizations for b2g 1.1 work (bug 822783 & bug 819368)
     'date': {
@@ -78,12 +73,31 @@ PROJECT_BRANCHES = {
             'otoro': {},
         },
     },
+    'gaia-master': {
+        'repo_path': 'mozilla-central',
+        'poll_repo': 'integration/gaia-central',
+        'lock_platforms': True,
+        'platforms': {
+            'panda': {
+                'mozharness_config': {
+                    'script_name': 'scripts/b2g_build.py',
+                    'extra_args': ['--target', 'panda', '--config', 'b2g/releng.py',
+                                   '--gaia-languages-file', 'locales/languages_dev.json',
+                                   '--gecko-languages-file', 'gecko/b2g/locales/all-locales',
+                                   '--additional-source-tarballs', 'download-panda.tar.bz2',
+                                   '--checkout-revision', 'default'],
+                    'reboot_command': ['bash', '-c', 'sudo reboot; sleep 600'],
+                }
+            }
+        }
+    },
     # Customizations for windows update service changes (bug 481815)
     #'elm': {},
     'fig': {},
     'gum': {},
     'holly': {},
-    'jamun': {},
+    # Bug 848025 - disable b2g builds for jamun
+    #'jamun': {},
     'larch': {},
     'maple': {},
     # Customizations for integration work for bugs 481815 and 307181

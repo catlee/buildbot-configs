@@ -20,29 +20,29 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '18.0.1'
-releaseConfig['appVersion']          = '18.0.1'
+releaseConfig['version']             = '20.0.1'
+releaseConfig['appVersion']          = '20.0.1'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_18_0_1'
+releaseConfig['baseTag']             = 'FIREFOX_20_0_1'
 releaseConfig['partialUpdates']      = {
 
-    '16.0.2': {
-        'appVersion': '16.0.2',
+    '20.0': {
+        'appVersion': '20.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_16_0_2',
+        'baseTag': 'FIREFOX_20_0',
     },
 
-    '17.0.1': {
-        'appVersion': '17.0.1',
+    '19.0.2': {
+        'appVersion': '19.0.2',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_17_0_1',
+        'baseTag': 'FIREFOX_19_0_2',
     },
 
-    '18.0': {
-        'appVersion': '18.0',
+    '18.0.2': {
+        'appVersion': '18.0.2',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_18_0',
+        'baseTag': 'FIREFOX_18_0_2',
     },
 
 }
@@ -54,7 +54,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': 'f64a3223c828',
+        'revision': '346a2850042d',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -81,7 +81,7 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
@@ -114,6 +114,7 @@ releaseConfig['ausUser']             = 'ffxbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
+releaseConfig['promptWaitTime']      = None
 releaseConfig['updateVerifyChunks']  = 4
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozRelease-firefox-linux.cfg',
