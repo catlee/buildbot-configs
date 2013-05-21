@@ -59,6 +59,7 @@ GLOBAL_VARS = {
         'linux64-debug': {},
         'linux64-asan': {},
         'linux64-dbg-asan': {},
+        'linux64-dbg-st-an': {},
         'macosx64-debug': {},
         'win32-debug': {},
         'android': {},
@@ -160,21 +161,44 @@ PLATFORM_VARS = {
             'dep_signing_servers': 'dep-signing',
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux32/releng.manifest',
             'use_mock': True,
-            'mock_target': 'mozilla-centos6-i386',
+            'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
                        ['autoconf213', 'python', 'zip', 'mozilla-python27-mercurial', 'git', 'ccache',
-                        'glibc-static', 'libstdc++-static', 'perl-Test-Simple', 'perl-Config-General',
-                        'gtk2-devel', 'libnotify-devel', 'yasm',
-                        'alsa-lib-devel', 'libcurl-devel',
-                        'wireless-tools-devel', 'libX11-devel',
-                        'libXt-devel', 'mesa-libGL-devel',
-                        'gnome-vfs2-devel', 'GConf2-devel', 'wget',
-                        'mpfr', # required for system compiler
-                        'xorg-x11-font*', # fonts required for PGO
-                        'imake', # required for makedepend!?!
-                        'gcc45_0moz3','gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
+                        'glibc-static.i686', 'libstdc++-static.i686', 'perl-Test-Simple', 'perl-Config-General',
+                        'gtk2-devel.i686', 'libnotify-devel.i686', 'yasm',
+                        'alsa-lib-devel.i686', 'libcurl-devel.i686',
+                        'wireless-tools-devel.i686', 'libX11-devel.i686',
+                        'libXt-devel.i686', 'mesa-libGL-devel.i686',
+                        'gnome-vfs2-devel.i686', 'GConf2-devel.i686', 'wget',
+                        'mpfr',  # required for system compiler
+                        'xorg-x11-font*',  # fonts required for PGO
+                        'imake',  # required for makedepend!?!
+                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache',  # <-- from releng repo
                         'valgrind',
-                        'pulseaudio-libs-devel',
+                        'pulseaudio-libs-devel.i686',
+                        'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
+                        # Packages already installed in the mock environment, as x86_64
+                        # packages.
+                        'glibc-devel.i686', 'libgcc.i686', 'libstdc++-devel.i686',
+                        # yum likes to install .x86_64 -devel packages that satisfy .i686
+                        # -devel packages dependencies. So manually install the dependencies
+                        # of the above packages.
+                        'ORBit2-devel.i686', 'atk-devel.i686', 'cairo-devel.i686',
+                        'check-devel.i686', 'dbus-devel.i686', 'dbus-glib-devel.i686',
+                        'fontconfig-devel.i686', 'glib2-devel.i686',
+                        'hal-devel.i686', 'libICE-devel.i686', 'libIDL-devel.i686',
+                        'libSM-devel.i686', 'libXau-devel.i686', 'libXcomposite-devel.i686',
+                        'libXcursor-devel.i686', 'libXdamage-devel.i686', 'libXdmcp-devel.i686',
+                        'libXext-devel.i686', 'libXfixes-devel.i686', 'libXft-devel.i686',
+                        'libXi-devel.i686', 'libXinerama-devel.i686', 'libXrandr-devel.i686',
+                        'libXrender-devel.i686', 'libXxf86vm-devel.i686', 'libdrm-devel.i686',
+                        'libidn-devel.i686', 'libpng-devel.i686', 'libxcb-devel.i686',
+                        'libxml2-devel.i686', 'pango-devel.i686', 'perl-devel.i686',
+                        'pixman-devel.i686', 'zlib-devel.i686',
+                        # Freetype packages need to be installed be version, because a newer
+                        # version is available, but we don't want it for Firefox builds.
+                        'freetype-2.3.11-6.el6_1.8.i686', 'freetype-devel-2.3.11-6.el6_1.8.i686',
+                        'freetype-2.3.11-6.el6_1.8.x86_64',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -245,6 +269,9 @@ PLATFORM_VARS = {
                         'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
                         'pulseaudio-libs-devel',
+                        'gstreamer-devel', 'gstreamer-plugins-base-devel',
+                        'freetype-2.3.11-6.el6_1.8.x86_64',
+                        'freetype-devel-2.3.11-6.el6_1.8.x86_64',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -316,6 +343,9 @@ PLATFORM_VARS = {
                         'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
                         'pulseaudio-libs-devel',
+                        'gstreamer-devel', 'gstreamer-plugins-base-devel',
+                        'freetype-2.3.11-6.el6_1.8.x86_64',
+                        'freetype-devel-2.3.11-6.el6_1.8.x86_64',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -390,6 +420,86 @@ PLATFORM_VARS = {
                         'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
                         'pulseaudio-libs-devel',
+                        'gstreamer-devel', 'gstreamer-plugins-base-devel',
+                        'freetype-2.3.11-6.el6_1.8.x86_64',
+                        'freetype-devel-2.3.11-6.el6_1.8.x86_64',
+                        ],
+            'mock_copyin_files': [
+                ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
+                ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+            ],
+            # The status of this build doesn't affect the last good revision
+            # algorithm for nightlies
+            'consider_for_nightly': False,
+        },
+        'linux64-dbg-st-an': {
+            'product_name': 'firefox',
+            'unittest_platform': 'linux64-dbg-st-an',
+            'app_name': 'browser',
+            'brand_name': 'Minefield',
+            'base_name': 'Linux x86-64 %(branch)s debug static analysis',
+            'mozconfig': 'in_tree',
+            'src_mozconfig': 'browser/config/mozconfigs/linux64/debug-static-analysis-clang',
+            'enable_xulrunner': False,
+            'profiled_build': False,
+            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+            'build_space': 10,
+            'upload_symbols': False,
+            'download_symbols': False,
+            'packageTests': False,
+            'slaves': SLAVES['mock'],
+            'platform_objdir': OBJDIR,
+            'stage_product': 'firefox',
+            'stage_platform': 'linux64-dbg-st-an',
+            'update_platform': 'Linux_x86_64-gcc3',
+            'enable_ccache': True,
+            'enable_shared_checkouts': True,
+            'env': {
+                'DISPLAY': ':2',
+                'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'MOZ_OBJDIR': OBJDIR,
+                'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
+                'SYMBOL_SERVER_USER': 'ffxbld',
+                'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
+                'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
+                'SYMBOL_SERVER_SSH_KEY': "/home/mock_mozilla/.ssh/ffxbld_dsa",
+                'MOZ_SYMBOLS_EXTRA_BUILDID': 'linux64-dbg-st-an',
+                'TINDERBOX_OUTPUT': '1',
+                'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'CCACHE_DIR': '/builds/ccache',
+                'CCACHE_COMPRESS': '1',
+                'CCACHE_UMASK': '002',
+                'LC_ALL': 'C',
+                'PATH': '/tools/buildbot/bin:/usr/local/bin:/usr/lib64/ccache:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/tools/git/bin:/tools/python27/bin:/tools/python27-mercurial/bin:/home/cltbld/bin',
+            },
+            'enable_opt_unittests': False,
+            'enable_checktests': True,
+            'enable_build_analysis': False,
+            'try_by_default': False,
+            'create_snippet': False,
+            'create_partial': False,
+            'test_pretty_names': False,
+            'l10n_check_test': False,
+            'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux64/clang.manifest',
+            'use_mock': True,
+            'mock_target': 'mozilla-centos6-x86_64',
+            'mock_packages': \
+                       ['autoconf213', 'python', 'zip', 'mozilla-python27-mercurial', 'git', 'ccache',
+                        'glibc-static', 'libstdc++-static', 'perl-Test-Simple', 'perl-Config-General',
+                        'gtk2-devel', 'libnotify-devel', 'yasm',
+                        'alsa-lib-devel', 'libcurl-devel',
+                        'wireless-tools-devel', 'libX11-devel',
+                        'libXt-devel', 'mesa-libGL-devel',
+                        'gnome-vfs2-devel', 'GConf2-devel', 'wget',
+                        'mpfr', # required for system compiler
+                        'xorg-x11-font*', # fonts required for PGO
+                        'imake', # required for makedepend!?!
+                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
+                        'valgrind',
+                        'pulseaudio-libs-devel',
+                        'freetype-2.3.11-6.el6_1.8.x86_64',
+                        'freetype-devel-2.3.11-6.el6_1.8.x86_64',
+                        'gstreamer-devel', 'gstreamer-plugins-base-devel',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -592,20 +702,44 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux32/releng.manifest',
             'use_mock': True,
-            'mock_target': 'mozilla-centos6-i386',
+            'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
                        ['autoconf213', 'python', 'zip', 'mozilla-python27-mercurial', 'git', 'ccache',
-                        'glibc-static', 'libstdc++-static', 'perl-Test-Simple', 'perl-Config-General',
-                        'gtk2-devel', 'libnotify-devel', 'yasm',
-                        'alsa-lib-devel', 'libcurl-devel',
-                        'wireless-tools-devel', 'libX11-devel',
-                        'libXt-devel', 'mesa-libGL-devel',
-                        'gnome-vfs2-devel', 'GConf2-devel', 'wget',
-                        'mpfr', # required for system compiler
-                        'xorg-x11-font*', # fonts required for PGO
-                        'imake', # required for makedepend!?!
-                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
-                        'pulseaudio-libs-devel',
+                        'glibc-static.i686', 'libstdc++-static.i686',
+                        'perl-Test-Simple', 'perl-Config-General',
+                        'gtk2-devel.i686', 'libnotify-devel.i686', 'yasm',
+                        'alsa-lib-devel.i686', 'libcurl-devel.i686',
+                        'wireless-tools-devel.i686', 'libX11-devel.i686',
+                        'libXt-devel.i686', 'mesa-libGL-devel.i686',
+                        'gnome-vfs2-devel.i686', 'GConf2-devel.i686', 'wget',
+                        'mpfr',  # required for system compiler
+                        'xorg-x11-font*',  # fonts required for PGO
+                        'imake',  # required for makedepend!?!
+                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache',  # <-- from releng repj
+                        'valgrind',
+                        'pulseaudio-libs-devel.i686',
+                        'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
+                        # Packages already installed in the mock environment,
+                        # as x86_64 packages.
+                        'glibc-devel.i686', 'libgcc.i686', 'libstdc++-devel.i686',
+                        # yum likes to install .x86_64 -devel packages that satisfy .i686
+                        # -devel packages dependencies. So manually install the
+                        # dependencies of the above packages.
+                        'ORBit2-devel.i686', 'atk-devel.i686', 'cairo-devel.i686',
+                        'check-devel.i686', 'dbus-devel.i686', 'dbus-glib-devel.i686',
+                        'fontconfig-devel.i686', 'glib2-devel.i686',
+                        'hal-devel.i686', 'libICE-devel.i686', 'libIDL-devel.i686',
+                        'libSM-devel.i686', 'libXau-devel.i686', 'libXcomposite-devel.i686',
+                        'libXcursor-devel.i686', 'libXdamage-devel.i686',
+                        'libXdmcp-devel.i686', 'libXext-devel.i686',
+                        'libXfixes-devel.i686', 'libXft-devel.i686',
+                        'libXi-devel.i686', 'libXinerama-devel.i686', 'libXrandr-devel.i686',
+                        'libXrender-devel.i686', 'libXxf86vm-devel.i686', 'libdrm-devel.i686',
+                        'libidn-devel.i686', 'libpng-devel.i686', 'libxcb-devel.i686',
+                        'libxml2-devel.i686', 'pango-devel.i686', 'perl-devel.i686',
+                        'pixman-devel.i686', 'zlib-devel.i686',
+                        'freetype-2.3.11-6.el6_1.8.i686', 'freetype-devel-2.3.11-6.el6_1.8.i686',
+                        'freetype-2.3.11-6.el6_1.8.x86_64',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -665,6 +799,9 @@ PLATFORM_VARS = {
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
                         'pulseaudio-libs-devel',
+                        'freetype-2.3.11-6.el6_1.8.x86_64',
+                        'freetype-devel-2.3.11-6.el6_1.8.x86_64',
+                        'gstreamer-devel', 'gstreamer-plugins-base-devel',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -776,13 +913,14 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'use_mock': True,
-            'mock_target': 'mozilla-centos6-i386',
+            'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
                               'ccache', 'android-sdk15', 'android-sdk16',
                               'android-ndk5', 'android-ndk8', 'zip',
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
                               'glibc-static', 'openssh-clients', 'mpfr',
-                              'wget'],
+                              'wget', 'glibc.i686', 'libstdc++.i686',
+                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
@@ -840,13 +978,14 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'use_mock': True,
-            'mock_target': 'mozilla-centos6-i386',
+            'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
                               'ccache', 'android-sdk15', 'android-sdk16',
                               'android-ndk5', 'android-ndk8', 'zip',
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
                               'glibc-static', 'openssh-clients', 'mpfr', 'bc',
-                              'wget'],
+                              'wget', 'glibc.i686', 'libstdc++.i686',
+                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
@@ -903,12 +1042,14 @@ PLATFORM_VARS = {
             'use_mock': True,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
-            'mock_target': 'mozilla-centos6-i386',
+            'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
                               'ccache', 'android-sdk15', 'android-sdk16',
                               'android-ndk7', 'android-ndk8', 'yasm', 'zip',
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
-                              'glibc-static', 'openssh-clients', 'mpfr', 'bc'],
+                              'glibc-static', 'openssh-clients', 'mpfr', 'bc',
+                              'glibc.i686', 'libstdc++.i686', 'zlib.i686',
+                              'freetype-2.3.11-6.el6_1.8.x86_64'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
@@ -970,13 +1111,14 @@ PLATFORM_VARS = {
             'use_mock': True,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
-            'mock_target': 'mozilla-centos6-i386',
+            'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
                               'ccache', 'android-sdk15', 'android-sdk16',
                               'android-ndk5', 'android-ndk8', 'zip',
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
                               'glibc-static', 'openssh-clients', 'mpfr',
-                              'wget'],
+                              'wget', 'glibc.i686', 'libstdc++.i686',
+                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
@@ -1037,13 +1179,14 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'use_mock': True,
-            'mock_target': 'mozilla-centos6-i386',
+            'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': ['autoconf213', 'mozilla-python27-mercurial',
                               'ccache', 'android-sdk15', 'android-sdk16',
                               'android-ndk5', 'android-ndk8', 'zip',
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
                               'glibc-static', 'openssh-clients', 'mpfr',
-                              'wget'],
+                              'wget', 'glibc.i686', 'libstdc++.i686',
+                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
@@ -1404,7 +1547,7 @@ BRANCHES['mozilla-central']['platforms']['android']['nightly_signing_servers'] =
 BRANCHES['mozilla-central']['platforms']['android-armv6']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['mozilla-central']['platforms']['macosx64-debug']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['mozilla-central']['platforms']['macosx64']['nightly_signing_servers'] = 'mac-nightly-signing'
-BRANCHES['mozilla-central']['l10n_extra_configure_args']= ['--with-macbundlename-prefix=Firefox']
+BRANCHES['mozilla-central']['l10n_extra_configure_args'] = ['--with-macbundlename-prefix=Firefox']
 
 ######## mozilla-release
 BRANCHES['mozilla-release']['repo_path'] = 'releases/mozilla-release'
@@ -1461,7 +1604,7 @@ BRANCHES['mozilla-beta']['enable_l10n'] = False
 BRANCHES['mozilla-beta']['enable_l10n_onchange'] = True
 BRANCHES['mozilla-beta']['l10nNightlyUpdate'] = False
 BRANCHES['mozilla-beta']['l10n_platforms'] = ['linux', 'linux64', 'win32',
-                                                 'macosx64']
+                                              'macosx64']
 BRANCHES['mozilla-beta']['l10nDatedDirs'] = True
 BRANCHES['mozilla-beta']['l10n_tree'] = 'fxbeta'
 #make sure it has an ending slash
@@ -1543,7 +1686,7 @@ BRANCHES['mozilla-aurora']['platforms']['linux64']['nightly_signing_servers'] = 
 BRANCHES['mozilla-aurora']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['mozilla-aurora']['platforms']['macosx64-debug']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['mozilla-aurora']['platforms']['macosx64']['nightly_signing_servers'] = 'mac-nightly-signing'
-BRANCHES['mozilla-aurora']['l10n_extra_configure_args']= ['--with-macbundlename-prefix=Firefox']
+BRANCHES['mozilla-aurora']['l10n_extra_configure_args'] = ['--with-macbundlename-prefix=Firefox']
 BRANCHES['mozilla-aurora']['enabled_products'] = ['firefox', 'mobile']
 
 ######## mozilla-esr17
@@ -1673,7 +1816,7 @@ BRANCHES['try']['stage_base_path_mobile'] = '/home/ftp/pub/firefox/try-builds'
 BRANCHES['try']['enable_merging'] = False
 BRANCHES['try']['enable_try'] = True
 BRANCHES['try']['pgo_strategy'] = 'try'
-BRANCHES['try']['package_dir'] ='%(who)s-%(got_revision)s'
+BRANCHES['try']['package_dir'] = '%(who)s-%(got_revision)s'
 # This is a path, relative to HGURL, where the repository is located
 # HGURL  repo_path should be a valid repository
 BRANCHES['try']['repo_path'] = 'try'
@@ -1700,7 +1843,7 @@ BRANCHES['try']['platforms']['macosx64']['slaves'] = TRY_SLAVES['macosx64-lion']
 BRANCHES['try']['platforms']['linux-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64-asan']['slaves'] = TRY_SLAVES['mock']
-BRANCHES['try']['platforms']['linux64-dbg-asan']['slaves'] = TRY_SLAVES['mock']
+BRANCHES['try']['platforms']['linux64-dbg-st-an']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['win32-debug']['slaves'] = TRY_SLAVES['win64']
 BRANCHES['try']['platforms']['macosx64-debug']['slaves'] = TRY_SLAVES['macosx64-lion']
 BRANCHES['try']['platforms']['android']['slaves'] = TRY_SLAVES['mock']
@@ -1708,34 +1851,23 @@ BRANCHES['try']['platforms']['android-armv6']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['android-noion']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['android-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['android-x86']['slaves'] = TRY_SLAVES['mock']
-BRANCHES['try']['platforms']['linux']['upload_symbols'] = False
-BRANCHES['try']['platforms']['linux64']['upload_symbols'] = False
-BRANCHES['try']['platforms']['macosx64']['upload_symbols'] = False
-BRANCHES['try']['platforms']['android']['upload_symbols'] = False
-BRANCHES['try']['platforms']['android-armv6']['upload_symbols'] = False
-BRANCHES['try']['platforms']['android-noion']['upload_symbols'] = False
-BRANCHES['try']['platforms']['android-debug']['upload_symbols'] = False
-BRANCHES['try']['platforms']['android-x86']['upload_symbols'] = False
-BRANCHES['try']['platforms']['win32']['upload_symbols'] = True
-BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_USER'] = 'trybld'
-BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_PATH'] = '/symbols/windows'
-BRANCHES['try']['platforms']['win32']['env']['SYMBOL_SERVER_SSH_KEY'] = '/c/Documents and Settings/cltbld/.ssh/trybld_dsa'
-BRANCHES['try']['platforms']['win64']['upload_symbols'] = False
 for platform in BRANCHES['try']['platforms'].keys():
     # Sadly, the rule that mobile builds go to /mobile/
     # isn't true for try :(
     BRANCHES['try']['platforms'][platform]['stage_product'] = 'firefox'
+    # Disable symbol upload across the board
+    BRANCHES['try']['platforms'][platform]['upload_symbols'] = False
 
 ######## generic branch configs
 for branch in ACTIVE_PROJECT_BRANCHES:
     branchConfig = PROJECT_BRANCHES[branch]
     BRANCHES[branch]['product_name'] = branchConfig.get('product_name', None)
-    BRANCHES[branch]['app_name']     = branchConfig.get('app_name', None)
-    BRANCHES[branch]['brand_name']   = branchConfig.get('brand_name', None)
+    BRANCHES[branch]['app_name'] = branchConfig.get('app_name', None)
+    BRANCHES[branch]['brand_name'] = branchConfig.get('brand_name', None)
     BRANCHES[branch]['repo_path'] = branchConfig.get('repo_path', 'projects/' + branch)
     BRANCHES[branch]['enabled_products'] = branchConfig.get('enabled_products',
                                                             GLOBAL_VARS['enabled_products'])
-    BRANCHES[branch]['enable_nightly'] =  branchConfig.get('enable_nightly', False)
+    BRANCHES[branch]['enable_nightly'] = branchConfig.get('enable_nightly', False)
     BRANCHES[branch]['enable_mobile'] = branchConfig.get('enable_mobile', True)
     BRANCHES[branch]['pgo_strategy'] = branchConfig.get('pgo_strategy', None)
     BRANCHES[branch]['periodic_pgo_interval'] = branchConfig.get('periodic_pgo_interval', 6)
@@ -1766,23 +1898,23 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['l10nUploadPath'] = \
         '/home/ftp/pub/mozilla.org/firefox/nightly/latest-' + branch + '-l10n/'
     BRANCHES[branch]['enUS_binaryURL'] = GLOBAL_VARS['download_base_url'] + branchConfig.get('enUS_binaryURL', '')
-    if BRANCHES[branch]['platforms'].has_key('linux'):
+    if 'linux' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['linux']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
-    if BRANCHES[branch]['platforms'].has_key('android'):
+    if 'android' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['android']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
-    if BRANCHES[branch]['platforms'].has_key('android-armv6'):
+    if 'android-armv6' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['android-armv6']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-armv6-' + branch
-    if BRANCHES[branch]['platforms'].has_key('android-noion'):
+    if 'android-noion' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['android-noion']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-noion-' + branch
-    if BRANCHES[branch]['platforms'].has_key('android-x86'):
+    if 'android-x86' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['android-x86']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'android-x86-' + branch
-    if BRANCHES[branch]['platforms'].has_key('linux64'):
+    if 'linux64' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['linux64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'linux64-' + branch
-    if BRANCHES[branch]['platforms'].has_key('win32'):
+    if 'win32' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
-    if BRANCHES[branch]['platforms'].has_key('win64'):
+    if 'win64' in BRANCHES[branch]['platforms']:
         del BRANCHES[branch]['platforms']['win64']
-    if BRANCHES[branch]['platforms'].has_key('macosx64'):
+    if 'macosx64' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-' + branch
     # Platform-specific defaults/interpretation
     for platform in BRANCHES[branch]['platforms']:
@@ -1805,23 +1937,23 @@ for branch in ACTIVE_PROJECT_BRANCHES:
 branches = BRANCHES.keys()
 branches.extend(ACTIVE_PROJECT_BRANCHES)
 for branch in branches:
-    if BRANCHES[branch]['platforms'].has_key('linux'):
+    if 'linux' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['linux']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib'
         BRANCHES[branch]['platforms']['linux']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
         }
-    if BRANCHES[branch]['platforms'].has_key('linux64'):
+    if 'linux64' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['linux64']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib64'
         BRANCHES[branch]['platforms']['linux64']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
         }
-    if BRANCHES[branch]['platforms'].has_key('linux-debug'):
-        BRANCHES[branch]['platforms']['linux-debug']['env']['LD_LIBRARY_PATH'] ='/tools/gcc-4.3.3/installed/lib:%s/dist/bin' % OBJDIR
+    if 'linux-debug' in BRANCHES[branch]['platforms']:
+        BRANCHES[branch]['platforms']['linux-debug']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib:%s/dist/bin' % OBJDIR
         BRANCHES[branch]['platforms']['linux-debug']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib',
         }
-    if BRANCHES[branch]['platforms'].has_key('linux64-debug'):
-        BRANCHES[branch]['platforms']['linux64-debug']['env']['LD_LIBRARY_PATH'] ='/tools/gcc-4.3.3/installed/lib64:%s/dist/bin' % OBJDIR
+    if 'linux64-debug' in BRANCHES[branch]['platforms']:
+        BRANCHES[branch]['platforms']['linux64-debug']['env']['LD_LIBRARY_PATH'] = '/tools/gcc-4.3.3/installed/lib64:%s/dist/bin' % OBJDIR
         BRANCHES[branch]['platforms']['linux64-debug']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
         }
@@ -1839,7 +1971,7 @@ for b in ('mozilla-esr17',):
 # Delete all references to android-noion once we have b2g jsreftests not in an emulator.
 for b in BRANCHES.keys():
     if b not in ('mozilla-central', 'mozilla-inbound', 'mozilla-b2g18',
-                 'mozilla-b2g18_v1_0_1', 'try'
+                 'mozilla-b2g18_v1_0_1', 'try', 'birch', 'date',
                  ):
         if 'android-noion' in BRANCHES[b]['platforms']:
             del BRANCHES[b]['platforms']['android-noion']
@@ -1847,23 +1979,77 @@ for b in BRANCHES.keys():
 # ASan builds are only on mozilla-central for now
 for b in BRANCHES:
     if b not in ('mozilla-central',):
-        for p in 'linux64-asan', 'linux64-dbg-asan':
+        for p in 'linux64-asan', 'linux64-dbg-asan', 'linux64-dbg-st-an':
             if p in BRANCHES[b]['platforms']:
                 del BRANCHES[b]['platforms'][p]
 
+# MERGE DAY building 32-bit linux in a x86_64 env rides the trains
+# MERGE DAY remove branches from this list when gecko 24 merges into them.
+for branch in ("mozilla-aurora", "mozilla-beta", "mozilla-release",
+               "mozilla-b2g18", "mozilla-b2g18_v1_0_1", "mozilla-esr17"):
+    for platform in ['linux', 'linux-debug']:
+        BRANCHES[branch]['platforms'][platform]['mock_target'] = \
+            'mozilla-centos6-i386'
+        BRANCHES[branch]['platforms'][platform]['mock_packages'] = \
+            ['autoconf213', 'python', 'zip', 'mozilla-python27-mercurial',
+             'git', 'ccache', 'glibc-static', 'libstdc++-static',
+             'perl-Test-Simple', 'perl-Config-General',
+             'gtk2-devel', 'libnotify-devel', 'yasm',
+             'alsa-lib-devel', 'libcurl-devel',
+             'wireless-tools-devel', 'libX11-devel',
+             'libXt-devel', 'mesa-libGL-devel',
+             'gnome-vfs2-devel', 'GConf2-devel', 'wget',
+             'mpfr', # required for system compiler
+             'xorg-x11-font*', # fonts required for PGO
+             'imake', # required for makedepend!?!
+             'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
+             'pulseaudio-libs-devel',
+             'freetype-2.3.11-6.el6_2.9',
+             'freetype-devel-2.3.11-6.el6_2.9',
+            ]
+        if not platform.endswith("-debug"):
+            BRANCHES[branch]["platforms"][platform]["mock_packages"] += \
+                ["valgrind"]
+
+# MERGE DAY building android in a x86_64 env rides the trains
+# MERGE DAy remove branches from this list when gecko 24 merges into them.
+for b in ("mozilla-aurora", "mozilla-beta", "mozilla-release",
+          "mozilla-b2g18", "mozilla-b2g18_v1_0_1", "mozilla-esr17"):
+    for plat in ['android', 'android-armv6', 'android-noion',
+                 'android-x86', 'android-debug']:
+        if plat in BRANCHES[b]['platforms']:
+            BRANCHES[b]['platforms'][plat]['mock_target'] = 'mozilla-centos6-i386'
+
 # MERGE DAY - pulseaudio-libs-devel package rides the trains (bug 662417)
 # MERGE DAY - Remove branches as FF21 reaches them
-for b in ['mozilla-release', 'mozilla-esr17',
-          'mozilla-b2g18', 'mozilla-b2g18_v1_0_1'
-          ]:
+for b in ['mozilla-esr17', 'mozilla-b2g18', 'mozilla-b2g18_v1_0_1']:
     for p, pc in BRANCHES[b]['platforms'].items():
         if 'mock_packages' in pc:
             BRANCHES[b]['platforms'][p]['mock_packages'] = \
                 [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x != 'pulseaudio-libs-devel']
 
+# gstreamer-devel packages on try only (bug 855492)
+for b in BRANCHES:
+    if b not in ('try',):
+        for p, pc in BRANCHES[b]['platforms'].items():
+            if 'mock_packages' in pc:
+                BRANCHES[b]['platforms'][p]['mock_packages'] = \
+                    [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x not in ('gstreamer-devel', 'gstreamer-plugins-base-devel')]
+
+
+# B2G's INBOUND
+for b in ('birch',):
+    for p in ['win32-debug', 'macosx64-debug', 'android', 'android-armv6', 'android-debug', 'android-x86']:
+        if p in BRANCHES[b]['platforms']:
+            del(BRANCHES[b]['platforms'][p])
+    for p in BRANCHES[b]['platforms'].keys():
+        if 'linux' not in p:
+            BRANCHES[b]['platforms'][p]['enable_checktests'] = False
+# END B2G's INBOUND
+
 # MERGE DAY
 # When Firefox 22 merges into these branches, they can be removed from the list
-for b in ('mozilla-beta', 'mozilla-release',):
+for b in ('mozilla-release',):
     BRANCHES[b]["run_make_alive_tests"] = False
 
 if __name__ == "__main__":

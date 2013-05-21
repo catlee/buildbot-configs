@@ -2,7 +2,7 @@
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
     'build-system': {},
-    'devtools':{
+    'devtools': {
         'enable_nightly': True,
     },
     # Disabled because of builder limit problems - bug 721854
@@ -41,37 +41,24 @@ PROJECT_BRANCHES = {
     'ash': {
         'mozharness_repo_path': 'users/asasaki_mozilla.com/ash-mozharness',
     },
-    'birch': {},
-    'cedar': {},
-    # Customizations for b2g 1.1 work (bug 822783 & bug 819368)
-    'date': {
-        'enable_nightly': True,
-        'enable_l10n': False,
-        'enable_xulrunner': False,
-        'enabled_products': ['b2g'],
-        'product_prefix': 'b2g',
-        'unittest_suites': [],
-        # XXX: this seems like it should be at the platform level
-        'enable_multi_locale': True,
-        'lock_platforms': True,
+    'birch': {
+        'enable_perproduct_builds': True,
         'platforms': {
-            'ics_armv7a_gecko': {},
-            'ics_armv7a_gecko-debug': {},
-            'linux32_gecko': {},
-            'linux64_gecko': {},
-            'macosx64_gecko': {},
-            'win32_gecko': {},
-            'linux32_gecko_localizer': {},
-            'linux64_gecko_localizer': {},
-            'macosx64_gecko_localizer': {},
-            'win32_gecko_localizer': {},
-            'panda': {},
-            'unagi': {
-                'enable_nightly': True,
+            'macosx64_gecko': {
+                'enable_checktests': False,
             },
-            'unagi_eng': {},
-            'otoro': {},
+            'win32_gecko': {
+                'enable_checktests': False,
+            },
         },
+    },
+    'cedar': {
+        'mozharness_tag': 'default',
+    },
+    'cypress': {},
+    'date': {
+        'lock_platforms': True,
+        'platforms': {},
     },
     'gaia-master': {
         'repo_path': 'mozilla-central',
@@ -93,7 +80,10 @@ PROJECT_BRANCHES = {
     },
     # Customizations for windows update service changes (bug 481815)
     #'elm': {},
-    'fig': {},
+    'fig': {
+        'lock_platforms': True,
+        'platforms': {},
+    },
     'gum': {},
     'holly': {},
     # Bug 848025 - disable b2g builds for jamun

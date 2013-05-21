@@ -154,12 +154,8 @@ PROJECT_BRANCHES = {
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
-        'enable_unittests': False,
-        'enable_talos': False,
         'platforms': {
             'macosx64-debug': {
-                'dont_build': True,
-                'enable_debug_unittests': False,
                 'nightly_signing_servers': 'mac-nightly-signing',
             },
             'macosx64': {
@@ -170,18 +166,6 @@ PROJECT_BRANCHES = {
             },
             'linux64': {
                 'nightly_signing_servers': 'nightly-signing',
-            },
-            'linux-debug': {
-                'dont_build': True,
-                'enable_debug_unittests': False,
-            },
-            'linux64-debug': {
-                'dont_build': True,
-                'enable_debug_unittests': False,
-            },
-            'win32-debug': {
-                'dont_build': True,
-                'enable_debug_unittests': False,
             },
         },
     },
@@ -226,14 +210,44 @@ PROJECT_BRANCHES = {
             },
         },
     },
-    'birch': {},
+    'birch': {
+        'enable_perproduct_builds': True,
+        'mozconfig_dir': 'mozilla-central',
+        'pgo_strategy': 'periodic',
+        'periodic_pgo_interval': 3,
+        'talos_suites': {
+            'xperf': 1,
+        },
+        'platforms': {
+            'win32': {
+                'enable_checktests': False,
+                'slave_platforms': ['win8'],
+                'talos_slave_platforms': ['win8'],
+            },
+            'win32-debug': {
+                'enable_checktests': False,
+                'slave_platforms': ['win8'],
+            },
+            'macosx64': {
+                'enable_checktests': False,
+                'slave_platforms': ['mountainlion'],
+            },
+            'macosx64-debug': {
+                'enable_checktests': False,
+                'slave_platforms': ['mountainlion'],
+            },
+        },
+    },
     'cedar': {
         'mozharness_tag': 'default',
         'lock_platforms': True,
+        'enable_talos': True,
         'platforms': {
             'linux': {},
             'linux64': {},
-            'win32': {},
+            'win32': {
+                'talos_slave_platforms': ['xp', 'xp-ix', 'win7', 'win7-ix'],
+            },
             'macosx64': {},
             'linux-debug': {},
             'linux64-debug': {},
@@ -245,21 +259,21 @@ PROJECT_BRANCHES = {
             'android-debug': {},
         },
     },
-    # Customizations for b2g 1.1 work (bug 822783 & bug 819368)
+    'cypress': {},
+    # Android x86_64 build environment (bug 860246)
     'date': {
         'lock_platforms': True,
+        'pgo_strategy': 'per-checkin',
         'platforms': {
             'linux': {},
-            'linux64': {},
-            'win32': {},
-            'macosx64': {},
             'linux-debug': {},
-            'linux64-debug': {},
-            'macosx64-debug': {},
-            'win32-debug': {},
         },
         'mobile_platforms': {
+            'android': {},
+            'android-debug': {},
             'android-noion': {},
+            'android-armv6': {},
+            'android-x86': {},
         },
     },
     # customizations for windows update service changes (bug 481815)
@@ -289,7 +303,17 @@ PROJECT_BRANCHES = {
             'android-x86': {},
         },
     },
-    'fig': {},
+    'fig': {
+        'lock_platforms': True,
+        'platforms': {},
+        'mobile_platforms': {
+            'android': {},
+            'android-debug': {},
+            'android-noion': {},
+            'android-armv6': {},
+            'android-x86': {},
+        },
+    },
     'gum': {},
     'holly': {},
     # Bug 848025 - disable android builds for jamun

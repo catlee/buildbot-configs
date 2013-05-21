@@ -12,14 +12,6 @@ import localconfig
 reload(localconfig)
 from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS, GRAPH_CONFIG
 
-REMOTE_PROCESS_NAMES = {'default': 'org.mozilla.fennec',
-                        'mozilla-beta': 'org.mozilla.firefox_beta',
-                        'mozilla-aurora': 'org.mozilla.fennec_aurora',
-                        'mozilla-release': 'org.mozilla.firefox',
-                        'release-mozilla-beta': 'org.mozilla.firefox_beta',
-                        'release-mozilla-release': 'org.mozilla.firefox',
-                        }
-
 TALOS_REMOTE_FENNEC_OPTS = {'productName': 'fennec',
                             'remoteTests': True,
                             'remoteExtras': {'options': ['--sampleConfig', 'remote.config',
@@ -27,13 +19,10 @@ TALOS_REMOTE_FENNEC_OPTS = {'productName': 'fennec',
                                                          '--webServer', 'bm-remote.build.mozilla.org',
                                                          '--browserWait', '60',
                                                          ],
-                                             'processName': REMOTE_PROCESS_NAMES,
                                              },
                             }
 
-UNITTEST_REMOTE_EXTRAS = {'processName': REMOTE_PROCESS_NAMES}
-ANDROID_UNITTEST_REMOTE_EXTRAS = deepcopy(UNITTEST_REMOTE_EXTRAS)
-ANDROID_UNITTEST_REMOTE_EXTRAS['cmdOptions'] = ['--bootstrap']
+ANDROID_UNITTEST_REMOTE_EXTRAS = {'cmdOptions': ['--bootstrap'], }
 
 BRANCHES = {
     'mozilla-central':     {},
@@ -239,23 +228,8 @@ ANDROID_UNITTEST_DICT = {
              'thisChunk': 4,
              },
         )),
-        # disabled for constant timeouts, bug 728119
-        # ('crashtest-1', (
-        #     {'suite': 'crashtest',
-        #      'totalChunks': 3,
-        #      'thisChunk': 1,
-        #      },
-        # )),
-        ('crashtest-2', (
+        ('crashtest', (
             {'suite': 'crashtest',
-             'totalChunks': 3,
-             'thisChunk': 2,
-             },
-        )),
-        ('crashtest-3', (
-            {'suite': 'crashtest',
-             'totalChunks': 3,
-             'thisChunk': 3,
              },
         )),
         ('xpcshell', (
@@ -282,6 +256,11 @@ ANDROID_UNITTEST_DICT = {
         )),
         ('robocop', (
             {'suite': 'mochitest-robocop',
+             },
+        )),
+        ('mochitest-gl', (
+            {'suite': 'mochitest-plain',
+             'testPath': 'content/canvas/test/webgl',
              },
         )),
     ],
@@ -388,6 +367,10 @@ for suite in ANDROID_PLAIN_UNITTEST_DICT['opt_unittest_suites']:
     ANDROID_PANDA_UNITTEST_DICT['opt_unittest_suites'].append(suite)
 
 ANDROID_ARMV6_UNITTEST_DICT = deepcopy(ANDROID_PLAIN_UNITTEST_DICT)
+# Bug 869590 Disable mochitest-gl for armv6
+for suite in ANDROID_ARMV6_UNITTEST_DICT['opt_unittest_suites'][:]:
+    if suite[0] == 'mochitest-gl':
+        ANDROID_ARMV6_UNITTEST_DICT['opt_unittest_suites'].remove(suite)
 
 ANDROID_PLAIN_UNITTEST_DICT['debug_unittest_suites'] = deepcopy(ANDROID_PLAIN_UNITTEST_DICT['opt_unittest_suites'])
 ANDROID_PANDA_UNITTEST_DICT['debug_unittest_suites'] = deepcopy(ANDROID_PANDA_UNITTEST_DICT['opt_unittest_suites'])
@@ -572,12 +555,6 @@ BRANCHES['try']['pgo_strategy'] = 'try'
 BRANCHES['try']['pgo_platforms'] = []
 BRANCHES['try']['enable_try'] = True
 
-#exclude android builds from running on non-cedar branches on pandas
-for branch in BRANCHES.keys():
-    if 'android' in BRANCHES[branch]['platforms'] and branch not in ("cedar", "mozilla-central", "try", "mozilla-inbound"):
-        del BRANCHES[branch]['platforms']['android']['panda_android']
-        BRANCHES[branch]['platforms']['android']['slave_platforms'] = ['tegra_android']
-
 # Ignore robocop chunks for mozilla-release, robocop-chunks is defined in ANDROID_PLAIN_UNITTEST_DICT
 BRANCHES['mozilla-release']["platforms"]["android"]["tegra_android"]["opt_unittest_suites"] = deepcopy(TEGRA_RELEASE_PLAIN_UNITTEST_DICT["opt_unittest_suites"])
 
@@ -592,10 +569,21 @@ for projectBranch in ACTIVE_PROJECT_BRANCHES:
 # Delete all references to android-noion once we have b2g jsreftests not in an emulator.
 for branch in BRANCHES:
     if branch not in ('mozilla-central', 'mozilla-inbound', 'mozilla-b2g18',
-                      'mozilla-b2g18_v1_0_1', 'try'
+                      'mozilla-b2g18_v1_0_1', 'try', 'birch', 'date',
                       ):
         if 'android-noion' in BRANCHES[branch]['platforms']:
             del BRANCHES[branch]['platforms']['android-noion']
+
+# MERGE DAY, drop trees from branch list as Firefox 22 rides forward.
+for branch in BRANCHES.keys():
+    # Loop removes it from any branch that gets beyond here
+    if branch not in ('mozilla-release', 'mozilla-esr17', 'mozilla-b2g18',
+                      'mozilla-b2g18_v1_0_1'):
+        continue
+
+    if 'android' in BRANCHES[branch]['platforms']:
+        del BRANCHES[branch]['platforms']['android']['panda_android']
+        BRANCHES[branch]['platforms']['android']['slave_platforms'] = ['tegra_android']
 
 # Do android debug only on cedar
 for branch in BRANCHES:
@@ -608,8 +596,8 @@ for branch in BRANCHES:
 # MERGE DAY, drop trees from branch list as Firefox 23 rides forward.
 for branch in BRANCHES:
     # Loop removes it from any branch that gets beyond here
-    if branch not in ('mozilla-aurora', 'mozilla-beta', 'mozilla-release',
-                      'mozilla-esr17', 'mozilla-b2g18', 'mozilla-b2g18_v1_0_1'):
+    if branch not in ('mozilla-beta', 'mozilla-release', 'mozilla-esr17',
+                      'mozilla-b2g18', 'mozilla-b2g18_v1_0_1'):
         continue
 
     for platform in BRANCHES[branch]['platforms']:

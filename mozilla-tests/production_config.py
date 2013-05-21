@@ -1,16 +1,17 @@
 SLAVES = {
-    'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(1,103) \
+    'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(11,103) \
         if x not in [18, 59]]), # bug 731793, bug 779574
-    'fedora64' : dict([("talos-r3-fed64-%03i" % x, {}) for x in range (1,72) \
-        if x not in [35]]), # bug 735846
-    'xp': dict([("talos-r3-xp-%03i" % x, {}) for x in range(1,111) \
-        if x not in [45, 58, 59]]), # bug 661377, bug 780515, bug 753357
-    'win7': dict([("talos-r3-w7-%03i" % x, {}) for x in range(1,115) \
-        if x not in [17]]), # bug 747734
+    'fedora64' : dict([("talos-r3-fed64-%03i" % x, {}) for x in range (40,72)]),
+    'xp': dict([("talos-r3-xp-%03i" % x, {}) for x in range(1,142) \
+        if x not in [4, 45, 58, 59]]), # bug 856604, 661377, 780515, 753357
+    'xp-ix': dict([("t-xp32-ix-%03i" % x, {}) for x in range(1,101)]),
+    'win7': dict([("talos-r3-w7-%03i" % x, {}) for x in range(4,135) \
+        if x not in [10, 17]]), # bug 861326 & bug 747734
+    'win7-ix': dict([("t-w732-ix-%03i" % x, {}) for x in range(1,101)]),
     'win8': dict([("t-w864-ix-%03i" % x, {}) for x in range(1,101)]),
     'snowleopard': dict([("talos-r4-snow-%03i" % x, {}) for x in range(1,85) \
-        if x not in [46]]), # bug 824754 - This machine is not suitable for production
-    'lion': dict([("talos-r4-lion-%03i" % x, {}) for x in range(1,85) \
+        if x not in [46, 81, 83]]), # bug 824754, bug 729090
+    'lion': dict([("talos-r4-lion-%03i" % x, {}) for x in range(1,91) \
         if x not in [58, 81, 83]]), # bug 730545, bug 729090 (x2)
     'mountainlion': dict([("talos-mtnlion-r5-%03i" % x, {}) for x in range(1,90)]),
     'tegra_android': dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
@@ -23,8 +24,8 @@ SLAVES = {
             for x in range(22,33) + range(34,45) + range(46,82) + range(522,874) + range(885,887)]
     ),
     'b2g_panda': dict([("panda-%04i" % x, {}) for x in range(82,522) + range(33,34) + range(45,46)]),
-    'ubuntu32_vm': dict([("tst-linux32-ec2-%03i" % x, {}) for x in range(1, 150) + range(300, 450)]),
-    'ubuntu64_vm': dict([("tst-linux64-ec2-%03i" % x, {}) for x in range(1, 150) + range(300, 450)]),
+    'ubuntu32_vm': dict([("tst-linux32-ec2-%03i" % x, {}) for x in range(1, 900)]),
+    'ubuntu64_vm': dict([("tst-linux64-ec2-%03i" % x, {}) for x in range(1, 900)]),
     'ubuntu32_hw': dict([("talos-linux32-ix-%03i" % x, {}) for x in range(1, 101)]),
     'ubuntu64_hw': dict([("talos-linux64-ix-%03i" % x, {}) for x in range(1, 101)]),
 }
@@ -33,7 +34,9 @@ SLAVES['tegra_android-armv6'] = SLAVES['tegra_android']
 SLAVES['tegra_android-noion'] = SLAVES['tegra_android']
 SLAVES['fedora-b2g'] = SLAVES['fedora']
 # Use "-b2g" suffix to make misc.py generate unique builder names
+SLAVES['ubuntu32_vm-b2gdt'] = SLAVES['ubuntu32_vm']
 SLAVES['ubuntu64_vm-b2g'] = SLAVES['ubuntu64_vm']
+SLAVES['ubuntu64_vm-b2gdt'] = SLAVES['ubuntu64_vm']
 SLAVES['ubuntu64_hw-b2g'] = SLAVES['ubuntu64_hw']
 SLAVES['b2g_panda_gaia_central'] = SLAVES['b2g_panda']
 

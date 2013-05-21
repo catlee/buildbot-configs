@@ -102,7 +102,7 @@ PLATFORM_VARS = {
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner',
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
+            'build_space': 10,
             'upload_symbols': True,
             'download_symbols': True,
             'packageTests': True,
@@ -155,6 +155,7 @@ PLATFORM_VARS = {
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
                         'pulseaudio-libs-devel',
+                        'freetype-2.3.11-6.el6_2.9', 'freetype-devel-2.3.11-6.el6_2.9',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -172,7 +173,7 @@ PLATFORM_VARS = {
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux64/xulrunner',
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 6,
+            'build_space': 10,
             'upload_symbols': True,
             'download_symbols': False,
             'packageTests': True,
@@ -226,6 +227,7 @@ PLATFORM_VARS = {
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
                         'pulseaudio-libs-devel',
+                        'freetype-2.3.11-6.el6_1.8', 'freetype-devel-2.3.11-6.el6_1.8',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -385,7 +387,7 @@ PLATFORM_VARS = {
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
             'packageTests': True,
-            'build_space': 7,
+            'build_space': 10,
             'slaves': SLAVES['mock'],
             'platform_objdir': OBJDIR,
             'stage_product': 'thunderbird',
@@ -424,6 +426,7 @@ PLATFORM_VARS = {
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
                         'pulseaudio-libs-devel',
+                        'freetype-2.3.11-6.el6_2.9', 'freetype-devel-2.3.11-6.el6_2.9',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -443,7 +446,7 @@ PLATFORM_VARS = {
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': False,
             'packageTests': True,
-            'build_space': 7,
+            'build_space': 10,
             'slaves': SLAVES['mock'],
             'platform_objdir': OBJDIR,
             'stage_product': 'thunderbird',
@@ -482,6 +485,7 @@ PLATFORM_VARS = {
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'yasm', 'ccache', # <-- from releng repo
                         'pulseaudio-libs-devel',
+                        'freetype-2.3.11-6.el6_1.8', 'freetype-devel-2.3.11-6.el6_1.8',
                         ],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
@@ -540,7 +544,7 @@ PLATFORM_VARS = {
             'download_symbols': True,
             'enable_installer': True,
             'packageTests': True,
-            'build_space': 9,
+            'build_space': 10,
             'slaves': SLAVES['win64'],
             'platform_objdir': OBJDIR,
             'stage_product': 'thunderbird',

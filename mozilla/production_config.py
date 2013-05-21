@@ -1,14 +1,14 @@
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(41,87) + [88]]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(1,16) + range(41,87) + [88] + range(93,95)]
 LINUX_VMS      = ['bld-centos5-32-vmw-%03i' % x for x in range(1,23)]
 LINUX_IXS      = ['linux-ix-slave%02i' % x for x in [1,2,6]]
 LINUX64_VMS    = ['bld-centos5-64-vmw-%03i' % x for x in range(1, 7)]
 LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in range(3, 7)]
 WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(2,13)]
 WIN64_IXS      = ['w64-ix-slave%02i' % x for x in range(6,25) + range(42,44) + range(64,100) if x not in [22,80,85,86]] + \
-                 ['w64-ix-slave%03i' % x for x in range(100,111)]
+                 ['w64-ix-slave%03i' % x for x in range(100,134)]
 MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,24)] # 5 staging, 17 prod, 17 try
-LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(300, 451) + range(600, 751)]
-MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in range(1, 38)]
+LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 900)]
+MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in [4] + range(15, 38)]
 
 SLAVES = {
     'linux':            LINUX_VMS + LINUX_IXS,
@@ -23,13 +23,13 @@ TRY_LINUX      = []
 TRY_LINUX_IXS  = []
 TRY_LINUX64    = []
 TRY_LINUX64_IXS= []
-TRY_LINUX64_EC2= ['try-linux64-ec2-%03d' % x for x in range(1, 101) + range(300, 401) + range(600, 701)]
-TRY_MAC64      = ['try-mac64-slave%02i' % x for x in range(27,32)]
+TRY_LINUX64_EC2= ['try-linux64-ec2-%03d' % x for x in range(1, 900)]
+TRY_MAC64      = []
 TRY_WIN32_IXS  = []
 TRY_WIN64_IXS  = ['w64-ix-slave%02i' % x for x in range(25,64) if x not in [42,43]]
 TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,43)]
 TRY_MOCK_IX      = ['bld-linux64-ix-%03d' % x for x in range(38, 74)]
-TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(1,41) + [95,96]]
+TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,41)]
 
 TRY_SLAVES = {
     'win32':       TRY_WIN32_IXS,
