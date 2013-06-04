@@ -56,8 +56,39 @@ PROJECT_BRANCHES = {
         'create_snippet': True,
         'create_partial': True,
     },
+    # Please sync any customizations made to mozilla-inbound to cypress.
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
+        'enable_perproduct_builds': True,
+        'mozconfig_dir': 'mozilla-central',
+        'enable_nightly': False,
+        'enable_weekly_bundle': True,
+        'pgo_strategy': 'periodic',
+        'periodic_pgo_interval': 3,
+        'talos_suites': {
+            'xperf': 1,
+        },
+        'platforms': {
+            'linux64': {
+                'nightly_signing_servers': 'nightly-signing',
+            },
+            'linux': {
+                'nightly_signing_servers': 'nightly-signing',
+            },
+            'macosx64-debug': {
+                'enable_leaktests': True,
+                'nightly_signing_servers': 'mac-nightly-signing',
+            },
+            'macosx64': {
+                'nightly_signing_servers': 'mac-nightly-signing',
+            },
+            'win32': {
+                'nightly_signing_servers': 'nightly-signing',
+            },
+        },
+    },
+    # Customized to be the same as inbound. bug 866314
+    'cypress': {
         'enable_perproduct_builds': True,
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': False,
@@ -154,6 +185,7 @@ PROJECT_BRANCHES = {
         'enable_nightly': True,
         'create_snippet': True,
         'create_partial': True,
+        'pgo_strategy': 'periodic',
         'platforms': {
             'macosx64-debug': {
                 'nightly_signing_servers': 'mac-nightly-signing',
@@ -194,6 +226,9 @@ PROJECT_BRANCHES = {
         'mozharness_tag': 'default',
         'mozharness_talos': True,
         'lock_platforms': True,
+        'talos_suites': {
+            'xperf': 1,
+        },
         'platforms': {
             'linux': {},
             'linux64': {},
@@ -259,23 +294,7 @@ PROJECT_BRANCHES = {
             'android-debug': {},
         },
     },
-    'cypress': {},
-    # Android x86_64 build environment (bug 860246)
-    'date': {
-        'lock_platforms': True,
-        'pgo_strategy': 'per-checkin',
-        'platforms': {
-            'linux': {},
-            'linux-debug': {},
-        },
-        'mobile_platforms': {
-            'android': {},
-            'android-debug': {},
-            'android-noion': {},
-            'android-armv6': {},
-            'android-x86': {},
-        },
-    },
+    'date': {},
     # customizations for windows update service changes (bug 481815)
     'elm': {
         'enable_nightly': True,
@@ -316,21 +335,7 @@ PROJECT_BRANCHES = {
     },
     'gum': {},
     'holly': {},
-    # Bug 848025 - disable android builds for jamun
-    'jamun': {
-        'lock_platforms': True,
-        'platforms': {
-            'linux': {},
-            'linux-debug': {},
-            'linux64': {},
-            'linux64-debug': {},
-            'macosx64-debug': {},
-            'macosx64': {},
-            'win32': {},
-            'win32-debug': {},
-        },
-        'mobile_platforms': {},
-    },
+    'jamun': {},
     'larch': {},
     'maple': {},
     # customizations for integration work for bugs 481815 and 307181
@@ -352,12 +357,6 @@ PROJECT_BRANCHES = {
         },
     },
     'pine': {},
-    # gaia-master is b2g only; no desktop platforms are needed
-    'gaia-master': {
-        'poll_repo': 'integration/gaia-central',
-        'lock_platforms': True,
-        'platforms': {}
-    }
 }
 
 # All is the default

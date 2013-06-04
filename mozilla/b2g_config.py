@@ -983,6 +983,8 @@ BRANCHES['mozilla-central']['start_minute'] = [2]
 BRANCHES['mozilla-central']['aus2_base_upload_dir'] = 'fake'
 BRANCHES['mozilla-central']['aus2_base_upload_dir_l10n'] = 'fake'
 BRANCHES['mozilla-central']['platforms']['unagi']['enable_nightly'] = True
+BRANCHES['mozilla-central']['platforms']['unagi_eng']['enable_nightly'] = True
+BRANCHES['mozilla-central']['platforms']['unagi_eng']['enable_dep'] = False
 
 ######## mozilla-b2g18
 # This is a path, relative to HGURL, where the repository is located
@@ -1138,7 +1140,7 @@ for branch in BRANCHES:
 
 # MERGE DAY: unagi_eng is only for b2g18 + b2g18_v1_0_1
 for branch in BRANCHES:
-    if branch not in ('mozilla-b2g18', 'mozilla-b2g18_v1_0_1') and \
+    if branch not in ('mozilla-b2g18', 'mozilla-b2g18_v1_0_1', 'mozilla-central',) and \
             'unagi_eng' in BRANCHES[branch]['platforms']:
         del BRANCHES[branch]['platforms']['unagi_eng']
 
@@ -1175,7 +1177,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
             BRANCHES[branch]['platforms'][platform]['mozconfig'] = platform + '/' + branchConfig.get('mozconfig_dir', 'generic') + '/nightly'
 
 # B2G WORK WEEK
-for b in ('birch', 'cypress'):
+for b in ('birch',):
     BRANCHES[b]['platforms']['linux32_gecko']['enable_checktests'] = False
     BRANCHES[b]['platforms']['linux64_gecko']['enable_checktests'] = False
     BRANCHES[b]['platforms']['linux32_gecko_localizer']['enable_checktests'] = False

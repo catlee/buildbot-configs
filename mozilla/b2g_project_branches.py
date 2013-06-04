@@ -18,8 +18,13 @@ PROJECT_BRANCHES = {
     'jaegermonkey': {
         'enable_nightly': True
     },
+    # Please sync any customizations made to mozilla-inbound to cypress.
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
+        'enable_perproduct_builds': True,
+    },
+    # Customized to be the same as inbound. bug 866314
+    'cypress': {
         'enable_perproduct_builds': True,
     },
     # Disabled because of builder limit problems - bug 721854
@@ -55,29 +60,7 @@ PROJECT_BRANCHES = {
     'cedar': {
         'mozharness_tag': 'default',
     },
-    'cypress': {},
-    'date': {
-        'lock_platforms': True,
-        'platforms': {},
-    },
-    'gaia-master': {
-        'repo_path': 'mozilla-central',
-        'poll_repo': 'integration/gaia-central',
-        'lock_platforms': True,
-        'platforms': {
-            'panda': {
-                'mozharness_config': {
-                    'script_name': 'scripts/b2g_build.py',
-                    'extra_args': ['--target', 'panda', '--config', 'b2g/releng.py',
-                                   '--gaia-languages-file', 'locales/languages_dev.json',
-                                   '--gecko-languages-file', 'gecko/b2g/locales/all-locales',
-                                   '--additional-source-tarballs', 'download-panda.tar.bz2',
-                                   '--checkout-revision', 'default'],
-                    'reboot_command': ['bash', '-c', 'sudo reboot; sleep 600'],
-                }
-            }
-        }
-    },
+    'date': {},
     # Customizations for windows update service changes (bug 481815)
     #'elm': {},
     'fig': {
@@ -86,8 +69,7 @@ PROJECT_BRANCHES = {
     },
     'gum': {},
     'holly': {},
-    # Bug 848025 - disable b2g builds for jamun
-    #'jamun': {},
+    'jamun': {},
     'larch': {},
     'maple': {},
     # Customizations for integration work for bugs 481815 and 307181

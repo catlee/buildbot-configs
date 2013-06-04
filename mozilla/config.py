@@ -216,7 +216,7 @@ PLATFORM_VARS = {
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux64/xulrunner',
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 10,
+            'build_space': 12,
             'upload_symbols': True,
             'download_symbols': False,
             'packageTests': True,
@@ -289,7 +289,7 @@ PLATFORM_VARS = {
             'enable_xulrunner': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 10,
+            'build_space': 12,
             'upload_symbols': False,
             'download_symbols': False,
             'packageTests': True,
@@ -366,7 +366,7 @@ PLATFORM_VARS = {
             'enable_xulrunner': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 10,
+            'build_space': 12,
             'upload_symbols': False,
             'download_symbols': False,
             'packageTests': True,
@@ -1164,7 +1164,7 @@ PLATFORM_VARS = {
             'enable_xulrunner': False,
             'profiled_build': False,
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
-            'build_space': 12,
+            'build_space': 14,
             'upload_symbols': True,
             'download_symbols': False,
             'packageTests': True,
@@ -1280,7 +1280,7 @@ PROJECTS = {
             'linux':          ['warnaserr'],
             'linux-debug':    ['warnaserrdebug'],
             'linux64':        ['warnaserr'],
-            'linux64-debug':  ['rootanalysis', 'warnaserrdebug'],
+            'linux64-debug':  ['rootanalysis', 'warnaserrdebug', 'generational'],
             'macosx64':           ['warnaserr'],
             'macosx64-debug':     ['dtrace', 'warnaserrdebug'],
         },
@@ -1298,12 +1298,35 @@ PROJECTS = {
         'repo_path': 'integration/mozilla-inbound',
         'branch': 'mozilla-inbound',
     },
+    'spidermonkey_cypress': {
+        'variants': {
+            'linux':          ['warnaserr'],
+            'linux-debug':    ['warnaserrdebug'],
+            'linux64':        ['warnaserr'],
+            'linux64-debug':  ['rootanalysis', 'warnaserrdebug', 'generational'],
+            'macosx64':           ['warnaserr'],
+            'macosx64-debug':     ['dtrace', 'warnaserrdebug'],
+        },
+        'platforms': {
+            'linux': {},
+            'linux-debug': {},
+            'linux64': {},
+            'linux64-debug': {},
+            'win32': {},
+            'win32-debug': {},
+            'macosx64': {},
+            'macosx64-debug': {},
+        },
+        'hgurl': 'http://hg.mozilla.org/',
+        'repo_path': 'projects/cypress',
+        'branch': 'cypress',
+    },
     'spidermonkey_ionmonkey': {
         'variants': {
             'linux':          ['warnaserr'],
             'linux-debug':    ['warnaserrdebug'],
             'linux64':        ['warnaserr'],
-            'linux64-debug':  ['rootanalysis', 'warnaserrdebug'],
+            'linux64-debug':  ['rootanalysis', 'warnaserrdebug', 'generational'],
             'macosx64':           ['warnaserr'],
             'macosx64-debug':     ['dtrace', 'warnaserrdebug'],
         },
@@ -1971,7 +1994,7 @@ for b in ('mozilla-esr17',):
 # Delete all references to android-noion once we have b2g jsreftests not in an emulator.
 for b in BRANCHES.keys():
     if b not in ('mozilla-central', 'mozilla-inbound', 'mozilla-b2g18',
-                 'mozilla-b2g18_v1_0_1', 'try', 'birch', 'date',
+                 'mozilla-b2g18_v1_0_1', 'try', 'birch', 'date', 'cypress',
                  ):
         if 'android-noion' in BRANCHES[b]['platforms']:
             del BRANCHES[b]['platforms']['android-noion']
@@ -2034,7 +2057,10 @@ for b in BRANCHES:
         for p, pc in BRANCHES[b]['platforms'].items():
             if 'mock_packages' in pc:
                 BRANCHES[b]['platforms'][p]['mock_packages'] = \
-                    [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x not in ('gstreamer-devel', 'gstreamer-plugins-base-devel')]
+                    [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x not in (
+                        'gstreamer-devel', 'gstreamer-plugins-base-devel',
+                        'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
+                    )]
 
 
 # B2G's INBOUND
