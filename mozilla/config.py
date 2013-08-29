@@ -2053,7 +2053,7 @@ for b in BRANCHES.keys():
 
 # ASan builds are only on mozilla-central for now
 for b in BRANCHES:
-    if b not in ('mozilla-central',):
+    if b not in ('mozilla-central', 'cedar', 'try'):
         for p in 'linux64-asan', 'linux64-asan-debug':
             if p in BRANCHES[b]['platforms']:
                 del BRANCHES[b]['platforms'][p]
