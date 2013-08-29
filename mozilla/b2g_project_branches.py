@@ -1,33 +1,37 @@
 # Additional branches that start as identical (individual variables can be overriden here)
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
-    'accessibility': {
-        'enable_nightly': True,
-    },
     'build-system': {},
-    'devtools':{
-        'enable_nightly': True,
-    },
-    # Disabled because of builder limit problems - bug 721854
-    #'electrolysis': {},
     'fx-team': {
         'repo_path': 'integration/fx-team',
-        'enable_nightly': True,
+        'enable_perproduct_builds': True,
+        'enable_nightly': False,
     },
-    # Turning off graphics - bug 649507
-    #'graphics': {},
+    'graphics': {},
     'ionmonkey': {
         'enable_nightly': True
     },
-    'jaegermonkey': {
-        'enable_nightly': True
-    },
+    # Please sync any customizations made to mozilla-inbound to cypress.
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
         'enable_perproduct_builds': True,
     },
-    # Disabled because of builder limit problems - bug 721854
-    #'places': {},
+    # Customized to be the same as inbound. bug 866314
+    'cypress': {
+        'enable_perproduct_builds': True,
+    },
+    'b2g-inbound': {
+        'repo_path': 'integration/b2g-inbound',
+        'enable_perproduct_builds': True,
+        'platforms': {
+            'macosx64_gecko': {
+                'enable_checktests': False,
+            },
+            'win32_gecko': {
+                'enable_checktests': False,
+            },
+        },
+    },
     # B2G builds not required on the profiling branch
     #'profiling': {},
     'services-central': {
@@ -45,29 +49,18 @@ PROJECT_BRANCHES = {
     'ash': {
         'mozharness_repo_path': 'users/asasaki_mozilla.com/ash-mozharness',
     },
-    # Only need to build on OS X (testing gcc OS X builds still work)
-    #'birch': {},
-    'cedar': {},
-    # Customizations for b2g 1.1 work (bug 822783 & bug 819368)
-    'date': {
-        'enable_nightly': True,
-        'enable_l10n': False,
-        'enable_xulrunner': False,
-        'enabled_products': ['b2g'],
-        'product_prefix': 'b2g',
-        'unittest_suites': [],
-        # XXX: this seems like it should be at the platform level
-        'enable_multi_locale': True,
-        'lock_platforms': True,
-        'platforms': {
-            'unagi': {
-                'enable_nightly': True,
-            },
-        },
+    'birch': {},
+    'cedar': {
+        'mozharness_tag': 'default',
     },
+    # B2G builds not required on date
+    # 'date': {},
     # Customizations for windows update service changes (bug 481815)
     #'elm': {},
-    'fig': {},
+    'fig': {
+        'lock_platforms': True,
+        'platforms': {},
+    },
     'gum': {},
     'holly': {},
     'jamun': {},

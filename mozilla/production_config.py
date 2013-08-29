@@ -1,50 +1,41 @@
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(41,87) + [88]]
-MAC_SNOW_MINIS = ['moz2-darwin10-slave%02i' % x for x in range(40,57) if x not in (51,52,)] # bug683792
-LINUX_VMS      = ['bld-centos5-32-vmw-%03i' % x for x in range(1,23)]
-LINUX_IXS      = ['mv-moz2-linux-ix-slave%02i' % x for x in range(2,22)] + \
-                 ['linux-ix-slave%02i' % x for x in [1,2,6] + range(12,32)]
-LINUX64_VMS    = ['bld-centos5-64-vmw-%03i' % x for x in range(1, 7)]
-LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in range(3,18)]
-WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(2,16) + [20, 26]]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(1,16) + range(41,87) + [88] + range(93,95)]
+LINUX_VMS      = ['bld-centos5-32-vmw-%03i' % x for x in range(1,7)]
+LINUX_IXS      = ['linux-ix-slave%02i' % x for x in [1,2,6]]
+LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in range(3, 7)]
+WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(2,13)]
 WIN64_IXS      = ['w64-ix-slave%02i' % x for x in range(6,25) + range(42,44) + range(64,100) if x not in [22,80,85,86]] + \
-                 ['w64-ix-slave%03i' % x for x in range(100,111)]
+                 ['w64-ix-slave%03i' % x for x in range(100,158)]
 MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,24)] # 5 staging, 17 prod, 17 try
-LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 101) + range(300, 401) + range(600, 701)]
+LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 900)]
+MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in range(27, 38)]
 
 SLAVES = {
     'linux':            LINUX_VMS + LINUX_IXS,
-    'linux64':          LINUX64_VMS + LINUX64_IXS,
+    'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
-    'macosx':           [],
-    'macosx64':         MAC_SNOW_MINIS,
     'macosx64-lion':    MAC_LION_MINIS,
-    'android':          LINUX_VMS + LINUX_IXS,
-    'android-armv6':    LINUX_VMS + LINUX_IXS,
-    'android-x86':      MOCK_DL120G7 + LINUX64_EC2,
-    'mock':             MOCK_DL120G7 + LINUX64_EC2,
+    'mock':             MOCK_DL120G7 + LINUX64_EC2 + MOCK_IX,
 }
 
 TRY_LINUX      = []
-TRY_LINUX_IXS  = ['mv-moz2-linux-ix-slave%02i' % x for x in range(22,24)] + \
-                 ['linux-ix-slave%02i' % x for x in range(7,12)]
+TRY_LINUX_IXS  = []
 TRY_LINUX64    = []
-TRY_LINUX64_IXS= ['linux64-ix-slave%02i' % x for x in range(22,42)]
-TRY_LINUX64_EC2= ['try-linux64-ec2-%03d' % x for x in range(1, 101) + range(300, 401) + range(600, 701)]
-TRY_MAC64      = ['try-mac64-slave%02i' % x for x in range(27,32)]
-TRY_WIN32_IXS  = ['mw32-ix-slave%02i' % x for x in range(16,19) + range(22,26)]
+TRY_LINUX64_IXS= []
+TRY_LINUX64_EC2= ['try-linux64-ec2-%03d' % x for x in range(1, 900)]
+TRY_MAC64      = []
+TRY_WIN32_IXS  = []
 TRY_WIN64_IXS  = ['w64-ix-slave%02i' % x for x in range(25,64) if x not in [42,43]]
 TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,43)]
-TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(1,41) + [95,96]]
+TRY_MOCK_IX      = ['bld-linux64-ix-%03d' % x for x in range(49, 74)]
+TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,41)]
 
 TRY_SLAVES = {
-    'linux':       TRY_LINUX + TRY_LINUX_IXS,
-    'linux64':     TRY_LINUX64 + TRY_LINUX64_IXS,
     'win32':       TRY_WIN32_IXS,
     'win64':       TRY_WIN64_IXS,
     'macosx64':    TRY_MAC64,
     'macosx64-lion': TRY_LION,
-    'mock':        TRY_MOCK_DL120G7 + TRY_LINUX64_EC2,
+    'mock':        TRY_MOCK_DL120G7 + TRY_LINUX64_EC2 + TRY_MOCK_IX,
 }
 
 # Local overrides for default values
@@ -66,13 +57,13 @@ GLOBAL_VARS = {
     # and if a failure to notify the talos master should result in a warning,
     # and sendchange retry count before give up
     'talos_masters': [
-        ('buildbot-master36.build.mozilla.org:9301', True, 5),
+        ('buildbot-master81.build.mozilla.org:9301', True, 5),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
     # and sendchange retry count before give up
     'unittest_masters': [
-        ('buildbot-master36.build.mozilla.org:9301', True, 5),
+        ('buildbot-master81.build.mozilla.org:9301', True, 5),
     ],
     'xulrunner_tinderbox_tree': 'XULRunner',
     'weekly_tinderbox_tree': 'Testing',
@@ -83,7 +74,7 @@ GLOBAL_VARS = {
 }
 
 BUILDS_BEFORE_REBOOT = 1
-SYMBOL_SERVER_HOST = 'symbols1.dmz.phx1.mozilla.com'
+SYMBOL_SERVER_HOST = 'symbolpush.mozilla.org'
 
 # Local branch overrides
 BRANCHES = {
@@ -98,11 +89,6 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-Release',
         'mobile_tinderbox_tree': 'Mozilla-Release',
     },
-    'mozilla-esr10': {
-        'packaged_unittest_tinderbox_tree': 'Mozilla-Esr10',
-        'tinderbox_tree': 'Mozilla-Esr10',
-        'mobile_tinderbox_tree': 'Mozilla-Esr10',
-    },
     'mozilla-esr17': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-Esr17',
         'tinderbox_tree': 'Mozilla-Esr17',
@@ -113,6 +99,16 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-B2g18',
         'mobile_tinderbox_tree': 'Mozilla-B2g18',
     },
+    'mozilla-b2g18_v1_0_1': {
+        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g18_v1_0_1',
+        'tinderbox_tree': 'Mozilla-B2g18_v1_0_1',
+        'mobile_tinderbox_tree': 'Mozilla-B2g18_v1_0_1',
+    },
+    'mozilla-b2g18_v1_1_0_hd': {
+        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
+        'tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
+        'mobile_tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
+    },
     'mozilla-beta': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-Beta',
         'tinderbox_tree': 'Mozilla-Beta',
@@ -122,26 +118,6 @@ BRANCHES = {
         'packaged_unittest_tinderbox_tree': 'Mozilla-Aurora',
         'tinderbox_tree': 'Mozilla-Aurora',
         'mobile_tinderbox_tree': 'Mozilla-Aurora',
-    },
-    'places': {
-        'tinderbox_tree': 'Places',
-        'mobile_tinderbox_tree': 'Places',
-        'packaged_unittest_tinderbox_tree': 'Places',
-    },
-    'electrolysis': {
-        'tinderbox_tree': 'Electrolysis',
-        'mobile_tinderbox_tree': 'Electrolysis',
-        'packaged_unittest_tinderbox_tree': 'Electrolysis',
-    },
-    'addonsmgr': {
-        'tinderbox_tree': 'AddonsMgr',
-        'mobile_tinderbox_tree': 'AddonsMgr',
-        'packaged_unittest_tinderbox_tree': 'AddonsMgr',
-    },
-    'jaegermonkey': {
-        'tinderbox_tree': 'Jaegermonkey',
-        'mobile_tinderbox_tree': 'Jaegermonkey',
-        'packaged_unittest_tinderbox_tree': 'Jaegermonkey',
     },
     'try': {
         'tinderbox_tree': 'Try',
@@ -176,8 +152,9 @@ PLATFORM_VARS = {}
 PROJECTS = {
     'fuzzing': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'fuzzing_bundle': 'http://pvtbuilds.pvt.build.mozilla.org/bundles/fuzzing.hg',
         'fuzzing_repo': 'ssh://ffxbld@hg.mozilla.org/private/fuzzing',
-        'fuzzing_remote_host': 'ffxbld@pvtbuilds2.dmz.scl3.mozilla.com',
+        'fuzzing_remote_host': 'ffxbld@stage.mozilla.org',
         # Path needs extra leading slash due to optparse expansion on Win32
         'fuzzing_base_dir': '//mnt/pvt_builds/fuzzing/',
         'idle_slaves': 3,
@@ -189,26 +166,29 @@ PROJECTS = {
         'tinderbox_tree': 'Nanojit',
         'disable_tinderbox_mail': False,
     },
-    'spidermonkey_mozilla-inbound': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
-        'idle_slaves': 0,
-        'tinderbox_tree': 'Mozilla-Inbound',
-        'disable_tinderbox_mail': False,
-    },
-    'spidermonkey_ionmonkey': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
-        'idle_slaves': 0,
-        'tinderbox_tree': 'Ionmonkey',
-    },
     'dxr_mozilla-central': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'upload_host': GLOBAL_VARS['stage_server'],
         'upload_user': 'ffxbld',
         'upload_sshkey': '/home/cltbld/.ssh/ffxbld_dsa',
     },
+}
+
+BRANCH_PROJECTS = {
+    'spidermonkey_tier_1': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+        'disable_tinderbox_mail': False,
+    },
     'spidermonkey_try': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
+        'disable_tinderbox_mail': False,
+    },
+    'spidermonkey_info': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+        'disable_tinderbox_mail': False,
     },
 }
 

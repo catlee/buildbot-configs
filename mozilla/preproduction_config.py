@@ -63,15 +63,19 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
-    'mozilla-esr10': {
-        'enable_blocklist_update': False,
-        'blocklist_update_on_closed_tree': False,
-    },
     'mozilla-esr17': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
     'mozilla-b2g18': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
+    'mozilla-b2g18_v1_0_1': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
+    'mozilla-b2g18_v1_1_0_hd': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
@@ -106,6 +110,7 @@ PROJECTS = {
     'fuzzing': {
         'disable_tinderbox_mail': True,
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'fuzzing_bundle': 'http://pvtbuilds.pvt.build.mozilla.org/bundles/fuzzing.hg',
         'fuzzing_repo': 'ssh://stage-ffxbld@hg.mozilla.org/private/fuzzing',
         'fuzzing_remote_host': 'ffxbld@preproduction-stage.srv.releng.scl3.mozilla.com',
         # Path needs extra leading slash due to optparse expansion on Win32
@@ -118,26 +123,28 @@ PROJECTS = {
         'idle_slaves': 0,
         'tinderbox_tree': 'MozillaTest',
     },
-    'spidermonkey_mozilla-inbound': {
-        'disable_tinderbox_mail': True,
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
-        'idle_slaves': 0,
-        'tinderbox_tree': 'MozillaTest',
-    },
-    'spidermonkey_ionmonkey': {
-        'disable_tinderbox_mail': True,
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
-        'idle_slaves': 0,
-        'tinderbox_tree': 'MozillaTest',
-    },
     'dxr_mozilla-central': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'upload_host': GLOBAL_VARS['stage_server'],
         'upload_user': 'ffxbld',
         'upload_sshkey': '/home/cltbld/.ssh/ffxbld_dsa',
     },
+}
+
+BRANCH_PROJECTS = {
+    'spidermonkey_tier_1': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+        'disable_tinderbox_mail': False,
+    },
     'spidermonkey_try': {
         'scripts_repo': 'http://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
+        'disable_tinderbox_mail': False,
+    },
+    'spidermonkey_info': {
+        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'idle_slaves': 0,
+        'disable_tinderbox_mail': False,
     },
 }

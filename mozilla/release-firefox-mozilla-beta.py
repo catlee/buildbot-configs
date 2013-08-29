@@ -20,23 +20,23 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '19.0b2'
-releaseConfig['appVersion']          = '19.0'
+releaseConfig['version']             = '24.0b6'
+releaseConfig['appVersion']          = '24.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_19_0b2'
+releaseConfig['baseTag']             = 'FIREFOX_24_0b6'
 releaseConfig['partialUpdates']      = {
 
-    '19.0b1': {
-        'appVersion': '19.0',
-        'buildNumber': 3,
-        'baseTag': 'FIREFOX_19_0b1',
+    '24.0b4': {
+        'appVersion': '24.0',
+        'buildNumber': 1,
+        'baseTag': 'FIREFOX_24_0b4',
     },
 
-    '18.0b7': {
-        'appVersion': '18.0',
+    '24.0b5': {
+        'appVersion': '24.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_18_0b7',
+        'baseTag': 'FIREFOX_24_0b5',
     },
 
 }
@@ -48,7 +48,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': 'aad6dcd323c3',
+        'revision': '998fae3a6eba',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -74,7 +74,8 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-beta'
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
-    'build/mozharness': 'default',
+    'build/partner-repacks': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
@@ -91,6 +92,7 @@ releaseConfig['enableUnittests']     = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'browser/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = True
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'ffxbld'
@@ -107,6 +109,7 @@ releaseConfig['ausUser']             = 'ffxbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
+releaseConfig['promptWaitTime']      = None
 releaseConfig['updateVerifyChunks']  = 4
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozBeta-firefox-linux.cfg',
@@ -115,10 +118,10 @@ releaseConfig['verifyConfigs']       = {
     'win32':  'mozBeta-firefox-win32.cfg'
 }
 releaseConfig['mozconfigs']          = {
-    'linux': 'browser/config/mozconfigs/linux32/release',
-    'linux64': 'browser/config/mozconfigs/linux64/release',
-    'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
-    'win32': 'browser/config/mozconfigs/win32/release',
+    'linux': 'browser/config/mozconfigs/linux32/beta',
+    'linux64': 'browser/config/mozconfigs/linux64/beta',
+    'macosx64': 'browser/config/mozconfigs/macosx-universal/beta',
+    'win32': 'browser/config/mozconfigs/win32/beta',
 }
 releaseConfig['xulrunner_mozconfigs']          = {
     'linux': 'xulrunner/config/mozconfigs/linux32/xulrunner',
@@ -129,7 +132,7 @@ releaseConfig['xulrunner_mozconfigs']          = {
 releaseConfig['releaseChannel']      = 'beta'
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = False
+releaseConfig['doPartnerRepacks']    = True
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Tuxedo/Bouncer configuration

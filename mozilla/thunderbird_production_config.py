@@ -1,8 +1,8 @@
 from copy import deepcopy
 
 from localconfig import \
-    GLOBAL_VARS, MAC_LION_MINIS, MAC_SNOW_MINIS, \
-    LINUX_VMS, LINUX_IXS, LINUX64_VMS, LINUX64_IXS, WIN32_IXS, WIN64_IXS, \
+    GLOBAL_VARS, MAC_LION_MINIS, \
+    LINUX_VMS, LINUX_IXS, LINUX64_IXS, WIN32_IXS, WIN64_IXS, \
     WIN64_IXS, MOCK_DL120G7, \
     TRY_LINUX, TRY_LINUX_IXS, TRY_LINUX64, TRY_LINUX64_IXS, \
     TRY_MAC64, TRY_WIN32_IXS, TRY_WIN64_IXS, TRY_MOCK_DL120G7, \
@@ -13,11 +13,9 @@ GLOBAL_VARS = deepcopy(GLOBAL_VARS)
 
 SLAVES = {
     'linux':            LINUX_VMS + LINUX_IXS,
-    'linux64':          LINUX64_VMS + LINUX64_IXS,
+    'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
-    'macosx':           [],
-    'macosx64':         MAC_SNOW_MINIS,
     'macosx64-lion':    MAC_LION_MINIS,
     'mock':             MOCK_DL120G7
 }
@@ -39,7 +37,7 @@ GLOBAL_VARS['talos_masters'] = []
 # if a failure to notify the master should result in a warning,
 # and sendchange retry count before give up
 GLOBAL_VARS['unittest_masters'] = [
-    ('buildbot-master36.build.mozilla.org:9301', True, 5),
+    ('buildbot-master81.build.mozilla.org:9301', True, 5),
 ]
 GLOBAL_VARS['xulrunner_tinderbox_tree'] = None
 GLOBAL_VARS['weekly_tinderbox_tree'] = 'Thunderbird'
@@ -59,10 +57,6 @@ BRANCHES = {
     'comm-release': {
         'packaged_unittest_tinderbox_tree': 'Thunderbird-Release',
         'tinderbox_tree': 'Thunderbird-Release',
-    },
-    'comm-esr10': {
-        'packaged_unittest_tinderbox_tree': 'Thunderbird-Esr10',
-        'tinderbox_tree': 'Thunderbird-Esr10',
     },
     'comm-esr17': {
         'packaged_unittest_tinderbox_tree': 'Thunderbird-Esr17',

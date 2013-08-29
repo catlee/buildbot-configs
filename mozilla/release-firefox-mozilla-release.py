@@ -8,6 +8,9 @@ releaseConfig = {}
 releaseConfig['disable_tinderbox_mail'] = True
 releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/always_clobber.php'
 
+# work around bustage tagging compare-locales from bug 905189
+releaseConfig['skip_tag']            = True
+
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>','<release-mgmt@mozilla.com>']
 releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
@@ -20,29 +23,29 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '18.0.1'
-releaseConfig['appVersion']          = '18.0.1'
+releaseConfig['version']             = '23.0.1'
+releaseConfig['appVersion']          = '23.0.1'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_18_0_1'
+releaseConfig['baseTag']             = 'FIREFOX_23_0_1'
 releaseConfig['partialUpdates']      = {
 
-    '16.0.2': {
-        'appVersion': '16.0.2',
+    '22.0': {
+        'appVersion': '22.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_16_0_2',
+        'baseTag': 'FIREFOX_22_0',
     },
 
-    '17.0.1': {
-        'appVersion': '17.0.1',
-        'buildNumber': 1,
-        'baseTag': 'FIREFOX_17_0_1',
+    '21.0': {
+        'appVersion': '21.0',
+        'buildNumber': 3,
+        'baseTag': 'FIREFOX_21_0',
     },
 
-    '18.0': {
-        'appVersion': '18.0',
+    '23.0': {
+        'appVersion': '23.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_18_0',
+        'baseTag': 'FIREFOX_23_0',
     },
 
 }
@@ -54,7 +57,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': 'f64a3223c828',
+        'revision': 'b41d7bb7cae8',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -81,7 +84,7 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
@@ -114,6 +117,7 @@ releaseConfig['ausUser']             = 'ffxbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
+releaseConfig['promptWaitTime']      = None
 releaseConfig['updateVerifyChunks']  = 4
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozRelease-firefox-linux.cfg',
@@ -137,6 +141,7 @@ releaseConfig['xulrunner_mozconfigs']          = {
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = True
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
+releaseConfig['syncPartnerBundles']  = True
 
 # Tuxedo/Bouncer configuration
 releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'

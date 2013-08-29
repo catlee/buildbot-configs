@@ -78,7 +78,7 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-beta'
 releaseConfig['otherReposToTag']     = {
     'users/stage-ffxbld/compare-locales': 'RELEASE_AUTOMATION',
     'users/stage-ffxbld/buildbot': 'production-0.8',
-    'users/stage-ffxbld/mozharness': 'default',
+    'users/stage-ffxbld/mozharness': 'production',
 }
 
 # Platform configuration
@@ -96,6 +96,7 @@ releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'browser/locales/shipped-locales'
 releaseConfig['l10nChunks']          = 2
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = True
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'stage-ffxbld'

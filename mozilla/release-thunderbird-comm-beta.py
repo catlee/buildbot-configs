@@ -21,17 +21,17 @@ releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
 releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '19.0b1'
-releaseConfig['appVersion']          = '19.0'
+releaseConfig['version']             = '24.0b2'
+releaseConfig['appVersion']          = '24.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'THUNDERBIRD_19_0b1'
+releaseConfig['baseTag']             = 'THUNDERBIRD_24_0b2'
 releaseConfig['partialUpdates']      = {
 
-    '18.0b1': {
-        'appVersion': '18.0',
+    '23.0b1': {
+        'appVersion': '23.0',
         'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_18_0b1',
+        'baseTag': 'THUNDERBIRD_23_0b1',
     },
 
 }
@@ -43,7 +43,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-beta',
         'path': 'releases/comm-beta',
-        'revision': '5c4982fd39e3',
+        'revision': 'bccdca1a2011',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -55,7 +55,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': 'aad6dcd323c3',
+        'revision': '3d27b40032a7',
         'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
@@ -77,7 +77,7 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_thunderbird-beta'
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
@@ -94,6 +94,7 @@ releaseConfig['enableUnittests']     = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'mail/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = False
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'tbirdbld'
@@ -110,6 +111,7 @@ releaseConfig['ausUser']             = 'tbirdbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=%locale%&platform=%platform%&version=%version%'
 releaseConfig['testOlderPartials']   = False
+releaseConfig['promptWaitTime']      = None
 releaseConfig['updateVerifyChunks']  = 4
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozBeta-thunderbird-linux.cfg',

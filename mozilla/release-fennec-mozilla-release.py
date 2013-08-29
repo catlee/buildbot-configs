@@ -20,11 +20,11 @@ releaseConfig['productName']         = 'fennec'
 releaseConfig['appName']             = 'mobile'
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '18.0'
-releaseConfig['appVersion']          = '18.0'
+releaseConfig['version']             = '23.0'
+releaseConfig['appVersion']          = '23.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_18_0'
+releaseConfig['baseTag']             = 'FENNEC_23_0'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['version']
 releaseConfig['nextMilestone']       = releaseConfig['version']
@@ -33,7 +33,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '3a7b66445659',
+        'revision': '064965b37dbd',
         'relbranch': None,
         'bumpFiles': {
             'mobile/android/confvars.sh': {
@@ -65,19 +65,19 @@ releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
-    'build/mozharness': 'default',
+    'build/mozharness': 'production',
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']        = ('android', 'android-armv6')
+releaseConfig['enUSPlatforms']        = ('android', 'android-armv6', 'android-x86')
 releaseConfig['notifyPlatforms']      = releaseConfig['enUSPlatforms']
-releaseConfig['manuallySignedPlatforms']      = releaseConfig['enUSPlatforms']
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
-releaseConfig['enableUnittests']      = True
+releaseConfig['enableUnittests']      = False
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = ('android',)
+releaseConfig['l10nNotifyPlatforms'] = releaseConfig['l10nPlatforms']
 releaseConfig['mergeLocales']        = True
 releaseConfig['enableMultiLocale']   = True
 
@@ -111,6 +111,7 @@ releaseConfig['partnerRepackConfig'] = {
 releaseConfig['mozconfigs']          = {
     'android': 'mobile/android/config/mozconfigs/android/release',
     'android-armv6': 'mobile/android/config/mozconfigs/android-armv6/release',
+    'android-x86': 'mobile/android/config/mozconfigs/android-x86/release',
 }
 
 # Misc configuration
@@ -139,16 +140,19 @@ releaseConfig['multilocale_config'] = {
             'multi_locale/release_mozilla-release_android.json',
         'android-armv6':
             'multi_locale/release_mozilla-release_android-armv6.json',
+        'android-x86':
+            'multi_locale/release_mozilla-release_android-x86.json',
     },
     'multilocaleOptions': [
         '--tag-override=%s_RELEASE' % releaseConfig['baseTag'],
         '--pull-locale-source',
         '--add-locales',
+        '--package-multi',
         '--summary',
     ]
 }
-releaseConfig['enableSigningAtBuildTime'] = False
+releaseConfig['enableSigningAtBuildTime'] = True
 releaseConfig['enablePartialMarsAtBuildTime'] = False
 releaseConfig['autoGenerateChecksums'] = False
 releaseConfig['use_mock'] = True
-releaseConfig['mock_platforms'] = ('android','android-armv6','linux')
+releaseConfig['mock_platforms'] = ('android', 'android-armv6', 'android-x86', 'linux')
