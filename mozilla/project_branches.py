@@ -204,6 +204,10 @@ PROJECT_BRANCHES = {
                 'enable_nightly': False,
                 'create_snippet': False,
             },
+            'linux64-asan': {
+                'enable_nightly': False,
+                'create_snippet': False,
+            },
             'win32': {
                 'enable_nightly': False,
                 'create_snippet': False,
