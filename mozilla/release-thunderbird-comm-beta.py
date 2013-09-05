@@ -21,17 +21,17 @@ releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
 releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '22.0b1'
-releaseConfig['appVersion']          = '22.0'
+releaseConfig['version']             = '24.0b2'
+releaseConfig['appVersion']          = '24.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'THUNDERBIRD_22_0b1'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'THUNDERBIRD_24_0b2'
 releaseConfig['partialUpdates']      = {
 
-    '21.0b1': {
-        'appVersion': '21.0',
+    '23.0b1': {
+        'appVersion': '23.0',
         'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_21_0b1',
+        'baseTag': 'THUNDERBIRD_23_0b1',
     },
 
 }
@@ -43,7 +43,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-beta',
         'path': 'releases/comm-beta',
-        'revision': '7145009f2017',
+        'revision': 'bccdca1a2011',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -55,7 +55,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': 'e4b85a8e623b',
+        'revision': '3d27b40032a7',
         'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
@@ -94,6 +94,7 @@ releaseConfig['enableUnittests']     = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'mail/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = False
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'tbirdbld'
@@ -123,12 +124,6 @@ releaseConfig['mozconfigs']          = {
     'linux64': 'mail/config/mozconfigs/linux64/release',
     'macosx64': 'mail/config/mozconfigs/macosx-universal/release',
     'win32': 'mail/config/mozconfigs/win32/release',
-}
-releaseConfig['l10n_mozconfigs']     = {
-    'linux': 'mail/config/mozconfigs/linux32/release-l10n',
-    'linux64': 'mail/config/mozconfigs/linux64/release-l10n',
-    'macosx64': 'mail/config/mozconfigs/macosx-universal/release-l10n',
-    'win32': 'mail/config/mozconfigs/win32/release-l10n',
 }
 releaseConfig['releaseChannel']      = 'beta'
 

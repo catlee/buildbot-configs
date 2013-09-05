@@ -92,7 +92,7 @@ releaseConfig['enableUnittests'] = True
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'browser/locales/shipped-locales'
-releaseConfig['l10nChunks']          = 2
+releaseConfig['l10nChunks']          = 6
 releaseConfig['mergeLocales']        = True
 
 # Mercurial account
@@ -134,6 +134,7 @@ releaseConfig['xulrunner_mozconfigs']          = {
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = True
 releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
+releaseConfig['syncPartnerBundles']  = True
 
 # Tuxedo/Bouncer configuration
 releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'

@@ -20,23 +20,23 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '22.0b3'
-releaseConfig['appVersion']          = '22.0'
+releaseConfig['version']             = '24.0b8'
+releaseConfig['appVersion']          = '24.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_22_0b3'
+releaseConfig['baseTag']             = 'FIREFOX_24_0b8'
 releaseConfig['partialUpdates']      = {
 
-    '22.0b2': {
-        'appVersion': '22.0',
+    '24.0b6': {
+        'appVersion': '24.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_22_0b2',
+        'baseTag': 'FIREFOX_24_0b6',
     },
 
-    '22.0b1': {
-        'appVersion': '22.0',
+    '24.0b7': {
+        'appVersion': '24.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_22_0b1',
+        'baseTag': 'FIREFOX_24_0b7',
     },
 
 }
@@ -48,7 +48,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '8ca75debb97a',
+        'revision': '07ab2af3b812',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -92,6 +92,7 @@ releaseConfig['enableUnittests']     = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'browser/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = True
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'ffxbld'
@@ -117,10 +118,10 @@ releaseConfig['verifyConfigs']       = {
     'win32':  'mozBeta-firefox-win32.cfg'
 }
 releaseConfig['mozconfigs']          = {
-    'linux': 'browser/config/mozconfigs/linux32/release',
-    'linux64': 'browser/config/mozconfigs/linux64/release',
-    'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
-    'win32': 'browser/config/mozconfigs/win32/release',
+    'linux': 'browser/config/mozconfigs/linux32/beta',
+    'linux64': 'browser/config/mozconfigs/linux64/beta',
+    'macosx64': 'browser/config/mozconfigs/macosx-universal/beta',
+    'win32': 'browser/config/mozconfigs/win32/beta',
 }
 releaseConfig['xulrunner_mozconfigs']          = {
     'linux': 'xulrunner/config/mozconfigs/linux32/xulrunner',

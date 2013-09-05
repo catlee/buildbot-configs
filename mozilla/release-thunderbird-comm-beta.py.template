@@ -94,6 +94,7 @@ releaseConfig['enableUnittests']     = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'mail/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = False
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'tbirdbld'
@@ -123,12 +124,6 @@ releaseConfig['mozconfigs']          = {
     'linux64': 'mail/config/mozconfigs/linux64/release',
     'macosx64': 'mail/config/mozconfigs/macosx-universal/release',
     'win32': 'mail/config/mozconfigs/win32/release',
-}
-releaseConfig['l10n_mozconfigs']     = {
-    'linux': 'mail/config/mozconfigs/linux32/release-l10n',
-    'linux64': 'mail/config/mozconfigs/linux64/release-l10n',
-    'macosx64': 'mail/config/mozconfigs/macosx-universal/release-l10n',
-    'win32': 'mail/config/mozconfigs/win32/release-l10n',
 }
 releaseConfig['releaseChannel']      = 'beta'
 

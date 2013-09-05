@@ -81,7 +81,6 @@ GLOBAL_VARS.update({
     'scratchbox_home': '/scratchbox/users/cltbld/home/cltbld',
     'use_old_updater': False,
     'mozilla_dir': '/mozilla',
-    'leak_target': 'mailbloat',
 })
 
 # shorthand, because these are used often
@@ -97,7 +96,6 @@ PLATFORM_VARS = {
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/linux32/nightly',
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner',
             'profiled_build': False,
@@ -139,6 +137,7 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux32/releng.manifest',
+            'tooltool_script': '/builds/tooltool.py',
             'use_mock': True,
             'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
@@ -152,7 +151,7 @@ PLATFORM_VARS = {
                         'mpfr',  # required for system compiler
                         'xorg-x11-font*',  # fonts required for PGO
                         'imake',  # required for makedepend!?!
-                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache',  # <-- from releng repo
+                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'gcc473_0moz1', 'yasm', 'ccache',  # <-- from releng repo
                         'valgrind',
                         'pulseaudio-libs-devel.i686',
                         'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
@@ -182,6 +181,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/tools/tooltool.py', '/builds/tooltool.py'),
             ],
         },
         'linux64': {
@@ -190,7 +190,6 @@ PLATFORM_VARS = {
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux x86-64 %(branch)s',
             'mozconfig': 'linux64/%(branch)s/nightly',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/linux64/nightly',
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux64/xulrunner',
             'profiled_build': False,
@@ -233,6 +232,7 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux64/releng.manifest',
+            'tooltool_script': '/builds/tooltool.py',
             'use_mock': True,
             'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
@@ -246,7 +246,7 @@ PLATFORM_VARS = {
                         'mpfr', # required for system compiler
                         'xorg-x11-font*', # fonts required for PGO
                         'imake', # required for makedepend!?!
-                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
+                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'gcc473_0moz1', 'yasm', 'ccache', # <-- from releng repo
                         'valgrind',
                         'pulseaudio-libs-devel',
                         'gstreamer-devel', 'gstreamer-plugins-base-devel',
@@ -256,6 +256,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/tools/tooltool.py', '/builds/tooltool.py'),
             ],
         },
         'macosx64': {
@@ -264,7 +265,6 @@ PLATFORM_VARS = {
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 %(branch)s',
             'mozconfig': 'macosx64/%(branch)s/nightly',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/macosx-universal/nightly',
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
             'packageTests': True,
@@ -313,7 +313,6 @@ PLATFORM_VARS = {
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 5.2 %(branch)s',
             'mozconfig': 'win32/%(branch)s/nightly',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/win32/nightly',
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/win32/xulrunner',
             'profiled_build': False,
@@ -360,7 +359,6 @@ PLATFORM_VARS = {
             'base_name': builder_prefix + 'WINNT 6.1 x86-64 %(branch)s',
             'src_mozconfig': 'mail/config/mozconfigs/win64/nightly',
             'mozconfig': 'win64/%(branch)s/nightly',
-            'run_alive_tests': False,
             # XXX we cannot build xulrunner on Win64 -- see bug 575912
             'enable_xulrunner': False,
             'profiled_build': True,
@@ -400,12 +398,10 @@ PLATFORM_VARS = {
         },
         'linux-debug': {
             'enable_nightly': False,
-            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux %(branch)s leak test',
             'mozconfig': 'linux/%(branch)s/debug',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/linux32/debug',
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
@@ -449,7 +445,7 @@ PLATFORM_VARS = {
                         'mpfr',  # required for system compiler
                         'xorg-x11-font*',  # fonts required for PGO
                         'imake',  # required for makedepend!?!
-                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache',  # <-- from releng repj
+                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'gcc473_0moz1', 'yasm', 'ccache',  # <-- from releng repj
                         'valgrind',
                         'pulseaudio-libs-devel.i686',
                         'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
@@ -482,12 +478,10 @@ PLATFORM_VARS = {
         },
         'linux64-debug': {
             'enable_nightly': False,
-            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'Linux x86-64 %(branch)s leak test',
             'mozconfig': 'linux64/%(branch)s/debug',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/linux64/debug',
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
@@ -530,7 +524,7 @@ PLATFORM_VARS = {
                         'mpfr', # required for system compiler
                         'xorg-x11-font*', # fonts required for PGO
                         'imake', # required for makedepend!?!
-                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
+                        'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'gcc473_0moz1', 'yasm', 'ccache', # <-- from releng repo
                         'pulseaudio-libs-devel',
                         'freetype-2.3.11-6.el6_1.8.x86_64',
                         'freetype-devel-2.3.11-6.el6_1.8.x86_64',
@@ -543,12 +537,10 @@ PLATFORM_VARS = {
         },
         'macosx64-debug': {
             'enable_nightly': False,
-            'enable_leaktests': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'OS X 10.7 64-bit %(branch)s leak test',
             'mozconfig': 'macosx64/%(branch)s/debug',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/macosx64/debug',
             'packageTests': True,
             'profiled_build': False,
@@ -581,12 +573,10 @@ PLATFORM_VARS = {
         },
         'win32-debug': {
             'enable_nightly': False,
-            'enable_leaktests': True,
             'product_name': 'thunderbird',
             'app_name': 'mail',
             'base_name': builder_prefix + 'WINNT 5.2 %(branch)s leak test',
             'mozconfig': 'win32/%(branch)s/debug',
-            'run_alive_tests': False,
             'src_mozconfig': 'mail/config/mozconfigs/win32/debug',
             'profiled_build': False,
             'builds_before_reboot': thunderbird_localconfig.BUILDS_BEFORE_REBOOT,
@@ -755,7 +745,6 @@ BRANCHES['comm-central']['blocklist_update_on_closed_tree'] = False
 BRANCHES['comm-central']['platforms']['linux']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['comm-central']['platforms']['linux64']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['comm-central']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
-BRANCHES['comm-central']['platforms']['macosx64-debug']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['comm-central']['platforms']['macosx64']['nightly_signing_servers'] = 'mac-nightly-signing'
 
 ######## comm-release
@@ -913,7 +902,6 @@ BRANCHES['comm-beta']['enable_nightly'] = False
 BRANCHES['comm-beta']['enable_blocklist_update'] = True
 BRANCHES['comm-beta']['blocklist_update_on_closed_tree'] = False
 BRANCHES['comm-beta']['enable_valgrind'] = False
-BRANCHES['comm-beta']['platforms']['win32']['l10n_slaves'] = SLAVES['win32']
 
 ######## comm-aurora
 BRANCHES['comm-aurora']['moz_repo_path'] = 'releases/mozilla-aurora'
@@ -963,7 +951,6 @@ BRANCHES['comm-aurora']['enable_valgrind'] = False
 BRANCHES['comm-aurora']['platforms']['linux']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['comm-aurora']['platforms']['linux64']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['comm-aurora']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
-BRANCHES['comm-aurora']['platforms']['macosx64-debug']['nightly_signing_servers'] = 'mac-nightly-signing'
 BRANCHES['comm-aurora']['platforms']['macosx64']['nightly_signing_servers'] = 'mac-nightly-signing'
 
 ######## try
@@ -1057,7 +1044,7 @@ for b in ['comm-release', 'comm-esr17']:
 
 # MERGE DAY building 32-bit linux in a x86_64 env rides the trains
 # MERGE DAY remove branches from this list when gecko 24 merges into them.
-for branch in ("comm-aurora", "comm-beta", "comm-release", "comm-esr17"):
+for branch in ("comm-release", "comm-esr17"):
     for platform in ['linux', 'linux-debug']:
         BRANCHES[branch]['platforms'][platform]['mock_target'] = \
             'mozilla-centos6-i386'
@@ -1081,6 +1068,17 @@ for branch in ("comm-aurora", "comm-beta", "comm-release", "comm-esr17"):
         if not platform.endswith("-debug"):
             BRANCHES[branch]["platforms"][platform]["mock_packages"] += \
                 ["valgrind"]
+
+# MERGE DAY - gstreamer-devel packages ride the trains (bug 881589)
+# MERGE DAY - remove branches from this list when gecko 24 merges into them.
+for b in ("comm-release", "comm-esr17"):
+    for p, pc in BRANCHES[b]['platforms'].items():
+        if 'mock_packages' in pc:
+            BRANCHES[b]['platforms'][p]['mock_packages'] = \
+                [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x not in (
+                    'gstreamer-devel', 'gstreamer-plugins-base-devel',
+                    'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
+                )]
 
 if __name__ == "__main__":
     import sys

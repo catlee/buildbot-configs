@@ -2,20 +2,13 @@
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
     'build-system': {},
-    'devtools': {
-        'enable_nightly': True,
-    },
-    # Disabled because of builder limit problems - bug 721854
-    #'electrolysis': {},
     'fx-team': {
         'repo_path': 'integration/fx-team',
+        'enable_perproduct_builds': True,
         'enable_nightly': False,
     },
     'graphics': {},
     'ionmonkey': {
-        'enable_nightly': True
-    },
-    'jaegermonkey': {
         'enable_nightly': True
     },
     # Please sync any customizations made to mozilla-inbound to cypress.
@@ -27,8 +20,18 @@ PROJECT_BRANCHES = {
     'cypress': {
         'enable_perproduct_builds': True,
     },
-    # Disabled because of builder limit problems - bug 721854
-    #'places': {},
+    'b2g-inbound': {
+        'repo_path': 'integration/b2g-inbound',
+        'enable_perproduct_builds': True,
+        'platforms': {
+            'macosx64_gecko': {
+                'enable_checktests': False,
+            },
+            'win32_gecko': {
+                'enable_checktests': False,
+            },
+        },
+    },
     # B2G builds not required on the profiling branch
     #'profiling': {},
     'services-central': {
@@ -46,21 +49,12 @@ PROJECT_BRANCHES = {
     'ash': {
         'mozharness_repo_path': 'users/asasaki_mozilla.com/ash-mozharness',
     },
-    'birch': {
-        'enable_perproduct_builds': True,
-        'platforms': {
-            'macosx64_gecko': {
-                'enable_checktests': False,
-            },
-            'win32_gecko': {
-                'enable_checktests': False,
-            },
-        },
-    },
+    'birch': {},
     'cedar': {
         'mozharness_tag': 'default',
     },
-    'date': {},
+    # B2G builds not required on date
+    # 'date': {},
     # Customizations for windows update service changes (bug 481815)
     #'elm': {},
     'fig': {

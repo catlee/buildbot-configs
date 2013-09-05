@@ -28,6 +28,7 @@ BRANCH_PRIORITIES = {
     'mozilla-esr17': 1,
     'mozilla-b2g18': 1,
     'mozilla-b2g18_v1_0_1': 1,
+    'mozilla-b2g18_v1_1_0_hd': 1,
     'comm-esr17': 1,
     'mozilla-beta': 2,
     'comm-beta': 2,
@@ -37,13 +38,14 @@ BRANCH_PRIORITIES = {
     'comm-aurora': 3,
     # Unlisted branches are prioritized at this level
     'mozilla-inbound': 4,
+    'b2g-inbound': 4,
     # Cypress is also an inbound!
     'cypress': 4,
-    'birch': 4,  # temporary 2nd inbound for b2g; bug 861299
     'try': 5,
     'try-comm-central': 5,
     'alder': 5,
     'ash': 5,
+    'birch': 5,
     'cedar': 5,
     'date': 5,
     'elm': 5,
