@@ -14,6 +14,7 @@ PROJECT_BRANCHES = {
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': False,
         'pgo_strategy': 'periodic',
+        'periodic_pgo_interval': 3,
         'enable_weekly_bundle': True,
     },
     'graphics': {
@@ -27,21 +28,8 @@ PROJECT_BRANCHES = {
         'pgo_strategy': 'periodic',
         'branch_projects': [ 'spidermonkey_tier_1', 'spidermonkey_info' ],
     },
-    # Please sync any customizations made to mozilla-inbound to cypress.
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
-        'enable_perproduct_builds': True,
-        'mozconfig_dir': 'mozilla-central',
-        'enable_weekly_bundle': True,
-        'pgo_strategy': 'periodic',
-        'periodic_pgo_interval': 3,
-        'talos_suites': {
-            'xperf': 1,
-        },
-        'branch_projects': [ 'spidermonkey_tier_1', 'spidermonkey_info' ],
-    },
-    # Customized to be the same as inbound. bug 866314
-    'cypress': {
         'enable_perproduct_builds': True,
         'mozconfig_dir': 'mozilla-central',
         'enable_weekly_bundle': True,
@@ -167,6 +155,7 @@ PROJECT_BRANCHES = {
         'talos_suites': {
             'xperf': 1,
         },
+        'blob_upload': True,
         'platforms': {
             'linux': {},
             'linux64': {},
@@ -179,14 +168,16 @@ PROJECT_BRANCHES = {
         },
         'mobile_platforms': {
             'android': {
-                'slave_platforms': ['panda_android', 'panda_android-nomozpool'],
+                'slave_platforms': ['panda_android'],
+            },
+            'android-x86': {
+                'enable_opt_unittests': True,
             },
         },
     },
     'birch': {},
     'cedar': {
         'mozharness_tag': 'default',
-        'lock_platforms': True,
         'enable_talos': True,
         'talos_suites': {
             'xperf': 1,
@@ -195,66 +186,29 @@ PROJECT_BRANCHES = {
         'enable_nightly': True,
         'create_snippet': True,
         'create_mobile_snippet': True,
-        'platforms': {
-            'linux': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'linux64': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'linux64-asan': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'linux64-asan-debug': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'win32': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'macosx64': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'linux-debug': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'linux64-debug': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'macosx64-debug': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-            'win32-debug': {
-                'enable_nightly': False,
-                'create_snippet': False,
-            },
-        },
+        'enable_opt_unittests': True,
+        'enable_l10n': True,
+        'enable_l10n_onchange': True,
+        'l10n_platforms': ['linux', 'linux64', 'win32', 'macosx64'],
+        'l10n_tree': 'fxcentral',
+        'l10n_repo_path': 'l10n-central',
+        'enUS_binaryURL': '/nightly/latest-cedar',
         'mobile_platforms': {
-            'android': {
-                'enable_nightly': True,
-                'create_snippet': True,
-                'create_mobile_snippet': True,
-            },
-            'android-debug': {
-                'enable_nightly': False,
-                'create_snippet': False,
-                'create_mobile_snippet': False,
+            'android-x86': {
+                'enable_opt_unittests': True,
             },
         },
+    },
+    'cypress': {
     },
     'date': {
         'lock_platforms': True,
         'platforms': {
             'win64': {
                 'enable_opt_unittests': True,
+            },
+            'win64-debug': {
+                'enable_debug_unittests': True,
             },
         },
     },
@@ -308,11 +262,6 @@ PROJECT_BRANCHES = {
                 'create_snippet': False,
                 'create_mobile_snippet': False,
             },
-            'android-noion': {
-                'enable_nightly': False,
-                'create_snippet': False,
-                'create_mobile_snippet': False,
-            },
             'android-armv6': {
                 'enable_nightly': False,
                 'create_snippet': False,
@@ -351,7 +300,25 @@ PROJECT_BRANCHES = {
             },
         },
     },
-    'pine': {},
+    'pine': {
+        'mozharness_tag': 'default',
+        'enable_talos': True,
+        'talos_suites': {
+            'xperf': 1,
+        },
+        'blob_upload': True,
+        'enable_nightly': False,
+        'create_snippet': True,
+        'create_mobile_snippet': True,
+        'enable_opt_unittests': True,
+        'enable_l10n': False,
+        'enable_l10n_onchange': False,
+        'mobile_platforms': {
+            'android-x86': {
+                'enable_opt_unittests': True,
+            },
+        },
+    }
 }
 
 # All is the default

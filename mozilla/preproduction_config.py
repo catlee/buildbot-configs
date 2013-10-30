@@ -67,6 +67,10 @@ BRANCHES = {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
+    'mozilla-esr24': {
+        'enable_blocklist_update': False,
+        'blocklist_update_on_closed_tree': False,
+    },
     'mozilla-b2g18': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
@@ -94,8 +98,8 @@ BRANCHES = {
                     'TINDERBOX_OUTPUT': '1',
                     'MOZ_CRASHREPORTER_NO_REPORT': '1',
                     # Source server support, bug 506702
-                    'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
-                    'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+                    'PDBSTR_PATH': '/c/Program Files (x86)/Windows Kits/8.0/Debuggers/x64/srcsrv/pdbstr.exe',
+                    'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                     'PATH': "${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
                 },
             },

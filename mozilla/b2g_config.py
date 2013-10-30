@@ -11,6 +11,10 @@ from b2g_project_branches import PROJECT_BRANCHES, ACTIVE_PROJECT_BRANCHES
 import b2g_localconfig
 reload(b2g_localconfig)
 
+import master_common
+reload(master_common)
+from master_common import items_before
+
 GLOBAL_VARS = deepcopy(GLOBAL_VARS)
 PLATFORM_VARS = deepcopy(PLATFORM_VARS)
 
@@ -34,6 +38,7 @@ GLOBAL_VARS.update({
         'leo_eng': {},
         'hamachi': {},
         'hamachi_eng': {},
+        'nexus-4': {},
         'helix': {},
         'emulator': {},
         'emulator-debug': {},
@@ -266,8 +271,7 @@ PLATFORM_VARS = {
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'mozconfig': 'NOT-IN-BB-CONF/%(branch)s/nightly',
         'src_mozconfig': 'b2g/config/mozconfigs/win32_gecko/nightly',
-        'enable_dep': False,
-        'enable_nightly': True,
+        'enable_dep': True,
         'profiled_build': False,
         'builds_before_reboot': b2g_localconfig.BUILDS_BEFORE_REBOOT,
         'build_space': 13,
@@ -275,7 +279,7 @@ PLATFORM_VARS = {
         'packageTests': True,
         'create_snippet': False,
         'create_partial': False,
-        'slaves': SLAVES['win64'],
+        'slaves': SLAVES['win64-rev2'],
         'platform_objdir': OBJDIR,
         'unittest_masters': [],
         'stage_product': 'b2g',
@@ -291,8 +295,8 @@ PLATFORM_VARS = {
             'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/ffxbld_dsa",
             'TINDERBOX_OUTPUT': '1',
             'MOZ_CRASHREPORTER_NO_REPORT': '1',
-            'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
-            'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+            'PDBSTR_PATH': '/c/Program Files (x86)/Windows Kits/8.0/Debuggers/x64/srcsrv/pdbstr.exe',
+            'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
             'BINSCOPE': 'C:\Program Files (x86)\Microsoft\SDL BinScope\BinScope.exe',
             'PATH': "${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
             'WGET_OPTS': '-q -c',
@@ -536,7 +540,7 @@ PLATFORM_VARS = {
         'packageTests': True,
         'create_snippet': False,
         'create_partial': False,
-        'slaves': SLAVES['win64'],
+        'slaves': SLAVES['win64-rev2'],
         'platform_objdir': OBJDIR,
         'unittest_masters': [],
         'stage_product': 'b2g',
@@ -552,8 +556,8 @@ PLATFORM_VARS = {
             'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/ffxbld_dsa",
             'TINDERBOX_OUTPUT': '1',
             'MOZ_CRASHREPORTER_NO_REPORT': '1',
-            'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
-            'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+            'PDBSTR_PATH': '/c/Program Files (x86)/Windows Kits/8.0/Debuggers/x64/srcsrv/pdbstr.exe',
+            'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
             'BINSCOPE': 'C:\Program Files (x86)\Microsoft\SDL BinScope\BinScope.exe',
             'PATH': "${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
             # Necessary to avoid conflicting with the dev-focused builds'
@@ -699,6 +703,25 @@ PLATFORM_VARS = {
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
     },
+    'nexus-4': {
+        'mozharness_config': {
+            'script_name': 'scripts/b2g_build.py',
+            # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
+            # --target name below
+            'extra_args': ['--target', 'mako', '--config', 'b2g/releng-private-updates.py',
+                           '--gaia-languages-file', 'locales/languages_dev.json',
+                           '--gecko-languages-file', 'gecko/b2g/locales/all-locales'],
+            'reboot_command': ['bash', '-c', 'sudo reboot; sleep 600'],
+        },
+        'env': {
+            'PATH': '/tools/python27-mercurial/bin:/tools/python27/bin:/usr/local/bin:/usr/lib64/ccache:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/cltbld/bin',
+            'PYTHONPATH': '/tools/python27/lib',
+        },
+        'stage_product': 'b2g',
+        'product_name': 'b2g',
+        'base_name': builder_prefix + '_%(branch)s_%(platform)s',
+        'slaves': SLAVES['mock'],
+    },
     'helix': {
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
@@ -786,57 +809,18 @@ PLATFORM_VARS = {
 BRANCHES = {
     'mozilla-central': {
     },
+    'mozilla-aurora': {
+    },
     'mozilla-b2g18': {
-        # b2g explicitly
-        'linux32_gecko': {},
-        'linux64_gecko': {},
-        'macosx64_gecko': {},
-        'win32_gecko': {},
-        'linux32_gecko_localizer': {},
-        'linux64_gecko_localizer': {},
-        'macosx64_gecko_localizer': {},
-        'win32_gecko_localizer': {},
-        'unagi': {},
-        'unagi_eng': {},
-        'inari': {},
-        'leo': {},
-        'leo_eng': {},
-        'hamachi': {},
+        'gecko_version': 18,
     },
     'mozilla-b2g18_v1_0_1': {
-        # b2g explicitly
-        'linux32_gecko': {},
-        'linux64_gecko': {},
-        'macosx64_gecko': {},
-        'win32_gecko': {},
-        'linux32_gecko_localizer': {},
-        'linux64_gecko_localizer': {},
-        'macosx64_gecko_localizer': {},
-        'win32_gecko_localizer': {},
-        'unagi': {},
-        'unagi_eng': {},
-        'inari': {},
-        'inari_eng': {},
-        'leo': {},
-        'hamachi_eng': {},
+        'gecko_version': 18,
+        'b2g_version': (1, 0, 1),
     },
     'mozilla-b2g18_v1_1_0_hd': {
-        # b2g explicitly
-        'linux32_gecko': {},
-        'linux64_gecko': {},
-        'macosx64_gecko': {},
-        'win32_gecko': {},
-        'linux32_gecko_localizer': {},
-        'linux64_gecko_localizer': {},
-        'macosx64_gecko_localizer': {},
-        'win32_gecko_localizer': {},
-        'unagi': {},
-        'unagi_eng': {},
-        'inari': {},
-        'leo': {},
-        'leo_eng': {},
-        'hamachi': {},
-        'helix': {},
+        'gecko_version': 18,
+        'b2g_version': (1, 1, 0),
     },
     'try': {
     },
@@ -938,13 +922,46 @@ BRANCHES['mozilla-central']['platforms']['inari_eng']['enable_dep'] = False
 BRANCHES['mozilla-central']['platforms']['leo']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['leo_eng']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['hamachi']['enable_nightly'] = True
+BRANCHES['mozilla-central']['platforms']['hamachi_eng']['enable_nightly'] = True
+BRANCHES['mozilla-central']['platforms']['hamachi_eng']['consider_for_nightly'] = False
+BRANCHES['mozilla-central']['platforms']['nexus-4']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['helix']['enable_nightly'] = True
+
+######## mozilla-aurora
+# This is a path, relative to HGURL, where the repository is located
+# HGURL + repo_path should be a valid repository
+BRANCHES['mozilla-aurora']['repo_path'] = 'releases/mozilla-aurora'
+BRANCHES['mozilla-aurora']['gaia_l10n_root'] = 'https://hg.mozilla.org/releases/gaia-l10n/v1_2'
+BRANCHES['mozilla-aurora']['gecko_l10n_root'] = 'https://hg.mozilla.org/releases/l10n/mozilla-aurora'
+BRANCHES['mozilla-aurora']['start_hour'] = [0]
+BRANCHES['mozilla-aurora']['start_minute'] = [40]
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = 'fake'
+BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = 'fake'
+BRANCHES['mozilla-aurora']['platforms']['unagi']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['unagi']['mozharness_config']['extra_args'] = ['--target', 'unagi', '--config', 'b2g/releng-beta.py', '--gaia-languages-file', 'locales/languages_dev.json', '--gecko-languages-file', 'gecko/b2g/locales/all-locales']
+BRANCHES['mozilla-aurora']['platforms']['unagi_eng']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['unagi_eng']['enable_dep'] = False
+BRANCHES['mozilla-aurora']['platforms']['inari']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['inari_eng']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['inari_eng']['enable_dep'] = False
+BRANCHES['mozilla-aurora']['platforms']['leo']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['leo_eng']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['hamachi']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['hamachi_eng']['enable_nightly'] = True
+BRANCHES['mozilla-aurora']['platforms']['hamachi_eng']['consider_for_nightly'] = False
+BRANCHES['mozilla-aurora']['platforms']['helix']['enable_nightly'] = True
+# Per bug https://bugzilla.mozilla.org/show_bug.cgi?id=917692#c14 , localizer
+# builds not needed for B2G 1.2
+BRANCHES['mozilla-aurora']['platforms']['linux32_gecko_localizer']['enable_nightly'] = False
+BRANCHES['mozilla-aurora']['platforms']['linux64_gecko_localizer']['enable_nightly'] = False
+BRANCHES['mozilla-aurora']['platforms']['macosx64_gecko_localizer']['enable_nightly'] = False
+BRANCHES['mozilla-aurora']['platforms']['win32_gecko_localizer']['enable_nightly'] = False
 
 ######## mozilla-b2g18
 # This is a path, relative to HGURL, where the repository is located
 # HGURL + repo_path should be a valid repository
 BRANCHES['mozilla-b2g18']['repo_path'] = 'releases/mozilla-b2g18'
-BRANCHES['mozilla-b2g18']['gaia_l10n_root'] = 'https://hg.mozilla.org/gaia-l10n'
+BRANCHES['mozilla-b2g18']['gaia_l10n_root'] = 'https://hg.mozilla.org/releases/gaia-l10n/v1_1'
 BRANCHES['mozilla-b2g18']['gecko_l10n_root'] = 'https://hg.mozilla.org/releases/l10n/mozilla-beta'
 # Build every night since we have external dependencies like gaia which need
 # building
@@ -971,6 +988,7 @@ BRANCHES['mozilla-b2g18']['platforms']['inari_eng']['enable_nightly'] = True
 BRANCHES['mozilla-b2g18']['platforms']['leo']['enable_nightly'] = True
 BRANCHES['mozilla-b2g18']['platforms']['leo_eng']['enable_nightly'] = True
 BRANCHES['mozilla-b2g18']['platforms']['hamachi']['enable_nightly'] = True
+BRANCHES['mozilla-b2g18']['platforms']['hamachi_eng']['enable_nightly'] = True
 # Disable desktop B2G checktests on the b2g18 branch
 BRANCHES['mozilla-b2g18']['platforms']['linux32_gecko']['enable_checktests'] = False
 BRANCHES['mozilla-b2g18']['platforms']['linux32_gecko']['gaia_revision_file'] = None
@@ -995,9 +1013,8 @@ BRANCHES['mozilla-b2g18']['platforms']['win32_gecko_localizer']['gaia_revision_f
 BRANCHES['mozilla-b2g18_v1_0_1']['repo_path'] = 'releases/mozilla-b2g18_v1_0_1'
 BRANCHES['mozilla-b2g18_v1_0_1']['gaia_l10n_root'] = 'https://hg.mozilla.org/releases/gaia-l10n/v1_0_1'
 BRANCHES['mozilla-b2g18_v1_0_1']['gecko_l10n_root'] = 'https://hg.mozilla.org/releases/l10n/mozilla-beta'
-# Build every night since we have external dependencies like gaia which need
-# building
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_nightly_lastgood'] = False
+# Build only on changes in gecko, ignoring gaia, manifests, etc
+BRANCHES['mozilla-b2g18_v1_0_1']['enable_nightly_lastgood'] = True
 BRANCHES['mozilla-b2g18_v1_0_1']['enable_perproduct_builds'] = True
 BRANCHES['mozilla-b2g18_v1_0_1']['start_hour'] = [4]
 BRANCHES['mozilla-b2g18_v1_0_1']['start_minute'] = [32]
@@ -1039,7 +1056,7 @@ BRANCHES['mozilla-b2g18_v1_0_1']['platforms']['win32_gecko_localizer']['gaia_rev
 # This is a path, relative to HGURL, where the repository is located
 # HGURL + repo_path should be a valid repository
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['repo_path'] = 'releases/mozilla-b2g18_v1_1_0_hd'
-BRANCHES['mozilla-b2g18_v1_1_0_hd']['gaia_l10n_root'] = 'https://hg.mozilla.org/gaia-l10n'
+BRANCHES['mozilla-b2g18_v1_1_0_hd']['gaia_l10n_root'] = 'https://hg.mozilla.org/releases/gaia-l10n/v1_1'
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['gecko_l10n_root'] = 'https://hg.mozilla.org/releases/l10n/mozilla-beta'
 # Build every night since we have external dependencies like gaia which need
 # building
@@ -1100,7 +1117,7 @@ BRANCHES['try']['enable_nightly'] = False
 BRANCHES['try']['platforms']['linux32_gecko']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64_gecko']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['macosx64_gecko']['slaves'] = TRY_SLAVES['macosx64-lion']
-BRANCHES['try']['platforms']['win32_gecko']['slaves'] = TRY_SLAVES['win64']
+BRANCHES['try']['platforms']['win32_gecko']['slaves'] = TRY_SLAVES['win64-rev2']
 BRANCHES['try']['platforms']['unagi']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['unagi']['mozharness_config']['extra_args'] = ['--target', 'unagi', '--config', 'b2g/releng-try.py', '--gaia-languages-file', 'locales/languages_dev.json', '--gecko-languages-file', 'gecko/b2g/locales/all-locales']
 BRANCHES['try']['platforms']['emulator']['slaves'] = TRY_SLAVES['mock']
@@ -1112,79 +1129,114 @@ BRANCHES['try']['platforms']['emulator-jb']['mozharness_config']['extra_args'] =
 BRANCHES['try']['platforms']['emulator-jb-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['emulator-jb-debug']['mozharness_config']['extra_args'] = ['--target', 'generic', '--config', 'b2g/releng-try.py', '--b2g-config-dir', 'emulator-jb', '--debug', '--gaia-languages-file', 'locales/languages_dev.json', '--gecko-languages-file', 'gecko/b2g/locales/all-locales']
 
+# MERGE DAY
+# Migrate branches to win64-rev2 platform (bug 918414)
+disabled_branches = set([x for x in BRANCHES.keys() if x not in PROJECT_BRANCHES.keys()] + ['b2g-inbound', 'mozilla-inbound'])
+for branch in disabled_branches:
+    for platform in ('win32_gecko', 'win32_gecko_localizer'):
+        if platform not in BRANCHES[branch]['platforms']:
+            continue
+        if 'PDBSTR_PATH' in BRANCHES[branch]['platforms'][platform]['env']:
+            BRANCHES[branch]['platforms'][platform]['env']['PDBSTR_PATH'] = '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe'
+        BRANCHES[branch]['platforms'][platform]['env']['HG_SHARE_BASE_DIR'] = 'e:/builds/hg-shared'
+        oldslaves = SLAVES['win64']
+        if 'try' in branch:
+            oldslaves = TRY_SLAVES['win64']
+        BRANCHES[branch]['platforms'][platform]['slaves'] = oldslaves
 
-# TODO: move the MERGE DAY items below to above the BRANCHES['mozilla-central']
-# chunk above, once the whole v1_0_1/kill_b2g18 stuff has calmed down
+# MERGE DAY: inari is for B2G 1.0+ (b2g18_v1_0_1, b2g18 + gecko26 and higher)
+# When gecko27 is on aurora we don't run B2G builds there, but will on beta
+for branch in BRANCHES:
+    if branch not in ('mozilla-aurora', 'mozilla-central', 'b2g-inbound',
+                      'mozilla-b2g18', 'mozilla-b2g18_v1_0_1'):
+        if 'inari' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['inari']
+        if 'inari_eng' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['inari_eng']
 
-# MERGE DAY: inari is only for central + b2g-inbound + b2g18 +
-# b2g18_v1_0_1
+# MERGE DAY: leo is for B2G 1.1+ (b2g18 + gecko26 and higher)
+# When gecko27 is on aurora we don't run B2G builds there, but will on beta
 for branch in BRANCHES:
-    if branch not in ('mozilla-central', 'b2g-inbound',
-                      'mozilla-b2g18', 'mozilla-b2g18_v1_0_1') and \
-            'inari' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['inari']
+    if branch not in ('mozilla-aurora', 'mozilla-central', 'b2g-inbound',
+                      'mozilla-b2g18'):
+        if 'leo' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['leo']
+    # leo-eng isn't for 1.2 anymore, bug 924503
+    if branch not in ('mozilla-central', 'b2g-inbound', 'mozilla-b2g18'):
+        if 'leo_eng' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['leo_eng']
 
-# MERGE DAY: inari_eng is only for central + b2g-inbound + b2g18 + b2g18_v1_0_1
+# MERGE DAY: hamachi is for B2G 1.0+ (b2g18_v1_0_1, b2g18 + gecko26 and higher)
+# When gecko27 is on aurora we don't run B2G builds there, but will on beta
 for branch in BRANCHES:
-    if branch not in ('mozilla-central', 'b2g-inbound',
-                      'mozilla-b2g18', 'mozilla-b2g18_v1_0_1',) and \
-            'inari_eng' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['inari_eng']
+    if branch not in ('mozilla-aurora', 'mozilla-central', 'b2g-inbound',
+                      'mozilla-b2g18', 'mozilla-b2g18_v1_0_1'):
+        if 'hamachi' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['hamachi']
+        if 'hamachi_eng' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['hamachi_eng']
 
-# MERGE DAY: leo/leo_eng is only for b2g-inbound, m-c, b2g18
+# MERGE DAY: nexus-4 is for B2G 1.2+ (gecko26 and higher)
+# When gecko27 is on aurora we don't run B2G builds there, but will on beta
 for branch in BRANCHES:
-    if branch not in ('mozilla-central', 'b2g-inbound',
-                      'mozilla-b2g18',) and \
-            'leo' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['leo']
-for branch in BRANCHES:
-    if branch not in ('mozilla-central', 'b2g-inbound',
-                      'mozilla-b2g18',) and \
-            'leo_eng' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['leo_eng']
+    if branch not in ('mozilla-aurora', 'mozilla-central', 'b2g-inbound') and \
+            'nexus-4' in BRANCHES[branch]['platforms']:
+        del BRANCHES[branch]['platforms']['nexus-4']
 
-# MERGE DAY: hamachi is only for m-c, b2g-inbound, b2g18, b2g18_v1_0_1
+# MERGE DAY: helix is for B3G 1.1hd+ (b2g18_v1_1_0_hd + gecko26 and higher)
+# When gecko27 is on aurora we don't run B2G builds there, but will on beta
 for branch in BRANCHES:
-    if branch not in ('mozilla-central', 'b2g-inbound',
-                      'mozilla-b2g18', 'mozilla-b2g18_v1_0_1') and \
-            'hamachi' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['hamachi']
+    if branch not in ('mozilla-b2g18_v1_1_0_hd', 'mozilla-aurora',
+                      'mozilla-central', 'b2g-inbound'):
+        if 'helix' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['helix']
 
-# MERGE DAY: hamachi_eng is only for b2g18_v1_0_1
+# MERGE DAY: unagi_eng is for B2G 1.0+ (b2g18_v1_0_1, b2g18 + gecko26 and
+# higher)
+# When gecko27 is on aurora we don't run B2G builds there, but will on beta
 for branch in BRANCHES:
-    if branch not in ('mozilla-b2g18_v1_0_1',) and \
-            'hamachi_eng' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['hamachi_eng']
+    if branch not in ('mozilla-b2g18', 'mozilla-b2g18_v1_0_1',
+                      'mozilla-aurora', 'mozilla-central', 'b2g-inbound'):
+        if 'unagi_eng' in BRANCHES[branch]['platforms']:
+            del BRANCHES[branch]['platforms']['unagi_eng']
 
-# MERGE DAY: helix is only for b2g18_v1_1_0_hd, mozilla-central
+# MERGE DAY: emulator-jb* is for B2G 1.2+ (gecko26 and higher)
+# When gecko27 is on aurora we don't run B2G builds there, but will on beta
 for branch in BRANCHES:
-    if branch not in ('mozilla-b2g18_v1_1_0_hd', 'mozilla-central') and \
-            'helix' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['helix']
-
-# MERGE DAY: unagi_eng is only for b2g18 + b2g18_v1_0_1
-for branch in BRANCHES:
-    if branch not in ('mozilla-b2g18', 'mozilla-b2g18_v1_0_1', 'mozilla-central',) and \
-            'unagi_eng' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['unagi_eng']
-
-# MERGE DAY: emulator-jb* is only for m-c, b2g-inbound (birch), m-i
-for branch in BRANCHES:
-    if branch not in ('mozilla-central', 'b2g-inbound', 'mozilla-inbound'):
+    if branch not in ('mozilla-aurora', 'mozilla-central', 'b2g-inbound',
+                      'mozilla-inbound', 'fx-team', 'try'):
         for p in BRANCHES[branch]['platforms'].keys():
             if p.startswith("emulator-jb"):
                 del BRANCHES[branch]['platforms'][p]
 
-# MERGE DAY - gstreamer-devel packages ride the trains (bug 881589)
-# MERGE DAY - remove branches from this list if gecko 24 merges into them
-for b in ("mozilla-b2g18", "mozilla-b2g18_v1_0_1", "mozilla-b2g18_v1_1_0_hd"):
-    for p, pc in BRANCHES[b]['platforms'].items():
+# gstreamer-devel packages ride the trains (bug 881589)
+for name, branch in items_before(BRANCHES, 'gecko_version', 24):
+    for p, pc in branch['platforms'].items():
         if 'mock_packages' in pc:
-            BRANCHES[b]['platforms'][p]['mock_packages'] = \
-                [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x not in (
+            branch['platforms'][p]['mock_packages'] = \
+                [x for x in branch['platforms'][p]['mock_packages'] if x not in (
                     'gstreamer-devel', 'gstreamer-plugins-base-devel',
                     'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
                 )]
+
+# Turn off a bunch of builds: bug 924503
+# Hamachi 1.0.1
+for p in BRANCHES['mozilla-b2g18_v1_0_1']['platforms'].keys():
+    if p not in ('hamachi', ):
+        del BRANCHES['mozilla-b2g18_v1_0_1']['platforms'][p]
+# Subset for 1.1
+for p in BRANCHES['mozilla-b2g18']['platforms'].keys():
+    if p not in ('hamachi', 'inari', 'leo', 'leo_eng', 'unagi_eng', 'emulator'):
+        del BRANCHES['mozilla-b2g18']['platforms'][p]
+# Subset for 1.1hd
+for p in BRANCHES['mozilla-b2g18_v1_1_0_hd']['platforms'].keys():
+    if p in ('unagi', ):
+        del BRANCHES['mozilla-b2g18_v1_1_0_hd']['platforms'][p]
+# B2G desktop builds before 1.2
+for name, branch in items_before(BRANCHES, 'gecko_version', 26):
+    for p in branch['platforms'].keys():
+        if '_gecko' in p:
+            del branch['platforms'][p]
 
 ######## generic branch configs
 for branch in ACTIVE_PROJECT_BRANCHES:

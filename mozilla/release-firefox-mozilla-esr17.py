@@ -20,29 +20,29 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '17.0.8esr'
-releaseConfig['appVersion']          = '17.0.8'
+releaseConfig['version']             = '17.0.10esr'
+releaseConfig['appVersion']          = '17.0.10'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'FIREFOX_17_0_8esr'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'FIREFOX_17_0_10esr'
 releaseConfig['partialUpdates']      = {
 
-    '17.0.7esr': {
-        'appVersion': '17.0.7',
+    '17.0.9esr': {
+        'appVersion': '17.0.9',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_17_0_7esr',
+        'baseTag': 'FIREFOX_17_0_9esr',
     },
 
 }
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '17.0.8esrpre'
+releaseConfig['nextAppVersion']      = '17.0.10esrpre'
 releaseConfig['nextMilestone']       = releaseConfig['nextAppVersion']
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-esr17',
         'path': 'releases/mozilla-esr17',
-        'revision': '8d80b1912bd7',
+        'revision': 'c3750e0515f7',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -86,6 +86,7 @@ releaseConfig['enableUnittests'] = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'browser/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = False
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'ffxbld'
@@ -104,7 +105,7 @@ releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
 releaseConfig['promptWaitTime']      = None
 releaseConfig['useBetaChannel']      = 1
-releaseConfig['updateVerifyChunks']  = 4
+releaseConfig['updateVerifyChunks']  = 6
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozEsr17-firefox-linux.cfg',
     'linux64':  'mozEsr17-firefox-linux64.cfg',
@@ -136,4 +137,4 @@ releaseConfig['releasetestUptake']   = 1
 releaseConfig['enable_repo_setup'] = False
 releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['use_mock'] = False
-releaseConfig['ftpSymlinkName'] = 'latest-esr'
+releaseConfig['ftpSymlinkName'] = 'latest-17.0esr'

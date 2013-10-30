@@ -20,41 +20,48 @@ releaseConfig['messagePrefix']       = '[staging-release] '
 
 # Basic product configuration
 #  Names for the product/files
-releaseConfig['productName']         = 'firefox'
-releaseConfig['appName']             = 'browser'
+releaseConfig['productName']         = 'thunderbird'
+releaseConfig['appName']             = 'mail'
+releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '{{ version }}'
-releaseConfig['appVersion']          = '{{ appVersion }}'
-releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = {{ buildNumber }}
-releaseConfig['baseTag']             = '{{ baseTag }}'
+releaseConfig['version']             = '9.0'
+releaseConfig['appVersion']          = releaseConfig['version']
+releaseConfig['milestone']           = releaseConfig['version']
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'THUNDERBIRD_9_0'
 releaseConfig['partialUpdates']      = {
-{% for version, partial in partials.items() %}
-    '{{ version }}': {
-        'appVersion': '{{ partial['appVersion'] }}',
-        'buildNumber': {{ partial['buildNumber'] }},
-        'baseTag': '{{ partial['baseTag'] }}',
-    },
-{% endfor %}
+    '8.0.1': {
+        'buildNumber': 2,
+        'baseTag': 'THUNDERBIRD_8_0_1',
+    }
 }
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = '{{ version }}pre'
-releaseConfig['nextMilestone']       = releaseConfig['nextAppVersion']
+releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
+releaseConfig['nextMilestone']       = releaseConfig['milestone']
 #  Repository configuration, for tagging
 ## Staging repository path
 releaseConfig['userRepoRoot'] = 'users/stage-ffxbld'
 releaseConfig['sourceRepositories']  = {
-    'mozilla': {
-        'name': 'mozilla-esr17',
-        'clonePath': 'releases/mozilla-esr17',
-        'path': '{{ branch }}',
-        'revision': '{{ mozillaRevision }}',
-        'relbranch': {% if mozillaRelbranch %}'{{ mozillaRelbranch }}'{% else %}None{% endif %},
+    'comm': {
+        'name': 'comm-release',
+        'clonePath': 'releases/comm-esr17',
+        'path': 'users/stage-ffxbld/comm-esr17',
+        'revision': 'default',
+        'relbranch': None,
         'bumpFiles': {
-            'browser/config/version.txt': {
+            'mail/config/version.txt': {
                 'version': releaseConfig['appVersion'],
                 'nextVersion': releaseConfig['nextAppVersion']
             },
+        }
+    },
+    'mozilla': {
+        'name': 'mozilla-release',
+        'clonePath': 'releases/mozilla-esr17',
+        'path': 'users/stage-ffxbld/mozilla-esr17',
+        'revision': 'default',
+        'relbranch': None,
+        'bumpFiles': {
             'config/milestone.txt': {
                 'version': releaseConfig['milestone'],
                 'nextVersion': releaseConfig['nextMilestone']
@@ -70,18 +77,19 @@ releaseConfig['sourceRepositories']  = {
 releaseConfig['l10nRelbranch']       = None
 releaseConfig['l10nRepoClonePath']   = 'releases/l10n/mozilla-release'
 releaseConfig['l10nRepoPath']        = 'users/stage-ffxbld'
-releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-esr17'
+releaseConfig['l10nRevisionFile']    = 'l10n-changesets_thunderbird-esr17'
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
-    'users/stage-ffxbld/compare-locales': 'RELEASE_0_9_5',
+    'users/stage-ffxbld/compare-locales': 'RELEASE_AUTOMATION',
     'users/stage-ffxbld/buildbot': 'production-0.8',
     'users/stage-ffxbld/partner-repacks': 'default',
+    'users/stage-ffxbld/mozharness': 'production',
 }
 
 # Platform configuration
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['notifyPlatforms']     = ('linux', 'linux64', 'win32', 'macosx64')
-releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
+releaseConfig['talosTestPlatforms']  = ()
 releaseConfig['xulrunnerPlatforms']  = ()
 
 # Unittests
@@ -90,44 +98,41 @@ releaseConfig['enableUnittests'] = True
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
-releaseConfig['shippedLocalesPath']  = 'browser/locales/shipped-locales'
+releaseConfig['shippedLocalesPath']  = 'mail/locales/shipped-locales'
 releaseConfig['l10nChunks']          = 6
 releaseConfig['mergeLocales']        = True
-releaseConfig['l10nUsePymake']       = False
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'stage-ffxbld'
 releaseConfig['hgSshKey']            = '~cltbld/.ssh/ffxbld_dsa'
 
 # Update-specific configuration
-releaseConfig['patcherConfig']       = 'mozEsr17-branch-patcher2.cfg'
+releaseConfig['patcherConfig']       = 'mozRelease-thunderbird-branch-patcher2.cfg'
 releaseConfig['ftpServer']           = 'dev-stage01.srv.releng.scl3.mozilla.com'
 releaseConfig['stagingServer']       = 'dev-stage01.srv.releng.scl3.mozilla.com'
 releaseConfig['previousReleasesStagingServer'] = 'stage.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'http://dev-stage01.srv.releng.scl3.mozilla.com'
 releaseConfig['ausHost']             = 'dev-stage01.srv.releng.scl3.mozilla.com'
-releaseConfig['ausUser']             = 'ffxbld'
-releaseConfig['ausSshKey']           = 'ffxbld_dsa'
-releaseConfig['releaseNotesUrl']     = None
+releaseConfig['ausUser']             = 'tbirdbld'
+releaseConfig['ausSshKey']           = 'tbirdbld_dsa'
+releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=%locale%&platform=%platform%&version=%version%'
 releaseConfig['testOlderPartials']   = False
-releaseConfig['promptWaitTime']      = {{ promptWaitTime }}
 releaseConfig['verifyConfigs']       = {
-    'linux':  'mozEsr17-firefox-linux.cfg',
-    'linux64':  'mozEsr17-firefox-linux64.cfg',
-    'macosx64': 'mozEsr17-firefox-mac64.cfg',
-    'win32':  'mozEsr17-firefox-win32.cfg'
+    'linux':  'mozRelease-thunderbird-linux.cfg',
+    'linux64':  'mozRelease-thunderbird-linux64.cfg',
+    'macosx64': 'mozRelease-thunderbird-mac64.cfg',
+    'win32':  'mozRelease-thunderbird-win32.cfg'
 }
 releaseConfig['mozconfigs']          = {
-    'linux': 'browser/config/mozconfigs/linux32/release',
-    'linux64': 'browser/config/mozconfigs/linux64/release',
-    'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
-    'win32': 'browser/config/mozconfigs/win32/release',
+    'linux': 'mail/config/mozconfigs/linux32/release',
+    'linux64': 'mail/config/mozconfigs/linux64/release',
+    'macosx64': 'mail/config/mozconfigs/macosx-universal/release',
+    'win32': 'mail/config/mozconfigs/win32/release',
 }
-releaseConfig['releaseChannel']      = 'esr'
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = False
+releaseConfig['doPartnerRepacks']    = True
 releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
 
 # Tuxedo/Bouncer configuration
@@ -141,4 +146,4 @@ releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
 releaseConfig['enable_repo_setup'] = False
 releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
 releaseConfig['use_mock'] = False
-releaseConfig['ftpSymlinkName'] = 'latest-17.0esr'
+releaseConfig['ftpSymlinkName'] = 'latest'

@@ -95,6 +95,7 @@ releaseConfig['enableUnittests'] = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'mail/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
+releaseConfig['l10nUsePymake']       = False
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'tbirdbld'
@@ -113,7 +114,7 @@ releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunder
 releaseConfig['testOlderPartials']   = False
 releaseConfig['promptWaitTime']      = {{ promptWaitTime }}
 releaseConfig['useBetaChannel']      = 1
-releaseConfig['updateVerifyChunks']  = 4
+releaseConfig['updateVerifyChunks']  = 6
 releaseConfig['verifyConfigs']       = {
     'linux':  'mozEsr17-thunderbird-linux.cfg',
     'linux64':  'mozEsr17-thunderbird-linux64.cfg',

@@ -8,6 +8,10 @@ import localconfig
 reload(localconfig)
 from localconfig import SLAVES, TRY_SLAVES
 
+import master_common
+reload(master_common)
+from master_common import setMainFirefoxVersions, items_before
+
 GLOBAL_VARS = {
     # It's a little unfortunate to have both of these but some things (HgPoller)
     # require an URL while other things (BuildSteps) require only the host.
@@ -62,6 +66,7 @@ GLOBAL_VARS = {
         'linux64-st-an-debug': {},
         'macosx64-debug': {},
         'win32-debug': {},
+        'win64-debug': {},
         'android': {},
         'android-x86': {},
         'android-armv6': {},
@@ -80,7 +85,7 @@ GLOBAL_VARS = {
     'enable_nightly': True,
     'enabled_products': ['firefox', 'mobile'],
     'enable_valgrind': True,
-    'valgrind_platforms': ('linux', 'linux64'),
+    'valgrind_platforms': ('linux64',),
 
     # List of keys in BRANCH_PROJECTS that will be activated for the BRANCH
     'branch_projects': ['spidermonkey_tier_1'],
@@ -485,7 +490,7 @@ PLATFORM_VARS = {
                 'PATH': '/tools/buildbot/bin:/usr/local/bin:/usr/lib64/ccache:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/tools/git/bin:/tools/python27/bin:/tools/python27-mercurial/bin:/home/cltbld/bin',
             },
             'enable_opt_unittests': False,
-            'enable_checktests': True,
+            'enable_checktests': False,
             'enable_build_analysis': False,
             'create_snippet': False,
             'create_partial': False,
@@ -520,6 +525,39 @@ PLATFORM_VARS = {
             # The status of this build doesn't affect the last good revision
             # algorithm for nightlies
             'consider_for_nightly': False,
+        },
+        'linux64-sh-haz': {
+            'mozharness_config': {
+                'script_name': 'scripts/spidermonkey_build.py',
+                'extra_args': [
+                    '--config-file', 'hazards/build_shell.py',
+                    '--config-file', 'hazards/common.py',
+                ],
+            },
+            'stage_product': 'firefox',
+            'product_name': 'firefox',
+            'base_name': '%(platform)s_%(branch)s',
+            'slaves': SLAVES['mock'],
+            'try_by_default': False,
+            'consider_for_nightly': False,
+            'mock_target': 'mozilla-centos6-x86_64',
+        },
+        'linux64-br-haz': {
+            'mozharness_config': {
+                'script_name': 'scripts/spidermonkey_build.py',
+                'extra_args': [
+                    '--config-file', 'hazards/build_browser.py',
+                    '--config-file', 'hazards/common.py',
+                ],
+            },
+
+            'stage_product': 'firefox',
+            'product_name': 'firefox',
+            'base_name': '%(platform)s_%(branch)s',
+            'slaves': SLAVES['mock'],
+            'try_by_default': False,
+            'consider_for_nightly': False,
+            'mock_target': 'mozilla-centos6-x86_64',
         },
         'macosx64': {
             'product_name': 'firefox',
@@ -592,8 +630,8 @@ PLATFORM_VARS = {
             'enable_installer': True,
             'enable_post_linker_size': True,
             'packageTests': True,
-            'slaves': SLAVES['win64'],
-            'l10n_slaves': SLAVES['win64'],
+            'slaves': SLAVES['win64-rev2'],
+            'l10n_slaves': SLAVES['win64-rev2'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
             'stage_platform': 'win32',
@@ -610,8 +648,8 @@ PLATFORM_VARS = {
                 'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/ffxbld_dsa",
                 'TINDERBOX_OUTPUT': '1',
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
-                'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+                'PDBSTR_PATH': '/c/Program Files (x86)/Windows Kits/8.0/Debuggers/x64/srcsrv/pdbstr.exe',
+                'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                 'BINSCOPE': 'C:\Program Files (x86)\Microsoft\SDL BinScope\BinScope.exe',
                 'PATH': "${MOZILLABUILD}nsis-2.46u;${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
             },
@@ -644,7 +682,7 @@ PLATFORM_VARS = {
             'enable_installer': True,
             'packageTests': True,
             'try_by_default': False,
-            'slaves': SLAVES['win64'],
+            'slaves': SLAVES['win64-rev2'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
             'stage_platform': 'win64',
@@ -662,8 +700,8 @@ PLATFORM_VARS = {
                 'MOZ_SYMBOLS_EXTRA_BUILDID': 'win64',
                 'TINDERBOX_OUTPUT': '1',
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'PDBSTR_PATH': '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe',
-                'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+                'PDBSTR_PATH': '/c/Program Files (x86)/Windows Kits/8.0/Debuggers/x64/srcsrv/pdbstr.exe',
+                'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                 'PATH': "${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
             },
             'enable_opt_unittests': False,
@@ -878,10 +916,45 @@ PLATFORM_VARS = {
             'enable_installer': True,
             'packageTests': True,
             'build_space': 9,
-            'slaves': SLAVES['win64'],
+            'slaves': SLAVES['win64-rev2'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
             'stage_platform': 'win32-debug',
+            'enable_shared_checkouts': True,
+            'env': {
+                'MOZ_OBJDIR': OBJDIR,
+                'XPCOM_DEBUG_BREAK': 'stack-and-abort',
+                'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
+                'BINSCOPE': 'C:\Program Files (x86)\Microsoft\SDL BinScope\BinScope.exe',
+                'PATH': "${MOZILLABUILD}nsis-2.46u;${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
+            },
+            'enable_unittests': False,
+            'enable_checktests': True,
+            'talos_masters': None,
+            'nightly_signing_servers': 'dep-signing',
+            'dep_signing_servers': 'dep-signing',
+        },
+        'win64-debug': {
+            'enable_nightly': False,
+            'enable_xulrunner': False,
+            'product_name': 'firefox',
+            'app_name': 'browser',
+            'brand_name': 'Minefield',
+            'base_name': 'WINNT 6.1 x86-64 %(branch)s leak test',
+            'mozconfig': 'win64/%(branch)s/debug',
+            'src_mozconfig': 'browser/config/mozconfigs/win64/debug',
+            'profiled_build': False,
+            'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
+            'download_symbols': True,
+            'enable_installer': True,
+            'packageTests': True,
+            'build_space': 9,
+            'try_by_default': False,
+            'slaves': SLAVES['win64-rev2'],
+            'platform_objdir': OBJDIR,
+            'stage_product': 'firefox',
+            'stage_platform': 'win64-debug',
             'enable_shared_checkouts': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
@@ -902,7 +975,7 @@ PLATFORM_VARS = {
             'unittest_platform': 'android-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
-            'base_name': 'Android %(branch)s',
+            'base_name': 'Android 2.2 %(branch)s',
             'mozconfig': 'android/%(branch)s/nightly',
             'src_mozconfig': 'mobile/android/config/mozconfigs/android/nightly',
             'mobile_dir': 'mobile/android',
@@ -970,7 +1043,7 @@ PLATFORM_VARS = {
             'product_name': 'firefox',
             'unittest_platform': 'android-armv6-opt',
             'app_name': 'browser',
-            'base_name': 'Android Armv6 %(branch)s',
+            'base_name': 'Android 2.2 Armv6 %(branch)s',
             'mozconfig': 'android-armv6/%(branch)s/nightly',
             'src_mozconfig': 'mobile/android/config/mozconfigs/android-armv6/nightly',
             'mobile_dir': 'mobile/android',
@@ -1035,7 +1108,7 @@ PLATFORM_VARS = {
             'product_name': 'firefox',
             'unittest_platform': 'android-x86-opt',
             'app_name': 'browser',
-            'base_name': 'Android X86 %(branch)s',
+            'base_name': 'Android 4.2 x86 %(branch)s',
             'mozconfig': 'android-x86/%(branch)s/nightly',
             'src_mozconfig': 'mobile/android/config/mozconfigs/android-x86/nightly',
             'mobile_dir': 'mobile/android',
@@ -1100,7 +1173,7 @@ PLATFORM_VARS = {
             'unittest_platform': 'android-noion-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
-            'base_name': 'Android no-ionmonkey %(branch)s',
+            'base_name': 'Android 2.2 no-ionmonkey %(branch)s',
             'mozconfig': 'android/%(branch)s/nightly',
             'src_mozconfig': 'mobile/android/config/mozconfigs/android-noion/nightly',
             'mobile_dir': 'mobile/android',
@@ -1168,7 +1241,7 @@ PLATFORM_VARS = {
             'product_name': 'firefox',
             'app_name': 'browser',
             'brand_name': 'Minefield',
-            'base_name': 'Android Debug %(branch)s',
+            'base_name': 'Android 2.2 Debug %(branch)s',
             'mozconfig': 'android-debug/%(branch)s/nightly',
             'src_mozconfig': 'mobile/android/config/mozconfigs/android/debug',
             'mobile_dir': 'mobile/android',
@@ -1335,8 +1408,6 @@ BRANCH_PROJECTS = {
             'linux-debug':    ['warnaserrdebug'],
             'linux64':        ['warnaserr'],
             'linux64-debug':  ['warnaserrdebug'],
-            'macosx64':           ['warnaserr'],
-            'macosx64-debug':     ['dtrace', 'warnaserrdebug'],
         },
         'platforms': {
             'linux': {},
@@ -1371,6 +1442,22 @@ BRANCHES = {
     'mozilla-esr17': {
         'branch_projects': [],
         'lock_platforms': True,
+        'gecko_version': 17,
+        'platforms': {
+            'linux': {},
+            'linux64': {},
+            'win32': {},
+            'macosx64': {},
+            'linux-debug': {},
+            'linux64-debug': {},
+            'macosx64-debug': {},
+            'win32-debug': {},
+        },
+    },
+    'mozilla-esr24': {
+        'branch_projects': [],
+        'lock_platforms': True,
+        'gecko_version': 24,
         'platforms': {
             'linux': {},
             'linux64': {},
@@ -1385,6 +1472,7 @@ BRANCHES = {
     'mozilla-b2g18': {
         'branch_projects': [],
         'lock_platforms': True,
+        'gecko_version': 18,
         'platforms': {
             # desktop for gecko security reproduciton (per akeybl
             # https://bugzil.la/818378#c8)
@@ -1402,6 +1490,7 @@ BRANCHES = {
     'mozilla-b2g18_v1_0_1': {
         'branch_projects': [],
         'lock_platforms': True,
+        'gecko_version': 18,
         'platforms': {
             # desktop for gecko security reproduciton (per akeybl
             # https://bugzil.la/818378#c8)
@@ -1419,6 +1508,7 @@ BRANCHES = {
     'mozilla-b2g18_v1_1_0_hd': {
         'branch_projects': [],
         'lock_platforms': True,
+        'gecko_version': 18,
         'platforms': {
             # desktop for gecko security reproduciton (per akeybl
             # https://bugzil.la/818378#c8)
@@ -1435,8 +1525,15 @@ BRANCHES = {
     },
     'try': {
         'branch_projects': ['spidermonkey_try'],
+        # For now, only run rooting hazards builds on try
+        'extra_platforms': {
+            'linux64-sh-haz': {},
+            'linux64-br-haz': {},
+        },
     },
 }
+
+setMainFirefoxVersions(BRANCHES)
 
 # Copy project branches into BRANCHES keys
 for branch in ACTIVE_PROJECT_BRANCHES:
@@ -1460,6 +1557,8 @@ for branch in BRANCHES.keys():
         # The "platforms" key is handle separatedely (see next for loop)
         elif key == 'platforms' or key not in BRANCHES[branch]:
             BRANCHES[branch][key] = deepcopy(value)
+
+    BRANCHES[branch]['platforms'].update(BRANCHES[branch].get('extra_platforms', {}))
 
     for platform, platform_config in PLATFORM_VARS.items():
         if platform in BRANCHES[branch]['platforms']:
@@ -1523,6 +1622,8 @@ for branch in BRANCHES.keys():
 
     if BRANCHES[branch]['platforms'].has_key('win64') and branch not in ('try', 'mozilla-central', 'date'):
         del BRANCHES[branch]['platforms']['win64']
+    if BRANCHES[branch]['platforms'].has_key('win64-debug') and branch not in ('try', 'mozilla-central', 'date'):
+        del BRANCHES[branch]['platforms']['win64-debug']
 
 ######## mozilla-central
 # This is a path, relative to HGURL, where the repository is located
@@ -1769,6 +1870,37 @@ del BRANCHES['mozilla-esr17']['platforms']['linux64-debug']['env']['PATH']
 # mock disabled block stop
 BRANCHES['mozilla-esr17']['platforms']['win32']['l10n_slaves'] = SLAVES['win32']
 
+######## mozilla-esr24
+BRANCHES['mozilla-esr24']['repo_path'] = 'releases/mozilla-esr24'
+BRANCHES['mozilla-esr24']['update_channel'] = 'nightly-esr24'
+BRANCHES['mozilla-esr24']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
+BRANCHES['mozilla-esr24']['enable_weekly_bundle'] = True
+BRANCHES['mozilla-esr24']['start_hour'] = [0]
+BRANCHES['mozilla-esr24']['start_minute'] = [05]
+BRANCHES['mozilla-esr24']['enable_xulrunner'] = False
+BRANCHES['mozilla-esr24']['pgo_strategy'] = 'per-checkin'
+BRANCHES['mozilla-esr24']['enable_mac_a11y'] = True
+BRANCHES['mozilla-esr24']['unittest_build_space'] = 6
+# L10n configuration
+BRANCHES['mozilla-esr24']['enable_l10n'] = False
+BRANCHES['mozilla-esr24']['enable_l10n_onchange'] = False
+BRANCHES['mozilla-esr24']['l10nNightlyUpdate'] = False
+BRANCHES['mozilla-esr24']['l10n_platforms'] = ['linux', 'linux64', 'win32',
+                                               'macosx64']
+BRANCHES['mozilla-esr24']['l10nDatedDirs'] = True
+BRANCHES['mozilla-esr24']['l10n_tree'] = 'fxesr24'
+BRANCHES['mozilla-esr24']['enUS_binaryURL'] = \
+    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-esr24'
+BRANCHES['mozilla-esr24']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-esr24']['enable_nightly'] = True
+BRANCHES['mozilla-esr24']['create_snippet'] = True
+BRANCHES['mozilla-esr24']['create_partial'] = True
+BRANCHES['mozilla-esr24']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr24'
+BRANCHES['mozilla-esr24']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr24'
+BRANCHES['mozilla-esr24']['enable_blocklist_update'] = True
+BRANCHES['mozilla-esr24']['enable_valgrind'] = False
+BRANCHES['mozilla-esr24']['enabled_products'] = ['firefox']
+
 ######## mozilla-b2g18
 BRANCHES['mozilla-b2g18']['repo_path'] = 'releases/mozilla-b2g18'
 BRANCHES['mozilla-b2g18']['update_channel'] = 'nightly-b2g18'
@@ -1894,19 +2026,21 @@ BRANCHES['try']['create_snippet'] = False
 BRANCHES['try']['aus2_base_upload_dir'] = 'fake'
 BRANCHES['try']['platforms']['linux']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64']['slaves'] = TRY_SLAVES['mock']
-BRANCHES['try']['platforms']['win32']['slaves'] = TRY_SLAVES['win64']
-BRANCHES['try']['platforms']['win64']['slaves'] = TRY_SLAVES['win64']
+BRANCHES['try']['platforms']['win32']['slaves'] = TRY_SLAVES['win64-rev2']
+BRANCHES['try']['platforms']['win64']['slaves'] = TRY_SLAVES['win64-rev2']
+BRANCHES['try']['platforms']['win64-debug']['slaves'] = TRY_SLAVES['win64-rev2']
 BRANCHES['try']['platforms']['macosx64']['slaves'] = TRY_SLAVES['macosx64-lion']
 BRANCHES['try']['platforms']['linux-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64-asan']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64-asan-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['linux64-st-an-debug']['slaves'] = TRY_SLAVES['mock']
-BRANCHES['try']['platforms']['win32-debug']['slaves'] = TRY_SLAVES['win64']
+BRANCHES['try']['platforms']['linux64-sh-haz']['slaves'] = TRY_SLAVES['mock']
+BRANCHES['try']['platforms']['linux64-br-haz']['slaves'] = TRY_SLAVES['mock']
+BRANCHES['try']['platforms']['win32-debug']['slaves'] = TRY_SLAVES['win64-rev2']
 BRANCHES['try']['platforms']['macosx64-debug']['slaves'] = TRY_SLAVES['macosx64-lion']
 BRANCHES['try']['platforms']['android']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['android-armv6']['slaves'] = TRY_SLAVES['mock']
-BRANCHES['try']['platforms']['android-noion']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['android-debug']['slaves'] = TRY_SLAVES['mock']
 BRANCHES['try']['platforms']['android-x86']['slaves'] = TRY_SLAVES['mock']
 for platform in BRANCHES['try']['platforms'].keys():
@@ -1970,8 +2104,6 @@ for branch in ACTIVE_PROJECT_BRANCHES:
         BRANCHES[branch]['platforms']['linux64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'linux64-' + branch
     if 'win32' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['win32']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = branch
-    if 'win64' in BRANCHES[branch]['platforms'] and branch not in ('date',):
-        del BRANCHES[branch]['platforms']['win64']
     if 'macosx64' in BRANCHES[branch]['platforms']:
         BRANCHES[branch]['platforms']['macosx64']['env']['MOZ_SYMBOLS_EXTRA_BUILDID'] = 'macosx64-' + branch
     # Platform-specific defaults/interpretation
@@ -2033,40 +2165,45 @@ for b, branch in BRANCHES.items():
         assert branch_project_name not in PROJECTS, '%s already in PROJECTS' % project_name
         PROJECTS[branch_project_name] = project
 
-# MERGE DAY
-# When Firefox 18 merges into these branches, they can be removed from the list
-for b in ('mozilla-esr17',):
-    # Disable pymake
-    for p in ('win32', 'win32-debug', 'win64'):
-        if p not in BRANCHES[b]['platforms']:
-            continue
-        BRANCHES[b]['platforms'][p]['enable_pymake'] = False
+# Disable pymake (bug 593585)
+for name, branch in items_before(BRANCHES, 'gecko_version', 18):
+    for p in ('win32', 'win32-debug', 'win64', 'win64-debug'):
+        if p in branch['platforms']:
+            branch['platforms'][p]['enable_pymake'] = False
 
-# XXX bug 789373 hack until we get b2g testing going.
-# Delete all references to android-noion once we have b2g jsreftests not in an emulator.
+# MERGE DAY - Delete all references to android-noion once mozilla-b2g18 is EOL.
 for b in BRANCHES.keys():
-    if b not in ('mozilla-central', 'mozilla-inbound', 'mozilla-b2g18',
-                 'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd', 'try',
-                 'b2g-inbound', 'date', 'cypress',
-                 ):
+    if b not in ('mozilla-b2g18', 'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd'):
         if 'android-noion' in BRANCHES[b]['platforms']:
             del BRANCHES[b]['platforms']['android-noion']
 
-# ASan builds are only on mozilla-central and try
-for b in BRANCHES:
-    if b not in ('mozilla-central', 'try'):
-        for p in 'linux64-asan', 'linux64-asan-debug':
-            if p in BRANCHES[b]['platforms']:
-                del BRANCHES[b]['platforms'][p]
+# MERGE DAY
+# Migrate branches to win64-rev2 platform (bug 918414)
+disabled_branches = set([x for x in BRANCHES.keys() if x not in PROJECT_BRANCHES.keys()] + ['b2g-inbound','mozilla-inbound'])
+for branch in disabled_branches:
+    for platform in ('win32','win32-debug','win64','win64-debug'):
+        if platform not in BRANCHES[branch]['platforms']:
+            continue
+        if 'PDBSTR_PATH' in BRANCHES[branch]['platforms'][platform]['env']:
+            BRANCHES[branch]['platforms'][platform]['env']['PDBSTR_PATH'] = '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe'
+        BRANCHES[branch]['platforms'][platform]['env']['HG_SHARE_BASE_DIR'] = 'e:/builds/hg-shared'
+        oldslaves = SLAVES['win64']
+        if 'try' in branch:
+            oldslaves = TRY_SLAVES['win64']
+        BRANCHES[branch]['platforms'][platform]['slaves'] = oldslaves
+        if 'l10n_slaves' in BRANCHES[branch]['platforms'][platform] and branch != 'mozilla-esr17':
+            BRANCHES[branch]['platforms'][platform]['l10n_slaves'] = oldslaves
 
-# MERGE DAY building 32-bit linux in a x86_64 env rides the trains
-# MERGE DAY remove branches from this list when gecko 24 merges into them.
-for branch in ("mozilla-release", "mozilla-b2g18", "mozilla-b2g18_v1_0_1",
-               "mozilla-b2g18_v1_1_0_hd", "mozilla-esr17"):
+for _, branch in items_before(BRANCHES, 'gecko_version', 26):
+    for p in 'linux64-asan', 'linux64-asan-debug':
+        if p in branch['platforms']:
+            del branch['platforms'][p]
+
+# Building 32-bit linux in a x86_64 env rides the trains (bug 857697)
+for name, branch in items_before(BRANCHES, 'gecko_version', 24):
     for platform in ['linux', 'linux-debug']:
-        BRANCHES[branch]['platforms'][platform]['mock_target'] = \
-            'mozilla-centos6-i386'
-        BRANCHES[branch]['platforms'][platform]['mock_packages'] = \
+        branch['platforms'][platform]['mock_target'] = 'mozilla-centos6-i386'
+        branch['platforms'][platform]['mock_packages'] = \
             ['autoconf213', 'python', 'zip', 'mozilla-python27-mercurial',
              'git', 'ccache', 'glibc-static', 'libstdc++-static',
              'perl-Test-Simple', 'perl-Config-General',
@@ -2084,43 +2221,39 @@ for branch in ("mozilla-release", "mozilla-b2g18", "mozilla-b2g18_v1_0_1",
              'freetype-devel-2.3.11-6.el6_2.9',
             ]
         if not platform.endswith("-debug"):
-            BRANCHES[branch]["platforms"][platform]["mock_packages"] += \
-                ["valgrind"]
+            branch["platforms"][platform]["mock_packages"] += ["valgrind"]
 
-# MERGE DAY building android in a x86_64 env rides the trains
-# MERGE DAY remove branches from this list when gecko 24 merges into them.
-for b in ("mozilla-release", "mozilla-b2g18", "mozilla-b2g18_v1_0_1",
-          "mozilla-b2g18_v1_1_0_hd", "mozilla-esr17"):
+# Building android in a x86_64 env rides the trains (bug 860246)
+for name, branch in items_before(BRANCHES, 'gecko_version', 24):
     for plat in ['android', 'android-armv6', 'android-noion',
                  'android-x86', 'android-debug']:
-        if plat in BRANCHES[b]['platforms']:
-            BRANCHES[b]['platforms'][plat]['mock_target'] = 'mozilla-centos6-i386'
+        if plat in branch['platforms']:
+            branch['platforms'][plat]['mock_target'] = 'mozilla-centos6-i386'
 
-# MERGE DAY - pulseaudio-libs-devel package rides the trains (bug 662417)
-# MERGE DAY - Remove branches as FF21 reaches them
-for b in ['mozilla-esr17', 'mozilla-b2g18', 'mozilla-b2g18_v1_0_1',
-          'mozilla-b2g18_v1_1_0_hd']:
-    for p, pc in BRANCHES[b]['platforms'].items():
+# pulseaudio-libs-devel package rides the trains (bug 662417)
+for name, branch in items_before(BRANCHES, 'gecko_version', 21):
+    for pc in branch['platforms'].values():
         if 'mock_packages' in pc:
-            BRANCHES[b]['platforms'][p]['mock_packages'] = \
-                [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x != 'pulseaudio-libs-devel']
+            pc['mock_packages'] = \
+                [x for x in pc['mock_packages'] if x != 'pulseaudio-libs-devel']
 
-# MERGE DAY - gstreamer-devel packages ride the trains (bug 881589)
-# MERGE DAY - remove branches from this list when gecko 24 merges into them.
-for b in ("mozilla-release", "mozilla-b2g18", "mozilla-b2g18_v1_0_1",
-          "mozilla-b2g18_v1_1_0_hd", "mozilla-esr17"):
-    for p, pc in BRANCHES[b]['platforms'].items():
+# gstreamer-devel packages ride the trains (bug 881589)
+for name, branch in items_before(BRANCHES, 'gecko_version', 24):
+    for pc in branch['platforms'].values():
         if 'mock_packages' in pc:
-            BRANCHES[b]['platforms'][p]['mock_packages'] = \
-                [x for x in BRANCHES[b]['platforms'][p]['mock_packages'] if x not in (
+            pc['mock_packages'] = \
+                [x for x in pc['mock_packages'] if x not in (
                     'gstreamer-devel', 'gstreamer-plugins-base-devel',
                     'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
                 )]
 
+for name, branch in items_before(BRANCHES, 'gecko_version', 22):
+    branch["run_make_alive_tests"] = False
+
 # Static analysis happens only on m-c and derived branches.
 for branch in ("mozilla-aurora", "mozilla-beta", "mozilla-release",
                "mozilla-b2g18", "mozilla-b2g18_v1_0_1",
-               "mozilla-b2g18_v1_1_0_hd", "mozilla-esr17"):
+               "mozilla-b2g18_v1_1_0_hd", "mozilla-esr17", "mozilla-esr24"):
     if 'linux64-st-an-debug' in BRANCHES[branch]['platforms']:
         del BRANCHES[branch]['platforms']['linux64-st-an-debug']
 

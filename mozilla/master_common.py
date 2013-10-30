@@ -1,7 +1,6 @@
 import time
 import random
 import re
-from twisted.python import log as twlog
 
 c = BuildmasterConfig = {}
 c['projectName'] = "Firefox"
@@ -24,8 +23,9 @@ c['change_source'] = []
 DEFAULT_BRANCH_PRIORITY = 4
 BRANCH_PRIORITIES = {
     'mozilla-release': 0,
-    'comm-release': 0,
+    'comm-esr24': 0,
     'mozilla-esr17': 1,
+    'mozilla-esr24': 1,
     'mozilla-b2g18': 1,
     'mozilla-b2g18_v1_0_1': 1,
     'mozilla-b2g18_v1_1_0_hd': 1,
@@ -39,14 +39,13 @@ BRANCH_PRIORITIES = {
     # Unlisted branches are prioritized at this level
     'mozilla-inbound': 4,
     'b2g-inbound': 4,
-    # Cypress is also an inbound!
-    'cypress': 4,
     'try': 5,
     'try-comm-central': 5,
     'alder': 5,
     'ash': 5,
     'birch': 5,
     'cedar': 5,
+    'cypress': 5,
     'date': 5,
     'elm': 5,
     'fig': 5,
@@ -103,6 +102,15 @@ def builderPriority(builder, request):
 
     return branch_priority, req_priority, builder_priority, submitted_at
 
+cached_twlog = None
+def getTwlog():
+    global cached_twlog
+    if cached_twlog:
+        return cached_twlog
+    else:
+        from twisted.python import log as twlog
+        cached_twlog = twlog
+        return cached_twlog
 
 def prioritizeBuilders(buildmaster, builders):
     """
@@ -114,6 +122,7 @@ def prioritizeBuilders(buildmaster, builders):
     The final list is shuffled so that each of the important builders has a
     fair chance of being assigned to a slave.
     """
+    twlog = getTwlog()
     start_time = time.time()
 
     def log(msg, *args):
@@ -220,3 +229,48 @@ def prioritizeBuilders(buildmaster, builders):
     return builders
 
 c['prioritizeBuilders'] = prioritizeBuilders
+
+
+# BRANCHES without 'gecko_version' set are considered to have a gecko_version
+# later (larger) than any other value. See items_before for example usage.
+def setMainFirefoxVersions(BRANCHES):
+    # MERGE DAY
+    BRANCHES['mozilla-release']['gecko_version'] = 25
+    BRANCHES['mozilla-beta']['gecko_version']    = 25
+    BRANCHES['mozilla-aurora']['gecko_version']  = 26
+
+def setMainCommVersions(BRANCHES):
+    # MERGE DAY
+    BRANCHES['comm-beta']['gecko_version'] = 25
+    BRANCHES['comm-aurora']['gecko_version'] = 26
+
+# Typical usage pattern:
+#
+#   set cfg = current_behavior
+#   for (b in items_before(BRANCHES, 'gecko_version', N)):
+#     set cfg = previous_behavior
+#
+def items_before(map, key, maxval):
+    """
+    yield all items from the dict 'map' where mapvalue[key] is present and less
+    than 'maxval' (assume that anything missing a value is later than the
+    threshold you're testing for.)
+    """
+    for k, v in map.items():
+        value = v.get(key)
+        if value and cmp(value, maxval) < 0:
+            yield (k, v)
+
+# Typical usage pattern:
+#
+#   for (b in items_at_least(BRANCHES, 'gecko_version', N)):
+#     set cfg = new_behavior
+#
+def items_at_least(map, key, minval):
+    """yield all items from the dict 'map' where mapvalue[key] is either not
+    present, or at least 'minval' if it is present (assume that anything
+    missing a value is definitely greater than the minimum)"""
+    for k, v in map.items():
+        value = v.get(key, minval)
+        if cmp(value, minval) >= 0:
+            yield (k, v)

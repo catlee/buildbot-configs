@@ -5,6 +5,17 @@
 # editing the .template instead. This file should only by edited directly if
 # you're starting a release without Release Kickoff. You have been warned.
 releaseConfig = {}
+
+# HACK ALERT
+# TODO for 24.0.1esr: the following line should be removed for 24.0.1esr build
+# to enable updates
+#####################################
+
+releaseConfig['skip_updates'] = True
+
+#####################################
+# END OF HACK ALERT
+
 releaseConfig['disable_tinderbox_mail'] = True
 releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/always_clobber.php'
 
@@ -20,30 +31,30 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '{{ version }}'
-releaseConfig['appVersion']          = '{{ appVersion }}'
+releaseConfig['version']             = '24.1.0esr'
+releaseConfig['appVersion']          = '24.1.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = {{ buildNumber }}
-releaseConfig['baseTag']             = '{{ baseTag }}'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'FIREFOX_24_1_0esr'
 releaseConfig['partialUpdates']      = {
-{% for version, partial in partials.items() %}
-    '{{ version }}': {
-        'appVersion': '{{ partial['appVersion'] }}',
-        'buildNumber': {{ partial['buildNumber'] }},
-        'baseTag': '{{ partial['baseTag'] }}',
+
+    '24.0esr': {
+        'appVersion': '24.0',
+        'buildNumber': 1,
+        'baseTag': 'FIREFOX_24_0esr',
     },
-{% endfor %}
+
 }
 #  Next (nightly) version info
-releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
-releaseConfig['nextMilestone']       = releaseConfig['milestone']
+releaseConfig['nextAppVersion']      = '24.1.0esrpre'
+releaseConfig['nextMilestone']       = releaseConfig['nextAppVersion']
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
-        'name': 'mozilla-release',
-        'path': '{{ branch }}',
-        'revision': '{{ mozillaRevision }}',
-        'relbranch': {% if mozillaRelbranch %}'{{ mozillaRelbranch }}'{% else %}None{% endif %},
+        'name': 'mozilla-esr24',
+        'path': 'releases/mozilla-esr24',
+        'revision': 'b6aa22c418f4',
+        'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
                 'version': releaseConfig['appVersion'],
@@ -63,10 +74,10 @@ releaseConfig['sourceRepositories']  = {
 #  L10n repositories
 releaseConfig['l10nRelbranch']       = None
 releaseConfig['l10nRepoPath']        = 'releases/l10n/mozilla-release'
-releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-release'
+releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-esr24'
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
-    'build/compare-locales': 'RELEASE_AUTOMATION',
+    'build/compare-locales': 'RELEASE_0_9_5',
     'build/buildbot': 'production-0.8',
     'build/partner-repacks': 'default',
     'build/mozharness': 'production',
@@ -76,11 +87,11 @@ releaseConfig['otherReposToTag']     = {
 releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
 releaseConfig['notifyPlatforms']     = releaseConfig['enUSPlatforms']
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
-releaseConfig['xulrunnerPlatforms']  = releaseConfig['enUSPlatforms']
+releaseConfig['xulrunnerPlatforms']  = ()
 
 # Unittests
 releaseConfig['unittestPlatforms']   = ()
-releaseConfig['enableUnittests'] = True
+releaseConfig['enableUnittests']     = True
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
@@ -93,7 +104,7 @@ releaseConfig['hgUsername']          = 'ffxbld'
 releaseConfig['hgSshKey']            = '/home/mock_mozilla/.ssh/ffxbld_dsa'
 
 # Update-specific configuration
-releaseConfig['patcherConfig']       = 'mozRelease-branch-patcher2.cfg'
+releaseConfig['patcherConfig']       = 'mozEsr24-branch-patcher2.cfg'     # TODO for 24.0.1esr
 releaseConfig['ftpServer']           = 'ftp.mozilla.org'
 releaseConfig['stagingServer']       = 'stage.mozilla.org'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
@@ -103,31 +114,21 @@ releaseConfig['ausUser']             = 'ffxbld'
 releaseConfig['ausSshKey']           = 'auspush'
 releaseConfig['releaseNotesUrl']     = None
 releaseConfig['testOlderPartials']   = False
-releaseConfig['promptWaitTime']      = {{ promptWaitTime }}
+releaseConfig['promptWaitTime']      = None
+releaseConfig['useBetaChannel']      = 1
 releaseConfig['updateVerifyChunks']  = 6
-releaseConfig['verifyConfigs']       = {
-    'linux':  'mozRelease-firefox-linux.cfg',
-    'linux64':  'mozRelease-firefox-linux64.cfg',
-    'macosx64': 'mozRelease-firefox-mac64.cfg',
-    'win32':  'mozRelease-firefox-win32.cfg'
-}
+releaseConfig['verifyConfigs']       = {}       # TODO for 24.0.1esr
 releaseConfig['mozconfigs']          = {
     'linux': 'browser/config/mozconfigs/linux32/release',
     'linux64': 'browser/config/mozconfigs/linux64/release',
     'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
     'win32': 'browser/config/mozconfigs/win32/release',
 }
-releaseConfig['xulrunner_mozconfigs']          = {
-    'linux': 'xulrunner/config/mozconfigs/linux32/xulrunner',
-    'linux64': 'xulrunner/config/mozconfigs/linux64/xulrunner',
-    'macosx64': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
-    'win32': 'xulrunner/config/mozconfigs/win32/xulrunner',
-}
+releaseConfig['releaseChannel']      = 'esr'
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = True
+releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
-releaseConfig['syncPartnerBundles']  = True
 
 # Tuxedo/Bouncer configuration
 releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
@@ -135,12 +136,12 @@ releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
 releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
                                           'opensolaris-sparc',
                                           'opensolaris-i386')
-
+releaseConfig['releaseUptake']       = 3
 releaseConfig['releasetestUptake']   = 1
 
 # Misc configuration
-releaseConfig['makeIndexFiles'] = True
 releaseConfig['enable_repo_setup'] = False
+releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
-releaseConfig['ftpSymlinkName'] = 'latest'
+releaseConfig['ftpSymlinkName'] = 'latest-esr'

@@ -3,7 +3,11 @@ from copy import deepcopy
 import config_common
 reload(config_common)
 from config_common import TALOS_CMD, loadDefaultValues, loadCustomTalosSuites, \
-    loadTalosSuites, nested_haskey, get_talos_slave_platforms
+    nested_haskey, get_talos_slave_platforms
+
+import master_common
+reload(master_common)
+from master_common import setMainFirefoxVersions, items_before, items_at_least
 
 import project_branches
 reload(project_branches)
@@ -29,6 +33,16 @@ BRANCHES = {
     'mozilla-beta':        {},
     'mozilla-esr17':       {
         'datazilla_url': None,
+        'gecko_version': 17,
+        'platforms': {
+            'macosx64': {},
+            'win32': {},
+            'linux': {},
+            'linux64': {},
+        },
+        'lock_platforms': True,
+    },
+    'mozilla-esr24': {
         'platforms': {
             'macosx64': {},
             'win32': {},
@@ -39,6 +53,7 @@ BRANCHES = {
     },
     'mozilla-b2g18': {
         'datazilla_url': None,
+        'gecko_version': 18,
         'platforms': {
             # desktop per sicking in Bug 829513
             'macosx64': {},
@@ -50,6 +65,7 @@ BRANCHES = {
     },
     'mozilla-b2g18_v1_0_1': {
         'datazilla_url': None,
+        'gecko_version': 18,
         'platforms': {
             # desktop per sicking in Bug 829513
             'macosx64': {},
@@ -61,6 +77,7 @@ BRANCHES = {
     },
     'mozilla-b2g18_v1_1_0_hd': {
         'datazilla_url': None,
+        'gecko_version': 18,
         'platforms': {
             # desktop per sicking in Bug 829513
             'macosx64': {},
@@ -70,8 +87,13 @@ BRANCHES = {
         },
         'lock_platforms': True,
     },
-    'try': {'coallesce_jobs': False},
+    'try': {
+      'coallesce_jobs': False,
+      'blob_upload' : True,
+    },
 }
+
+setMainFirefoxVersions(BRANCHES)
 
 # Talos
 PLATFORMS = {
@@ -211,13 +233,8 @@ SUITES = {
         'suites': GRAPH_CONFIG + ['--activeTests', 'tsvgr:tsvgr_opacity', '--filter', 'ignore_first:5', '--filter', 'median'],
         'options': ({}, ALL_TALOS_PLATFORMS),
     },
-    'rafx': {
-        'enable_by_default': False,
-        'suites': GRAPH_CONFIG + ['--activeTests', 'tscrollx:tsvgx:tcanvasmark', '--filter', 'ignore_first:1', '--filter', 'median'],
-        'options': ({}, ALL_TALOS_PLATFORMS),
-    },
     'dirtypaint': {
-        'enable_by_default': True,
+        'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'tspaint_places_generated_med:tspaint_places_generated_max', '--setPref', 'hangmonitor.timeout=0', '--mozAfterPaint'],
         'options': (TALOS_DIRTY_OPTS, ALL_TALOS_PLATFORMS),
     },
@@ -246,7 +263,8 @@ BRANCH_UNITTEST_VARS = {
     },
 }
 
-# MERGE DAY remove this chunk when Firefox 22 is on all branches.
+# Remove this chunk when Firefox 22 is on all branches.
+# That will happen when esr17 and b2g18 based repos EOL
 # Buildbot-based unit tests.
 BUILDBOT_UNITTEST_SUITES = {
     'opt': [
@@ -326,7 +344,7 @@ BUILDBOT_UNITTEST_SUITES = {
         #('mozmill-all', ['mozmill']),
     ],
 }
-# End MERGE DAY
+# End of block to be removed when esr17 and b2g18 branches are removed
 
 MOCHITEST = [
     ('mochitest-1', {
@@ -463,6 +481,14 @@ METRO = [
         'script_maxtime': 7200,
     }),
 ]
+JITTEST = [
+    ('jittest', {
+        'use_mozharness': True,
+        'script_path': 'scripts/desktop_unittest.py',
+        'extra_args': ['--jittest-suite', 'jittest'],
+        'script_maxtime': 7200,
+    }),
+]
 
 UNITTEST_SUITES = {
     'opt_unittest_suites': MOCHITEST + REFTEST_NO_IPC + XPCSHELL,
@@ -527,11 +553,11 @@ PLATFORM_UNITTEST_VARS = {
                 'xpcshell': {
                     'config_files': ["unittests/linux_unittest.py"],
                 },
-                'cppunit': {
-                    'config_files': ["unittests/linux_unittest.py"],
-                },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/linux_unittest.py"],
                 },
             },
         },
@@ -586,6 +612,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/linux_unittest.py"],
                 },
             },
         },
@@ -644,11 +673,11 @@ PLATFORM_UNITTEST_VARS = {
                 'xpcshell': {
                     'config_files': ["unittests/linux_unittest.py"],
                 },
-                'cppunit': {
-                    'config_files': ["unittests/linux_unittest.py"],
-                },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/linux_unittest.py"],
                 },
             },
         },
@@ -703,6 +732,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/linux_unittest.py"],
                 },
             },
         },
@@ -766,6 +798,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/linux_unittest.py"],
                 },
             },
         },
@@ -832,6 +867,9 @@ PLATFORM_UNITTEST_VARS = {
                 'marionette': {
                     'config_files': ["marionette/windows_config.py"],
                 },
+                'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
             },
         },
         'xp-ix': {
@@ -885,6 +923,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'marionette': {
                     'config_files': ["marionette/windows_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
                 },
             },
         },
@@ -940,6 +981,9 @@ PLATFORM_UNITTEST_VARS = {
                 'marionette': {
                     'config_files': ["marionette/windows_config.py"],
                 },
+                'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
             },
         },
         'win7-ix': {
@@ -993,6 +1037,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'marionette': {
                     'config_files': ["marionette/windows_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
                 },
             },
         },
@@ -1050,6 +1097,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'marionette': {
                     'config_files': ["marionette/windows_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
                 },
             },
         }
@@ -1119,6 +1169,9 @@ PLATFORM_UNITTEST_VARS = {
                 'marionette': {
                     'config_files': ["marionette/windows_config.py"],
                 },
+                'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
             },
         }
     },
@@ -1181,6 +1234,9 @@ PLATFORM_UNITTEST_VARS = {
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
                 },
+                'jittest': {
+                    'config_files': ["unittests/mac_unittest.py"],
+                },
             },
         },
         'lion': {
@@ -1235,6 +1291,9 @@ PLATFORM_UNITTEST_VARS = {
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
                 },
+                'jittest': {
+                    'config_files': ["unittests/mac_unittest.py"],
+                },
             },
         },
         'mountainlion': {
@@ -1288,6 +1347,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
+                },
+                'jittest': {
+                    'config_files': ["unittests/mac_unittest.py"],
                 },
             },
         },
@@ -1404,19 +1466,8 @@ for k, v in localconfig.PROJECTS.items():
 
 # Let's load the defaults
 for branch in BRANCHES.keys():
-    BRANCHES[branch]['repo_path'] = branch
-    BRANCHES[branch]['branch_name'] = branch.title()
-    BRANCHES[branch]['build_branch'] = branch.title()
-    BRANCHES[branch]['enable_unittests'] = True
-    BRANCHES[branch]['talos_command'] = TALOS_CMD
-    BRANCHES[branch]['fetch_symbols'] = True
-    BRANCHES[branch]['fetch_release_symbols'] = False
-    BRANCHES[branch]['talos_from_source_code'] = True
-    BRANCHES[branch]['support_url_base'] = 'http://talos-bundles.pvt.build.mozilla.org'
-    loadTalosSuites(BRANCHES, SUITES, branch)
-    BRANCHES[branch]['pgo_strategy'] = None
-    BRANCHES[branch]['pgo_platforms'] = ['linux', 'linux64', 'win32']
-    BRANCHES[branch]['mozharness_talos'] = True
+    loadDefaultValues(BRANCHES, branch, BRANCHES[branch])
+    loadCustomTalosSuites(BRANCHES, SUITES, branch, BRANCHES[branch])
 
 # The following are exceptions to the defaults
 
@@ -1425,33 +1476,16 @@ BRANCHES['mozilla-central']['branch_name'] = "Firefox"
 BRANCHES['mozilla-central']['repo_path'] = "mozilla-central"
 BRANCHES['mozilla-central']['build_branch'] = "1.9.2"
 BRANCHES['mozilla-central']['pgo_strategy'] = 'periodic'
-BRANCHES['mozilla-central']['rafx_tests'] = (1, True, {}, ALL_TALOS_PLATFORMS)
 
 ######### mozilla-release
 BRANCHES['mozilla-release']['release_tests'] = 1
 BRANCHES['mozilla-release']['repo_path'] = "releases/mozilla-release"
 BRANCHES['mozilla-release']['pgo_strategy'] = 'per-checkin'
 
-# MERGE DAY remove the below when Firefox 25 merges in
-BRANCHES['mozilla-release']['xperf_tests'] = (0, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
-# END MERGE DAY remove the below when Firefox 25 merges in
-
-# MERGE DAY remove the below when Firefox 24 merges in
-BRANCHES['mozilla-release']['mozharness_talos'] = False
-# END MERGE DAY remove the below when Firefox 24 merges in
-
 ######### mozilla-beta
 BRANCHES['mozilla-beta']['release_tests'] = 1
 BRANCHES['mozilla-beta']['repo_path'] = "releases/mozilla-beta"
 BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
-
-# MERGE DAY remove the below when Firefox 25 merges in
-BRANCHES['mozilla-beta']['xperf_tests'] = (0, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
-# END MERGE DAY remove the below when Firefox 25 merges in
-
-# MERGE DAY remove the below when Firefox 24 merges in
-BRANCHES['mozilla-beta']['mozharness_talos'] = False
-# END MERGE DAY remove the below when Firefox 24 merges in
 
 ######### mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = "releases/mozilla-aurora"
@@ -1483,6 +1517,11 @@ del BRANCHES['mozilla-esr17']['platforms']['win32']['win7-ix']
 del BRANCHES['mozilla-esr17']['platforms']['win32']['xp-ix']
 BRANCHES['mozilla-esr17']['platforms']['win32']['talos_slave_platforms'] = ['xp', 'win7']
 
+######### mozilla-esr24
+BRANCHES['mozilla-esr24']['release_tests'] = 1
+BRANCHES['mozilla-esr24']['repo_path'] = "releases/mozilla-esr24"
+BRANCHES['mozilla-esr24']['pgo_strategy'] = 'per-checkin'
+BRANCHES['mozilla-esr24']['xperf_tests'] = (0, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 
 ######### mozilla-b2g18
 BRANCHES['mozilla-b2g18']['release_tests'] = 1
@@ -1566,6 +1605,7 @@ BRANCHES['mozilla-b2g18_v1_1_0_hd']['platforms']['win32']['talos_slave_platforms
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['xperf_tests'] = (0, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 
 ######## try
+BRANCHES['try']['repo_path'] = "try"
 BRANCHES['try']['xperf_tests'] = (1, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 BRANCHES['try']['tp5o_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['try']['pgo_strategy'] = 'try'
@@ -1573,35 +1613,26 @@ BRANCHES['try']['enable_try'] = True
 BRANCHES['try']['platforms']['macosx64']['snowleopard']['opt_unittest_suites'] = UNITTEST_SUITES['opt_unittest_suites'] + REFTEST_IPC
 BRANCHES['try']['platforms']['macosx64']['lion']['opt_unittest_suites'] = UNITTEST_SUITES['opt_unittest_suites'] + REFTEST_IPC
 BRANCHES['try']['platforms']['macosx64']['mountainlion']['opt_unittest_suites'] = UNITTEST_SUITES['opt_unittest_suites'] + REFTEST_IPC
-BRANCHES['try']['platforms']['win32']['xp']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL + MARIONETTE
+BRANCHES['try']['platforms']['win32']['xp']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL
 BRANCHES['try']['platforms']['win32']['xp-ix']['opt_unittest_suites'] = UNITTEST_SUITES['opt_unittest_suites']
-BRANCHES['try']['platforms']['win32']['xp-ix']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL + MARIONETTE
+BRANCHES['try']['platforms']['win32']['xp-ix']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL
 BRANCHES['try']['platforms']['win32']['win7']['opt_unittest_suites'] = UNITTEST_SUITES['opt_unittest_suites'] + REFTEST_NOACCEL
-BRANCHES['try']['platforms']['win32']['win7']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL + MARIONETTE
+BRANCHES['try']['platforms']['win32']['win7']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL
 BRANCHES['try']['platforms']['win32']['win7-ix']['opt_unittest_suites'] = UNITTEST_SUITES['opt_unittest_suites'] + REFTEST_NOACCEL
-BRANCHES['try']['platforms']['win32']['win7-ix']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL + MARIONETTE
+BRANCHES['try']['platforms']['win32']['win7-ix']['debug_unittest_suites'] = MOCHITEST + REFTEST_NO_IPC + XPCSHELL
 
-# Let's load jetpack for the following branches:
-# MERGE DAY once FF21 merges into a branch remove it from this list
-for branch in BRANCHES.keys():
-    if branch not in ('mozilla-esr17', 'mozilla-b2g18', 'mozilla-b2g18_v1_0_1',
-                      'mozilla-b2g18_v1_1_0_hd'):
-        for pf in PLATFORMS:
-            if pf not in BRANCHES[branch]['platforms'].keys():
+# Load jetpack for branches that have at least FF21
+for name, branch in items_at_least(BRANCHES, 'gecko_version', 21):
+    for pf in PLATFORMS:
+        if pf not in branch['platforms']:
+            continue
+        for slave_pf in branch['platforms'][pf].get(
+                'slave_platforms', PLATFORMS[pf]['slave_platforms']):
+            if slave_pf not in branch['platforms'][pf]:
                 continue
-            for slave_pf in BRANCHES[branch]['platforms'][pf].get(
-                    'slave_platforms', PLATFORMS[pf]['slave_platforms']):
-                if slave_pf not in BRANCHES[branch]['platforms'][pf]:
-                    continue
-                BRANCHES[branch]['platforms'][pf][slave_pf]['opt_unittest_suites'] += [('jetpack', ['jetpack'])]
-                BRANCHES[branch]['platforms'][pf][slave_pf]['debug_unittest_suites'] += [('jetpack', ['jetpack'])]
+            branch['platforms'][pf][slave_pf]['opt_unittest_suites'].append(('jetpack', ['jetpack']))
+            branch['platforms'][pf][slave_pf]['debug_unittest_suites'].append(('jetpack', ['jetpack']))
 
-
-######## generic branch variables for project branches
-for projectBranch in ACTIVE_PROJECT_BRANCHES:
-    branchConfig = PROJECT_BRANCHES[projectBranch]
-    loadDefaultValues(BRANCHES, projectBranch, branchConfig)
-    loadCustomTalosSuites(BRANCHES, SUITES, projectBranch, branchConfig)
 
 # Enable cppunittest jobs for now
 for platform in PLATFORMS.keys():
@@ -1610,25 +1641,57 @@ for platform in PLATFORMS.keys():
     for slave_platform in PLATFORMS[platform]['slave_platforms']:
         if slave_platform not in BRANCHES['cedar']['platforms'][platform]:
             continue
+        if slave_platform in ['fedora', 'fedora64']:
+            continue
         if BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites']:
             BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites'] += CPPUNIT[:]
         else:
             BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites'] = CPPUNIT[:]
 
-# Enable metro jobs for now
-# MERGE DAY: This may need to follow the trains: see bug 847442
+#enable cppunitests on opt but not for fedora, fedora64 https://bugzilla.mozilla.org/show_bug.cgi?id=912192
+for platform in PLATFORMS.keys():
+    if platform not in BRANCHES['cedar']['platforms']:
+        continue
+    for slave_platform in PLATFORMS[platform]['slave_platforms']:
+        if slave_platform not in BRANCHES['cedar']['platforms'][platform]:
+            continue
+        if slave_platform in ['fedora', 'fedora64']:
+            continue
+        if BRANCHES['cedar']['platforms'][platform][slave_platform]['opt_unittest_suites']:
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['opt_unittest_suites'] += CPPUNIT[:]
+        else:
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['opt_unittest_suites'] = CPPUNIT[:]
+
+
+# Enable jittests on cedar https://bugzilla.mozilla.org/show_bug.cgi?id=912997
+for platform in PLATFORMS.keys():
+    if platform not in BRANCHES['cedar']['platforms']:
+        continue
+    for slave_platform in PLATFORMS[platform]['slave_platforms']:
+        if slave_platform not in BRANCHES['cedar']['platforms'][platform]:
+            continue
+        if BRANCHES['cedar']['platforms'][platform][slave_platform]['opt_unittest_suites']:
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['opt_unittest_suites'] += JITTEST[:]
+        else:
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['opt_unittest_suites'] = JITTEST[:]
+        if BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites']:
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites'] += JITTEST[:]
+        else:
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites'] = JITTEST[:]
+
+# Enable metro debug jobs for now
+# This may need to follow the trains: see bug 847442 (comment 73)
 BRANCHES['cedar']['platforms']['win32']['win8']['debug_unittest_suites'] += METRO[:]
 for branch in BRANCHES.keys():
     if branch not in ('mozilla-aurora', 'mozilla-beta', 'mozilla-release',
                       'mozilla-esr17', 'mozilla-b2g18', 'mozilla-b2g18_v1_0_0',
-                      'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd'):
+                      'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd',
+                      'mozilla-esr24'):
         if 'win32' in BRANCHES[branch]['platforms'] and \
                 'win8' in BRANCHES[branch]['platforms']['win32']:
             BRANCHES[branch]['platforms']['win32']['win8']['opt_unittest_suites'] += METRO[:]
 
-# MERGE DAY NOTE: remove v21 based branches from the list below
-NON_UBUNTU_BRANCHES = ("mozilla-esr17", "mozilla-b2g18",
-                       "mozilla-b2g18_v1_0_1", "mozilla-b2g18_v1_1_0_hd")
+NON_UBUNTU_BRANCHES = set([name for name, branch in items_before(BRANCHES, 'gecko_version', 21)])
 
 
 # Green tests, including mozharness based ones
@@ -1638,21 +1701,14 @@ def get_ubuntu_unittests(branch, test_type):
                     ["crashtest", "jsreftest", "jetpack", "crashtest-ipc",
                      "reftest-ipc", "xpcshell", "reftest", "reftest-no-accel",
                      "mochitest-1", "mochitest-2", "mochitest-3",
-                     "mochitest-4", "mochitest-5", "mochitest"],
+                     "mochitest-4", "mochitest-5", "mochitest",
+                     "mochitest-browser-chrome", "mochitest-other"],
                     "debug_unittest_suites":
                     ["crashtest", "jsreftest", "jetpack", "marionette",
                      "xpcshell", "reftest", "reftest-no-accel", "mochitest-1",
                      "mochitest-2", "mochitest-3", "mochitest-4",
-                     "mochitest-5", "mochitest"]}
-    # MERGE DAY: uplift when Firefox 24 merges in
-    FF24_TESTS = {"opt_unittest_suites":
-                  ["mochitest-browser-chrome", "mochitest-other"],
-                  "debug_unittest_suites": ["mochitest-other"]}
-    if branch not in ("mozilla-release"):
-        return UBUNTU_TESTS[test_type] + FF24_TESTS[test_type]
-    else:
-        return list(UBUNTU_TESTS[test_type])
-
+                     "mochitest-5", "mochitest", "mochitest-other"]}
+    return list(UBUNTU_TESTS[test_type])
 
 # Remove Ubuntu platform from the release trains,
 # use either Fedora or Ubuntu for other branches
@@ -1697,8 +1753,8 @@ for branch in BRANCHES:
                             except KeyError:
                                 pass
 
-# MERGE DAY: remove branches when Firefox 23 merges in
-NON_UBUNTU_TALOS_BRANCHES = ("mozilla-esr17", "mozilla-b2g18")
+# Remove whole section when esr17 is EOL
+NON_UBUNTU_TALOS_BRANCHES = ["mozilla-esr17"]
 for branch in set(BRANCHES.keys()) - set(NON_UBUNTU_TALOS_BRANCHES):
     for s in SUITES.iterkeys():
         if nested_haskey(BRANCHES[branch], 'suites', s, 'options'):
@@ -1712,16 +1768,14 @@ for branch in set(BRANCHES.keys()) - set(NON_UBUNTU_TALOS_BRANCHES):
             tests[3] = [x for x in tests[3] if x not in ('fedora', 'fedora64')]
             BRANCHES[branch]['%s_tests' % s] = tuple(tests)
 
-# MERGE DAY: remove branches when Firefox 23 merges in
-WIN32_REV3_BRANCHES = ("mozilla-esr17", "mozilla-b2g18", "mozilla-b2g18_v1_0_1")
 # Disable Rev3 winxp and win7 machines for FF23+
-for branch in set(BRANCHES.keys()) - set(WIN32_REV3_BRANCHES):
-    if 'win32' not in BRANCHES[branch]['platforms']:
+for name, branch in items_at_least(BRANCHES, 'gecko_version', 23):
+    if 'win32' not in branch['platforms']:
         continue
-    del BRANCHES[branch]['platforms']['win32']['xp']
-    del BRANCHES[branch]['platforms']['win32']['win7']
-    if 'talos_slave_platforms' not in BRANCHES[branch]['platforms']['win32']:
-        BRANCHES[branch]['platforms']['win32']['talos_slave_platforms'] = ['xp-ix', 'win7-ix', 'win8']
+    del branch['platforms']['win32']['xp']
+    del branch['platforms']['win32']['win7']
+    if 'talos_slave_platforms' not in branch['platforms']['win32']:
+        branch['platforms']['win32']['talos_slave_platforms'] = ['xp-ix', 'win7-ix', 'win8']
 
 # TALOS: If you set 'talos_slave_platforms' for a branch you will only get that subset of platforms
 for branch in BRANCHES.keys():
@@ -1746,11 +1800,10 @@ for branch in set(BRANCHES.keys()) - set(WIN64_TESTING_BRANCHES):
     if 'win64' in BRANCHES[branch]['platforms']:
         del BRANCHES[branch]['platforms']['win64']
 
-# Enable ASAN tests on mozilla-central and try only
-ASAN_TESTING_BRANCHES = ('mozilla-central', 'try')
-for branch in set(BRANCHES.keys()) - set(ASAN_TESTING_BRANCHES):
-    if 'linux64-asan' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['linux64-asan']
+# ASAN builds/tests should ride the trains for gecko 26
+for name, branch in items_before(BRANCHES, 'gecko_version', 26):
+    if 'linux64-asan' in branch['platforms']:
+        del branch['platforms']['linux64-asan']
 
 
 if __name__ == "__main__":

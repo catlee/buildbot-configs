@@ -1,7 +1,8 @@
 SLAVES = {
     'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(11,103) \
-        if x not in [18, 59, 70]]), # bug 731793, bug 779574, bug 740505
-    'fedora64' : dict([("talos-r3-fed64-%03i" % x, {}) for x in range (40,72)]),
+        if x not in [01, 02, 18, 59, 70]]), # bug 799528, bug 731300, bug 731793, bug 779574, bug 740505
+    'fedora64' : dict([("talos-r3-fed64-%03i" % x, {}) for x in range (40,72) \
+        if x not in [32]]), # bug 785862
     'xp': dict([("talos-r3-xp-%03i" % x, {}) for x in range(1,142) \
         if x not in [4, 45, 58, 59, 116, 119]]), # bug 856604, 661377, 780515, 753357, 863407
     'xp-ix': dict([("t-xp32-ix-%03i" % x, {}) for x in range(1,131)]),
@@ -10,22 +11,19 @@ SLAVES = {
     'win7-ix': dict([("t-w732-ix-%03i" % x, {}) for x in range(1,131)]),
     'win8': dict([("t-w864-ix-%03i" % x, {}) for x in range(1,131)]),
     'snowleopard': dict([("talos-r4-snow-%03i" % x, {}) for x in range(1,85) \
-        if x not in [46, 81, 84]]), # bug 824754, bug 729090, bug 795558
+        if x not in [81, 84]]), # bug 729090, bug 795558
     'lion': dict([("talos-r4-lion-%03i" % x, {}) for x in range(1,91) \
         if x not in [58, 81, 83]]), # bug 730545, bug 729090 (x2)
-    'mountainlion': dict([("talos-mtnlion-r5-%03i" % x, {}) for x in range(1,90)]),
+    'mountainlion': dict([("talos-mtnlion-r5-%03i" % x, {}) for x in range(1,90) \
+        if x not in [87]]), # bug 786994
     'tegra_android': dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
         for x in range(31,371) \
         if x not in range(122,129) + [30,33,34,43,44,49,65,69,77,131,137,143,147,\
             153,156,161,175,176,180,184,185,186,193,197,198,202,203,204,205,222,224,\
-            226,241,268,275,289,291,292,301,349,368]]), # decommissioned tegras
-    'panda_android-nomozpool': dict(
-        [('panda-%04i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
-            for x in range(270,306) + range(320,729)]
-    ),
+            226,241,268,275,289,291,292,301,307,349,368]]), # decommissioned tegras
     'panda_android': dict(
         [('panda-%04i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
-            for x in range(22,33) + range(33,45) + range(45,257) + range(729,874) + range(885,887)]
+            for x in range(22,257) + range(270,306) + range(320,874) + range(885,887)]
     ),
     'ubuntu32_vm': dict([("tst-linux32-ec2-%03i" % x, {}) for x in range(1, 900)]),
     'ubuntu64_vm': dict([("tst-linux64-ec2-%03i" % x, {}) for x in range(1, 900)]),
@@ -46,6 +44,7 @@ SLAVES['ubuntu64_vm-b2gdt'] = SLAVES['ubuntu64_vm']
 SLAVES['ubuntu64_vm-b2g-emulator'] = SLAVES['ubuntu64_vm']
 SLAVES['ubuntu64_hw-b2g'] = SLAVES['ubuntu64_hw']
 SLAVES['ubuntu64_hw-b2g-emulator'] = SLAVES['ubuntu64_hw']
+SLAVES['mountainlion-b2gdt'] = SLAVES['mountainlion']
 
 TRY_SLAVES = {}
 
@@ -77,6 +76,10 @@ BRANCHES = {
     'mozilla-esr17': {
         'tinderbox_tree': 'Mozilla-Esr17',
         'mobile_tinderbox_tree': 'Mozilla-Esr17',
+    },
+    'mozilla-esr24': {
+        'tinderbox_tree': 'Mozilla-Esr24',
+        'mobile_tinderbox_tree': 'Mozilla-Esr24',
     },
     'mozilla-b2g18': {
         'tinderbox_tree': 'Mozilla-B2g18',

@@ -16,10 +16,6 @@ PROJECT_BRANCHES = {
         'repo_path': 'integration/mozilla-inbound',
         'enable_perproduct_builds': True,
     },
-    # Customized to be the same as inbound. bug 866314
-    'cypress': {
-        'enable_perproduct_builds': True,
-    },
     'b2g-inbound': {
         'repo_path': 'integration/b2g-inbound',
         'enable_perproduct_builds': True,
@@ -48,10 +44,14 @@ PROJECT_BRANCHES = {
     'alder': {},
     'ash': {
         'mozharness_repo_path': 'users/asasaki_mozilla.com/ash-mozharness',
+        'mozharness_repo': 'http://hg.mozilla.org/users/asasaki_mozilla.com/ash-mozharness',
+        'mozharness_tag': 'default',
     },
     'birch': {},
     'cedar': {
         'mozharness_tag': 'default',
+    },
+    'cypress': {
     },
     # B2G builds not required on date
     # 'date': {},
@@ -70,7 +70,9 @@ PROJECT_BRANCHES = {
     'oak': {
         'enable_nightly': True
     },
-    'pine': {},
+    'pine': {
+        'mozharness_tag': 'default',
+    }
 }
 
 # All is the default

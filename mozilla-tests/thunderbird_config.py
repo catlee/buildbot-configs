@@ -6,6 +6,10 @@ from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS
 import thunderbird_localconfig
 reload(thunderbird_localconfig)
 
+import master_common
+reload(master_common)
+from master_common import setMainCommVersions
+
 GLOBAL_VARS = deepcopy(GLOBAL_VARS)
 BRANCH_UNITTEST_VARS = deepcopy(BRANCH_UNITTEST_VARS)
 
@@ -15,18 +19,22 @@ GLOBAL_VARS.update(thunderbird_localconfig.GLOBAL_VARS.copy())
 BRANCHES = {
     'comm-central': {
     },
-    'comm-release': {
-    },
     'comm-beta': {
     },
     'comm-aurora': {
     },
     'comm-esr17': {
+        'gecko_version': 17
+    },
+    'comm-esr24': {
+        'gecko_version': 24
     },
     'try-comm-central': {
         'coallesce_jobs': False
     },
 }
+
+setMainCommVersions(BRANCHES)
 
 PLATFORMS = {
     'macosx64': {},
@@ -307,23 +315,9 @@ BRANCHES['comm-central']['repo_path'] = "comm-central"
 #BRANCHES['comm-central']['build_branch'] = "1.9.2"
 BRANCHES['comm-central']['pgo_strategy'] = None
 
-######## comm-release
-BRANCHES['comm-release']['pgo_strategy'] = None
-BRANCHES['comm-release']['repo_path'] = "releases/comm-release"
-# MERGE DAY: remove when Thunderbird 24 merges in
-del BRANCHES['comm-release']['platforms']['win32']['xp-ix']
-del BRANCHES['comm-release']['platforms']['win32']['win7-ix']
-del BRANCHES['comm-release']['platforms']['linux']['ubuntu32_vm']
-del BRANCHES['comm-release']['platforms']['linux64']['ubuntu64_vm']
-BRANCHES['comm-release']['platforms']['win32']['slave_platforms'] = ['xp', 'win7']
-BRANCHES['comm-release']['platforms']['linux']['slave_platforms'] = ['fedora']
-BRANCHES['comm-release']['platforms']['linux64']['slave_platforms'] = ['fedora64']
-
 ######## comm-beta
 BRANCHES['comm-beta']['pgo_strategy'] = None
 BRANCHES['comm-beta']['repo_path'] = "releases/comm-beta"
-BRANCHES['comm-beta']['platforms']['linux']['slave_platforms'] = ['fedora']
-BRANCHES['comm-beta']['platforms']['linux64']['slave_platforms'] = ['fedora64']
 
 ######## comm-aurora
 BRANCHES['comm-aurora']['pgo_strategy'] = None
@@ -342,12 +336,15 @@ BRANCHES['comm-esr17']['platforms']['win32']['slave_platforms'] = ['xp', 'win7']
 BRANCHES['comm-esr17']['platforms']['linux']['slave_platforms'] = ['fedora']
 BRANCHES['comm-esr17']['platforms']['linux64']['slave_platforms'] = ['fedora64']
 
+######## comm-esr24
+BRANCHES['comm-esr24']['pgo_strategy'] = None
+BRANCHES['comm-esr24']['repo_path'] = "releases/comm-esr24"
+
 ######## try
 BRANCHES['try-comm-central']['enable_try'] = True
 
-# MERGE DAY: Remove comm-release when TB 24 merges in.
-WIN32_REV3_BRANCHES = ("comm-release", "comm-esr17")
-FEDORA_REV3_BRANCHES = WIN32_REV3_BRANCHES
+WIN32_REV3_BRANCHES = ["comm-esr17"]
+FEDORA_REV3_BRANCHES = ["comm-esr17"]
 
 # Disable Rev3 winxp and win7 machines for all branches apart from try and comm-central
 # for now.

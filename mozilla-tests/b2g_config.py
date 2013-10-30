@@ -5,6 +5,11 @@ from localconfig import SLAVES, TRY_SLAVES, GLOBAL_VARS
 
 import b2g_localconfig
 reload(b2g_localconfig)
+
+import master_common
+reload(master_common)
+from master_common import items_before
+
 import config_common
 reload(config_common)
 
@@ -17,12 +22,23 @@ BRANCHES = {
     'ash': {},
     'cedar': {},
     'cypress': {},
+    'pine': {},
     'fx-team': {},
     'graphics': {},
-    'mozilla-b2g18': {},
-    'mozilla-b2g18_v1_0_1': {},
-    'mozilla-b2g18_v1_1_0_hd': {},
+    'mozilla-b2g18': {
+        'gecko_version': 18,
+        'b2g_version': (1, 1, 0),
+    },
+    'mozilla-b2g18_v1_0_1': {
+        'gecko_version': 18,
+        'b2g_version': (1, 0, 1),
+    },
+    'mozilla-b2g18_v1_1_0_hd': {
+        'gecko_version': 18,
+        'b2g_version': (1, 1, 1),
+    },
     'mozilla-central': {},
+    'mozilla-aurora': {},
     'mozilla-inbound': {},
     'b2g-inbound': {},
     'services-central': {},
@@ -33,6 +49,7 @@ BRANCHES = {
 PLATFORMS = {
     'linux32_gecko': {},
     'linux64_gecko': {},
+    'macosx64_gecko': {},
     'emulator': {},
 }
 
@@ -54,6 +71,17 @@ PLATFORMS['linux64_gecko']['env_name'] = 'linux-perf'
 PLATFORMS['linux64_gecko']['ubuntu64_vm-b2gdt'] = {'name': builder_prefix + "_ubuntu64_vm"}
 PLATFORMS['linux64_gecko']['stage_product'] = 'b2g'
 PLATFORMS['linux64_gecko']['mozharness_config'] = {
+    'mozharness_python': '/tools/buildbot/bin/python',
+    'use_mozharness': True,
+    'hg_bin': 'hg',
+    'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,
+}
+
+PLATFORMS['macosx64_gecko']['slave_platforms'] = ['mountainlion-b2gdt', ]
+PLATFORMS['macosx64_gecko']['env_name'] = 'linux-perf'
+PLATFORMS['macosx64_gecko']['mountainlion-b2gdt'] = {'name': builder_prefix + "_mtnlion"}
+PLATFORMS['macosx64_gecko']['stage_product'] = 'b2g'
+PLATFORMS['macosx64_gecko']['mozharness_config'] = {
     'mozharness_python': '/tools/buildbot/bin/python',
     'use_mozharness': True,
     'hg_bin': 'hg',
@@ -88,6 +116,7 @@ BRANCH_UNITTEST_VARS = {
     'platforms': {
         'linux32_gecko': {},
         'linux64_gecko': {},
+        'macosx64_gecko': {},
         'emulator': {},
     },
 }
@@ -141,6 +170,15 @@ MOCHITEST = [
                      },
      ),
 ]
+
+MOCHITEST_DESKTOP = [
+    ('mochitest-1', {'suite': 'mochitest-plain',
+                     'use_mozharness': True,
+                     'script_path': 'scripts/b2g_desktop_unittest.py',
+                     },
+     ),
+]
+
 REFTEST = [
     ('reftest-1', {'suite': 'reftest',
                    'use_mozharness': True,
@@ -255,6 +293,14 @@ XPCSHELL = [
      ),
 ]
 
+GAIA_INTEGRATION = [(
+    'gaia-integration', {
+        'suite': 'gaia-integration',
+        'use_mozharness': True,
+        'script_path': 'scripts/gaia_integration.py',
+    },
+)]
+
 GAIA_UNITTESTS = [(
     'gaia-unit', {
         'suite': 'gaia-unit',
@@ -294,6 +340,11 @@ PLATFORM_UNITTEST_VARS = {
             'opt_unittest_suites': GAIA_UI[:],
             'debug_unittest_suites': [],
             'suite_config': {
+                'gaia-integration': {
+                    'extra_args': [
+                        '--cfg', 'b2g/gaia_unit_production_config.py',
+                    ],
+                },
                 'gaia-unit': {
                     'extra_args': [
                         '--cfg', 'b2g/gaia_unit_production_config.py',
@@ -302,6 +353,13 @@ PLATFORM_UNITTEST_VARS = {
                 'gaia-ui-test': {
                     'extra_args': [
                         '--cfg', 'marionette/gaia_ui_test_prod_config.py',
+                    ],
+                },
+                'mochitest-1': {
+                    'extra_args': [
+                        '--cfg', 'b2g/desktop_automation_config.py',
+                        '--test-suite', 'mochitest',
+                        '--this-chunk', 1, '--total-chunks', 1,
                     ],
                 },
             },
@@ -319,11 +377,50 @@ PLATFORM_UNITTEST_VARS = {
             'opt_unittest_suites': GAIA_UNITTESTS[:] + GAIA_UI[:],
             'debug_unittest_suites': [],
             'suite_config': {
+                'gaia-integration': {
+                    'extra_args': [
+                        '--cfg', 'b2g/gaia_unit_production_config.py',
+                    ],
+                },
                 'gaia-unit': {
                     'extra_args': [
                         '--cfg', 'b2g/gaia_unit_production_config.py',
                     ],
                 },
+                'gaia-ui-test': {
+                    'extra_args': [
+                        '--cfg', 'marionette/gaia_ui_test_prod_config.py',
+                    ],
+                },
+                'mochitest-1': {
+                    'extra_args': [
+                        '--cfg', 'b2g/desktop_automation_config.py',
+                        '--test-suite', 'mochitest',
+                        '--this-chunk', 1, '--total-chunks', 1,
+                    ],
+                },
+            },
+        },
+    },
+    'macosx64_gecko': {
+        'product_name': 'b2g',
+        'app_name': 'b2g',
+        'brand_name': 'Gecko',
+        'builds_before_reboot': 1,
+        'unittest-env': {
+            "MOZ_NO_REMOTE": '1',
+            "NO_EM_RESTART": '1',
+            "XPCOM_DEBUG_BREAK": 'warn',
+            "MOZ_CRASHREPORTER_NO_REPORT": '1',
+            # for extracting dmg's
+            "PAGER": '/bin/cat',
+        },
+        'enable_opt_unittests': True,
+        'enable_debug_unittests': False,
+        'mountainlion-b2gdt': {
+            'opt_unittest_suites': GAIA_UI[:],
+            'debug_unittest_suites': [],
+            'suite_config': {
                 'gaia-ui-test': {
                     'extra_args': [
                         '--cfg', 'marionette/gaia_ui_test_prod_config.py',
@@ -1020,6 +1117,8 @@ BRANCHES['ash']['branch_name'] = "Ash"
 BRANCHES['ash']['repo_path'] = "projects/ash"
 BRANCHES['ash']['mozharness_repo'] = "http://hg.mozilla.org/users/asasaki_mozilla.com/ash-mozharness"
 BRANCHES['ash']['mozharness_tag'] = "default"
+BRANCHES['ash']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
+BRANCHES['ash']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
 BRANCHES['cedar']['branch_name'] = "Cedar"
 BRANCHES['cedar']['repo_path'] = "projects/cedar"
 BRANCHES['cedar']['mozharness_tag'] = "default"
@@ -1027,6 +1126,17 @@ BRANCHES['cedar']['platforms']['emulator']['fedora-b2g-emulator']['opt_unittest_
 BRANCHES['cedar']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['opt_unittest_suites'] = ALL_UNITTESTS[:] + JSREFTEST
 BRANCHES['cedar']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['debug_unittest_suites'] = ALL_UNITTESTS[:]
 BRANCHES['cedar']['platforms']['emulator']['enable_debug_unittests'] = True
+BRANCHES['cedar']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP + GAIA_INTEGRATION[:]
+BRANCHES['cedar']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP + GAIA_INTEGRATION[:]
+BRANCHES['pine']['branch_name'] = "Pine"
+BRANCHES['pine']['repo_path'] = "projects/pine"
+BRANCHES['pine']['mozharness_tag'] = "default"
+BRANCHES['pine']['platforms']['emulator']['fedora-b2g-emulator']['opt_unittest_suites'] += JSREFTEST
+BRANCHES['pine']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['opt_unittest_suites'] = ALL_UNITTESTS[:] + JSREFTEST
+BRANCHES['pine']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['debug_unittest_suites'] = ALL_UNITTESTS[:]
+BRANCHES['pine']['platforms']['emulator']['enable_debug_unittests'] = True
+BRANCHES['pine']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
+BRANCHES['pine']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
 BRANCHES['cypress']['branch_name'] = "Cypress"
 BRANCHES['cypress']['repo_path'] = "projects/cypress"
 BRANCHES['fx-team']['repo_path'] = "integration/fx-team"
@@ -1038,6 +1148,7 @@ BRANCHES['mozilla-b2g18_v1_0_1']['repo_path'] = "releases/mozilla-b2g18_v1_0_1"
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['repo_path'] = "releases/mozilla-b2g18_v1_1_0_hd"
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['platforms']['emulator']['fedora-b2g-emulator']['opt_unittest_suites'] = MARIONETTE + REFTEST_SANITY
 BRANCHES['mozilla-central']['branch_name'] = "Firefox"
+BRANCHES['mozilla-aurora']['repo_path'] = "releases/mozilla-aurora"
 BRANCHES['mozilla-inbound']['repo_path'] = "integration/mozilla-inbound"
 BRANCHES['b2g-inbound']['branch_name'] = "B2g-Inbound"
 BRANCHES['b2g-inbound']['repo_path'] = "integration/b2g-inbound"
@@ -1051,8 +1162,7 @@ for branch in BRANCHES.keys():
         if 'slave_platforms' not in BRANCHES[branch]['platforms'][platform]:
             BRANCHES[branch]['platforms'][platform]['slave_platforms'] = list(PLATFORMS[platform]['slave_platforms'])
 
-# MERGE DAY NOTE: remove v22 based branches from the list below
-NON_UBUNTU_BRANCHES = ("mozilla-b2g18", "mozilla-b2g18_v1_0_1", "mozilla-b2g18_v1_1_0_hd")
+NON_UBUNTU_BRANCHES = set([name for name, branch in items_before(BRANCHES, 'gecko_version', 22)])
 
 # use either Fedora or Ubuntu for other branches,
 # don't touch cedar
@@ -1082,26 +1192,26 @@ for branch in BRANCHES.keys():
             if 'ubuntu64_vm-b2gdt' in BRANCHES[branch]['platforms']['linux64_gecko']:
                 del BRANCHES[branch]['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']
 
-# Disable linux32_gecko on all branches but cedar
-for branch in set(BRANCHES.keys()) - set(['cedar']):
-    for platform in ('linux32_gecko',):
+# Disable linux32_gecko, macosx64_gecko on all branches but cedar and pine
+for branch in set(BRANCHES.keys()) - set(['cedar', 'pine']):
+    for platform in ('linux32_gecko', 'macosx64_gecko'):
         if platform not in BRANCHES[branch]['platforms']:
             continue
         del BRANCHES[branch]['platforms'][platform]
 
 # emulator hacks.  See bug 885456
-# MERGE DAY This will someday ride trains...
+# MERGE DAY remove branches as gecko26 merges in
 for branch in BRANCHES.keys():
-    if branch in ('mozilla-aurora', 'mozilla-beta', 'mozilla-release',
+    if branch in ('mozilla-beta', 'mozilla-release',
                   'mozilla-esr17', 'mozilla-b2g18_v1_0_0',
                   'mozilla-b2g18_v1_0_1'):
         if 'emulator' in BRANCHES[branch]['platforms']:
             del BRANCHES[branch]['platforms']['emulator']
 
 # linux64_gecko hacks.  See bug 891973
-# MERGE DAY This will someday ride trains...
+# MERGE DAY remove branches as gecko26 merges in
 for branch in BRANCHES.keys():
-    if branch in ('mozilla-aurora', 'mozilla-beta', 'mozilla-release',
+    if branch in ('mozilla-beta', 'mozilla-release',
                   'mozilla-esr17', 'mozilla-b2g18', 'mozilla-b2g18_v1_0_0',
                   'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd'):
         if 'linux64_gecko' in BRANCHES[branch]['platforms']:

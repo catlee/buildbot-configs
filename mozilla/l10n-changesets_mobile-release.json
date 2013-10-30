@@ -8,19 +8,27 @@
     "platforms": ["android"]
   },
   "ca": {
-    "revision": "3e911ef81869",
-    "platforms": ["android"]
-  },
-  "cs": {
-    "revision": "2f69e532839a",
+    "revision": "a0d33038f732",
     "platforms": ["android", "android-multilocale"]
   },
+  "cs": {
+    "revision": "c43590228439",
+    "platforms": ["android", "android-multilocale"]
+  },
+  "cy": {
+    "revision": "53f662270dc2",
+    "platforms": ["android"]
+  },
   "da": {
-    "revision": "deafd6ff9cea",
+    "revision": "25aa02963a08",
     "platforms": ["android", "android-multilocale"]
   },
   "de": {
-    "revision": "1be208831d16",
+    "revision": "9aacdfa0a51f",
+    "platforms": ["android", "android-multilocale"]
+  },
+  "en-GB": {
+    "revision": "f1325ebbc506",
     "platforms": ["android", "android-multilocale"]
   },
   "es-AR": {
@@ -28,15 +36,15 @@
     "platforms": ["android"]
   },
   "es-ES": {
-    "revision": "dbd99601d267",
+    "revision": "5fd0b66ea650",
     "platforms": ["android", "android-multilocale"]
   },
   "fi": {
-    "revision": "30440ea6b154",
+    "revision": "de788d2c7042",
     "platforms": ["android", "android-multilocale"]
   },
   "fr": {
-    "revision": "545d4cb0eb6b",
+    "revision": "b9a297ad9197",
     "platforms": ["android", "android-multilocale"]
   },
   "fy-NL": {
@@ -44,27 +52,27 @@
     "platforms": ["android"]
   },
   "ga-IE": {
-    "revision": "b611f1be732c",
-    "platforms": ["android"]
+    "revision": "65ae03d5a06a",
+    "platforms": ["android", "android-multilocale"]
   },
   "gl": {
     "revision": "6a40cee822a6",
     "platforms": ["android"]
   },
   "hu": {
-    "revision": "2570a031ec8b",
+    "revision": "4e41822b0f94",
     "platforms": ["android", "android-multilocale"]
   },
   "it": {
-    "revision": "0fc29187e982",
+    "revision": "9b96dafc36f5",
     "platforms": ["android", "android-multilocale"]
   },
   "ja": {
-    "revision": "bd9308683edc",
+    "revision": "e1f91be4e810",
     "platforms": ["android", "android-multilocale"]
   },
   "ko": {
-    "revision": "8775c070f9ae",
+    "revision": "6ef86860a079",
     "platforms": ["android", "android-multilocale"]
   },
   "lt": {
@@ -72,11 +80,11 @@
     "platforms": ["android"]
   },
   "nb-NO": {
-    "revision": "aa0a958ff745",
+    "revision": "b96aa2fb7e8b",
     "platforms": ["android", "android-multilocale"]
   },
   "nl": {
-    "revision": "32a04daf1c19",
+    "revision": "d3355df78cbc",
     "platforms": ["android", "android-multilocale"]
   },
   "pa-IN": {
@@ -84,43 +92,51 @@
     "platforms": ["android"]
   },
   "pl": {
-    "revision": "875146139c39",
+    "revision": "e5f6275e7666",
     "platforms": ["android", "android-multilocale"]
   },
   "pt-BR": {
-    "revision": "d0f65f85f2f1",
+    "revision": "430098adb98e",
     "platforms": ["android", "android-multilocale"]
   },
   "pt-PT": {
     "revision": "ac8e6e353a42",
     "platforms": ["android", "android-multilocale"]
   },
+  "ro": {
+    "revision": "cdbf50ab417c",
+    "platforms": ["android", "android-multilocale"]
+  },
   "ru": {
-    "revision": "7bdca228e43d",
+    "revision": "3ab7ab705179",
     "platforms": ["android", "android-multilocale"]
   },
   "sk": {
-    "revision": "0e12bfb7673e",
+    "revision": "24bb640dfc18",
     "platforms": ["android", "android-multilocale"]
   },
   "sl": {
     "revision": "07442918d3aa",
     "platforms": ["android"]
   },
+  "sv-SE": {
+    "revision": "045995f8e114",
+    "platforms": ["android", "android-multilocale"]
+  },
   "tr": {
-    "revision": "849cd4f05c16",
+    "revision": "2d30960be949",
     "platforms": ["android", "android-multilocale"]
   },
   "uk": {
-    "revision": "e54754531f14",
-    "platforms": ["android"]
+    "revision": "df98bb43a412",
+    "platforms": ["android", "android-multilocale"]
   },
   "zh-CN": {
-    "revision": "9821c10b555a",
+    "revision": "6b12f8a81d2c",
     "platforms": ["android", "android-multilocale"]
   },
   "zh-TW": {
-    "revision": "986291294e5b",
+    "revision": "f17d96022796",
     "platforms": ["android", "android-multilocale"]
   }
 }

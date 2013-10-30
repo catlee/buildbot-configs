@@ -30,6 +30,7 @@ else:
         'mozilla-aurora',
         'mozilla-release',
         'mozilla-esr17',
+        'mozilla-esr24',
         'mozilla-b2g18',
         'mozilla-b2g18_v1_0_1',
         'mozilla-b2g18_v1_1_0_hd',
@@ -41,8 +42,8 @@ else:
         'comm-central',
         'comm-beta',
         'comm-aurora',
-        'comm-release',
         'comm-esr17',
+        'comm-esr24',
     ]
 if 'limit_b2g_branches' in master_config:
     ACTIVE_B2G_BRANCHES = [x.encode("utf-8") for x in master_config['limit_b2g_branches']]
@@ -50,6 +51,7 @@ else:
     ACTIVE_B2G_BRANCHES = ACTIVE_B2G_PROJECT_BRANCHES[:]
     ACTIVE_B2G_BRANCHES.extend([
         'mozilla-central',
+        'mozilla-aurora',
         'mozilla-b2g18',
         'mozilla-b2g18_v1_0_1',
         'mozilla-b2g18_v1_1_0_hd',
