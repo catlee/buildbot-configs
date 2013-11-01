@@ -15,11 +15,23 @@ trap 'for cmd in "${atexit[@]}"; do eval $cmd; done' EXIT
 # I have had problems where a whole bunch of parallel HTTP requests caused
 # errors (?), so fetch it once here and pass it in.
 MASTERS_JSON=$(mktemp $WORK/tmp.masters.XXXXXXXXXX)
-wget -q -O$MASTERS_JSON "$MASTERS_JSON_URL" || exit 1
+# Handle local / remote json files
+if [ "${MASTERS_JSON_URL:0:4}" = "http" ]; then
+    wget -q -O$MASTERS_JSON "$MASTERS_JSON_URL" || exit 1
+else
+    cp "${MASTERS_JSON_URL}" $MASTERS_JSON
+fi
 atexit+=("rm $MASTERS_JSON")
 
 FAILFILE=$(mktemp $WORK/tmp.failfile.XXXXXXXXXX)
 atexit+=("rm $FAILFILE")
+
+# Strip off cmdline options
+OPTS=""
+while [ "${1:0:1}" == "-" ]; do
+    OPTS="$OPTS $1"
+    shift
+done
 
 # Construct the set of masters that we will test.
 MASTERS=($(./setup-master.py -l -j "$MASTERS_JSON" --tested-only "$@"))

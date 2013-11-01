@@ -127,12 +127,13 @@ class MasterConfig:
                 self.logFile(create_log_filename)
             return (300, create_log_filename, None)
         if run_coverage:
-            cmd = ['coverage', 'run', '-a', '--branch',
+            cmd = ['coverage', 'run', '-a', '-p', '--branch',
                    buildbot, 'checkconfig']
         else:
             cmd = [buildbot, 'checkconfig']
         rc = subprocess.call(cmd,
-                             cwd=test_dir, stdout=test_log, stderr=subprocess.STDOUT)
+                             cwd=test_dir, stdout=test_log,
+                             stderr=subprocess.STDOUT)
         test_log.close()
         log = open(test_log_filename)
         log_size = os.path.getsize(test_log_filename)
