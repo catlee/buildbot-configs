@@ -34,13 +34,14 @@ while [ "${1:0:1}" == "-" ]; do
 done
 
 # Construct the set of masters that we will test.
-MASTERS=($(./setup-master.py -l -j "$MASTERS_JSON" --tested-only "$@"))
+MASTERS=($(./setup-master.py -l -j "$MASTERS_JSON" --tested-only))
 
 # Fire off all the tests in parallel.
 for MASTER in ${MASTERS[*]}; do (
     OUTFILE=$(mktemp $WORK/tmp.testout.XXXXXXXXXX)
 
-    ./setup-master.py -t -j "$MASTERS_JSON" "$@" $MASTER > $OUTFILE 2>&1 || echo "$MASTER" >> $FAILFILE
+    echo ./setup-master.py $OPTS -t -j "$MASTERS_JSON" "$@" $MASTER > $OUTFILE 2>&1
+    # echo ./setup-master.py $OPTS -t -j "$MASTERS_JSON" "$@" $MASTER > $OUTFILE 2>&1 || echo "$MASTER" >> $FAILFILE
     cat $OUTFILE # Make the output a little less interleaved
     rm $OUTFILE
 ) &
