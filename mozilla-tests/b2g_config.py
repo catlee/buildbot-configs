@@ -12,6 +12,7 @@ from master_common import items_before
 
 import config_common
 reload(config_common)
+from config_common import nested_haskey
 
 GLOBAL_VARS = deepcopy(GLOBAL_VARS)
 
@@ -37,8 +38,11 @@ BRANCHES = {
         'gecko_version': 18,
         'b2g_version': (1, 1, 1),
     },
+    'mozilla-b2g26_v1_2': {
+        'gecko_version': 26,
+        'b2g_version': (1, 2, 0),
+    },
     'mozilla-central': {},
-    'mozilla-aurora': {},
     'mozilla-inbound': {},
     'b2g-inbound': {},
     'services-central': {},
@@ -281,6 +285,7 @@ MARIONETTE = [
     ('marionette-webapi', {'suite': 'marionette-webapi',
                            'use_mozharness': True,
                            'script_path': 'scripts/marionette.py',
+                           'blob_upload': True,
                            },
      ),
 ]
@@ -337,7 +342,7 @@ PLATFORM_UNITTEST_VARS = {
         'enable_opt_unittests': True,
         'enable_debug_unittests': False,
         'ubuntu32_vm-b2gdt': {
-            'opt_unittest_suites': GAIA_UI[:],
+            'opt_unittest_suites': GAIA_UI[:] + MOCHITEST_DESKTOP[:],
             'debug_unittest_suites': [],
             'suite_config': {
                 'gaia-integration': {
@@ -374,7 +379,7 @@ PLATFORM_UNITTEST_VARS = {
         'enable_opt_unittests': True,
         'enable_debug_unittests': False,
         'ubuntu64_vm-b2gdt': {
-            'opt_unittest_suites': GAIA_UNITTESTS[:] + GAIA_UI[:],
+            'opt_unittest_suites': GAIA_UI[:] + MOCHITEST_DESKTOP[:],
             'debug_unittest_suites': [],
             'suite_config': {
                 'gaia-integration': {
@@ -665,7 +670,7 @@ PLATFORM_UNITTEST_VARS = {
             },
         },
         'ubuntu64_vm-b2g-emulator': {
-            'opt_unittest_suites': MOCHITEST + CRASHTEST + XPCSHELL,
+            'opt_unittest_suites': MOCHITEST + CRASHTEST + XPCSHELL + MARIONETTE,
             'debug_unittest_suites': [],
             'suite_config': {
                 'marionette-webapi': {
@@ -1075,16 +1080,6 @@ for branch in BRANCHES.keys():
             else:
                 BRANCHES[branch][key] = deepcopy(value)
 
-#    # Merge in any project branch config for platforms
-#    if branch in ACTIVE_PROJECT_BRANCHES and PROJECT_BRANCHES[branch].has_key('platforms'):
-#        for platform, platform_config in PROJECT_BRANCHES[branch]['platforms'].items():
-#            if platform in PLATFORMS:
-#                for key, value in platform_config.items():
-#                    value = deepcopy(value)
-#                    if isinstance(value, str):
-#                        value = value % locals()
-#                    BRANCHES[branch]['platforms'][platform][key] = value
-
     for platform, platform_config in b2g_localconfig.PLATFORM_VARS.items():
         if platform in BRANCHES[branch]['platforms']:
             for key, value in platform_config.items():
@@ -1117,8 +1112,6 @@ BRANCHES['ash']['branch_name'] = "Ash"
 BRANCHES['ash']['repo_path'] = "projects/ash"
 BRANCHES['ash']['mozharness_repo'] = "http://hg.mozilla.org/users/asasaki_mozilla.com/ash-mozharness"
 BRANCHES['ash']['mozharness_tag'] = "default"
-BRANCHES['ash']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
-BRANCHES['ash']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
 BRANCHES['cedar']['branch_name'] = "Cedar"
 BRANCHES['cedar']['repo_path'] = "projects/cedar"
 BRANCHES['cedar']['mozharness_tag'] = "default"
@@ -1126,8 +1119,8 @@ BRANCHES['cedar']['platforms']['emulator']['fedora-b2g-emulator']['opt_unittest_
 BRANCHES['cedar']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['opt_unittest_suites'] = ALL_UNITTESTS[:] + JSREFTEST
 BRANCHES['cedar']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['debug_unittest_suites'] = ALL_UNITTESTS[:]
 BRANCHES['cedar']['platforms']['emulator']['enable_debug_unittests'] = True
-BRANCHES['cedar']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP + GAIA_INTEGRATION[:]
-BRANCHES['cedar']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP + GAIA_INTEGRATION[:]
+BRANCHES['cedar']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += GAIA_INTEGRATION[:]
+BRANCHES['cedar']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += GAIA_INTEGRATION[:]
 BRANCHES['pine']['branch_name'] = "Pine"
 BRANCHES['pine']['repo_path'] = "projects/pine"
 BRANCHES['pine']['mozharness_tag'] = "default"
@@ -1135,8 +1128,6 @@ BRANCHES['pine']['platforms']['emulator']['fedora-b2g-emulator']['opt_unittest_s
 BRANCHES['pine']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['opt_unittest_suites'] = ALL_UNITTESTS[:] + JSREFTEST
 BRANCHES['pine']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['debug_unittest_suites'] = ALL_UNITTESTS[:]
 BRANCHES['pine']['platforms']['emulator']['enable_debug_unittests'] = True
-BRANCHES['pine']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
-BRANCHES['pine']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP
 BRANCHES['cypress']['branch_name'] = "Cypress"
 BRANCHES['cypress']['repo_path'] = "projects/cypress"
 BRANCHES['fx-team']['repo_path'] = "integration/fx-team"
@@ -1147,11 +1138,12 @@ BRANCHES['mozilla-b2g18']['platforms']['emulator']['fedora-b2g-emulator']['opt_u
 BRANCHES['mozilla-b2g18_v1_0_1']['repo_path'] = "releases/mozilla-b2g18_v1_0_1"
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['repo_path'] = "releases/mozilla-b2g18_v1_1_0_hd"
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['platforms']['emulator']['fedora-b2g-emulator']['opt_unittest_suites'] = MARIONETTE + REFTEST_SANITY
+BRANCHES['mozilla-b2g26_v1_2']['repo_path'] = "releases/mozilla-b2g26_v1_2"
 BRANCHES['mozilla-central']['branch_name'] = "Firefox"
-BRANCHES['mozilla-aurora']['repo_path'] = "releases/mozilla-aurora"
 BRANCHES['mozilla-inbound']['repo_path'] = "integration/mozilla-inbound"
 BRANCHES['b2g-inbound']['branch_name'] = "B2g-Inbound"
 BRANCHES['b2g-inbound']['repo_path'] = "integration/b2g-inbound"
+BRANCHES['b2g-inbound']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += GAIA_UNITTESTS
 BRANCHES['services-central']['repo_path'] = "services/services-central"
 BRANCHES['try']['pgo_strategy'] = "try"
 BRANCHES['try']['enable_try'] = True
@@ -1186,7 +1178,7 @@ for branch in set(BRANCHES.keys()) - set(['cedar']):
 
 # Disable ubuntu64_vm-b2gdt (ie gaia-ui-test) on older branches
 for branch in BRANCHES.keys():
-    if branch in ('mozilla-esr17', 'mozilla-b2g18_v1_0_0',
+    if branch in ('mozilla-esr17', 'mozilla-esr24', 'mozilla-b2g18_v1_0_0',
                   'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd'):
         if 'linux64_gecko' in BRANCHES[branch]['platforms']:
             if 'ubuntu64_vm-b2gdt' in BRANCHES[branch]['platforms']['linux64_gecko']:
@@ -1216,6 +1208,26 @@ for branch in BRANCHES.keys():
                   'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd'):
         if 'linux64_gecko' in BRANCHES[branch]['platforms']:
             del BRANCHES[branch]['platforms']['linux64_gecko']
+
+# marionette-webapi Ubuntu train, see bug 932988
+FEDORA_MARIONETTE_BRANCHES = set([name for name, branch in items_before(BRANCHES, 'gecko_version', 28)])
+for b in BRANCHES.keys():
+    slave_p = None
+    branch = BRANCHES[b]
+    # Figure out which slave platform to delete
+    if b in FEDORA_MARIONETTE_BRANCHES:
+        if nested_haskey(branch['platforms'], 'emulator', 'ubuntu64_vm-b2g-emulator'):
+            slave_p = branch['platforms']['emulator']['ubuntu64_vm-b2g-emulator']
+    else:
+        if nested_haskey(branch['platforms'], 'emulator', 'fedora-b2g-emulator'):
+            slave_p = branch['platforms']['emulator']['fedora-b2g-emulator']
+    if slave_p:
+        for i in slave_p['opt_unittest_suites']:
+            if i[0] == "marionette-webapi":
+                slave_p['opt_unittest_suites'].remove(i)
+        for i in slave_p['debug_unittest_suites']:
+            if i[0] == "marionette-webapi":
+                slave_p['opt_unittest_suites'].remove(i)
 
 
 if __name__ == "__main__":

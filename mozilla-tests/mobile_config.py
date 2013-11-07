@@ -40,6 +40,9 @@ BRANCHES = {
         'platforms': {},
         'lock_platforms': True,
     },
+    'mozilla-b2g26_v1_2': {
+        'gecko_version': 26,
+    },
     'mozilla-b2g18': {
         'datazilla_url': None,
         'gecko_version': 18,
@@ -90,7 +93,7 @@ PLATFORMS['android']['stage_product'] = 'mobile'
 PLATFORMS['android']['mozharness_config'] = {
     'mozharness_python': '/tools/buildbot/bin/python',
     'hg_bin': 'hg',
-    'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,
+    'reboot_command': None,
     'talos_script_maxtime': 10800,
 }
 
@@ -319,6 +322,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-1'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -328,6 +332,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-2'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -337,6 +342,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-3'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -346,6 +352,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-4'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -355,6 +362,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-5'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -364,6 +372,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-6'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -373,6 +382,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-7'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -382,6 +392,7 @@ ANDROID_MOZHARNESS_MOCHITEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-8'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -394,6 +405,7 @@ ANDROID_MOZHARNESS_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-1'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -403,6 +415,7 @@ ANDROID_MOZHARNESS_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-2'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -412,6 +425,7 @@ ANDROID_MOZHARNESS_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-3'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -421,6 +435,7 @@ ANDROID_MOZHARNESS_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-4'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -432,6 +447,7 @@ ANDROID_MOZHARNESS_CRASHTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--crashtest-suite', 'crashtest'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -444,6 +460,7 @@ ANDROID_MOZHARNESS_JSREFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--jsreftest-suite', 'jsreftest-1'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -453,6 +470,7 @@ ANDROID_MOZHARNESS_JSREFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--jsreftest-suite', 'jsreftest-2'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -462,6 +480,7 @@ ANDROID_MOZHARNESS_JSREFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--jsreftest-suite', 'jsreftest-3'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -474,6 +493,7 @@ ANDROID_MOZHARNESS_XPCSHELL = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--xpcshell-suite', 'xpcshell'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -486,6 +506,7 @@ ANDROID_MOZHARNESS_MOCHITESTGL = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--mochitest-suite', 'mochitest-gl'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -498,6 +519,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-1'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -507,6 +529,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-2'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -516,6 +539,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-3'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -525,6 +549,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-4'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -534,6 +559,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-5'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -543,6 +569,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-6'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -552,6 +579,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-7'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -561,6 +589,7 @@ ANDROID_MOZHARNESS_PLAIN_REFTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--reftest-suite', 'reftest-8'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -573,6 +602,7 @@ ANDROID_MOZHARNESS_JITTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--jittest-suite', 'jittest'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -585,6 +615,7 @@ ANDROID_MOZHARNESS_CPPUNITTEST = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--cppunittest-suite', 'cppunittest'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -597,6 +628,7 @@ ANDROID_MOZHARNESS_PLAIN_ROBOCOP = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--robocop-suite', 'robocop-1'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -606,6 +638,7 @@ ANDROID_MOZHARNESS_PLAIN_ROBOCOP = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--robocop-suite', 'robocop-2'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -615,6 +648,7 @@ ANDROID_MOZHARNESS_PLAIN_ROBOCOP = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--robocop-suite', 'robocop-3'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -624,6 +658,7 @@ ANDROID_MOZHARNESS_PLAIN_ROBOCOP = [
       'use_mozharness': True,
       'script_path': 'scripts/android_panda.py',
       'extra_args': ['--cfg', 'android/android_panda_releng.py', '--robocop-suite', 'robocop-4'],
+      'blob_upload': True,
       'timeout': 2400,
       'script_maxtime': 14400,
       },
@@ -746,25 +781,10 @@ ANDROID_X86_MOZHARNESS_DICT = [
             '--cfg', 'android/androidx86.py',
             '--test-suite', 'mochitest-1',
             '--test-suite', 'mochitest-2',
-            '--test-suite', 'mochitest-4',
-            '--test-suite', 'xpcshell',
+            '--test-suite', 'mochitest-gl',
+            '--test-suite', 'jsreftest',
         ],
-        'trychooser_suites': ['mochitest-1', 'mochitest-2', 'mochitest-4', 'xpcshell'],
-        'timeout': 2400,
-        'script_maxtime': 14400,
-        },
-    ),
-    ('androidx86-set-2', {
-        'use_mozharness': True,
-        'script_path': 'scripts/androidx86_emulator_unittest.py',
-        'extra_args': [
-            '--cfg', 'android/androidx86.py',
-            '--test-suite', 'mochitest-5',
-            '--test-suite', 'mochitest-6',
-            '--test-suite', 'mochitest-7',
-            '--test-suite', 'mochitest-8',
-        ],
-        'trychooser_suites': ['mochitest-5', 'mochitest-6', 'mochitest-7', 'mochitest-8'],
+        'trychooser_suites': ['mochitest-1', 'mochitest-2', 'mochitest-gl', 'jsreftest'],
         'timeout': 2400,
         'script_maxtime': 14400,
         },
@@ -772,7 +792,7 @@ ANDROID_X86_MOZHARNESS_DICT = [
 ]
 
 ANDROID_X86_NOT_GREEN_DICT = [
-    ('androidx86-set-3', {
+    ('androidx86-set-2', {
         'use_mozharness': True,
         'script_path': 'scripts/androidx86_emulator_unittest.py',
         'extra_args': [
@@ -780,83 +800,24 @@ ANDROID_X86_NOT_GREEN_DICT = [
             '--test-suite', 'reftest-1',
             '--test-suite', 'reftest-2',
             '--test-suite', 'reftest-3',
-            '--test-suite', 'reftest-4',
+            '--test-suite', 'crashtest',
         ],
-        'trychooser_suites': ['plain-reftest-1', 'plain-reftest-2', 'plain-reftest-3', 'plain-reftest-4'],
+        'trychooser_suites': ['plain-reftest-1', 'plain-reftest-2', 'plain-reftest-3', 'crashtest'],
         'timeout': 2400,
         'script_maxtime': 14400,
         },
     ),
-    ('androidx86-set-4', {
+    ('androidx86-set-3', {
         'use_mozharness': True,
         'script_path': 'scripts/androidx86_emulator_unittest.py',
         'extra_args': [
             '--cfg', 'android/androidx86.py',
-            '--test-suite', 'reftest-5',
-            '--test-suite', 'reftest-6',
-            '--test-suite', 'reftest-7',
-            '--test-suite', 'reftest-8',
-        ],
-        'trychooser_suites': ['plain-reftest-5', 'plain-reftest-6', 'plain-reftest-7', 'plain-reftest-8'],
-        'timeout': 2400,
-        'script_maxtime': 14400,
-        },
-    ),
-    ('androidx86-set-5', {
-        'use_mozharness': True,
-        'script_path': 'scripts/androidx86_emulator_unittest.py',
-        'extra_args': [
-            '--cfg', 'android/androidx86.py',
-            '--test-suite', 'reftest-9',
-            '--test-suite', 'reftest-10',
-            '--test-suite', 'jsreftest-1',
-            '--test-suite', 'jsreftest-2',
-        ],
-        'trychooser_suites': ['plain-reftest-9', 'plain-reftest-10', 'jsreftest-1', 'jsreftest-2'],
-        'timeout': 2400,
-        'script_maxtime': 14400,
-        },
-    ),
-    ('androidx86-set-6', {
-        'use_mozharness': True,
-        'script_path': 'scripts/androidx86_emulator_unittest.py',
-        'extra_args': [
-            '--cfg', 'android/androidx86.py',
-            '--test-suite', 'jsreftest-3',
-            '--test-suite', 'jsreftest-4',
-            '--test-suite', 'jsreftest-5',
-            '--test-suite', 'jsreftest-6',
-        ],
-        'trychooser_suites': ['jsreftest-3', 'jsreftest-4', 'jsreftest-5', 'jsreftest-6'],
-        'timeout': 2400,
-        'script_maxtime': 14400,
-        },
-    ),
-    ('androidx86-set-7', {
-        'use_mozharness': True,
-        'script_path': 'scripts/androidx86_emulator_unittest.py',
-        'extra_args': [
-            '--cfg', 'android/androidx86.py',
-            '--test-suite', 'crashtest-1',
-            '--test-suite', 'crashtest-2',
-            '--test-suite', 'crashtest-3',
-        ],
-        'trychooser_suites': ['crashtest-1', 'crashtest-2', 'crashtest-3'],
-        'timeout': 2400,
-        'script_maxtime': 14400,
-        },
-    ),
-    ('androidx86-set-8', {
-        'use_mozharness': True,
-        'script_path': 'scripts/androidx86_emulator_unittest.py',
-        'extra_args': [
-            '--cfg', 'android/androidx86.py',
-            '--test-suite', 'mochitest-3',
-            '--test-suite', 'mochitest-gl',
             '--test-suite', 'robocop-1',
             '--test-suite', 'robocop-2',
+            '--test-suite', 'robocop-3',
+            '--test-suite', 'xpcshell',
         ],
-        'trychooser_suites': ['mochitest-3', 'mochitest-gl', 'robocop-1', 'robocop-2'],
+        'trychooser_suites': ['robocop-1', 'robocop-2', 'robocop-3', 'xpcshell'],
         'timeout': 2400,
         'script_maxtime': 14400,
         },
@@ -1024,28 +985,22 @@ BRANCHES['mozilla-beta']['release_tests'] = 1
 BRANCHES['mozilla-beta']['repo_path'] = "releases/mozilla-beta"
 BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
 BRANCHES['mozilla-beta']['pgo_platforms'] = []
-# MERGE DAY: Remove this line when FF26 merges in
-BRANCHES['mozilla-beta']['platforms']['android-x86']['enable_opt_unittests'] = False
-BRANCHES['mozilla-beta']['remote-tsvg_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-beta']['remote-tsvgx_tests'] = (0, False, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-beta']['remote-tcanvasmark_tests'] = (0, False, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-beta']['remote-ts_tests'] = (1, True, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-BRANCHES['mozilla-beta']['remote-tspaint_tests'] = (0, False, TALOS_REMOTE_FENNEC_OPTS, ANDROID)
-# MERGE DAY: end
 
 ######### mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = "releases/mozilla-aurora"
 BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
 BRANCHES['mozilla-aurora']['pgo_platforms'] = []
-# MERGE DAY: Remove this line when FF26 merges in
-BRANCHES['mozilla-aurora']['platforms']['android-x86']['enable_opt_unittests'] = False
-# MERGE DAY: end
 
 ######### mozilla-esr17
 BRANCHES['mozilla-esr17']['release_tests'] = 5
 BRANCHES['mozilla-esr17']['repo_path'] = "releases/mozilla-esr17"
 BRANCHES['mozilla-esr17']['pgo_strategy'] = 'per-checkin'
 BRANCHES['mozilla-esr17']['pgo_platforms'] = []
+
+######### mozilla-b2g26_v1_2
+BRANCHES['mozilla-b2g26_v1_2']['repo_path'] = "releases/mozilla-b2g26_v1_2"
+BRANCHES['mozilla-b2g26_v1_2']['pgo_strategy'] = 'per-checkin'
+BRANCHES['mozilla-b2g26_v1_2']['pgo_platforms'] = []
 
 ######### mozilla-b2g18
 BRANCHES['mozilla-b2g18']['release_tests'] = 1

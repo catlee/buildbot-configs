@@ -23,10 +23,16 @@ SLAVES = {
             226,241,268,275,289,291,292,301,307,349,368]]), # decommissioned tegras
     'panda_android': dict(
         [('panda-%04i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
-            for x in range(22,257) + range(270,306) + range(320,874) + range(885,887)]
+            for x in range(22,257) + range(270,306) + range(320,874) + range(885,910)]
     ),
-    'ubuntu32_vm': dict([("tst-linux32-ec2-%03i" % x, {}) for x in range(1, 900)]),
-    'ubuntu64_vm': dict([("tst-linux64-ec2-%03i" % x, {}) for x in range(1, 900)]),
+    'ubuntu32_vm': dict(
+        [("tst-linux32-ec2-%03i" % x, {}) for x in range(1, 900)] +
+        [("tst-linux32-spot-%03i" % x, {}) for x in range(1, 900)]
+    ),
+    'ubuntu64_vm': dict(
+        [("tst-linux64-ec2-%03i" % x, {}) for x in range(1, 900)] +
+        [("tst-linux64-spot-%03i" % x, {}) for x in range(1, 900)]
+    ),
     'ubuntu32_hw': dict([("talos-linux32-ix-%03i" % x, {}) for x in range(1, 56)]),
     'ubuntu64_hw': dict([("talos-linux64-ix-%03i" % x, {}) for x in range(1, 56)]),
     'win64_vm': dict([('tst-w64-ec2-%03i' % x, {}) for x in range(100)]),
@@ -92,6 +98,10 @@ BRANCHES = {
     'mozilla-b2g18_v1_1_0_hd': {
         'tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
         'mobile_tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
+    },
+    'mozilla-b2g26_v1_2': {
+        'tinderbox_tree': 'Mozilla-B2g26-v1.2',
+        'mobile_tinderbox_tree': 'Mozilla-B2g26-v1.2',
     },
     'mozilla-beta': {
         'tinderbox_tree': 'Mozilla-Beta',
