@@ -40,8 +40,7 @@ MASTERS=($(./setup-master.py -l -j "$MASTERS_JSON" --tested-only))
 for MASTER in ${MASTERS[*]}; do (
     OUTFILE=$(mktemp $WORK/tmp.testout.XXXXXXXXXX)
 
-    echo ./setup-master.py $OPTS -t -j "$MASTERS_JSON" "$@" $MASTER > $OUTFILE 2>&1
-    # echo ./setup-master.py $OPTS -t -j "$MASTERS_JSON" "$@" $MASTER > $OUTFILE 2>&1 || echo "$MASTER" >> $FAILFILE
+    ./setup-master.py $OPTS -t -j "$MASTERS_JSON" $MASTER > $OUTFILE 2>&1 || echo "$MASTER" >> $FAILFILE
     cat $OUTFILE # Make the output a little less interleaved
     rm $OUTFILE
 ) &

@@ -394,7 +394,7 @@ if __name__ == "__main__":
     elif options.test:
         failing_masters = []
         # Test the masters, once normally and onces as a universal master
-        for m in filter_masters(master_list):
+        for m in masters:
             rc, logfile, dir = m.testMaster(options.buildbot,
                                             error_logs=options.error_logs,
                                             run_coverage=options.coverage)
