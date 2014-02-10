@@ -680,6 +680,7 @@ PLATFORM_VARS = {
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
             # --target name below
             'extra_args': ['--target', 'nexus-4', '--config', 'b2g/releng-private-updates.py',
+                           '--b2g-config-dir', 'mako',
                            '--gaia-languages-file', 'locales/languages_dev.json',
                            '--gecko-languages-file', 'gecko/b2g/locales/all-locales'],
             'reboot_command': ['bash', '-c', 'sudo reboot; sleep 600'],
