@@ -598,6 +598,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'inari_eng': {
         'mozharness_config': {
@@ -613,6 +615,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'leo': {
         'mozharness_config': {
@@ -628,6 +632,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'leo_eng': {
         'mozharness_config': {
@@ -643,6 +649,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'hamachi': {
         'mozharness_config': {
@@ -658,6 +666,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'hamachi_eng': {
         'mozharness_config': {
@@ -673,6 +683,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'nexus-4': {
         'mozharness_config': {
@@ -692,6 +704,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'helix': {
         'mozharness_config': {
@@ -707,6 +721,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'helix_eng': {
         'mozharness_config': {
@@ -722,6 +738,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
     'emulator': {
         'mozharness_config': {
@@ -802,6 +820,8 @@ PLATFORM_VARS = {
         'product_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
         'slaves': SLAVES['mock'],
+        'enable_periodic': True,
+        'enable_dep': False,
     },
 }
 
