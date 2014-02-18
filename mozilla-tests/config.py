@@ -533,6 +533,14 @@ JITTEST = [
         'script_maxtime': 7200,
     }),
 ]
+MOZBASE = [
+    ('mozbase', {
+        'use_mozharness': True,
+        'script_path': 'scripts/desktop_unittest.py',
+        'extra_args': ['--mozbase-suite', 'mozbase'],
+        'script_maxtime': 7200,
+    }),
+]
 
 WEB_PLATFORM_TESTS = [
     ('web-platform-tests', {
@@ -626,6 +634,9 @@ PLATFORM_UNITTEST_VARS = {
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
                 },
+                'mozbase': {
+                    'config_files': ["unittests/linux_unittest.py"],
+                },
             },
         },
         'ubuntu32_vm': {
@@ -694,6 +705,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
+                },
+                'mozbase': {
+                    'config_files': ["unittests/linux_unittest.py"],
                 },
             },
         },
@@ -770,6 +784,9 @@ PLATFORM_UNITTEST_VARS = {
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
                 },
+                'mozbase': {
+                    'config_files': ["unittests/linux_unittest.py"],
+                },
             },
         },
         'ubuntu64_vm': {
@@ -841,6 +858,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
+                },
+                'mozbase': {
+                    'config_files': ["unittests/linux_unittest.py"],
                 },
             },
         },
@@ -920,6 +940,9 @@ PLATFORM_UNITTEST_VARS = {
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
                 },
+                'mozbase': {
+                    'config_files': ["unittests/linux_unittest.py"],
+                },
             },
         },
     },
@@ -997,6 +1020,9 @@ PLATFORM_UNITTEST_VARS = {
                 'jittest': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
+                'mozbase': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
             },
         },
         'win7-ix': {
@@ -1061,6 +1087,9 @@ PLATFORM_UNITTEST_VARS = {
                     'config_files': ["marionette/windows_config.py"],
                 },
                 'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
+                'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
             },
@@ -1130,6 +1159,9 @@ PLATFORM_UNITTEST_VARS = {
                     'config_files': ["marionette/windows_config.py"],
                 },
                 'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
+                'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
             },
@@ -1212,6 +1244,9 @@ PLATFORM_UNITTEST_VARS = {
                 'jittest': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
+                'mozbase': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
             },
         },
         'win64_vm': {
@@ -1279,6 +1314,9 @@ PLATFORM_UNITTEST_VARS = {
                     'config_files': ["marionette/windows_config.py"],
                 },
                 'jittest': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
+                'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
             },
@@ -1358,6 +1396,9 @@ PLATFORM_UNITTEST_VARS = {
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
                 },
+                'mozbase': {
+                    'config_files': ["unittests/mac_unittest.py"],
+                },
             },
         },
         'mountainlion': {
@@ -1427,6 +1468,9 @@ PLATFORM_UNITTEST_VARS = {
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
                 },
+                'mozbase': {
+                    'config_files': ["unittests/mac_unittest.py"],
+                },
             },
         },
         'mavericks': {
@@ -1495,6 +1539,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'web-platform-tests': {
                     'config_files': ["web_platform_tests/prod_config.py"],
+                },
+                'mozbase': {
+                    'config_files': ["unittests/mac_unittest.py"],
                 },
             },
         },
@@ -1772,6 +1819,18 @@ for platform in PLATFORMS.keys():
 for name, branch in items_at_least(BRANCHES, 'gecko_version', 28):
     if 'win32' in branch['platforms'] and 'win8' in branch['platforms']['win32']:
         branch['platforms']['win32']['win8']['opt_unittest_suites'] += METRO[:]
+
+# Enable mozbase unit tests on cedar
+# https://bugzilla.mozilla.org/show_bug.cgi?id=971687
+for platform in PLATFORMS.keys():
+    if platform not in BRANCHES['cedar']['platforms']:
+        continue
+    for slave_platform in PLATFORMS[platform]['slave_platforms']:
+        if 'fedora' in slave_platform:
+            continue  # Don't use rev3 mini's with this stuff
+        if slave_platform in BRANCHES['cedar']['platforms'][platform]:
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['opt_unittest_suites'] += MOZBASE[:]
+            BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOZBASE[:]
 
 NON_UBUNTU_BRANCHES = set([name for name, branch in items_before(BRANCHES, 'gecko_version', 21)])
 
