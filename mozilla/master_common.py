@@ -179,8 +179,6 @@ def prioritizeBuilders(buildmaster, builders):
 
     # For each set of slaves, create a list of (priority, builder) for that set
     # of slaves
-    # Look at the jacuzzis
-    # TODO: Don't need to do this for test masters
     from buildbotcustom.misc import J
     builders_by_slaves = {}
     for b in builders:
