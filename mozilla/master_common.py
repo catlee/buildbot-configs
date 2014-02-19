@@ -180,13 +180,17 @@ def prioritizeBuilders(buildmaster, builders):
     # For each set of slaves, create a list of (priority, builder) for that set
     # of slaves
     # Look at the jacuzzis
+    # TODO: Don't need to do this for test masters
     from buildbotcustom.misc import J
     builders_by_slaves = {}
     for b in builders:
-        #slaves = frozenset(s.slave.slavename for s in b[1].slaves if s.slave.slavename in avail_slaves)
         slaves = [s for s in b[1].slaves if s.slave.slavename in avail_slaves]
-        # Filter through the bubbles....
-        slaves = J.get_slaves(b[1].name, slaves)
+        # Filter the available slaves through the jacuzzi bubbles..
+        try:
+            slaves = J.get_slaves(b[1].name, slaves)
+        except Exception:
+            twlog.err("handled exception talking to jacuzzi; trying to carry on")
+
         slaves = frozenset(s.slave.slavename for s in slaves)
         if slaves:
             builders_by_slaves.setdefault(slaves, []).append(b)
