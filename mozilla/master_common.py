@@ -185,11 +185,12 @@ def prioritizeBuilders(buildmaster, builders):
     builders_by_slaves = {}
     for b in builders:
         slaves = [s for s in b[1].slaves if s.slave.slavename in avail_slaves]
-        # Filter the available slaves through the jacuzzi bubbles..
-        try:
-            slaves = J.get_slaves(b[1].name, slaves)
-        except Exception:
-            twlog.err("handled exception talking to jacuzzi; trying to carry on")
+        if getattr(prioritizeBuilders, 'check_jacuzzis', False):
+            try:
+                # Filter the available slaves through the jacuzzi bubbles..
+                slaves = J.get_slaves(b[1].name, slaves)
+            except Exception:
+                twlog.err("handled exception talking to jacuzzi; trying to carry on")
 
         slaves = frozenset(s.slave.slavename for s in slaves)
         if slaves:
