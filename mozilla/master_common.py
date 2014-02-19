@@ -183,13 +183,15 @@ def prioritizeBuilders(buildmaster, builders):
     from buildbotcustom.misc import J
     builders_by_slaves = {}
     for b in builders:
-        slaves = frozenset(s.slave.slavename for s in b[1].slaves if s.slave.slavename in avail_slaves)
+        #slaves = frozenset(s.slave.slavename for s in b[1].slaves if s.slave.slavename in avail_slaves)
+        slaves = [s for s in b[1].slaves if s.slave.slavename in avail_slaves]
         # Filter through the bubbles....
-        slaves = J.get_slaves(b, slaves)
+        slaves = J.get_slaves(b[1].name, slaves)
+        slaves = frozenset(s.slave.slavename for s in slaves)
         if slaves:
             builders_by_slaves.setdefault(slaves, []).append(b)
         else:
-            log('removed builder %s with no allocated slaves available' % b.name)
+            log('removed builder %s with no allocated slaves available' % b[1].name)
     log("assigned into %i slave set(s)", len(builders_by_slaves))
 
     # Find the set of builders with the highest priority for each set of slaves
