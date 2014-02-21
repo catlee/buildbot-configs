@@ -179,6 +179,11 @@ def prioritizeBuilders(buildmaster, builders):
 
     # For each set of slaves, create a list of (priority, builder) for that set
     # of slaves
+    # If we're checking the jacuzzi allocations, then limit the available
+    # slaves by whatever the jacuzzi allocation is.
+    # If we don't incorporate the jacuzzi allocations here, we could end up
+    # with lower priority builders being discarded below which have available
+    # slaves attached and allocated.
     from buildbotcustom.misc import J
     builders_by_slaves = {}
     for b in builders:
