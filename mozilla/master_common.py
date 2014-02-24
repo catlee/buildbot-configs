@@ -195,8 +195,8 @@ def prioritizeBuilders(buildmaster, builders):
             except Exception:
                 twlog.err("handled exception talking to jacuzzi; trying to carry on")
 
-        slaves = frozenset(s.slave.slavename for s in slaves)
         if slaves:
+            slaves = frozenset(s.slave.slavename for s in slaves)
             builders_by_slaves.setdefault(slaves, []).append(b)
         else:
             log('removed builder %s with no allocated slaves available' % b[1].name)
