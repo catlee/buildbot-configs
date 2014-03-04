@@ -2,7 +2,7 @@ from copy import deepcopy
 
 from localconfig import \
     GLOBAL_VARS, MAC_LION_MINIS, \
-    LINUX_VMS, LINUX_IXS, LINUX64_IXS, WIN32_IXS, WIN64_IXS, \
+    LINUX_IXS, LINUX64_IXS, WIN32_IXS, WIN64_IXS, \
     WIN64_IXS, MOCK_DL120G7, \
     TRY_LINUX, TRY_LINUX_IXS, TRY_LINUX64, TRY_LINUX64_IXS, \
     TRY_MAC64, TRY_WIN32_IXS, TRY_WIN64_IXS, TRY_MOCK_DL120G7, \
@@ -12,7 +12,7 @@ from localconfig import \
 GLOBAL_VARS = deepcopy(GLOBAL_VARS)
 
 SLAVES = {
-    'linux':            LINUX_VMS + LINUX_IXS,
+    'linux':            LINUX_IXS,
     'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
@@ -33,6 +33,7 @@ TRY_SLAVES = {
 }
 
 # Local overrides for default values
+GLOBAL_VARS['balrog_username'] = 'tbirdbld'
 GLOBAL_VARS['download_base_url'] = 'http://ftp.mozilla.org/pub/mozilla.org/thunderbird'
 GLOBAL_VARS['talos_masters'] = []
 # List of unittest masters to notify of new builds to test,

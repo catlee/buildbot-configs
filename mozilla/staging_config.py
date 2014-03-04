@@ -15,6 +15,7 @@ STAGING_SLAVES = {
     'win64-rev2':       WIN64_REV2,
     'macosx64-lion':    MAC_LION_MINIS,
     'mock':             MOCK_DL120G7 + LINUX64_EC2,
+    'mock-hw':          MOCK_DL120G7,
 }
 
 SLAVES = deepcopy(STAGING_SLAVES)
@@ -40,6 +41,7 @@ GLOBAL_VARS = {
     'mobile_download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/mobile',
     'graph_server': 'graphs.allizom.org',
     'balrog_api_root': 'https://aus4-admin-dev.allizom.org',
+    'balrog_username': 'stage-ffxbld',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://clobberer-stage.pvt.build.mozilla.org/index.php',
     'disable_tinderbox_mail': True,
@@ -47,13 +49,13 @@ GLOBAL_VARS = {
     # and if a failure to notify the talos master should result in a warning,
     # and sendchange retry count before give up
     'talos_masters': [
-        ('dev-master01.build.scl1.mozilla.com:9901', True, 1),
+        ('dev-master1.srv.releng.scl3.mozilla.com:9901', True, 1),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
     # and sendchange retry count before give up
     'unittest_masters': [
-        ('dev-master01.build.scl1.mozilla.com:9901', True, 1),
+        ('dev-master1.srv.releng.scl3.mozilla.com:9901', True, 1),
         ],
     'xulrunner_tinderbox_tree': 'MozillaTest',
     'weekly_tinderbox_tree': 'MozillaTest',

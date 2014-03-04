@@ -1,5 +1,4 @@
 MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(1,16) + range(41,87) + [88] + range(93,95)]
-LINUX_VMS      = ['bld-centos5-32-vmw-%03i' % x for x in range(1,7)]
 LINUX_IXS      = []
 LINUX64_IXS    = []
 WIN32_IXS      = []
@@ -15,13 +14,14 @@ if set(WIN64_REV2).intersection(set(WIN64_IXS)):
     raise Exception('WIN64_REV2 and WIN64_IXS overlap')
 
 SLAVES = {
-    'linux':            LINUX_VMS + LINUX_IXS,
+    'linux':            LINUX_IXS,
     'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
     'win64-rev2':       WIN64_REV2,
     'macosx64-lion':    MAC_LION_MINIS,
     'mock':             MOCK_DL120G7 + LINUX64_EC2 + MOCK_IX,
+    'mock-hw':          MOCK_DL120G7 + MOCK_IX,
 }
 
 TRY_LINUX      = []
@@ -65,6 +65,7 @@ GLOBAL_VARS = {
     'mobile_download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/mobile',
     'graph_server': 'graphs.mozilla.org',
     'balrog_api_root': 'https://aus4-admin.mozilla.org',
+    'balrog_username': 'ffxbld',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://clobberer.pvt.build.mozilla.org/index.php',
     'disable_tinderbox_mail': True,

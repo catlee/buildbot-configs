@@ -139,10 +139,28 @@ PROJECT_BRANCHES = {
         'create_mobile_snippet': True,
         'enable_l10n': True,
         'enable_l10n_onchange': False,
-        'l10n_platforms': ['linux', 'linux64', 'win32', 'macosx64'],
+        'l10n_platforms': ['linux', 'linux64'],
         'l10n_tree': 'fxcentral',
         'l10n_repo_path': 'l10n-central',
         'enUS_binaryURL': '/nightly/latest-birch',
+        'enable_valgrind': False,
+        'branch_projects': [],
+        'enable_nightly': False,
+        'lock_platforms': True,
+        'platforms': {
+            'linux': {
+                'enable_opt_unittests': False,
+                'enable_debug_unittests': False,
+                'talos_slave_platforms': [],
+            },
+            'linux-debug': {},
+            'linux64': {
+                'enable_opt_unittests': False,
+                'enable_debug_unittests': False,
+                'talos_slave_platforms': [],
+            },
+            'linux64-debug': {},
+        }
     },
     'cedar': {
         'mozharness_tag': 'default',
@@ -189,6 +207,9 @@ PROJECT_BRANCHES = {
     'fig': {},
     'gum': {},
     'holly': {
+        # Mimic mozilla-aurora
+        'gecko_version': 29,
+        'branch_projects': [],
         'pgo_strategy': 'periodic',
         'enable_nightly': True,
         'create_snippet': True,

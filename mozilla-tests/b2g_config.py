@@ -21,7 +21,8 @@ GLOBAL_VARS.update(b2g_localconfig.GLOBAL_VARS.copy())
 
 BRANCHES = {
     'ash': {},
-    'birch': {},
+    # Not needed right now, see bug 977420
+    #'birch': {},
     'cedar': {},
     'cypress': {},
     'elm': {},
@@ -59,6 +60,7 @@ PLATFORMS = {
     'linux64_gecko': {},
     'macosx64_gecko': {},
     'emulator': {},
+    'emulator-jb': {},
 }
 
 builder_prefix = "b2g"
@@ -109,6 +111,17 @@ PLATFORMS['emulator']['mozharness_config'] = {
     'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,
 }
 
+PLATFORMS['emulator-jb']['slave_platforms'] = ['ubuntu64_vm-b2g-emulator-jb']
+PLATFORMS['emulator-jb']['env_name'] = 'linux-perf'
+PLATFORMS['emulator-jb']['ubuntu64_vm-b2g-emulator-jb'] = {'name': "b2g_emulator-jb_vm"}
+PLATFORMS['emulator-jb']['stage_product'] = 'b2g'
+PLATFORMS['emulator-jb']['mozharness_config'] = {
+    'mozharness_python': '/tools/buildbot/bin/python',
+    'use_mozharness': True,
+    'hg_bin': 'hg',
+    'reboot_command': ['/tools/buildbot/bin/python'] + MOZHARNESS_REBOOT_CMD,
+}
+
 # Lets be explicit instead of magical.
 for platform, platform_config in PLATFORMS.items():
     for slave_platform in platform_config['slave_platforms']:
@@ -126,6 +139,7 @@ BRANCH_UNITTEST_VARS = {
         'linux64_gecko': {},
         'macosx64_gecko': {},
         'emulator': {},
+        'emulator-jb': {},
     },
 }
 
@@ -185,6 +199,15 @@ MOCHITEST = [
                      'script_path': 'scripts/b2g_emulator_unittest.py',
                      'blob_upload': True,
                      },
+     ),
+]
+
+MOCHITEST_EMULATOR_JB = [
+    ('mochitest-1', {'suite': 'mochitest-plain',
+                           'use_mozharness': True,
+                           'script_path': 'scripts/b2g_emulator_unittest.py',
+                           'blob_upload': True,
+                           },
      ),
 ]
 
@@ -886,7 +909,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '1', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'crashtest-2': {
@@ -894,7 +916,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '2', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'crashtest-3': {
@@ -902,13 +923,11 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '3', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'marionette-webapi': {
                     'extra_args': [
                         "--cfg", "marionette/automation_emulator_config.py",
-                        '--no-update',
                     ],
                 },
                 'mochitest-1': {
@@ -916,7 +935,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '1', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-2': {
@@ -924,7 +942,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '2', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-3': {
@@ -932,7 +949,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '3', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-4': {
@@ -940,7 +956,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '4', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-5': {
@@ -948,7 +963,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '5', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-6': {
@@ -956,7 +970,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '6', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-7': {
@@ -964,7 +977,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '7', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-8': {
@@ -972,7 +984,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '8', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-9': {
@@ -980,7 +991,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '9', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'reftest': {
@@ -988,7 +998,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--test-manifest', 'tests/layout/reftests/reftest-sanity/reftest.list',
-                        '--no-update',
                     ],
                 },
                 'reftest-1': {
@@ -996,7 +1005,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '1', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-2': {
@@ -1004,7 +1012,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '2', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-3': {
@@ -1012,7 +1019,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '3', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-4': {
@@ -1020,7 +1026,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '4', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-5': {
@@ -1028,7 +1033,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '5', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-6': {
@@ -1036,7 +1040,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '6', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-7': {
@@ -1044,7 +1047,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '7', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-8': {
@@ -1052,7 +1054,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '8', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-9': {
@@ -1060,7 +1061,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '9', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-10': {
@@ -1068,7 +1068,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '10', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-1': {
@@ -1076,7 +1075,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '1', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-2': {
@@ -1084,7 +1082,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '2', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-3': {
@@ -1092,14 +1089,12 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '3', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'xpcshell': {
                     'extra_args': [
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'xpcshell',
-                        '--no-update',
                     ],
                 },
             },
@@ -1111,7 +1106,6 @@ PLATFORM_UNITTEST_VARS = {
                 'marionette-webapi': {
                     'extra_args': [
                         "--cfg", "marionette/automation_emulator_config.py",
-                        '--no-update',
                     ],
                 },
                 'gaia-ui-test': {
@@ -1125,7 +1119,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '1', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-2': {
@@ -1133,7 +1126,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '2', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-3': {
@@ -1141,7 +1133,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '3', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-4': {
@@ -1149,7 +1140,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '4', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-5': {
@@ -1157,7 +1147,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '5', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-6': {
@@ -1165,7 +1154,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '6', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-7': {
@@ -1173,7 +1161,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '7', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-8': {
@@ -1181,7 +1168,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '8', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-9': {
@@ -1189,7 +1175,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '9', '--total-chunks', '9',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-1': {
@@ -1197,7 +1182,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '1', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-2': {
@@ -1205,7 +1189,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '2', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-3': {
@@ -1213,7 +1196,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '3', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-4': {
@@ -1221,7 +1203,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '4', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-5': {
@@ -1229,7 +1210,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '5', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-6': {
@@ -1237,7 +1217,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '6', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-7': {
@@ -1245,7 +1224,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '7', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-8': {
@@ -1253,7 +1231,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '8', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-9': {
@@ -1261,7 +1238,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '9', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-10': {
@@ -1269,7 +1245,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '10', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-11': {
@@ -1277,7 +1252,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '11', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-12': {
@@ -1285,7 +1259,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '12', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-13': {
@@ -1293,7 +1266,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '13', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-14': {
@@ -1301,7 +1273,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '14', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'mochitest-debug-15': {
@@ -1309,14 +1280,12 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'mochitest',
                         '--this-chunk', '15', '--total-chunks', '15',
-                        '--no-update',
                     ],
                 },
                 'xpcshell': {
                     'extra_args': [
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'xpcshell',
-                        '--no-update',
                     ],
                 },
                 'crashtest-1': {
@@ -1324,7 +1293,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '1', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'crashtest-2': {
@@ -1332,7 +1300,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '2', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'crashtest-3': {
@@ -1340,7 +1307,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '3', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'reftest': {
@@ -1348,7 +1314,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--test-manifest', 'tests/layout/reftests/reftest-sanity/reftest.list',
-                        '--no-update',
                     ],
                 },
                 'reftest-1': {
@@ -1356,7 +1321,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '1', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-2': {
@@ -1364,7 +1328,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '2', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-3': {
@@ -1372,7 +1335,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '3', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-4': {
@@ -1380,7 +1342,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '4', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-5': {
@@ -1388,7 +1349,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '5', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-6': {
@@ -1396,7 +1356,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '6', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-7': {
@@ -1404,7 +1363,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '7', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-8': {
@@ -1412,7 +1370,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '8', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-9': {
@@ -1420,7 +1377,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '9', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-10': {
@@ -1428,7 +1384,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '10', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-1': {
@@ -1436,7 +1391,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '1', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-2': {
@@ -1444,7 +1398,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '2', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-3': {
@@ -1452,7 +1405,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '3', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
             },
@@ -1466,7 +1418,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '1', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'crashtest-2': {
@@ -1474,7 +1425,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '2', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'crashtest-3': {
@@ -1482,7 +1432,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'crashtest',
                         '--this-chunk', '3', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'reftest': {
@@ -1490,7 +1439,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--test-manifest', 'tests/layout/reftests/reftest-sanity/reftest.list',
-                        '--no-update',
                     ],
                 },
                 'reftest-1': {
@@ -1498,7 +1446,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '1', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-2': {
@@ -1506,7 +1453,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '2', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-3': {
@@ -1514,7 +1460,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '3', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-4': {
@@ -1522,7 +1467,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '4', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-5': {
@@ -1530,7 +1474,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '5', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-6': {
@@ -1538,7 +1481,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '6', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-7': {
@@ -1546,7 +1488,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '7', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-8': {
@@ -1554,7 +1495,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '8', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-9': {
@@ -1562,7 +1502,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '9', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'reftest-10': {
@@ -1570,7 +1509,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'reftest',
                         '--this-chunk', '10', '--total-chunks', '10',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-1': {
@@ -1578,7 +1516,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '1', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-2': {
@@ -1586,7 +1523,6 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '2', '--total-chunks', '3',
-                        '--no-update',
                     ],
                 },
                 'jsreftest-3': {
@@ -1594,7 +1530,29 @@ PLATFORM_UNITTEST_VARS = {
                         '--cfg', 'b2g/emulator_automation_config.py',
                         '--test-suite', 'jsreftest',
                         '--this-chunk', '3', '--total-chunks', '3',
-                        '--no-update',
+                    ],
+                },
+            },
+        },
+    },
+    'emulator-jb': {
+        'product_name': 'b2g',
+        'app_name': 'b2g',
+        'brand_name': 'Gecko',
+        'builds_before_reboot': 1,
+        'unittest-env': {'DISPLAY': ':0'},
+        'enable_opt_unittests': True,
+        'enable_debug_unittests': False,
+        'ubuntu64_vm-b2g-emulator-jb': {
+            'opt_unittest_suites': [],
+            'debug_unittest_suites': [],
+            'suite_config': {
+                'mochitest-1': {
+                    'extra_args': [
+                        '--cfg', 'b2g/emulator_automation_config.py',
+                        '--test-suite', 'mochitest',
+                        '--this-chunk', '1', '--total-chunks', '1',
+                        '--test-manifest', 'tests/mochitest/manifests/emulator-jb.ini',
                     ],
                 },
             },
@@ -1679,9 +1637,10 @@ BRANCHES['cedar']['mozharness_tag'] = "default"
 BRANCHES['cedar']['platforms']['emulator']['fedora-b2g-emulator']['opt_unittest_suites'] += JSREFTEST
 BRANCHES['cedar']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['opt_unittest_suites'] = ALL_UNITTESTS[:] + JSREFTEST + GAIA_UI
 BRANCHES['cedar']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['debug_unittest_suites'] = MOCHITEST_EMULATOR_DEBUG[:] + REFTEST + CRASHTEST + MARIONETTE + XPCSHELL
+BRANCHES['cedar']['platforms']['emulator-jb']['ubuntu64_vm-b2g-emulator-jb']['opt_unittest_suites'] = MOCHITEST_EMULATOR_JB[:]
 BRANCHES['cedar']['platforms']['linux32_gecko']['ubuntu32_vm-b2gdt']['opt_unittest_suites'] += GAIA_UI + REFTEST_DESKTOP
 BRANCHES['cedar']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += REFTEST_DESKTOP
-BRANCHES['cedar']['platforms']['macosx64_gecko']['mountainlion-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP + REFTEST_DESKTOP_SANITY
+BRANCHES['cedar']['platforms']['macosx64_gecko']['mountainlion-b2gdt']['opt_unittest_suites'] += MOCHITEST_DESKTOP + REFTEST_DESKTOP_SANITY + GAIA_INTEGRATION
 BRANCHES['elm']['platforms']['emulator']['ubuntu64_vm-b2g-emulator']['opt_unittest_suites'] = REFTEST[:]
 del BRANCHES['elm']['platforms']['linux64_gecko']
 del BRANCHES['elm']['platforms']['linux32_gecko']
@@ -1770,7 +1729,8 @@ for b in BRANCHES.keys():
     branch = BRANCHES[b]
     if b in OLD_BRANCHES:
         for slave_platform in (('linux64_gecko', 'ubuntu64_vm-b2gdt'),
-                               ('linux32_gecko', 'ubuntu32_vm-b2gdt')):
+                               ('linux32_gecko', 'ubuntu32_vm-b2gdt'),
+                               ('macosx64_gecko', 'mountainlion-b2gdt')):
             if nested_haskey(branch['platforms'], slave_platform[0], slave_platform[1]):
                 slave_p = branch['platforms'][slave_platform[0]][slave_platform[1]]
                 slave_p['opt_unittest_suites'] = [x for x in slave_p['opt_unittest_suites']
