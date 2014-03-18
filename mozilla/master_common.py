@@ -193,7 +193,7 @@ def prioritizeBuilders(buildmaster, builders):
     # Annotate our list of builders with their priority
     builders_with_slaves = map(lambda builder: (builderPriority(builder, requests[builder.name]), builder), builders_with_slaves)
     builders_with_slaves.sort()
-    log("prioritized %i builder(s): %s", len(builders_with_slaves), [(p, b.name) for (p, b) in builders])
+    log("prioritized %i builder(s): %s", len(builders_with_slaves), [(p, b.name) for (p, b) in builders_with_slaves])
 
     # Process as many builders as we have slaves available,
     # in sorted order. e.g. if we have 3 builders [b0, b1, b2], and 2 connected
