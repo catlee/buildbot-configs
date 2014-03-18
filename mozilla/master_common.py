@@ -202,7 +202,10 @@ def prioritizeBuilders(buildmaster, builders):
     log("assigned into %i slave set(s)", len(builders_by_slaves))
 
     # For each slave set, process as many builders as we have slaves available,
-    # in sorted order.
+    # in sorted order. e.g. if we have 3 builders [b0, b1, b2], and 2 connected
+    # slaves, then return [b0, b1].
+    # NB. Both b0 and b1 can fail to assign work if their nextSlave functions
+    # return None, in which case b2 will be starved.
     run_again = False
     important_builders = []
     for slaves, builder_list in builders_by_slaves.items():
