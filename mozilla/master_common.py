@@ -1,5 +1,4 @@
 import time
-import random
 import re
 
 c = BuildmasterConfig = {}
@@ -202,43 +201,24 @@ def prioritizeBuilders(buildmaster, builders):
             log('removed builder %s with no allocated slaves available' % b[1].name)
     log("assigned into %i slave set(s)", len(builders_by_slaves))
 
-    # Find the set of builders with the highest priority for each set of slaves
-    # If there are multiple builders with the same priority, keep all of them,
-    # but discard builders with lower priority.
-    # By removing lower priority builders, we avoid the situation where a slave
-    # connects when the master is partway through iterating through the full
-    # set of builders and assigns work to lower priority builders while there's
-    # still work pending for higher priority builders.
-    # If we do end up discarding lower priority builders, we should re-run the
-    # builder loop after assigning the high-priority work.
+    # For each slave set, process as many builders as we have slaves available,
+    # in sorted order.
     run_again = False
-    important_builders = set()
+    important_builders = []
     for slaves, builder_list in builders_by_slaves.items():
         builder_list.sort()
-        # The first entry in the list is the builder with the highest priority
-        best_priority = builder_list[0][0]
-        if len(slaves) < 20:
-            log("finding important builders for slaves: %s", list(slaves))
-        else:
-            log("finding important builders for slaves: %s", list(slaves)[:20] + ["..."])
-
-        for p, b in builder_list:
-            if p == best_priority:
-                important_builders.add(b)
-                log("important builder %s (p == %s)", b.name, p)
-            else:
-                run_again = True
-                log("unimportant builder %s (%s != %s)", b.name, p, best_priority)
+        log("Using first %i builders:", len(slaves))
+        for p, b in builder_list[:len(slaves)]:
+            log("important builder %s (p = %s)", b.name, p)
+            important_builders.append(b)
+        # Log out ones we've skipped
+        for p, b in builder_list[len(slaves):]:
+            run_again = True
+            log("unimportant builder %s (p = %s)", b.name, p)
     log("found %i important builder(s): %s", len(important_builders), [b.name for b in important_builders])
-
     # Now we're left with important builders for all the slave pools
-    builders = list(important_builders)
-    # They should be all the same priority now, so we can shuffle them to make
-    # sure we assign jobs to slaves fairly
-    log("shuffling important builders")
-    random.shuffle(builders)
 
-    # We've ended up dropping some builders
+    # We've ended up dropping some builders, so run the builder loop again soon
     if run_again:
         log("triggering builder loop again since we've dropped some lower priority builders")
         buildmaster.botmaster.loop.trigger()
