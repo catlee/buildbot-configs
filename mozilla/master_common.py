@@ -200,6 +200,9 @@ def prioritizeBuilders(buildmaster, builders):
     # slaves, then return [b0, b1].
     # NB. Both b0 and b1 can fail to assign work if their nextSlave functions
     # return None, in which case b2 will be starved.
+    # It's possible (but hopefully rare!) that b0 will steal all available
+    # slaves, b1 will be skipped over, a slave will connect, and then b2 will
+    # run and get the slave.
     log("using up to first %i builders:", len(avail_slaves))
     run_again = False
     important_builders = []
