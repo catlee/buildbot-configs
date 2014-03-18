@@ -207,7 +207,7 @@ def prioritizeBuilders(buildmaster, builders):
     important_builders = []
     for slaves, builder_list in builders_by_slaves.items():
         builder_list.sort()
-        log("Using first %i builders:", len(slaves))
+        log("using up to first %i builders:", len(slaves))
         for p, b in builder_list[:len(slaves)]:
             log("important builder %s (p = %s)", b.name, p)
             important_builders.append(b)
@@ -224,7 +224,7 @@ def prioritizeBuilders(buildmaster, builders):
         buildmaster.botmaster.loop.trigger()
     log("finished prioritization")
 
-    return builders
+    return important_builders
 
 c['prioritizeBuilders'] = prioritizeBuilders
 
