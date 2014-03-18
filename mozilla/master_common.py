@@ -207,7 +207,7 @@ def prioritizeBuilders(buildmaster, builders):
     log("using up to first %i builders:", len(avail_slaves))
     run_again = False
     important_builders = []
-    for p, b in builders_with_slaves[len(avail_slaves):]:
+    for p, b in builders_with_slaves[:len(avail_slaves)]:
         log("important builder %s (p = %s)", b.name, p)
         important_builders.append(b)
     # Log out ones we've skipped
