@@ -220,9 +220,9 @@ def prioritizeBuilders(buildmaster, builders):
     # We've ended up dropping some builders, so run the builder loop again soon
     if run_again:
         log("triggering builder loop again since we've dropped some lower priority builders")
+        # Trigger the builder loop to run again in a few seconds
         from twisted.internet import reactor
         reactor.callLater(10, buildmaster.botmaster.loop.trigger)
-        #buildmaster.botmaster.loop.trigger()
     log("finished prioritization")
 
     return important_builders
