@@ -176,15 +176,14 @@ def prioritizeBuilders(buildmaster, builders):
     builders.sort()
     log("prioritized %i builder(s): %s", len(builders), [(p, b.name) for (p, b) in builders])
 
-    # For each set of slaves, create a list of (priority, builder) for that set
-    # of slaves
+    # Find which builders have slaves available
     # If we're checking the jacuzzi allocations, then limit the available
     # slaves by whatever the jacuzzi allocation is.
     # If we don't incorporate the jacuzzi allocations here, we could end up
     # with lower priority builders being discarded below which have available
     # slaves attached and allocated.
     from buildbotcustom.misc import J
-    builders_by_slaves = {}
+    builders_with_slaves = []
     for b in builders:
         slaves = [s for s in b[1].slaves if s.slave.slavename in avail_slaves]
         if getattr(prioritizeBuilders, 'check_jacuzzis', False):
@@ -195,31 +194,29 @@ def prioritizeBuilders(buildmaster, builders):
                 twlog.err("handled exception talking to jacuzzi; trying to carry on")
 
         if slaves:
-            slaves = frozenset(s.slave.slavename for s in slaves)
-            builders_by_slaves.setdefault(slaves, []).append(b)
+            builders_with_slaves.append(b)
         else:
             log('removed builder %s with no allocated slaves available' % b[1].name)
-    log("assigned into %i slave set(s)", len(builders_by_slaves))
+    log("%i builders with slaves", len(builders_with_slaves))
 
-    # For each slave set, process as many builders as we have slaves available,
+    # Process as many builders as we have slaves available,
     # in sorted order. e.g. if we have 3 builders [b0, b1, b2], and 2 connected
     # slaves, then return [b0, b1].
     # NB. Both b0 and b1 can fail to assign work if their nextSlave functions
     # return None, in which case b2 will be starved.
+    log("using up to first %i builders:", len(avail_slaves))
     run_again = False
     important_builders = []
-    for slaves, builder_list in builders_by_slaves.items():
-        builder_list.sort()
-        log("using up to first %i builders:", len(slaves))
-        for p, b in builder_list[:len(slaves)]:
-            log("important builder %s (p = %s)", b.name, p)
-            important_builders.append(b)
-        # Log out ones we've skipped
-        for p, b in builder_list[len(slaves):]:
-            run_again = True
-            log("unimportant builder %s (p = %s)", b.name, p)
+    for p, b in builders_with_slaves[len(avail_slaves):]:
+        log("important builder %s (p = %s)", b.name, p)
+        important_builders.append(b)
+    # Log out ones we've skipped
+    for p, b in builders_with_slaves[len(avail_slaves):]:
+        run_again = True
+        log("unimportant builder %s (p = %s)", b.name, p)
+
+    # Now we're left with enough important builders for our connected slaves
     log("found %i important builder(s): %s", len(important_builders), [b.name for b in important_builders])
-    # Now we're left with important builders for all the slave pools
 
     # We've ended up dropping some builders, so run the builder loop again soon
     if run_again:
