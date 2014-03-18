@@ -197,7 +197,7 @@ def prioritizeBuilders(buildmaster, builders):
             builders_with_slaves.append(b)
         else:
             log('removed builder %s with no allocated slaves available' % b[1].name)
-    log("%i builders with slaves", len(builders_with_slaves))
+    log("builders with slaves: %i", len(builders_with_slaves))
 
     # Process as many builders as we have slaves available,
     # in sorted order. e.g. if we have 3 builders [b0, b1, b2], and 2 connected
