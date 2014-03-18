@@ -167,15 +167,6 @@ def prioritizeBuilders(buildmaster, builders):
                 seen_slaves.add(s.slave.slavename)
     log("found %i available of %i connected slaves", len(avail_slaves), len(seen_slaves))
 
-    # Remove builders we have no slaves for
-    builders = filter(lambda builder: [s for s in builder.slaves if s.slave.slavename in avail_slaves], builders)
-    log("builders with slaves: %i", len(builders))
-
-    # Annotate our list of builders with their priority
-    builders = map(lambda builder: (builderPriority(builder, requests[builder.name]), builder), builders)
-    builders.sort()
-    log("prioritized %i builder(s): %s", len(builders), [(p, b.name) for (p, b) in builders])
-
     # Find which builders have slaves available
     # If we're checking the jacuzzi allocations, then limit the available
     # slaves by whatever the jacuzzi allocation is.
@@ -198,6 +189,11 @@ def prioritizeBuilders(buildmaster, builders):
         else:
             log('removed builder %s with no allocated slaves available' % b[1].name)
     log("builders with slaves: %i", len(builders_with_slaves))
+
+    # Annotate our list of builders with their priority
+    builders = map(lambda builder: (builderPriority(builder, requests[builder.name]), builder), builders)
+    builders.sort()
+    log("prioritized %i builder(s): %s", len(builders), [(p, b.name) for (p, b) in builders])
 
     # Process as many builders as we have slaves available,
     # in sorted order. e.g. if we have 3 builders [b0, b1, b2], and 2 connected
