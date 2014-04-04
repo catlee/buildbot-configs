@@ -18,20 +18,12 @@ log = logging.getLogger(__name__)
 def loadMaster(path):
     """Loads the master configuration and returns the 'c' object"""
     g = {}
-    cwd = os.getcwd()
     log.debug("loading %s", path)
     path = os.path.abspath(path)
     master_dir = os.path.dirname(path)
-    old_sys_path = sys.path[:]
-    old_modules = sys.modules.copy()
-    try:
-        sys.path.append(master_dir)
-        os.chdir(master_dir)
-        execfile(path, g, g)
-    finally:
-        os.chdir(cwd)
-        sys.path = old_sys_path[:]
-        sys.modules = old_modules
+    sys.path.append(master_dir)
+    os.chdir(master_dir)
+    execfile(path, g, g)
     return g['c']
 
 
