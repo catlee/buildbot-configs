@@ -88,7 +88,7 @@ def combineDumps(dumps):
     schedulers = {}
     master_builders = {}
 
-    for d in dumps:
+    for d in sorted(dumps, key=lambda d: d['master']):
         safeupdate(builders, d['builders'])
         safeupdate(slavepools, d['slavepools'])
         safeupdate(schedulers, d['schedulers'])
@@ -105,18 +105,13 @@ def combineDumps(dumps):
 
 def worker(path):
     output = tempfile.NamedTemporaryFile()
-    try:
-        proc = subprocess.Popen([sys.executable, sys.argv[0], path, '-o', output.name])
-        proc.wait()
-        return json.load(open(output.name))
-    except Exception:
-        log.exception("Couldn't load %s", path)
-        raise
+    proc = subprocess.Popen([sys.executable, sys.argv[0], path, '-o', output.name])
+    proc.wait()
+    return json.load(open(output.name))
 
 
 def dump_master(path):
     try:
-        # Be quiet!
         c = loadMaster(path)
         retval = getMasterInfo(c)
         retval['master'] = os.path.basename(os.path.dirname(path))
