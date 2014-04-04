@@ -9,6 +9,7 @@ import subprocess
 import time
 import tempfile
 import hashlib
+from contextlib import contextmanager
 
 import logging
 log = logging.getLogger(__name__)
@@ -121,6 +122,20 @@ def dump_master(path):
         raise
 
 
+@contextmanager
+def atomic_output(path):
+    fd, tmpname = tempfile.mkstemp(dir=os.path.dirname(path))
+    fp = os.fdopen(fd, 'wb')
+    try:
+        yield fp, tmpname
+        fp.close()
+        os.rename(tmpname, path)
+    except:
+        fp.close()
+        os.unlink(tmpname)
+        raise
+
+
 def main():
     import argparse
     parser = argparse.ArgumentParser()
@@ -145,11 +160,8 @@ def main():
         args.output_file = None
 
     if args.output_file:
-        fd, tmpname = tempfile.mkstemp(dir=os.path.dirname(args.output_file))
-        fp = os.fdopen(fd, 'w')
-        json.dump(dump, fp, indent=2, sort_keys=True)
-        fp.close()
-        os.rename(tmpname, args.output_file)
+        with atomic_output(args.output_file) as (fp, tmpname):
+            json.dump(dump, fp, indent=2, sort_keys=True)
     else:
         print json.dumps(dump, indent=2, sort_keys=True)
 
