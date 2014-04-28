@@ -11,14 +11,14 @@ from localconfig import SLAVES, TRY_SLAVES
 
 import master_common
 reload(master_common)
-from master_common import setMainFirefoxVersions, items_before
+from master_common import setMainFirefoxVersions, items_before, items_at_least
 
 GLOBAL_VARS = {
     # It's a little unfortunate to have both of these but some things (HgPoller)
     # require an URL while other things (BuildSteps) require only the host.
     # Since they're both right here it shouldn't be
     # a problem to keep them in sync.
-    'hgurl': 'http://hg.mozilla.org/',
+    'hgurl': 'https://hg.mozilla.org/',
     'hghost': 'hg.mozilla.org',
     'config_subdir': 'mozilla2',
     'objdir': 'obj-firefox',
@@ -61,6 +61,7 @@ GLOBAL_VARS = {
         'win64': {},
         'macosx64': {},
         'linux-debug': {},
+        'linux64-br-haz': {},
         'linux64-debug': {},
         'linux64-asan': {},
         'linux64-asan-debug': {},
@@ -76,7 +77,7 @@ GLOBAL_VARS = {
     },
     'pgo_strategy': None,
     'pgo_platforms': ('linux', 'linux64', 'win32',),
-    'periodic_pgo_interval': 6, # in hours
+    'periodic_start_hours': range(0, 24, 6),
     'enable_blocklist_update': False,
     'blocklist_update_on_closed_tree': False,
     'blocklist_update_set_approval': True,
@@ -86,6 +87,7 @@ GLOBAL_VARS = {
     'enable_nightly': True,
     'enabled_products': ['firefox', 'mobile'],
     'enable_valgrind': True,
+    'enable_xulrunner': False,
     'valgrind_platforms': ('linux64',),
 
     # List of keys in BRANCH_PROJECTS that will be activated for the BRANCH
@@ -111,6 +113,23 @@ GLOBAL_VARS = {
             'toolkit',
             ],
     'use_old_updater': False,
+    # currently we have the logic that if we a platform uses mozharness as
+    # the build step logic, it will have 'mozharness_config' in its dict.
+    # But we need to differentiate when that platform is a FF
+    # desktop build opposed to the existing other mozharness builds (ie: b2g,
+    # spider, etc). This list serves that purpose:
+    'mozharness_desktop_build_platforms': [
+        'linux', 'linux64', 'linux64-asan', 'linux64-asan-debug',
+        'linux64-st-an-debug', 'linux-debug', 'linux64-debug'
+    ],
+    # rather than repeat these options in each of these options in
+    # every platform, let's define the arguments here and when we want to
+    # turn an existing platform into say a 'nightly' version, add the options
+    #  from here and append it to 'extra_options'
+    'mozharness_desktop_extra_options': {
+        'nightly': ['--enable-pgo', '--enable-nightly'],
+        'pgo': ['--enable-pgo'],
+    }
 }
 GLOBAL_VARS.update(localconfig.GLOBAL_VARS.copy())
 
@@ -122,11 +141,21 @@ SYMBOL_SERVER_MOBILE_PATH = GLOBAL_VARS['symbol_server_mobile_path']
 
 PLATFORM_VARS = {
         'linux': {
+            'mozharness_config': {
+                'script_name': 'scripts/fx_desktop_build.py',
+                'extra_args': [
+                    '--config', 'builds/releng_base_linux_32_builds.py',
+                ],
+                'reboot_command': ['scripts/external_tools/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt','-n', '1', '-z'],
+            },
+            'dep_signing_servers': 'dep-signing',
+            'base_name': 'Linux %(branch)s',
+
             'product_name': 'firefox',
             'unittest_platform': 'linux-opt',
             'app_name': 'browser',
             'brand_name': 'Minefield',
-            'base_name': 'Linux %(branch)s',
             'mozconfig': 'linux/%(branch)s/nightly',
             'src_mozconfig': 'browser/config/mozconfigs/linux32/nightly',
             'src_xulrunner_mozconfig': 'xulrunner/config/mozconfigs/linux32/xulrunner',
@@ -146,6 +175,8 @@ PLATFORM_VARS = {
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -166,9 +197,8 @@ PLATFORM_VARS = {
             'test_pretty_names': True,
             'l10n_check_test': True,
             'nightly_signing_servers': 'dep-signing',
-            'dep_signing_servers': 'dep-signing',
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux32/releng.manifest',
-            'tooltool_script': '/builds/tooltool.py',
+            'tooltool_script': ['/builds/tooltool.py'],
             'use_mock': True,
             'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
@@ -212,11 +242,28 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/builds/gapi.data', '/builds/gapi.data'),
                 ('/tools/tooltool.py', '/builds/tooltool.py'),
             ],
         },
         'linux64': {
+            'mozharness_config': {
+                'script_name': 'scripts/fx_desktop_build.py',
+                'extra_args': [
+                    '--config', 'builds/releng_base_linux_64_builds.py',
+                ],
+                'reboot_command': ['scripts/external_tools/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt','-n', '1', '-z'],
+            },
+            # because non-unified platforms are defined at misc level,
+            # we can not add a new platform in config.py for this but instead
+            #  add another config on all non-unified able platforms
+            'mozharness_non_unified_extra_args': [
+                '--config', 'builds/releng_base_linux_64_builds.py',
+                '--custom-build-variant-cfg', 'non-unified',
+            ],
+
             'product_name': 'firefox',
             'unittest_platform': 'linux64-opt',
             'app_name': 'browser',
@@ -238,9 +285,12 @@ PLATFORM_VARS = {
             'update_platform': 'Linux_x86_64-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -264,7 +314,7 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'tooltool_manifest_src': 'browser/config/tooltool-manifests/linux64/releng.manifest',
-            'tooltool_script': '/builds/tooltool.py',
+            'tooltool_script': ['/builds/tooltool.py'],
             'use_mock': True,
             'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
@@ -279,7 +329,7 @@ PLATFORM_VARS = {
                         'xorg-x11-font*', # fonts required for PGO
                         'imake', # required for makedepend!?!
                         'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'gcc473_0moz1', 'yasm', 'ccache', # <-- from releng repo
-                        'valgrind',
+                        'valgrind', 'dbus-x11',
                         'pulseaudio-libs-devel',
                         'gstreamer-devel', 'gstreamer-plugins-base-devel',
                         'freetype-2.3.11-6.el6_1.8.x86_64',
@@ -288,11 +338,22 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/builds/gapi.data', '/builds/gapi.data'),
                 ('/tools/tooltool.py', '/builds/tooltool.py'),
             ],
         },
         'linux64-asan': {
+            'mozharness_config': {
+                'script_name': 'scripts/fx_desktop_build.py',
+                'extra_args': [
+                    '--config', 'builds/releng_base_linux_64_builds.py',
+                    '--custom-build-variant-cfg', 'asan',
+                ],
+                'reboot_command': ['scripts/external_tools/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt','-n', '1', '-z'],
+            },
+
             'product_name': 'firefox',
             'unittest_platform': 'linux64-asan-opt',
             'app_name': 'browser',
@@ -317,6 +378,8 @@ PLATFORM_VARS = {
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -335,7 +398,6 @@ PLATFORM_VARS = {
             'enable_opt_unittests': False,
             'enable_checktests': True,
             'enable_build_analysis': False,
-            'try_by_default': False,
             'create_snippet': False,
             'create_partial': False,
             'test_pretty_names': False,
@@ -364,6 +426,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/builds/gapi.data', '/builds/gapi.data'),
             ],
             # The status of this build doesn't affect the last good revision
@@ -371,6 +434,16 @@ PLATFORM_VARS = {
             'consider_for_nightly': False,
         },
         'linux64-asan-debug': {
+            'mozharness_config': {
+                'script_name': 'scripts/fx_desktop_build.py',
+                'extra_args': [
+                    '--config', 'builds/releng_base_linux_64_builds.py',
+                    '--custom-build-variant-cfg', 'asan-and-debug',
+                ],
+                'reboot_command': ['scripts/external_tools/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt','-n', '1', '-z'],
+            },
+
             'enable_nightly': True,
             'product_name': 'firefox',
             'unittest_platform': 'linux64-asan-debug',
@@ -396,6 +469,8 @@ PLATFORM_VARS = {
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -414,7 +489,6 @@ PLATFORM_VARS = {
             'enable_opt_unittests': False,
             'enable_checktests': True,
             'enable_build_analysis': False,
-            'try_by_default': False,
             'create_snippet': False,
             'create_partial': False,
             'test_pretty_names': False,
@@ -443,6 +517,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/builds/gapi.data', '/builds/gapi.data'),
             ],
             # The status of this build doesn't affect the last good revision
@@ -450,6 +525,16 @@ PLATFORM_VARS = {
             'consider_for_nightly': False,
         },
         'linux64-st-an-debug': {
+            'mozharness_config': {
+                'script_name': 'scripts/fx_desktop_build.py',
+                'extra_args': [
+                    '--config', 'builds/releng_base_linux_64_builds.py',
+                    '--custom-build-variant-cfg', 'stat-and-debug',
+                ],
+                'reboot_command': ['scripts/external_tools/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt','-n', '1', '-z'],
+            },
+
             'enable_nightly': False,
             'product_name': 'firefox',
             'unittest_platform': 'linux64-st-an-debug',
@@ -475,6 +560,8 @@ PLATFORM_VARS = {
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -521,6 +608,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/builds/gapi.data', '/builds/gapi.data'),
             ],
             # The status of this build doesn't affect the last good revision
@@ -556,7 +644,7 @@ PLATFORM_VARS = {
             'product_name': 'firefox',
             'base_name': '%(platform)s_%(branch)s',
             'slaves': SLAVES['mock'],
-            'try_by_default': False,
+            'try_by_default': True,
             'consider_for_nightly': False,
             'mock_target': 'mozilla-centos6-x86_64',
         },
@@ -581,9 +669,12 @@ PLATFORM_VARS = {
             'stage_platform': 'macosx64',
             'update_platform': 'Darwin_x86_64-gcc3',
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
                 'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
@@ -640,6 +731,7 @@ PLATFORM_VARS = {
             'crashtest_leak_threshold': 484,
             'update_platform': 'WINNT_x86-msvc',
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
@@ -665,6 +757,8 @@ PLATFORM_VARS = {
             # must be overridden explicitly.
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
+            'tooltool_manifest_src': 'browser/config/tooltool-manifests/win32/releng.manifest',
+            'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'win64': {
             'product_name': 'firefox',
@@ -713,8 +807,20 @@ PLATFORM_VARS = {
             # The status of this build doesn't affect the last good revision
             # algorithm for nightlies
             'consider_for_nightly': False,
+            'tooltool_manifest_src': 'browser/config/tooltool-manifests/win64/releng.manifest',
+            'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'linux-debug': {
+            'mozharness_config': {
+                'script_name': 'scripts/fx_desktop_build.py',
+                'extra_args': [
+                    '--config', 'builds/releng_base_linux_32_builds.py',
+                    '--custom-build-variant-cfg', 'debug',
+                ],
+                'reboot_command': ['scripts/external_tools/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt','-n', '1', '-z'],
+            },
+
             'enable_nightly': False,
             'enable_xulrunner': False,
             'product_name': 'firefox',
@@ -727,7 +833,7 @@ PLATFORM_VARS = {
             'builds_before_reboot': localconfig.BUILDS_BEFORE_REBOOT,
             'download_symbols': True,
             'packageTests': True,
-            'build_space': 14,
+            'build_space': 15,
             'slaves': SLAVES['mock'],
             'platform_objdir': OBJDIR,
             'stage_product': 'firefox',
@@ -737,10 +843,13 @@ PLATFORM_VARS = {
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'DISPLAY': ':2',
                 'LD_LIBRARY_PATH': '%s/dist/bin' % OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'TINDERBOX_OUTPUT': '1',
                 'CCACHE_DIR': '/builds/ccache',
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
@@ -794,10 +903,28 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/builds/gapi.data', '/builds/gapi.data'),
             ],
         },
         'linux64-debug': {
+            'mozharness_config': {
+                'script_name': 'scripts/fx_desktop_build.py',
+                'extra_args': [
+                    '--config', 'builds/releng_base_linux_64_builds.py',
+                    '--custom-build-variant-cfg', 'debug',
+                ],
+                'reboot_command': ['scripts/external_tools/count_and_reboot.py',
+                                   '-f', '../reboot_count.txt','-n', '1', '-z'],
+            },
+            # because non-unified platforms are defined at misc level,
+            # we can not add a new platform in config.py for this but instead
+            #  add another config on all non-unified able platforms
+            'mozharness_non_unified_extra_args': [
+                '--config', 'builds/releng_base_linux_64_builds.py',
+                '--custom-build-variant-cfg', 'debug-and-non-unified',
+            ],
+
             'enable_nightly': False,
             'enable_xulrunner': False,
             'product_name': 'firefox',
@@ -817,13 +944,17 @@ PLATFORM_VARS = {
             'stage_platform': 'linux64-debug',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'DISPLAY': ':2',
                 'LD_LIBRARY_PATH': '%s/dist/bin' % OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'TINDERBOX_OUTPUT': '1',
                 'CCACHE_DIR': '/builds/ccache',
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
@@ -856,6 +987,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/builds/gapi.data', '/builds/gapi.data'),
             ],
         },
@@ -878,11 +1010,15 @@ PLATFORM_VARS = {
             'stage_product': 'firefox',
             'stage_platform': 'macosx64-debug',
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'TINDERBOX_OUTPUT': '1',
                 'LC_ALL': 'C',
                 'PATH': '/tools/python/bin:/tools/buildbot/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin',
                 'CCACHE_DIR': '/builds/ccache',
@@ -922,10 +1058,12 @@ PLATFORM_VARS = {
             'stage_product': 'firefox',
             'stage_platform': 'win32-debug',
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
+                'TINDERBOX_OUTPUT': '1',
                 'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                 'BINSCOPE': 'C:\Program Files (x86)\Microsoft\SDL BinScope\BinScope.exe',
                 'PATH': "${MOZILLABUILD}nsis-2.46u;${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
@@ -935,6 +1073,8 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
+            'tooltool_manifest_src': 'browser/config/tooltool-manifests/win32/releng.manifest',
+            'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'win64-debug': {
             'enable_nightly': False,
@@ -961,7 +1101,8 @@ PLATFORM_VARS = {
                 'MOZ_OBJDIR': OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
                 'MOZ_CRASHREPORTER_NO_REPORT': '1',
-                'HG_SHARE_BASE_DIR': 'e:/builds/hg-shared',
+                'TINDERBOX_OUTPUT': '1',
+                'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                 'BINSCOPE': 'C:\Program Files (x86)\Microsoft\SDL BinScope\BinScope.exe',
                 'PATH': "${MOZILLABUILD}nsis-2.46u;${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
             },
@@ -970,6 +1111,9 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
+            'consider_for_nightly': False,
+            'tooltool_manifest_src': 'browser/config/tooltool-manifests/win64/releng.manifest',
+            'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'android': {
             'product_name': 'firefox',
@@ -993,6 +1137,7 @@ PLATFORM_VARS = {
             'update_platform': 'Android_arm-eabi-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'use_mock': True,
@@ -1004,14 +1149,17 @@ PLATFORM_VARS = {
                               'glibc-static', 'openssh-clients', 'mpfr',
                               "gcc472_0moz1", "gcc473_0moz1", 'wget', 'glibc.i686',
                               'libstdc++.i686', 'zlib.i686',
-                              'freetype-2.3.11-6.el6_1.8.x86_64'],
+                              'freetype-2.3.11-6.el6_1.8.x86_64', 'ant', 'ant-apache-regexp'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
             ],
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -1025,8 +1173,7 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
-                'JAVA_HOME': '/tools/jdk6',
-                'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
+                'PATH': '/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
             },
             'enable_opt_unittests': False,
             'talos_masters': GLOBAL_VARS['talos_masters'],
@@ -1070,14 +1217,17 @@ PLATFORM_VARS = {
                               'glibc-static', 'openssh-clients', 'mpfr', 'bc',
                               "gcc472_0moz1", "gcc473_0moz1", 'wget', 'glibc.i686',
                               'libstdc++.i686', 'zlib.i686',
-                              'freetype-2.3.11-6.el6_1.8.x86_64'],
+                              'freetype-2.3.11-6.el6_1.8.x86_64', 'ant', 'ant-apache-regexp'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
             ],
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -1091,7 +1241,6 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
-                'JAVA_HOME': '/tools/jdk6',
                 'PATH': '/tools/buildbot/bin:/usr/local/bin:/bin:/usr/bin',
             },
             'enable_opt_unittests': False,
@@ -1134,14 +1283,17 @@ PLATFORM_VARS = {
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
                               'glibc-static', 'openssh-clients', 'mpfr', 'bc',
                               "gcc472_0moz1", "gcc473_0moz1", 'glibc.i686', 'libstdc++.i686',
-                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64'],
+                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64', 'ant', 'ant-apache-regexp'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
             ],
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -1154,7 +1306,6 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
-                'JAVA_HOME': '/tools/jdk6',
                 'PATH': '/tools/buildbot/bin:/usr/local/bin:/bin:/usr/bin',
             },
             'enable_opt_unittests': False,
@@ -1203,14 +1354,17 @@ PLATFORM_VARS = {
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
                               'glibc-static', 'openssh-clients', 'mpfr',
                               'wget', 'glibc.i686', 'libstdc++.i686',
-                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64'],
+                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64', 'ant', 'ant-apache-regexp'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
             ],
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -1224,8 +1378,7 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
-                'JAVA_HOME': '/tools/jdk6',
-                'PATH': '/tools/jdk6/bin:/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
+                'PATH': '/opt/local/bin:/tools/python/bin:/tools/buildbot/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/',
             },
             'enable_opt_unittests': False,
             'talos_masters': GLOBAL_VARS['talos_masters'],
@@ -1260,6 +1413,7 @@ PLATFORM_VARS = {
             'update_platform': 'Android_arm-eabi-gcc3',
             'enable_ccache': True,
             'enable_shared_checkouts': True,
+            'enable_nonunified_build': True,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'use_mock': True,
@@ -1270,14 +1424,17 @@ PLATFORM_VARS = {
                               'java-1.6.0-openjdk-devel', 'zlib-devel',
                               'glibc-static', 'openssh-clients', 'mpfr',
                               'wget', 'glibc.i686', 'libstdc++.i686',
-                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64'],
+                              'zlib.i686', 'freetype-2.3.11-6.el6_1.8.x86_64', 'ant', 'ant-apache-regexp'],
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
             ],
             'env': {
                 'DISPLAY': ':2',
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
+                'TOOLTOOL_CACHE': '/builds/tooltool_cache',
+                'TOOLTOOL_HOME': '/builds',
                 'MOZ_OBJDIR': OBJDIR,
                 'SYMBOL_SERVER_HOST': localconfig.SYMBOL_SERVER_HOST,
                 'SYMBOL_SERVER_USER': 'ffxbld',
@@ -1291,7 +1448,6 @@ PLATFORM_VARS = {
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
                 'LC_ALL': 'C',
-                'JAVA_HOME': '/tools/jdk6',
                 'PATH': '/tools/buildbot/bin:/usr/local/bin:/bin:/usr/bin',
             },
             'enable_opt_unittests': False,
@@ -1313,12 +1469,7 @@ PLATFORM_VARS["macosx64-lion-debug"]["slaves"] = SLAVES['macosx64-lion']
 
 PROJECTS = {
     'fuzzing': {
-        'platforms': ['linux', 'linux64', 'macosx64-lion', 'win64'],
-    },
-    'nanojit': {
-        'platforms': ['linux', 'linux64', 'macosx64-lion', 'win64'],
-        'hgurl': 'http://hg.mozilla.org',
-        'repo_path': 'projects/nanojit-central',
+        'platforms': ['mock-hw', 'macosx64-lion', 'win64'],
     },
 }
 
@@ -1368,6 +1519,7 @@ BRANCH_PROJECTS = {
     'spidermonkey_tier_1': {
         'variants': {
             'linux64-debug':  ['rootanalysis', 'generational'],
+            'linux-debug': ['arm-sim'],
         },
         'platforms': {
             'linux': {},
@@ -1376,23 +1528,43 @@ BRANCH_PROJECTS = {
             'linux64-debug': {},
             'win32': {},
             'win32-debug': {},
+            'win64': {},
+            'win64-debug': {},
             'macosx64': {},
             'macosx64-debug': {},
         },
-        'hgurl': 'http://hg.mozilla.org/',
+        'hgurl': 'https://hg.mozilla.org/',
     },
 
     # Try server builds only triggered on changes to the spidermonkey source
     'spidermonkey_try': {
         'enable_try': True,
-        'try_by_default': ['rootanalysis', 'generational'],
+        'try_by_default': {
+            'rootanalysis': True, # all platforms for which it is defined
+            'generational': set(['linux64-debug']),
+            'arm-sim': True,
+        },
         'variants': {
-            'linux64-debug':  ['rootanalysis', 'generational', 'exactrooting'],
+            'linux': ['warnaserr'],
+            'linux-debug': ['arm-sim', 'warnaserrdebug'],
+            'linux64':  ['warnaserr'],
+            'linux64-debug':  ['rootanalysis', 'generational', 'exactrooting', 'warnaserrdebug'],
+            'win32': ['generational', 'warnaserr'],
+            'win32-debug': ['generational', 'warnaserrdebug'],
         },
         'platforms': {
-            'linux64-debug': {}, # Filled in with branch-specific values below
+            'linux': {},
+            'linux-debug': {},
+            'linux64': {},
+            'linux64-debug': {},
+            'win32': {},
+            'win32-debug': {},
+            'win64': {},
+            'win64-debug': {},
+            'macosx64': {},
+            'macosx64-debug': {},
         },
-        'hgurl': 'http://hg.mozilla.org/',
+        'hgurl': 'https://hg.mozilla.org/',
     },
 
     # Non-tier-1 builds that provide useful information but are hidden on tbpl.
@@ -1412,10 +1584,12 @@ BRANCH_PROJECTS = {
             'linux64-debug': {},
             'win32': {},
             'win32-debug': {},
+            'win64': {},
+            'win64-debug': {},
             'macosx64': {},
             'macosx64-debug': {},
         },
-        'hgurl': 'http://hg.mozilla.org/',
+        'hgurl': 'https://hg.mozilla.org/',
     },
 }
 
@@ -1434,21 +1608,6 @@ BRANCHES = {
     },
     'mozilla-aurora': {
         'branch_projects': []
-    },
-    'mozilla-esr17': {
-        'branch_projects': [],
-        'lock_platforms': True,
-        'gecko_version': 17,
-        'platforms': {
-            'linux': {},
-            'linux64': {},
-            'win32': {},
-            'macosx64': {},
-            'linux-debug': {},
-            'linux64-debug': {},
-            'macosx64-debug': {},
-            'win32-debug': {},
-        },
     },
     'mozilla-esr24': {
         'branch_projects': [],
@@ -1480,7 +1639,44 @@ BRANCHES = {
             'linux64-debug': {},
             'macosx64-debug': {},
             'win32-debug': {},
-            'android-noion': {},
+        },
+    },
+    'mozilla-b2g28_v1_3': {
+        'branch_projects': [],
+        'lock_platforms': True,
+        'gecko_version': 28,
+        'platforms': {
+            # desktop for gecko security reproduciton (per akeybl
+            # https://bugzil.la/818378#c8)
+            'linux': {},
+            'linux64': {},
+            'win32': {},
+            'macosx64': {},
+            'linux-debug': {},
+            'linux64-debug': {},
+            'macosx64-debug': {},
+            'win32-debug': {},
+        },
+    },
+    'mozilla-b2g28_v1_3t': {
+        'branch_projects': [],
+        'lock_platforms': True,
+        'gecko_version': 28,
+        'platforms': {},
+    },
+    'mozilla-b2g30_v1_4': {
+        'branch_projects': [],
+        'lock_platforms': True,
+        'gecko_version': 30,
+        'platforms': {
+            'linux': {},
+            'linux64': {},
+            'win32': {},
+            'macosx64': {},
+            'linux-debug': {},
+            'linux64-debug': {},
+            'macosx64-debug': {},
+            'win32-debug': {},
         },
     },
     'mozilla-b2g18': {
@@ -1490,32 +1686,8 @@ BRANCHES = {
         'platforms': {
             # desktop for gecko security reproduciton (per akeybl
             # https://bugzil.la/818378#c8)
-            'linux': {},
             'linux64': {},
-            'win32': {},
-            'macosx64': {},
-            'linux-debug': {},
             'linux64-debug': {},
-            'macosx64-debug': {},
-            'win32-debug': {},
-            'android-noion': {},
-        },
-    },
-    'mozilla-b2g18_v1_0_1': {
-        'branch_projects': [],
-        'lock_platforms': True,
-        'gecko_version': 18,
-        'platforms': {
-            # desktop for gecko security reproduciton (per akeybl
-            # https://bugzil.la/818378#c8)
-            'linux': {},
-            'linux64': {},
-            'win32': {},
-            'macosx64': {},
-            'linux-debug': {},
-            'linux64-debug': {},
-            'macosx64-debug': {},
-            'win32-debug': {},
             'android-noion': {},
         },
     },
@@ -1526,23 +1698,17 @@ BRANCHES = {
         'platforms': {
             # desktop for gecko security reproduciton (per akeybl
             # https://bugzil.la/818378#c8)
-            'linux': {},
             'linux64': {},
-            'win32': {},
-            'macosx64': {},
-            'linux-debug': {},
             'linux64-debug': {},
-            'macosx64-debug': {},
-            'win32-debug': {},
             'android-noion': {},
         },
     },
     'try': {
         'branch_projects': ['spidermonkey_try'],
-        # For now, only run rooting hazards builds on try
+        # For now, only run shell rooting hazards builds on try. (Browser
+        # hazard builds run everywhere, not just on try.)
         'extra_platforms': {
             'linux64-sh-haz': {},
-            'linux64-br-haz': {},
         },
     },
 }
@@ -1644,6 +1810,7 @@ for branch in BRANCHES.keys():
 # HGURL + repo_path should be a valid repository
 BRANCHES['mozilla-central']['repo_path'] = 'mozilla-central'
 BRANCHES['mozilla-central']['l10n_repo_path'] = 'l10n-central'
+BRANCHES['mozilla-central']['enable_perproduct_builds'] = True
 BRANCHES['mozilla-central']['enable_weekly_bundle'] = True
 BRANCHES['mozilla-central']['start_hour'] = [3]
 BRANCHES['mozilla-central']['start_minute'] = [2]
@@ -1651,6 +1818,8 @@ BRANCHES['mozilla-central']['start_minute'] = [2]
 BRANCHES['mozilla-central']['enable_xulrunner'] = True
 # Enable PGO Builds on this branch
 BRANCHES['mozilla-central']['pgo_strategy'] = 'periodic'
+BRANCHES['mozilla-central']['periodic_start_hours'] = range(1, 24, 3)
+BRANCHES['mozilla-central']['periodic_start_minute'] = 30
 # Enable unit tests
 BRANCHES['mozilla-central']['enable_mac_a11y'] = True
 BRANCHES['mozilla-central']['unittest_build_space'] = 6
@@ -1780,11 +1949,12 @@ BRANCHES['mozilla-beta']['enable_perproduct_builds'] = True
 ######## mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = 'releases/mozilla-aurora'
 BRANCHES['mozilla-aurora']['l10n_repo_path'] = 'releases/l10n/mozilla-aurora'
-BRANCHES['mozilla-aurora']['enable_nightly_lastgood'] = False
 BRANCHES['mozilla-aurora']['enable_perproduct_builds'] = True
 BRANCHES['mozilla-aurora']['enable_weekly_bundle'] = True
 BRANCHES['mozilla-aurora']['start_hour'] = [0]
 BRANCHES['mozilla-aurora']['start_minute'] = [40]
+BRANCHES['mozilla-aurora']['periodic_start_hours'] = range(1, 24, 6)
+BRANCHES['mozilla-aurora']['periodic_start_minute'] = 30
 # Enable XULRunner / SDK builds
 BRANCHES['mozilla-aurora']['enable_xulrunner'] = True
 # Enable PGO Builds on this branch
@@ -1835,57 +2005,6 @@ BRANCHES['mozilla-aurora']['platforms']['macosx64']['nightly_signing_servers'] =
 BRANCHES['mozilla-aurora']['l10n_extra_configure_args'] = ['--with-macbundlename-prefix=Firefox']
 BRANCHES['mozilla-aurora']['enabled_products'] = ['firefox', 'mobile']
 
-######## mozilla-esr17
-BRANCHES['mozilla-esr17']['repo_path'] = 'releases/mozilla-esr17'
-BRANCHES['mozilla-esr17']['update_channel'] = 'nightly-esr17'
-BRANCHES['mozilla-esr17']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
-BRANCHES['mozilla-esr17']['enable_weekly_bundle'] = True
-BRANCHES['mozilla-esr17']['start_hour'] = [0]
-BRANCHES['mozilla-esr17']['start_minute'] = [05]
-BRANCHES['mozilla-esr17']['enable_xulrunner'] = False
-BRANCHES['mozilla-esr17']['pgo_strategy'] = 'per-checkin'
-BRANCHES['mozilla-esr17']['enable_mac_a11y'] = True
-BRANCHES['mozilla-esr17']['unittest_build_space'] = 6
-# L10n configuration
-BRANCHES['mozilla-esr17']['enable_l10n'] = False
-BRANCHES['mozilla-esr17']['enable_l10n_onchange'] = False
-BRANCHES['mozilla-esr17']['l10nNightlyUpdate'] = False
-BRANCHES['mozilla-esr17']['l10n_platforms'] = ['linux', 'linux64', 'win32',
-                                               'macosx64']
-BRANCHES['mozilla-esr17']['l10nDatedDirs'] = True
-BRANCHES['mozilla-esr17']['l10n_tree'] = 'fxesr17'
-BRANCHES['mozilla-esr17']['enUS_binaryURL'] = \
-    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-esr17'
-BRANCHES['mozilla-esr17']['allLocalesFile'] = 'browser/locales/all-locales'
-BRANCHES['mozilla-esr17']['enable_nightly'] = True
-BRANCHES['mozilla-esr17']['create_snippet'] = True
-BRANCHES['mozilla-esr17']['create_partial'] = True
-BRANCHES['mozilla-esr17']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr17'
-BRANCHES['mozilla-esr17']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr17'
-BRANCHES['mozilla-esr17']['enable_blocklist_update'] = True
-BRANCHES['mozilla-esr17']['enable_valgrind'] = False
-BRANCHES['mozilla-esr17']['enabled_products'] = ['firefox']
-# mock disabled block start
-# linux platforms
-BRANCHES['mozilla-esr17']['platforms']['linux']['use_mock'] = False
-BRANCHES['mozilla-esr17']['platforms']['linux64']['use_mock'] = False
-BRANCHES['mozilla-esr17']['platforms']['linux-debug']['use_mock'] = False
-BRANCHES['mozilla-esr17']['platforms']['linux64-debug']['use_mock'] = False
-BRANCHES['mozilla-esr17']['platforms']['linux']['slaves'] = SLAVES['linux']
-BRANCHES['mozilla-esr17']['platforms']['linux64']['slaves'] = SLAVES['linux64']
-BRANCHES['mozilla-esr17']['platforms']['linux-debug']['slaves'] = SLAVES['linux']
-BRANCHES['mozilla-esr17']['platforms']['linux64-debug']['slaves'] = SLAVES['linux64']
-BRANCHES['mozilla-esr17']['platforms']['linux']['env']['PYTHON26'] = '/tools/python-2.6.5/bin/python'
-BRANCHES['mozilla-esr17']['platforms']['linux64']['env']['PYTHON26'] = '/tools/python-2.6.5/bin/python'
-BRANCHES['mozilla-esr17']['platforms']['linux']['env']['SYMBOL_SERVER_SSH_KEY'] = "/home/cltbld/.ssh/ffxbld_dsa"
-BRANCHES['mozilla-esr17']['platforms']['linux64']['env']['SYMBOL_SERVER_SSH_KEY'] = "/home/cltbld/.ssh/ffxbld_dsa"
-del BRANCHES['mozilla-esr17']['platforms']['linux']['env']['PATH']
-del BRANCHES['mozilla-esr17']['platforms']['linux64']['env']['PATH']
-del BRANCHES['mozilla-esr17']['platforms']['linux-debug']['env']['PATH']
-del BRANCHES['mozilla-esr17']['platforms']['linux64-debug']['env']['PATH']
-# mock disabled block stop
-BRANCHES['mozilla-esr17']['platforms']['win32']['l10n_slaves'] = SLAVES['win32']
-
 ######## mozilla-esr24
 BRANCHES['mozilla-esr24']['repo_path'] = 'releases/mozilla-esr24'
 BRANCHES['mozilla-esr24']['update_channel'] = 'nightly-esr24'
@@ -1914,6 +2033,7 @@ BRANCHES['mozilla-esr24']['create_partial'] = True
 BRANCHES['mozilla-esr24']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr24'
 BRANCHES['mozilla-esr24']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-esr24'
 BRANCHES['mozilla-esr24']['enable_blocklist_update'] = True
+BRANCHES['mozilla-esr24']['enable_hsts_update'] = True
 BRANCHES['mozilla-esr24']['enable_valgrind'] = False
 BRANCHES['mozilla-esr24']['enabled_products'] = ['firefox']
 
@@ -1922,7 +2042,6 @@ BRANCHES['mozilla-b2g26_v1_2']['repo_path'] = 'releases/mozilla-b2g26_v1_2'
 BRANCHES['mozilla-b2g26_v1_2']['update_channel'] = 'nightly-b2g26'
 BRANCHES['mozilla-b2g26_v1_2']['l10n_repo_path'] = 'releases/l10n/mozilla-beta'
 BRANCHES['mozilla-b2g26_v1_2']['enable_weekly_bundle'] = True
-BRANCHES['mozilla-b2g26_v1_2']['enable_nightly_lastgood'] = False
 BRANCHES['mozilla-b2g26_v1_2']['enable_perproduct_builds'] = True
 BRANCHES['mozilla-b2g26_v1_2']['start_hour'] = [3]
 BRANCHES['mozilla-b2g26_v1_2']['start_minute'] = [45]
@@ -1940,21 +2059,92 @@ BRANCHES['mozilla-b2g26_v1_2']['l10nDatedDirs'] = True
 BRANCHES['mozilla-b2g26_v1_2']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-b2g26_v1_2'
 BRANCHES['mozilla-b2g26_v1_2']['allLocalesFile'] = 'browser/locales/all-locales'
-BRANCHES['mozilla-b2g26_v1_2']['enable_nightly'] = True
+BRANCHES['mozilla-b2g26_v1_2']['enable_nightly'] = False
 BRANCHES['mozilla-b2g26_v1_2']['create_snippet'] = False
 BRANCHES['mozilla-b2g26_v1_2']['create_partial'] = False
 BRANCHES['mozilla-b2g26_v1_2']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g26_v1_2'
 BRANCHES['mozilla-b2g26_v1_2']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g26_v1_2'
 BRANCHES['mozilla-b2g26_v1_2']['enable_blocklist_update'] = False
+BRANCHES['mozilla-b2g26_v1_2']['enable_hsts_update'] = True
 BRANCHES['mozilla-b2g26_v1_2']['enable_valgrind'] = False
 BRANCHES['mozilla-b2g26_v1_2']['enabled_products'] = ['firefox', 'mobile']
+
+######## mozilla-b2g28_v1_3
+BRANCHES['mozilla-b2g28_v1_3']['repo_path'] = 'releases/mozilla-b2g28_v1_3'
+BRANCHES['mozilla-b2g28_v1_3']['update_channel'] = 'nightly-b2g28'
+BRANCHES['mozilla-b2g28_v1_3']['l10n_repo_path'] = 'releases/l10n/mozilla-beta'
+BRANCHES['mozilla-b2g28_v1_3']['enable_weekly_bundle'] = True
+BRANCHES['mozilla-b2g28_v1_3']['enable_perproduct_builds'] = True
+BRANCHES['mozilla-b2g28_v1_3']['start_hour'] = [3]
+BRANCHES['mozilla-b2g28_v1_3']['start_minute'] = [45]
+BRANCHES['mozilla-b2g28_v1_3']['enable_xulrunner'] = False
+BRANCHES['mozilla-b2g28_v1_3']['pgo_platforms'] = []
+BRANCHES['mozilla-b2g28_v1_3']['enable_mac_a11y'] = True
+BRANCHES['mozilla-b2g28_v1_3']['unittest_build_space'] = 6
+# L10n configuration
+BRANCHES['mozilla-b2g28_v1_3']['enable_l10n'] = False
+BRANCHES['mozilla-b2g28_v1_3']['enable_l10n_onchange'] = False
+BRANCHES['mozilla-b2g28_v1_3']['l10nNightlyUpdate'] = False
+BRANCHES['mozilla-b2g28_v1_3']['l10n_platforms'] = ['linux', 'linux64', 'win32',
+                                               'macosx64']
+BRANCHES['mozilla-b2g28_v1_3']['l10nDatedDirs'] = True
+BRANCHES['mozilla-b2g28_v1_3']['enUS_binaryURL'] = \
+    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-b2g28_v1_3'
+BRANCHES['mozilla-b2g28_v1_3']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-b2g28_v1_3']['enable_nightly'] = True
+BRANCHES['mozilla-b2g28_v1_3']['create_snippet'] = False
+BRANCHES['mozilla-b2g28_v1_3']['create_partial'] = False
+BRANCHES['mozilla-b2g28_v1_3']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g28_v1_3'
+BRANCHES['mozilla-b2g28_v1_3']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g28_v1_3'
+BRANCHES['mozilla-b2g28_v1_3']['enable_blocklist_update'] = False
+BRANCHES['mozilla-b2g28_v1_3']['enable_hsts_update'] = True
+BRANCHES['mozilla-b2g28_v1_3']['enable_valgrind'] = False
+BRANCHES['mozilla-b2g28_v1_3']['enabled_products'] = ['firefox', 'mobile']
+
+######## mozilla-b2g28_v1_3t
+BRANCHES['mozilla-b2g28_v1_3t']['repo_path'] = 'releases/mozilla-b2g28_v1_3t'
+BRANCHES['mozilla-b2g28_v1_3t']['enable_l10n'] = False
+BRANCHES['mozilla-b2g28_v1_3t']['enable_nightly'] = False
+BRANCHES['mozilla-b2g28_v1_3t']['enable_xulrunner'] = False
+BRANCHES['mozilla-b2g28_v1_3t']['enable_valgrind'] = False
+
+######## mozilla-b2g30_v1_4
+BRANCHES['mozilla-b2g30_v1_4']['repo_path'] = 'releases/mozilla-b2g30_v1_4'
+BRANCHES['mozilla-b2g30_v1_4']['update_channel'] = 'nightly-b2g30'
+BRANCHES['mozilla-b2g30_v1_4']['l10n_repo_path'] = 'releases/l10n/mozilla-beta'
+BRANCHES['mozilla-b2g30_v1_4']['enable_weekly_bundle'] = True
+BRANCHES['mozilla-b2g30_v1_4']['enable_perproduct_builds'] = True
+BRANCHES['mozilla-b2g30_v1_4']['start_hour'] = [3]
+BRANCHES['mozilla-b2g30_v1_4']['start_minute'] = [45]
+BRANCHES['mozilla-b2g30_v1_4']['enable_xulrunner'] = False
+BRANCHES['mozilla-b2g30_v1_4']['pgo_platforms'] = []
+BRANCHES['mozilla-b2g30_v1_4']['enable_mac_a11y'] = True
+BRANCHES['mozilla-b2g30_v1_4']['unittest_build_space'] = 6
+# L10n configuration
+BRANCHES['mozilla-b2g30_v1_4']['enable_l10n'] = False
+BRANCHES['mozilla-b2g30_v1_4']['enable_l10n_onchange'] = False
+BRANCHES['mozilla-b2g30_v1_4']['l10nNightlyUpdate'] = False
+BRANCHES['mozilla-b2g30_v1_4']['l10n_platforms'] = ['linux', 'linux64', 'win32',
+                                               'macosx64']
+BRANCHES['mozilla-b2g30_v1_4']['l10nDatedDirs'] = True
+BRANCHES['mozilla-b2g30_v1_4']['enUS_binaryURL'] = \
+    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-b2g30_v1_4'
+BRANCHES['mozilla-b2g30_v1_4']['allLocalesFile'] = 'browser/locales/all-locales'
+BRANCHES['mozilla-b2g30_v1_4']['enable_nightly'] = True
+BRANCHES['mozilla-b2g30_v1_4']['create_snippet'] = False
+BRANCHES['mozilla-b2g30_v1_4']['create_partial'] = False
+BRANCHES['mozilla-b2g30_v1_4']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g30_v1_4'
+BRANCHES['mozilla-b2g30_v1_4']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g30_v1_4'
+BRANCHES['mozilla-b2g30_v1_4']['enable_blocklist_update'] = False
+BRANCHES['mozilla-b2g30_v1_4']['enable_hsts_update'] = True
+BRANCHES['mozilla-b2g30_v1_4']['enable_valgrind'] = False
+BRANCHES['mozilla-b2g30_v1_4']['enabled_products'] = ['firefox', 'mobile']
 
 ######## mozilla-b2g18
 BRANCHES['mozilla-b2g18']['repo_path'] = 'releases/mozilla-b2g18'
 BRANCHES['mozilla-b2g18']['update_channel'] = 'nightly-b2g18'
 BRANCHES['mozilla-b2g18']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
-BRANCHES['mozilla-b2g18']['enable_weekly_bundle'] = True
-BRANCHES['mozilla-b2g18']['enable_nightly_lastgood'] = False
+BRANCHES['mozilla-b2g18']['enable_weekly_bundle'] = False
 BRANCHES['mozilla-b2g18']['enable_perproduct_builds'] = True
 BRANCHES['mozilla-b2g18']['start_hour'] = [3]
 BRANCHES['mozilla-b2g18']['start_minute'] = [45]
@@ -1972,7 +2162,7 @@ BRANCHES['mozilla-b2g18']['l10nDatedDirs'] = True
 BRANCHES['mozilla-b2g18']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-b2g18'
 BRANCHES['mozilla-b2g18']['allLocalesFile'] = 'browser/locales/all-locales'
-BRANCHES['mozilla-b2g18']['enable_nightly'] = True
+BRANCHES['mozilla-b2g18']['enable_nightly'] = False
 BRANCHES['mozilla-b2g18']['create_snippet'] = False
 BRANCHES['mozilla-b2g18']['create_partial'] = False
 BRANCHES['mozilla-b2g18']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g18'
@@ -1981,43 +2171,11 @@ BRANCHES['mozilla-b2g18']['enable_blocklist_update'] = False
 BRANCHES['mozilla-b2g18']['enable_valgrind'] = False
 BRANCHES['mozilla-b2g18']['enabled_products'] = ['firefox', 'mobile']
 
-######## mozilla-b2g18_v1_0_1
-BRANCHES['mozilla-b2g18_v1_0_1']['repo_path'] = 'releases/mozilla-b2g18_v1_0_1'
-BRANCHES['mozilla-b2g18_v1_0_1']['update_channel'] = 'nightly-b2g18_v1_0_1'
-BRANCHES['mozilla-b2g18_v1_0_1']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_weekly_bundle'] = True
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_perproduct_builds'] = True
-BRANCHES['mozilla-b2g18_v1_0_1']['start_hour'] = [3]
-BRANCHES['mozilla-b2g18_v1_0_1']['start_minute'] = [45]
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_xulrunner'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['pgo_platforms'] = []
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_mac_a11y'] = True
-BRANCHES['mozilla-b2g18_v1_0_1']['unittest_build_space'] = 6
- # L10n configuration
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_l10n'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_l10n_onchange'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['l10nNightlyUpdate'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['l10n_platforms'] = ['linux', 'linux64', 'win32',
-                                                      'macosx64']
-BRANCHES['mozilla-b2g18_v1_0_1']['l10nDatedDirs'] = True
-BRANCHES['mozilla-b2g18_v1_0_1']['enUS_binaryURL'] = \
-    GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-b2g18_v1_0_1'
-BRANCHES['mozilla-b2g18_v1_0_1']['allLocalesFile'] = 'browser/locales/all-locales'
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_nightly'] = True
-BRANCHES['mozilla-b2g18_v1_0_1']['create_snippet'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['create_partial'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g18_v1_0_1'
-BRANCHES['mozilla-b2g18_v1_0_1']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g18_v1_0_1'
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_blocklist_update'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['enable_valgrind'] = False
-BRANCHES['mozilla-b2g18_v1_0_1']['enabled_products'] = ['firefox', 'mobile']
-
 ######## mozilla-b2g18_v1_1_0_hd
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['repo_path'] = 'releases/mozilla-b2g18_v1_1_0_hd'
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['update_channel'] = 'nightly-b2g18_v1_1_0_hd'
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['l10n_repo_path'] = 'releases/l10n/mozilla-release'
-BRANCHES['mozilla-b2g18_v1_1_0_hd']['enable_weekly_bundle'] = True
-BRANCHES['mozilla-b2g18_v1_1_0_hd']['enable_nightly_lastgood'] = False
+BRANCHES['mozilla-b2g18_v1_1_0_hd']['enable_weekly_bundle'] = False
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['enable_perproduct_builds'] = True
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['start_hour'] = [3]
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['start_minute'] = [45]
@@ -2035,7 +2193,7 @@ BRANCHES['mozilla-b2g18_v1_1_0_hd']['l10nDatedDirs'] = True
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-mozilla-b2g18_v1_1_0_hd'
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['allLocalesFile'] = 'browser/locales/all-locales'
-BRANCHES['mozilla-b2g18_v1_1_0_hd']['enable_nightly'] = True
+BRANCHES['mozilla-b2g18_v1_1_0_hd']['enable_nightly'] = False
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['create_snippet'] = False
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['create_partial'] = False
 BRANCHES['mozilla-b2g18_v1_1_0_hd']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Firefox/mozilla-b2g18_v1_1_0_hd'
@@ -2112,7 +2270,8 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['enable_nightly'] = branchConfig.get('enable_nightly', False)
     BRANCHES[branch]['enable_mobile'] = branchConfig.get('enable_mobile', True)
     BRANCHES[branch]['pgo_strategy'] = branchConfig.get('pgo_strategy', None)
-    BRANCHES[branch]['periodic_pgo_interval'] = branchConfig.get('periodic_pgo_interval', 6)
+    BRANCHES[branch]['periodic_start_hours'] = branchConfig.get('periodic_start_hours', range(0, 24, 6))
+    BRANCHES[branch]['periodic_start_minute'] = branchConfig.get('periodic_start_minute', 30)
     BRANCHES[branch]['start_hour'] = branchConfig.get('start_hour', [4])
     BRANCHES[branch]['start_minute'] = branchConfig.get('start_minute', [2])
     # Disable XULRunner / SDK builds
@@ -2171,7 +2330,6 @@ for branch in ACTIVE_PROJECT_BRANCHES:
         # which may have already been set to the global default.
         BRANCHES[branch]['platforms'][platform]['nightly_signing_servers'] = branchConfig.get('platforms', {}).get(platform, {}).get('nightly_signing_servers',
                                                                              BRANCHES[branch]['platforms'][platform]['dep_signing_servers'])
-    BRANCHES[branch]['enable_valgrind'] = False
 
 # Bug 578880, remove the following block after gcc-4.5 switch
 branches = BRANCHES.keys()
@@ -2215,82 +2373,16 @@ for b, branch in BRANCHES.items():
         assert branch_project_name not in PROJECTS, '%s already in PROJECTS' % project_name
         PROJECTS[branch_project_name] = project
 
-# Disable pymake (bug 593585)
-for name, branch in items_before(BRANCHES, 'gecko_version', 18):
-    for p in ('win32', 'win32-debug', 'win64', 'win64-debug'):
-        if p in branch['platforms']:
-            branch['platforms'][p]['enable_pymake'] = False
-
 # MERGE DAY - Delete all references to android-noion once mozilla-b2g18 is EOL.
 for b in BRANCHES.keys():
-    if b not in ('mozilla-b2g18', 'mozilla-b2g18_v1_0_1', 'mozilla-b2g18_v1_1_0_hd'):
+    if b not in ('mozilla-b2g18', 'mozilla-b2g18_v1_1_0_hd'):
         if 'android-noion' in BRANCHES[b]['platforms']:
             del BRANCHES[b]['platforms']['android-noion']
-
-# MERGE DAY
-# Migrate branches to win64-rev2 platform (bug 918414)
-disabled_branches = set([x for x in BRANCHES.keys() if x not in PROJECT_BRANCHES.keys()] + ['b2g-inbound','mozilla-inbound'])
-mixed_masters = ['buildbot-master56','buildbot-master66']
-mixed_branches = ['try','mozilla-inbound']
-win64_mix_size = 37
-for b in mixed_branches:
-    if b not in disabled_branches:
-        raise Exception("win64-rev2 mixed branch '%s' must be in disabled branches list")
-win64_rev2_master = False
-for m in mixed_masters:
-    if m in uname()[1]:
-        win64_rev2_master = True
-        break
-for branch in disabled_branches:
-    for platform in ('win32','win32-debug','win64','win64-debug'):
-        if platform not in BRANCHES[branch]['platforms']:
-            continue
-        if branch in mixed_branches and win64_rev2_master:
-            slaves = SLAVES['win64-rev2'][:win64_mix_size]
-            if 'try' in branch:
-                slaves = TRY_SLAVES['win64-rev2'][:win64_mix_size]
-            BRANCHES[branch]['platforms'][platform]['slaves'] = slaves
-            if 'l10n_slaves' in BRANCHES[branch]['platforms'][platform] and branch != 'mozilla-esr17':
-                BRANCHES[branch]['platforms'][platform]['l10n_slaves'] = slaves
-        else:
-            if 'PDBSTR_PATH' in BRANCHES[branch]['platforms'][platform]['env']:
-                BRANCHES[branch]['platforms'][platform]['env']['PDBSTR_PATH'] = '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe'
-            BRANCHES[branch]['platforms'][platform]['env']['HG_SHARE_BASE_DIR'] = 'e:/builds/hg-shared'
-            oldslaves = SLAVES['win64']
-            if 'try' in branch:
-                oldslaves = TRY_SLAVES['win64']
-            BRANCHES[branch]['platforms'][platform]['slaves'] = oldslaves
-            if 'l10n_slaves' in BRANCHES[branch]['platforms'][platform] and branch != 'mozilla-esr17':
-                BRANCHES[branch]['platforms'][platform]['l10n_slaves'] = oldslaves
 
 for _, branch in items_before(BRANCHES, 'gecko_version', 26):
     for p in 'linux64-asan', 'linux64-asan-debug':
         if p in branch['platforms']:
             del branch['platforms'][p]
-
-# Building 32-bit linux in a x86_64 env rides the trains (bug 857697)
-for name, branch in items_before(BRANCHES, 'gecko_version', 24):
-    for platform in ['linux', 'linux-debug']:
-        branch['platforms'][platform]['mock_target'] = 'mozilla-centos6-i386'
-        branch['platforms'][platform]['mock_packages'] = \
-            ['autoconf213', 'python', 'zip', 'mozilla-python27-mercurial',
-             'git', 'ccache', 'glibc-static', 'libstdc++-static',
-             'perl-Test-Simple', 'perl-Config-General',
-             'gtk2-devel', 'libnotify-devel', 'yasm',
-             'alsa-lib-devel', 'libcurl-devel',
-             'wireless-tools-devel', 'libX11-devel',
-             'libXt-devel', 'mesa-libGL-devel',
-             'gnome-vfs2-devel', 'GConf2-devel', 'wget',
-             'mpfr', # required for system compiler
-             'xorg-x11-font*', # fonts required for PGO
-             'imake', # required for makedepend!?!
-             'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'gcc473_0moz1', 'yasm', 'ccache', # <-- from releng repo
-             'pulseaudio-libs-devel',
-             'freetype-2.3.11-6.el6_2.9',
-             'freetype-devel-2.3.11-6.el6_2.9',
-            ]
-        if not platform.endswith("-debug"):
-            branch["platforms"][platform]["mock_packages"] += ["valgrind"]
 
 # Building android in a x86_64 env rides the trains (bug 860246)
 for name, branch in items_before(BRANCHES, 'gecko_version', 24):
@@ -2316,15 +2408,54 @@ for name, branch in items_before(BRANCHES, 'gecko_version', 24):
                     'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
                 )]
 
+# ant test on try
+## ant rides the trains (Bug 971841)
+# for name, branch in items_before(BRANCHES, 'gecko_version', 30):
+for name, branch in BRANCHES.items():
+    if "try" in name:
+        continue # Remove this condition when we switch to riding trains
+    for plat, pc in branch['platforms'].items():
+        if 'mock_packages' in pc and "android" in plat:
+            pc['mock_packages'] = \
+                [x for x in pc['mock_packages'] if x not in (
+                    'ant', 'ant-apache-regexp',
+                )]
+
 for name, branch in items_before(BRANCHES, 'gecko_version', 22):
     branch["run_make_alive_tests"] = False
 
+# Only run non-unified builds on m-c and derived branches
+for branch in ("mozilla-aurora", "mozilla-beta", "mozilla-release",
+               "mozilla-esr24", "mozilla-b2g28_v1_3", "mozilla-b2g28_v1_3t",
+               "mozilla-b2g30_v1_4",
+               "mozilla-b2g26_v1_2", "mozilla-b2g18",
+               "mozilla-b2g18_v1_1_0_hd", "try", "holly"):
+    for pc in BRANCHES[branch]['platforms'].values():
+        if 'enable_nonunified_build' in pc:
+            pc['enable_nonunified_build'] = False
+
 # Static analysis happens only on m-c and derived branches.
 for branch in ("mozilla-aurora", "mozilla-beta", "mozilla-release",
-               "mozilla-b2g18", "mozilla-b2g18_v1_0_1",
-               "mozilla-b2g18_v1_1_0_hd", "mozilla-esr17", "mozilla-esr24"):
+               "mozilla-esr24", "mozilla-b2g28_v1_3",
+               "mozilla-b2g30_v1_4",
+               "mozilla-b2g28_v1_3t", "mozilla-b2g26_v1_2",
+               "mozilla-b2g18", "mozilla-b2g18_v1_1_0_hd"):
     if 'linux64-st-an-debug' in BRANCHES[branch]['platforms']:
         del BRANCHES[branch]['platforms']['linux64-st-an-debug']
+
+# Exact rooting landed for desktop only in 28.
+for name, branch in items_before(BRANCHES, 'gecko_version', 28):
+    if 'linux64-br-haz' in branch['platforms']:
+        del branch['platforms']['linux64-br-haz']
+for name, branch in items_at_least(BRANCHES, 'gecko_version', 28):
+    # b2g cannot use exact rooting yet since it has known hazards. If a
+    # b2g-only tree were to acquire additional desktop-only hazard, we
+    # currently would not care. Eventually, we will get the analysis running on
+    # b2g, fix the hazards, turn on exact rooting for b2g, and then turn these
+    # builds on.
+    if 'b2g' in name and 'inbound' not in name:
+        if 'linux64-br-haz' in branch['platforms']:
+            del branch['platforms']['linux64-br-haz']
 
 # B2G's INBOUND
 for b in ('b2g-inbound',):
@@ -2332,6 +2463,9 @@ for b in ('b2g-inbound',):
         if 'linux' not in p:
             BRANCHES[b]['platforms'][p]['enable_checktests'] = False
 # END B2G's INBOUND
+
+# Bug 950206 - Enable 32-bit Windows builds on Date, test those builds on tst-w64-ec2-XXXX
+BRANCHES['date']['platforms']['win32']['unittest_platform'] = 'win64-opt'
 
 if __name__ == "__main__":
     import sys

@@ -209,7 +209,7 @@ def load_masters_json(masters_json, role=None, universal=False, log=None,
                          'thunderbird_config.py',
                          '*_config.py',
                          '*_common.py',
-                         'b2g_project_branches.py',
+                         '*_project_branches.py',
                          'project_branches.py',
                          ],
                          renames=[
@@ -252,7 +252,7 @@ def load_masters_json(masters_json, role=None, universal=False, log=None,
                 c.local_links.extend(
                     [('staging_release-firefox-mozilla-%s.py' % v,
                       'release-firefox-mozilla-%s.py' % v)
-                     for v in ['beta', 'release', 'esr17', 'esr24', 'b2g18']
+                     for v in ['beta', 'release', 'esr24', 'b2g18']
                      ] +
                     [('staging_release-fennec-mozilla-%s.py' % v,
                       'release-fennec-mozilla-%s.py' % v)
@@ -260,7 +260,7 @@ def load_masters_json(masters_json, role=None, universal=False, log=None,
                      ] +
                     [('staging_release-thunderbird-comm-%s.py' % v,
                       'release-thunderbird-comm-%s.py' % v)
-                        for v in ['beta', 'release', 'esr17', 'esr24', 'b2g18']
+                        for v in ['beta', 'release', 'esr24', 'b2g18']
                      ]
                 )
             else:
@@ -320,7 +320,7 @@ if __name__ == "__main__":
         "-8", action="store_true", dest="buildbot08", default=False)
     parser.add_option("-b", "--buildbot", dest="buildbot", default="buildbot")
     parser.add_option("-j", "--masters-json", dest="masters_json",
-                      default="http://hg.mozilla.org/build/tools/raw-file/tip/buildfarm/maintenance/production-masters.json")
+                      default="https://hg.mozilla.org/build/tools/raw-file/tip/buildfarm/maintenance/production-masters.json")
     parser.add_option("-R", "--role", dest="role", default=None,
                       help="Filter by given comma-separated role(s), eg try, build, tests, scheduler")
     parser.add_option(

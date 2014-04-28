@@ -5,6 +5,7 @@ GLOBAL_VARS = {
     'config_repo_path': 'build/buildbot-configs',
     'buildbotcustom_repo_path': 'build/buildbotcustom',
     'stage_server': 'dev-stage01.srv.releng.scl3.mozilla.com',
+    'balrog_username': 'stage-tbirdbld',
     'aus2_user': 'tbirdbld',
     'aus2_ssh_key': 'tbirdbld_dsa',
     'aus2_host': 'dev-stage01.srv.releng.scl3.mozilla.com',
@@ -18,7 +19,7 @@ GLOBAL_VARS = {
     # if a failure to notify the master should result in a warning,
     # and sendchange retry count before give up
     'unittest_masters': [
-        ('dev-master01.build.scl1.mozilla.com:9901', True, 1),
+        ('dev-master1.srv.releng.scl3.mozilla.com:9901', True, 1),
         ],
     'xulrunner_tinderbox_tree': 'ThunderbirdTest',
     'weekly_tinderbox_tree': 'ThunderbirdTest',
@@ -26,7 +27,6 @@ GLOBAL_VARS = {
     'packaged_unittest_tinderbox_tree': 'ThunderbirdTest',
     'tinderbox_tree': 'ThunderbirdTest',
     'hg_username': 'stage-tbirdbld',
-    'base_mirror_urls': ['http://hg-internal.dmz.scl3.mozilla.com'],
     'base_bundle_urls': ['http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/thunderbird/bundles'],
 }
 
@@ -44,10 +44,6 @@ BRANCHES = {
         'blocklist_update_on_closed_tree': False,
     },
     'comm-aurora': {
-        'enable_blocklist_update': False,
-        'blocklist_update_on_closed_tree': False,
-    },
-    'comm-esr17': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },

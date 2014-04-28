@@ -21,17 +21,17 @@ releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
 releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '24.1.0'
-releaseConfig['appVersion']          = '24.1.0'
+releaseConfig['version']             = '24.5.0'
+releaseConfig['appVersion']          = '24.5.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'THUNDERBIRD_24_1_0'
+releaseConfig['baseTag']             = 'THUNDERBIRD_24_5_0'
 releaseConfig['partialUpdates']      = {
 
-    '24.0.1': {
-        'appVersion': '24.0.1',
+    '24.4.0': {
+        'appVersion': '24.4.0',
         'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_24_0_1',
+        'baseTag': 'THUNDERBIRD_24_4_0',
     },
 
 }
@@ -43,7 +43,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-esr24',
         'path': 'releases/comm-esr24',
-        'revision': 'b58e293b7622',
+        'revision': '83644ae8e82b',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -53,10 +53,11 @@ releaseConfig['sourceRepositories']  = {
         }
     },
     'mozilla': {
+        # XXX remove js/src/config/milestone.txt when setting up ESR31
         'name': 'mozilla-esr24',
         'path': 'releases/mozilla-esr24',
-        'revision': 'GECKO2410_2013102320_RELBRANCH',
-        'relbranch': 'GECKO2410_2013102320_RELBRANCH',
+        'revision': '2dcea6a55d16',
+        'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
                 'version': releaseConfig['milestone'],
@@ -108,7 +109,7 @@ releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['ausServerUrl']        = 'https://aus3.mozilla.org'
 releaseConfig['ausHost']             = 'aus3-staging.mozilla.org'
 releaseConfig['ausUser']             = 'tbirdbld'
-releaseConfig['ausSshKey']           = 'auspush'
+releaseConfig['ausSshKey']           = 'tbirdbld_dsa'
 releaseConfig['releaseNotesUrl']     = 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=%locale%&platform=%platform%&version=%version%'
 releaseConfig['testOlderPartials']   = False
 releaseConfig['promptWaitTime']      = None
@@ -131,14 +132,8 @@ releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
-
-releaseConfig['releaseUptake']       = 30000
-releaseConfig['releasetestUptake']   = 1
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_thunderbird.py'
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

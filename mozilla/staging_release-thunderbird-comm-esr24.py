@@ -43,9 +43,9 @@ releaseConfig['nextMilestone']       = releaseConfig['milestone']
 releaseConfig['userRepoRoot'] = 'users/stage-ffxbld'
 releaseConfig['sourceRepositories']  = {
     'comm': {
-        'name': 'comm-release',
-        'clonePath': 'releases/comm-esr17',
-        'path': 'users/stage-ffxbld/comm-esr17',
+        'name': 'comm-esr24',
+        'clonePath': 'releases/comm-esr24',
+        'path': 'users/stage-ffxbld/comm-esr24',
         'revision': 'default',
         'relbranch': None,
         'bumpFiles': {
@@ -57,8 +57,8 @@ releaseConfig['sourceRepositories']  = {
     },
     'mozilla': {
         'name': 'mozilla-release',
-        'clonePath': 'releases/mozilla-esr17',
-        'path': 'users/stage-ffxbld/mozilla-esr17',
+        'clonePath': 'releases/mozilla-esr24',
+        'path': 'users/stage-ffxbld/mozilla-esr24',
         'revision': 'default',
         'relbranch': None,
         'bumpFiles': {
@@ -77,7 +77,7 @@ releaseConfig['sourceRepositories']  = {
 releaseConfig['l10nRelbranch']       = None
 releaseConfig['l10nRepoClonePath']   = 'releases/l10n/mozilla-release'
 releaseConfig['l10nRepoPath']        = 'users/stage-ffxbld'
-releaseConfig['l10nRevisionFile']    = 'l10n-changesets_thunderbird-esr17'
+releaseConfig['l10nRevisionFile']    = 'l10n-changesets_thunderbird-esr24'
 #  Support repositories
 releaseConfig['otherReposToTag']     = {
     'users/stage-ffxbld/compare-locales': 'RELEASE_AUTOMATION',
@@ -132,15 +132,12 @@ releaseConfig['mozconfigs']          = {
 }
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = True
+releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://tuxedo.stage.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.allizom.org/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_thunderbird.py'
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

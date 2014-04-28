@@ -2,16 +2,24 @@ from copy import deepcopy
 import production_config as pc
 
 STAGING_SLAVES = {
-    'tegra_android': dict(
-        [('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) for x in range(10,30)]
-    ),
-    'fedora': dict(),
+    'tegra_android': {},
+    'panda_android': {},
 }
+
+for i in range(10,24) + range(25,30) + [180] + range(184,186) + [224,241]:
+    STAGING_SLAVES['tegra_android']['tegra-%03i' % i] = {
+        'http_port': '30%03i' % i,
+        'ssl_port': '31%03i' % i,
+    }
+
+for i in range(307,320) + range(874,885):
+    STAGING_SLAVES['panda_android']['panda-%04i' % i] = {
+        'http_port': '30%03i' % i,
+        'ssl_port': '31%03i' % i,
+    }
 
 STAGING_SLAVES['tegra_android-armv6'] = STAGING_SLAVES['tegra_android']
 STAGING_SLAVES['tegra_android-noion'] = STAGING_SLAVES['tegra_android']
-STAGING_SLAVES['fedora-b2g'] = STAGING_SLAVES['fedora']
-STAGING_SLAVES['fedora-b2g-emulator'] = STAGING_SLAVES['fedora']
 
 SLAVES = deepcopy(STAGING_SLAVES)
 
@@ -31,12 +39,13 @@ GLOBAL_VARS = {
     'tinderbox_tree': 'MozillaTest',
     'mobile_tinderbox_tree': 'MobileTest',
     'build_tools_repo_path': 'build/tools',
-    'mozharness_repo': 'http://hg.mozilla.org/build/mozharness',
+    'mozharness_repo': 'https://hg.mozilla.org/build/mozharness',
     'mozharness_tag': 'production',
     'stage_server': 'dev-stage01.srv.releng.scl3.mozilla.com',
     'stage_username': 'ffxbld',
     'stage_ssh_key': 'ffxbld_dsa',
     'datazilla_url': 'https://datazilla.mozilla.org/test',
+    'blob_upload': True,
 }
 
 BRANCHES = {
@@ -55,7 +64,8 @@ PLATFORM_VARS = {
 
 PROJECTS = {
     'jetpack': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'scripts_repo': 'https://hg.mozilla.org/build/tools',
         'tinderbox_tree': 'MozillaTest',
     },
 }
+B2G_PROJECTS = {}

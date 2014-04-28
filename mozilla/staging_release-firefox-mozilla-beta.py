@@ -121,10 +121,10 @@ releaseConfig['verifyConfigs']       = {
     'win32':  'mozBeta-firefox-win32.cfg'
 }
 releaseConfig['mozconfigs']          = {
-    'linux': 'browser/config/mozconfigs/linux32/release',
-    'linux64': 'browser/config/mozconfigs/linux64/release',
-    'macosx64': 'browser/config/mozconfigs/macosx-universal/release',
-    'win32': 'browser/config/mozconfigs/win32/release',
+    'linux': 'browser/config/mozconfigs/linux32/beta',
+    'linux64': 'browser/config/mozconfigs/linux64/beta',
+    'macosx64': 'browser/config/mozconfigs/macosx-universal/beta',
+    'win32': 'browser/config/mozconfigs/win32/beta',
 }
 releaseConfig['xulrunner_mozconfigs']          = {
     'linux': 'xulrunner/config/mozconfigs/linux32/xulrunner',
@@ -133,17 +133,17 @@ releaseConfig['xulrunner_mozconfigs']          = {
     'win32': 'xulrunner/config/mozconfigs/win32/xulrunner',
 }
 releaseConfig['releaseChannel']      = 'beta'
+releaseConfig['testChannels']        = ['releasetest', 'betatest']
+releaseConfig['testChannelRuleIds']  = [19,20]
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://tuxedo.stage.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.allizom.org/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_beta.py'
+
 releaseConfig['releaseUptake']       = 3
 releaseConfig['releasetestUptake']   = 1
 
@@ -154,3 +154,7 @@ releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
 releaseConfig['ftpSymlinkName'] = 'latest-beta'
+releaseConfig['bouncer_aliases'] = {
+    'Firefox-%(version)s': 'firefox-beta-latest',
+    'Firefox-%(version)s-stub': 'firefox-beta-stub',
+}

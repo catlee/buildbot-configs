@@ -3,11 +3,52 @@
 # the -t option.  We use that now
 exit=0
 
+# even though it isn't fully used, the config check does require a valid
+# shared memory setup AT THE DEFAULT LOCATION. If you're running on a
+# laptop, that may not exist. Fail early.
+#
+# OSX note: it "works" (for test-masters purposes) to just create the
+#           directory, even though that isn't how shared memory is
+#           handled on OSX. The directories must be owned by the id
+#           running the tests.
+#
+# if you want to run trial tests without needing to execute the full test suite
+# call this script with: run-test
+
+shm=(/dev/shm)
+good_shm=true
+for needed_dir in ${shm[@]}; do
+    if ! test -w $needed_dir; then
+        echo 1>&2 "No shm setup, please create writable directory '$needed_dir'"
+        good_shm=false
+    fi
+done
+$good_shm || exit 1
+
 WORK=test-output
 mkdir $WORK 2>/dev/null
 
+
+function run_unittests {
+for dir in mozilla mozilla-tests; do
+  cd $dir
+  for f in test/*.py; do
+    trial $f || exit=1
+  done
+  rm -rf _trial_temp
+  cd ..
+done
+}
+
+if [ "$1" == "run-tests" ]
+then
+    # run trial and exit
+    run_unittests
+    exit
+fi
+
 actioning="Checking"
-MASTERS_JSON_URL="${MASTERS_JSON_URL:-http://hg.mozilla.org/build/tools/raw-file/tip/buildfarm/maintenance/production-masters.json}"
+MASTERS_JSON_URL="${MASTERS_JSON_URL:-https://hg.mozilla.org/build/tools/raw-file/tip/buildfarm/maintenance/production-masters.json}"
 
 atexit=()
 trap 'for cmd in "${atexit[@]}"; do eval $cmd; done' EXIT
@@ -51,20 +92,24 @@ echo "$actioning ${#MASTERS[*]} masters..."
 echo "${MASTERS[*]}"
 wait
 
+check_for_virtual_env() {
+    if test -z "$VIRTUAL_ENV"; then
+        echo "NOTE: you were not using a virtual environment" 1>&2
+    fi
+}
+
 if [ -s $FAILFILE ]; then
     echo "*** $(wc -l < $FAILFILE) master tests failed ***" >&2
     echo "Failed masters:" >&2
     sed -e 's/^/  /' "$FAILFILE" >&2
+    check_for_virtual_env
     exit 1
 fi
 
-for dir in mozilla mozilla-tests; do
-  cd $dir
-  for f in test/*.py; do
-    trial $f || exit=1
-  done
-  rm -rf _trial_temp
-  cd ..
-done
+run_unittests
+
+if test "$exit" -ne 0 ; then
+    check_for_virtual_env
+fi
 
 exit $exit

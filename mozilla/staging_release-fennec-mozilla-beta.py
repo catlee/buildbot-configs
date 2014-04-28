@@ -121,6 +121,7 @@ releaseConfig['disablePermissionCheck']   = True
 releaseConfig['disableVirusCheck']        = True
 releaseConfig['disablePushToMirrors']     = True
 releaseConfig['enableUpdatePackaging']    = False
+releaseConfig['balrog_api_root']          = None
 
 releaseConfig['single_locale_options'] = {
     'android': [
@@ -150,7 +151,6 @@ releaseConfig['multilocale_config'] = {
 
 # Staging config
 releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
-releaseConfig['skip_release_download'] = True
 releaseConfig['enableSigningAtBuildTime'] = True
 releaseConfig['enablePartialMarsAtBuildTime'] = False
 releaseConfig['autoGenerateChecksums'] = False

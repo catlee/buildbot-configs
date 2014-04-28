@@ -10,6 +10,10 @@ import master_common
 reload(master_common)
 from master_common import setMainCommVersions
 
+import thunderbird_project_branches
+reload(thunderbird_project_branches)
+from thunderbird_project_branches import PROJECT_BRANCHES, ACTIVE_PROJECT_BRANCHES
+
 GLOBAL_VARS = deepcopy(GLOBAL_VARS)
 BRANCH_UNITTEST_VARS = deepcopy(BRANCH_UNITTEST_VARS)
 
@@ -22,9 +26,6 @@ BRANCHES = {
     'comm-beta': {
     },
     'comm-aurora': {
-    },
-    'comm-esr17': {
-        'gecko_version': 17
     },
     'comm-esr24': {
         'gecko_version': 24
@@ -45,26 +46,22 @@ PLATFORMS = {
 
 builder_prefix = "TB "
 
-PLATFORMS['macosx64']['slave_platforms'] = ['snowleopard', 'lion', 'mountainlion']
+PLATFORMS['macosx64']['slave_platforms'] = ['snowleopard', 'mountainlion']
 PLATFORMS['macosx64']['env_name'] = 'mac-perf'
 PLATFORMS['macosx64']['snowleopard'] = {'name': builder_prefix + "Rev4 MacOSX Snow Leopard 10.6"}
-PLATFORMS['macosx64']['lion'] = {'name': builder_prefix + "Rev4 MacOSX Lion 10.7"}
 PLATFORMS['macosx64']['mountainlion'] = {'name': builder_prefix + "Rev5 MacOSX Mountain Lion 10.8"}
 PLATFORMS['macosx64']['stage_product'] = 'thunderbird'
 PLATFORMS['macosx64']['mozharness_python'] = '/tools/buildbot/bin/python'
 
-PLATFORMS['win32']['slave_platforms'] = ['xp', 'xp-ix', 'win7', 'win7-ix']
+PLATFORMS['win32']['slave_platforms'] = ['xp-ix', 'win7-ix']
 PLATFORMS['win32']['env_name'] = 'win32-perf'
-PLATFORMS['win32']['xp'] = {'name': builder_prefix + "Rev3 WINNT 5.1"}
 PLATFORMS['win32']['xp-ix'] = {'name': builder_prefix + "Windows XP 32-bit"}
-PLATFORMS['win32']['win7'] = {'name': builder_prefix + "Rev3 WINNT 6.1"}
 PLATFORMS['win32']['win7-ix'] = {'name': builder_prefix + "Windows 7 32-bit"}
 PLATFORMS['win32']['stage_product'] = 'thunderbird'
 PLATFORMS['win32']['mozharness_python'] = ['c:/mozilla-build/python25/python', '-u']
 
-PLATFORMS['linux']['slave_platforms'] = ['fedora', 'ubuntu32_vm']
+PLATFORMS['linux']['slave_platforms'] = ['ubuntu32_vm']
 PLATFORMS['linux']['env_name'] = 'linux-perf'
-PLATFORMS['linux']['fedora'] = {'name': builder_prefix + "Rev3 Fedora 12"}
 PLATFORMS['linux']['ubuntu32_vm'] = {'name': 'Ubuntu VM 12.04'}
 PLATFORMS['linux']['stage_product'] = 'thunderbird'
 PLATFORMS['linux']['mozharness_python'] = '/tools/buildbot/bin/python'
@@ -76,9 +73,8 @@ PLATFORMS['linux']['mozharness_config'] = {
     'config_file': 'talos/linux_config.py',
 }
 
-PLATFORMS['linux64']['slave_platforms'] = ['fedora64', 'ubuntu64_vm']
+PLATFORMS['linux64']['slave_platforms'] = ['ubuntu64_vm']
 PLATFORMS['linux64']['env_name'] = 'linux-perf'
-PLATFORMS['linux64']['fedora64'] = {'name': builder_prefix + "Rev3 Fedora 12x64"}
 PLATFORMS['linux64']['ubuntu64_vm'] = {'name': 'Ubuntu VM 12.04 x64'}
 PLATFORMS['linux64']['stage_product'] = 'thunderbird'
 PLATFORMS['linux64']['mozharness_python'] = '/tools/buildbot/bin/python'
@@ -153,10 +149,6 @@ PLATFORM_UNITTEST_VARS = {
         'unittest-env': {'DISPLAY': ':0'},
         'enable_opt_unittests': True,
         'enable_debug_unittests': True,
-        'fedora': {
-            'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
-            'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
-        },
         'ubuntu32_vm': {
             'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
             'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
@@ -170,10 +162,6 @@ PLATFORM_UNITTEST_VARS = {
         'unittest-env': {'DISPLAY': ':0'},
         'enable_opt_unittests': True,
         'enable_debug_unittests': True,
-        'fedora64': {
-            'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
-            'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
-        },
         'ubuntu64_vm': {
             'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
             'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
@@ -189,15 +177,7 @@ PLATFORM_UNITTEST_VARS = {
         'env_name': 'win32-perf-unittest',
         'enable_opt_unittests': True,
         'enable_debug_unittests': True,
-        'xp': {
-            'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
-            'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
-        },
         'xp-ix': {
-            'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
-            'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
-        },
-        'win7': {
             'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
             'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
         },
@@ -217,10 +197,6 @@ PLATFORM_UNITTEST_VARS = {
             'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
             'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
         },
-        'lion': {
-            'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
-            'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
-        },
         'mountainlion': {
             'opt_unittest_suites': UNITTEST_SUITES['opt_unittest_suites'][:],
             'debug_unittest_suites': UNITTEST_SUITES['debug_unittest_suites'][:],
@@ -229,8 +205,8 @@ PLATFORM_UNITTEST_VARS = {
 }
 
 # Copy project branches into BRANCHES keys
-#for branch in ACTIVE_PROJECT_BRANCHES:
-#    BRANCHES[branch] = deepcopy(PROJECT_BRANCHES[branch])
+for branch in ACTIVE_PROJECT_BRANCHES:
+    BRANCHES[branch] = deepcopy(PROJECT_BRANCHES[branch])
 
 # Copy unittest vars in first, then platform vars
 for branch in BRANCHES.keys():
@@ -271,15 +247,15 @@ for branch in BRANCHES.keys():
             else:
                 BRANCHES[branch][key] = deepcopy(value)
 
-#    # Merge in any project branch config for platforms
-#    if branch in ACTIVE_PROJECT_BRANCHES and PROJECT_BRANCHES[branch].has_key('platforms'):
-#        for platform, platform_config in PROJECT_BRANCHES[branch]['platforms'].items():
-#            if platform in PLATFORMS:
-#                for key, value in platform_config.items():
-#                    value = deepcopy(value)
-#                    if isinstance(value, str):
-#                        value = value % locals()
-#                    BRANCHES[branch]['platforms'][platform][key] = value
+    # Merge in any project branch config for platforms
+    if branch in ACTIVE_PROJECT_BRANCHES and 'platforms' in PROJECT_BRANCHES[branch]:
+        for platform, platform_config in PROJECT_BRANCHES[branch]['platforms'].items():
+            if platform in PLATFORMS:
+                for key, value in platform_config.items():
+                    value = deepcopy(value)
+                    if isinstance(value, str):
+                        value = value % locals()
+                    BRANCHES[branch]['platforms'][platform][key] = value
 
     for platform, platform_config in thunderbird_localconfig.PLATFORM_VARS.items():
         if platform in BRANCHES[branch]['platforms']:
@@ -322,19 +298,6 @@ BRANCHES['comm-beta']['repo_path'] = "releases/comm-beta"
 ######## comm-aurora
 BRANCHES['comm-aurora']['pgo_strategy'] = None
 BRANCHES['comm-aurora']['repo_path'] = "releases/comm-aurora"
-BRANCHES['comm-aurora']['platforms']['linux']['slave_platforms'] = ['fedora']
-BRANCHES['comm-aurora']['platforms']['linux64']['slave_platforms'] = ['fedora64']
-
-######## comm-esr17
-BRANCHES['comm-esr17']['pgo_strategy'] = None
-BRANCHES['comm-esr17']['repo_path'] = "releases/comm-esr17"
-del BRANCHES['comm-esr17']['platforms']['win32']['xp-ix']
-del BRANCHES['comm-esr17']['platforms']['win32']['win7-ix']
-del BRANCHES['comm-esr17']['platforms']['linux']['ubuntu32_vm']
-del BRANCHES['comm-esr17']['platforms']['linux64']['ubuntu64_vm']
-BRANCHES['comm-esr17']['platforms']['win32']['slave_platforms'] = ['xp', 'win7']
-BRANCHES['comm-esr17']['platforms']['linux']['slave_platforms'] = ['fedora']
-BRANCHES['comm-esr17']['platforms']['linux64']['slave_platforms'] = ['fedora64']
 
 ######## comm-esr24
 BRANCHES['comm-esr24']['pgo_strategy'] = None
@@ -343,24 +306,19 @@ BRANCHES['comm-esr24']['repo_path'] = "releases/comm-esr24"
 ######## try
 BRANCHES['try-comm-central']['enable_try'] = True
 
-WIN32_REV3_BRANCHES = ["comm-esr17"]
-FEDORA_REV3_BRANCHES = ["comm-esr17"]
-
-# Disable Rev3 winxp and win7 machines for all branches apart from try and comm-central
-# for now.
-for branch in set(BRANCHES.keys()) - set(WIN32_REV3_BRANCHES):
+# Disable Rev3 winxp and win7 machines for all branches
+for branch in set(BRANCHES.keys()):
     if 'win32' not in BRANCHES[branch]['platforms']:
         continue
-    del BRANCHES[branch]['platforms']['win32']['xp']
+    if 'win7' not in BRANCHES[branch]['platforms']['win32']:
+        continue
     del BRANCHES[branch]['platforms']['win32']['win7']
     BRANCHES[branch]['platforms']['win32']['slave_platforms'] = ['xp-ix', 'win7-ix']
 
-for branch in set(BRANCHES.keys()) - set(FEDORA_REV3_BRANCHES):
+for branch in set(BRANCHES.keys()):
     if 'linux' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['linux']['fedora']
         BRANCHES[branch]['platforms']['linux']['slave_platforms'] = ['ubuntu32_vm']
     if 'linux64' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['linux64']['fedora64']
         BRANCHES[branch]['platforms']['linux64']['slave_platforms'] = ['ubuntu64_vm']
 
 if __name__ == "__main__":

@@ -1,42 +1,49 @@
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(1,16) + range(41,87) + [88] + range(93,95)]
-LINUX_VMS      = ['bld-centos5-32-vmw-%03i' % x for x in range(1,7)]
-LINUX_IXS      = ['linux-ix-slave%02i' % x for x in [1,2,6]]
-LINUX64_IXS    = ['linux64-ix-slave%02i' % x for x in range(3, 7)]
-WIN32_IXS      = ['mw32-ix-slave%02i' % x for x in range(2,13)]
-WIN64_IXS      = ['w64-ix-slave%02i' % x for x in range(88,100)] + \
-                 ['w64-ix-slave%03i' % x for x in range(100,158) if x not in range(110,131)]
-WIN64_REV2     = ['w64-ix-slave%02i' % x for x in range(6,30) + range(42,44) + range(75,88) if x not in [22,80,85,86]] + \
-                 ['w64-ix-slave%03i' % x for x in range(111,131)]
-MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,24)] # 5 staging, 17 prod, 17 try
-LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 900)]
-MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in range(27, 38)]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(1,16) + range(41,69) + range(70,87) + [88] + range(93,95)]
+LINUX_IXS      = []
+LINUX64_IXS    = []
+WIN32_IXS      = []
+WIN64_IXS      = []
+WIN64_REV2     = ['w64-ix-slave%02i' % x for x in range(6,30) + range(42,44) + range(75,100) if x not in [22,80,85,86]] + \
+                 ['w64-ix-slave%03i' % x for x in range(100,110) + range(111,158)] + \
+                 ['b-2008-ix-%04i' % x for x in range(1,18)]
+MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,10) + range(12,14) + range(15,20)]
+LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 50) + range(301, 350)] + \
+                 ['bld-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)]
+MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in range(28, 38)] + \
+                 ['b-linux64-ix-%04d' % x for x in range(1, 12)]
+
 if set(WIN64_REV2).intersection(set(WIN64_IXS)):
     raise Exception('WIN64_REV2 and WIN64_IXS overlap')
 
 SLAVES = {
-    'linux':            LINUX_VMS + LINUX_IXS,
+    'linux':            LINUX_IXS,
     'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
     'win64-rev2':       WIN64_REV2,
     'macosx64-lion':    MAC_LION_MINIS,
     'mock':             MOCK_DL120G7 + LINUX64_EC2 + MOCK_IX,
+    'mock-hw':          MOCK_DL120G7 + MOCK_IX,
 }
 
 TRY_LINUX      = []
 TRY_LINUX_IXS  = []
 TRY_LINUX64    = []
 TRY_LINUX64_IXS= []
-TRY_LINUX64_EC2= ['try-linux64-ec2-%03d' % x for x in range(1, 900)]
 TRY_MAC64      = []
 TRY_WIN32_IXS  = []
-TRY_WIN64_IXS  = ['w64-ix-slave%02i' % x for x in range(67,75)]
-TRY_WIN64_REV2 = ['w64-ix-slave%02i' % x for x in [3] + range(30,67) if x not in [42,43]] + \
-                 ['w64-ix-slave%03i' % x for x in [110]]
-TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,43)] + \
-                   ['b-linux64-hp-%03d' % x for x in range(1, 7)]
-TRY_MOCK_IX      = ['bld-linux64-ix-%03d' % x for x in range(49, 74)]
-TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,41)]
+TRY_WIN64_IXS  = []
+TRY_LINUX64_EC2 = ['try-linux64-ec2-%03d' % x for x in range(1, 60) + range(301,340)] + \
+    ['try-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)]
+TRY_WIN64_REV2 = ['w64-ix-slave%02i' % x for x in [3] + range(32,75) if x not in [42,43]] + \
+                 ['w64-ix-slave%03i' % x for x in [110] + range(159,171)] + \
+                 ['b-2008-ix-%04i' % x for x in range(18, 65) + range(173,15)]
+TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,33) + [35] + range(40,43)] + \
+                   ['b-linux64-hp-%03d' % x for x in range(1, 7)] + \
+                   ['b-linux64-hp-%04d' % x for x in range(1, 20)] + \
+                   ['b-linux64-ix-%04d' % x for x in range(12, 14)]
+TRY_MOCK_IX      = ['bld-linux64-ix-%03d' % x for x in range(49,51)]
+TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,40)]
 if set(TRY_WIN64_REV2).intersection(set(TRY_WIN64_IXS)):
     raise Exception('TRY_WIN64_REV2 and TRY_WIN64_IXS overlap')
 if set(TRY_WIN64_IXS + TRY_WIN64_REV2).intersection(WIN64_IXS + WIN64_REV2):
@@ -58,11 +65,12 @@ GLOBAL_VARS = {
     'stage_server': 'stage.mozilla.org',
     'aus2_host': 'aus3-staging.mozilla.org',
     'aus2_user': 'ffxbld',
-    'aus2_ssh_key': 'auspush',
+    'aus2_ssh_key': 'ffxbld_dsa',
     'download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox',
     'mobile_download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/mobile',
     'graph_server': 'graphs.mozilla.org',
     'balrog_api_root': 'https://aus4-admin.mozilla.org',
+    'balrog_username': 'ffxbld',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://clobberer.pvt.build.mozilla.org/index.php',
     'disable_tinderbox_mail': True,
@@ -81,9 +89,9 @@ GLOBAL_VARS = {
     'xulrunner_tinderbox_tree': 'XULRunner',
     'weekly_tinderbox_tree': 'Testing',
     'l10n_tinderbox_tree': 'Mozilla-l10n',
-    'base_mirror_urls': ['http://hg-internal.dmz.scl3.mozilla.com'],
-    'base_bundle_urls': ['http://ftp.mozilla.org/pub/mozilla.org/firefox/bundles'],
+    'base_bundle_urls': ['https://ftp-ssl.mozilla.org/pub/mozilla.org/firefox/bundles'],
     'tooltool_url_list': ['http://runtime-binaries.pvt.build.mozilla.org/tooltool'],
+    'blob_upload': True,
 }
 
 BUILDS_BEFORE_REBOOT = 1
@@ -102,11 +110,6 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-Release',
         'mobile_tinderbox_tree': 'Mozilla-Release',
     },
-    'mozilla-esr17': {
-        'packaged_unittest_tinderbox_tree': 'Mozilla-Esr17',
-        'tinderbox_tree': 'Mozilla-Esr17',
-        'mobile_tinderbox_tree': 'Mozilla-Esr17',
-    },
     'mozilla-esr24': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-Esr24',
         'tinderbox_tree': 'Mozilla-Esr24',
@@ -117,11 +120,6 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-B2g18',
         'mobile_tinderbox_tree': 'Mozilla-B2g18',
     },
-    'mozilla-b2g18_v1_0_1': {
-        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g18_v1_0_1',
-        'tinderbox_tree': 'Mozilla-B2g18_v1_0_1',
-        'mobile_tinderbox_tree': 'Mozilla-B2g18_v1_0_1',
-    },
     'mozilla-b2g18_v1_1_0_hd': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
         'tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
@@ -131,6 +129,16 @@ BRANCHES = {
         'packaged_unittest_tinderbox_tree': 'Mozilla-B2g26-v1.2',
         'tinderbox_tree': 'Mozilla-B2g26-v1.2',
         'mobile_tinderbox_tree': 'Mozilla-B2g26-v1.2',
+    },
+    'mozilla-b2g28_v1_3': {
+        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g28-v1.3',
+        'tinderbox_tree': 'Mozilla-B2g28-v1.3',
+        'mobile_tinderbox_tree': 'Mozilla-B2g28-v1.3',
+    },
+    'mozilla-b2g30_v1_4': {
+        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g30-v1.4',
+        'tinderbox_tree': 'Mozilla-B2g30-v1.4',
+        'mobile_tinderbox_tree': 'Mozilla-B2g30-v1.4',
     },
     'mozilla-beta': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-Beta',
@@ -146,11 +154,11 @@ BRANCHES = {
         'tinderbox_tree': 'Try',
         'mobile_tinderbox_tree': 'Try',
         'packaged_unittest_tinderbox_tree': 'Try',
-        'download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds',
-        'mobile_download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds',
+        'download_base_url': 'https://ftp-ssl.mozilla.org/pub/mozilla.org/firefox/try-builds',
+        'mobile_download_base_url': 'https://ftp-ssl.mozilla.org/pub/mozilla.org/firefox/try-builds',
         'enable_mail_notifier': True,
         'notify_real_author': True,
-        'package_url': 'http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds',
+        'package_url': 'https://ftp-ssl.mozilla.org/pub/mozilla.org/firefox/try-builds',
         'talos_masters': [],
         'platforms': {
             'win32': {
@@ -174,7 +182,7 @@ PLATFORM_VARS = {}
 
 PROJECTS = {
     'fuzzing': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'scripts_repo': 'https://hg.mozilla.org/build/tools',
         'fuzzing_bundle': 'http://pvtbuilds.pvt.build.mozilla.org/bundles/fuzzing.hg',
         'fuzzing_repo': 'ssh://ffxbld@hg.mozilla.org/private/fuzzing',
         'fuzzing_remote_host': 'ffxbld@stage.mozilla.org',
@@ -183,27 +191,21 @@ PROJECTS = {
         'idle_slaves': 3,
         'disable_tinderbox_mail': False,
     },
-    'nanojit': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
-        'idle_slaves': 3,
-        'tinderbox_tree': 'Nanojit',
-        'disable_tinderbox_mail': False,
-    },
 }
 
 BRANCH_PROJECTS = {
     'spidermonkey_tier_1': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'scripts_repo': 'https://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'disable_tinderbox_mail': False,
     },
     'spidermonkey_try': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'scripts_repo': 'https://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'disable_tinderbox_mail': False,
     },
     'spidermonkey_info': {
-        'scripts_repo': 'http://hg.mozilla.org/build/tools',
+        'scripts_repo': 'https://hg.mozilla.org/build/tools',
         'idle_slaves': 0,
         'disable_tinderbox_mail': False,
     },
