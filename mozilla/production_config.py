@@ -5,11 +5,11 @@ WIN32_IXS      = []
 WIN64_IXS      = []
 WIN64_REV2     = ['w64-ix-slave%02i' % x for x in range(6,30) + range(42,44) + range(75,100) if x not in [22,80,85,86]] + \
                  ['w64-ix-slave%03i' % x for x in range(100,110) + range(111,158)] + \
-                 ['b-2008-ix-%04i' % x for x in range(1,18)] + \
-                 ['b-2008-sm-%04d' % x for x in range(1, 65)]
+                 ['b-2008-ix-%04i' % x for x in range(1,18)]
 MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,10) + range(12,14) + range(15,20)]
 LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 50) + range(301, 350)] + \
-                 ['bld-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)]
+                 ['bld-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)] + \
+                 ['bld-linux64-spot-%d' % x for x in range(1000, 1100)]
 MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in range(28, 38)] + \
                  ['b-linux64-ix-%04d' % x for x in range(1, 12)]
 
@@ -35,16 +35,18 @@ TRY_MAC64      = []
 TRY_WIN32_IXS  = []
 TRY_WIN64_IXS  = []
 TRY_LINUX64_EC2 = ['try-linux64-ec2-%03d' % x for x in range(1, 60) + range(301,340)] + \
-    ['try-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)]
+    ['try-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)] + \
+    ['try-linux64-spot-%d' % x for x in range(1000, 1100)]
 TRY_WIN64_REV2 = ['w64-ix-slave%02i' % x for x in [3] + range(32,75) if x not in [42,43]] + \
                  ['w64-ix-slave%03i' % x for x in [110] + range(159,171)] + \
-                 ['b-2008-ix-%04i' % x for x in range(18, 65) + range(173,15)]
+                 ['b-2008-ix-%04i' % x for x in range(18, 65) + range(173,15)] + \
+                 ['b-2008-sm-%04d' % x for x in range(1, 65)]
 TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,33) + [35] + range(40,43)] + \
                    ['b-linux64-hp-%03d' % x for x in range(1, 7)] + \
                    ['b-linux64-hp-%04d' % x for x in range(1, 20)] + \
                    ['b-linux64-ix-%04d' % x for x in range(12, 14)]
 TRY_MOCK_IX      = ['bld-linux64-ix-%03d' % x for x in range(49,51)]
-TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,40)]
+TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,40) + [87]]
 if set(TRY_WIN64_REV2).intersection(set(TRY_WIN64_IXS)):
     raise Exception('TRY_WIN64_REV2 and TRY_WIN64_IXS overlap')
 if set(TRY_WIN64_IXS + TRY_WIN64_REV2).intersection(WIN64_IXS + WIN64_REV2):
@@ -93,6 +95,9 @@ GLOBAL_VARS = {
     'base_bundle_urls': ['https://ftp-ssl.mozilla.org/pub/mozilla.org/firefox/bundles'],
     'tooltool_url_list': ['http://runtime-binaries.pvt.build.mozilla.org/tooltool'],
     'blob_upload': True,
+    'mozharness_configs': {
+        'balrog': 'balrog/production.py',
+    },
 }
 
 BUILDS_BEFORE_REBOOT = 1

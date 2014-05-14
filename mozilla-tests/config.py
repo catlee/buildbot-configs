@@ -1045,6 +1045,9 @@ PLATFORM_UNITTEST_VARS = {
                 'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
+                'web-platform-tests': {
+                    'config_files': ["web_platform_tests/prod_config_windows.py"],
+                },
             },
         },
         'win7-ix': {
@@ -1144,6 +1147,9 @@ PLATFORM_UNITTEST_VARS = {
                 'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
+                'web-platform-tests': {
+                    'config_files': ["web_platform_tests/prod_config_windows.py"],
+                },
             },
         },
         'win8': {
@@ -1242,6 +1248,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
+                },
+                'web-platform-tests': {
+                    'config_files': ["web_platform_tests/prod_config_windows.py"],
                 },
             },
         }
@@ -1350,6 +1359,9 @@ PLATFORM_UNITTEST_VARS = {
                 'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
+                'web-platform-tests': {
+                    'config_files': ["web_platform_tests/prod_config_windows.py"],
+                },
             },
         },
         'win64_vm': {
@@ -1445,6 +1457,9 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'mozbase': {
                     'config_files': ["unittests/win_unittest.py"],
+                },
+                'web-platform-tests': {
+                    'config_files': ["web_platform_tests/prod_config_windows.py"],
                 },
             },
         }
@@ -2010,7 +2025,7 @@ for platform in PLATFORMS.keys():
 
 # Enable web-platform-tests on cedar (non-windows only for now)
 for platform in PLATFORMS.keys():
-    if platform not in BRANCHES['cedar']['platforms'] or platform.startswith('win'):
+    if platform not in BRANCHES['cedar']['platforms']:
         continue
 
     for slave_platform in PLATFORMS[platform]['slave_platforms']:
@@ -2037,6 +2052,18 @@ for name, branch in items_at_least(BRANCHES, 'gecko_version', 31):
         branch['platforms']['linux']['ubuntu32_vm']['opt_unittest_suites'] += MOCHITEST_E10S[:]
     if 'linux64' in branch['platforms']:
         branch['platforms']['linux64']['ubuntu64_vm']['opt_unittest_suites'] += MOCHITEST_E10S[:]
+
+# Filter the tests that are enabled on elm for bug 1006717.
+for platform in BRANCHES['elm']['platforms'].keys():
+    if platform not in PLATFORMS:
+        continue
+
+    for slave_platform in PLATFORMS[platform]['slave_platforms']:
+        if slave_platform not in BRANCHES['elm']['platforms'][platform]:
+            continue
+        slave_p = BRANCHES['elm']['platforms'][platform][slave_platform]
+        slave_p['opt_unittest_suites'] = MOCHITEST + XPCSHELL + MOCHITEST_DT
+        slave_p['debug_unittest_suites'] = MOCHITEST + XPCSHELL + MARIONETTE + MOCHITEST_DT_3
 
 # TALOS: If you set 'talos_slave_platforms' for a branch you will only get that subset of platforms
 for branch in BRANCHES.keys():
@@ -2089,14 +2116,15 @@ for name, branch in items_before(BRANCHES, 'gecko_version', 30):
                     # wasn't in the list anyways
                     pass
 
-# mochitest-devtools-chrome and mountainlion only exist on 30+
+# mochitest-devtools-chrome only exists on 30+; remove mountainlion from
+# b2g branches 29 and below
 for name, branch in items_before(BRANCHES, 'gecko_version', 30):
     for platform in branch['platforms']:
         for slave_platform in PLATFORMS[platform]['slave_platforms']:
             if slave_platform not in branch['platforms'][platform]:
                 continue
             # Delete mountainlion, bug 997959
-            if slave_platform in ('mountainlion', ):
+            if slave_platform in ('mountainlion', ) and 'b2g' in name:
                 del branch['platforms'][platform][slave_platform]
                 continue
             try:

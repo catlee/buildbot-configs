@@ -28,7 +28,6 @@ BRANCHES = {
     # 'birch': {},
     'cedar': {},
     'cypress': {},
-    'elm': {},
     'pine': {},
     'fx-team': {},
     'graphics': {},
@@ -1641,6 +1640,15 @@ BRANCHES['services-central']['repo_path'] = "services/services-central"
 BRANCHES['try']['pgo_strategy'] = "try"
 BRANCHES['try']['enable_try'] = True
 BRANCHES['gaia-try']['repo_path'] = "integration/gaia-try"
+# Temporary redirect for debugging: bug 1008351
+BRANCHES['gaia-try']['mozharness_repo'] = "https://hg.mozilla.org/users/jford_mozilla.com/mozharness"
+BRANCHES['gaia-try']['mozharness_tag'] = "default"
+
+# Run at scale
+BRANCHES['mozilla-inbound']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += \
+    GAIA_BUILD
+BRANCHES['b2g-inbound']['platforms']['linux64_gecko']['ubuntu64_vm-b2gdt']['opt_unittest_suites'] += \
+    GAIA_BUILD
 
 # explicitly set slave platforms per branch
 for branch in BRANCHES.keys():
@@ -1666,12 +1674,28 @@ for branch in BRANCHES.keys():
             BRANCHES[branch]['platforms']['emulator']['enable_debug_unittests'] = False
 
 # Disable gecko-debug unittests on older branches, Bug 91611
+# All tests need to be enabled on cedar until they green up, Bug 1004610
+# On recent branches, enable GAIA_UI for linux64, Bug 1004610, c9
 OLD_BRANCHES = set([name for name, branch in items_before(BRANCHES, 'gecko_version', 30)])
 for b in BRANCHES.keys():
-    if b != 'cedar' or b in OLD_BRANCHES:
+    if b in OLD_BRANCHES:
         for platform in ['linux32_gecko', 'linux64_gecko', 'macosx64_gecko']:
              if platform in BRANCHES[b]['platforms']:
                  BRANCHES[b]['platforms'][platform]['enable_debug_unittests'] = False
+    else:
+        if b == 'cedar':
+            # run all test suites on all platforms
+            pass
+        else:
+            for platform in ['linux32_gecko', 'macosx64_gecko']:
+                 # disable all tests
+                 if platform in BRANCHES[b]['platforms']:
+                     BRANCHES[b]['platforms'][platform]['enable_debug_unittests'] = False
+            for slave_platform in (('linux64_gecko', 'ubuntu64_vm-b2gdt')):
+                # enable GAIA_UI tests only
+                if nested_haskey(BRANCHES[b]['platforms'], slave_platform[0], slave_platform[1]):
+                    slave_p = BRANCHES[b]['platforms'][slave_platform[0]][slave_platform[1]] 
+                    slave_p['debug_unittest_suites'] = GAIA_UI[:]
 
 
 # Disable b2g desktop reftest-sanity on cedar

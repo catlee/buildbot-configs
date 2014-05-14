@@ -1,7 +1,7 @@
 from copy import deepcopy
 import production_config as pc
 
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(87, 93) if x not in [88]]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(89, 93)]
 WIN32_IXS      = []
 WIN64_IXS      = []
 WIN64_REV2     = ['ix-mn-w0864-%03d' % x for x in range(1,3)] + \
@@ -67,6 +67,9 @@ GLOBAL_VARS = {
     'base_bundle_urls': ['http://dev-stage01.build.mozilla.org/pub/mozilla.org/firefox/bundles'],
     'tooltool_url_list': ['http://runtime-binaries.pvt.build.mozilla.org/tooltool'],
     'blob_upload': True,
+    'mozharness_configs': {
+        'balrog': 'balrog/staging.py',
+    },
 }
 
 BUILDS_BEFORE_REBOOT = 5
