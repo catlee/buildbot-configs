@@ -57,7 +57,7 @@ GLOBAL_VARS.update({
     },
     'pgo_platforms': list(),
     'pgo_strategy': None,
-    'periodic_interval': 6, # in hours
+    'periodic_start_hours': range(0, 24, 6),
     'product_name': 'thunderbird', # Not valid for mobile builds
     'app_name': 'mail',     # Not valid for mobile builds
     'brand_name': 'Daily', # Not valid for mobile builds
@@ -65,6 +65,7 @@ GLOBAL_VARS.update({
     'blocklist_update_on_closed_tree': False,
     'blocklist_update_set_approval': True,
     'enable_nightly': True,
+    'enable_perproduct_builds': True,
     'enabled_products': ['thunderbird'],
     'enable_valgrind': False,
     'valgrind_platforms': ('linux', 'linux64'),
@@ -86,6 +87,7 @@ GLOBAL_VARS.update({
             'toolkit',
             'security/manager',
         ],
+    'default_l10n_space': 4,
     'scratchbox_path': '/builds/scratchbox/moz_scratchbox',
     'scratchbox_home': '/scratchbox/users/cltbld/home/cltbld',
     'use_old_updater': False,
@@ -97,6 +99,12 @@ OBJDIR = GLOBAL_VARS['objdir']
 SYMBOL_SERVER_PATH = GLOBAL_VARS['symbol_server_path']
 SYMBOL_SERVER_POST_UPLOAD_CMD = GLOBAL_VARS['symbol_server_post_upload_cmd']
 builder_prefix = "TB "
+
+GLOBAL_ENV = {
+    'MOZ_CRASHREPORTER_NO_REPORT': '1',
+    'TINDERBOX_OUTPUT': '1',
+    'MOZ_AUTOMATION': '1',
+}
 
 PLATFORM_VARS = {
         'linux': {
@@ -129,8 +137,6 @@ PLATFORM_VARS = {
                 'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
                 'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
                 'SYMBOL_SERVER_SSH_KEY': "/home/mock_mozilla/.ssh/tbirdbld_dsa",
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'CCACHE_DIR': '/builds/ccache',
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
@@ -146,7 +152,7 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux32/releng.manifest',
-            'tooltool_script': '/builds/tooltool.py',
+            'tooltool_script': ['/builds/tooltool.py'],
             'use_mock': True,
             'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
@@ -190,6 +196,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/tools/tooltool.py', '/builds/tooltool.py'),
             ],
         },
@@ -224,8 +231,6 @@ PLATFORM_VARS = {
                 'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
                 'SYMBOL_SERVER_SSH_KEY': "/home/mock_mozilla/.ssh/tbirdbld_dsa",
                 'MOZ_SYMBOLS_EXTRA_BUILDID': 'linux64',
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'CCACHE_DIR': '/builds/ccache',
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
@@ -241,7 +246,7 @@ PLATFORM_VARS = {
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
             'tooltool_manifest_src': 'mail/config/tooltool-manifests/linux64/releng.manifest',
-            'tooltool_script': '/builds/tooltool.py',
+            'tooltool_script': ['/builds/tooltool.py'],
             'use_mock': True,
             'mock_target': 'mozilla-centos6-x86_64',
             'mock_packages': \
@@ -265,6 +270,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
                 ('/tools/tooltool.py', '/builds/tooltool.py'),
             ],
         },
@@ -297,8 +303,6 @@ PLATFORM_VARS = {
                 'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
                 'SYMBOL_SERVER_SSH_KEY': "/Users/cltbld/.ssh/tbirdbld_dsa",
                 'MOZ_SYMBOLS_EXTRA_BUILDID': 'macosx64',
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'CHOWN_ROOT': '~/bin/chown_root',
                 'CHOWN_REVERT': '~/bin/chown_revert',
                 'LC_ALL': 'C',
@@ -347,8 +351,6 @@ PLATFORM_VARS = {
                 'SYMBOL_SERVER_PATH': SYMBOL_SERVER_PATH,
                 'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
                 'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/tbirdbld_dsa",
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'PDBSTR_PATH': '/c/Program Files (x86)/Windows Kits/8.0/Debuggers/x64/srcsrv/pdbstr.exe',
                 'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                 'PATH': "${MOZILLABUILD}nsis-2.46u;${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
@@ -360,6 +362,8 @@ PLATFORM_VARS = {
             'l10n_check_test': False,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/win32/releng.manifest',
+            'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'win64': {
             'product_name': 'thunderbird',
@@ -393,8 +397,6 @@ PLATFORM_VARS = {
                 'POST_SYMBOL_UPLOAD_CMD': SYMBOL_SERVER_POST_UPLOAD_CMD,
                 'SYMBOL_SERVER_SSH_KEY': "/c/Users/cltbld/.ssh/tbirdbld_dsa",
                 'MOZ_SYMBOLS_EXTRA_BUILDID': 'win64',
-                'TINDERBOX_OUTPUT': '1',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'PDBSTR_PATH': '/c/Program Files (x86)/Windows Kits/8.0/Debuggers/x64/srcsrv/pdbstr.exe',
                 'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                 'PATH': "${MOZILLABUILD}nsis-2.46u;${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
@@ -404,6 +406,8 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'test_pretty_names': True,
             'l10n_check_test': False,
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/win64/releng.manifest',
+            'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'linux-debug': {
             'enable_nightly': False,
@@ -429,7 +433,6 @@ PLATFORM_VARS = {
                 'DISPLAY': ':2',
                 'LD_LIBRARY_PATH': '%s/mozilla/dist/bin' % OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'CCACHE_DIR': '/builds/ccache',
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
@@ -483,6 +486,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
             ],
         },
         'linux64-debug': {
@@ -509,7 +513,6 @@ PLATFORM_VARS = {
                 'DISPLAY': ':2',
                 'LD_LIBRARY_PATH': '%s/mozilla/dist/bin' % OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'CCACHE_DIR': '/builds/ccache',
                 'CCACHE_COMPRESS': '1',
                 'CCACHE_UMASK': '002',
@@ -542,6 +545,7 @@ PLATFORM_VARS = {
             'mock_copyin_files': [
                 ('/home/cltbld/.ssh', '/home/mock_mozilla/.ssh'),
                 ('/home/cltbld/.hgrc', '/builds/.hgrc'),
+                ('/home/cltbld/.boto', '/builds/.boto'),
             ],
         },
         'macosx64-debug': {
@@ -565,7 +569,6 @@ PLATFORM_VARS = {
                 'MOZ_OBJDIR': OBJDIR,
                 'HG_SHARE_BASE_DIR': '/builds/hg-shared',
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'LC_ALL': 'C',
                 'PATH': '/tools/python/bin:/tools/buildbot/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin',
                 'CCACHE_DIR': '/builds/ccache',
@@ -601,7 +604,6 @@ PLATFORM_VARS = {
             'env': {
                 'MOZ_OBJDIR': OBJDIR,
                 'XPCOM_DEBUG_BREAK': 'stack-and-abort',
-                'MOZ_CRASHREPORTER_NO_REPORT': '1',
                 'HG_SHARE_BASE_DIR': 'c:/builds/hg-shared',
                 'PATH': "${MOZILLABUILD}nsis-2.46u;${MOZILLABUILD}python27;${MOZILLABUILD}buildbotve\\scripts;${PATH}",
             },
@@ -610,9 +612,16 @@ PLATFORM_VARS = {
             'talos_masters': None,
             'nightly_signing_servers': 'dep-signing',
             'dep_signing_servers': 'dep-signing',
+            'tooltool_manifest_src': 'mail/config/tooltool-manifests/win32/releng.manifest',
+            'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
 }
 
+for platform in PLATFORM_VARS.values():
+    if 'env' not in platform:
+        platform['env'] = deepcopy(GLOBAL_ENV)
+    else:
+        platform['env'].update((k, v) for k, v in GLOBAL_ENV.items() if k not in platform['env'])
 
 # All branches (not in project_branches) that are to be built MUST be listed here, along with their
 # platforms (if different from the default set).
@@ -944,7 +953,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
     BRANCHES[branch]['enable_nightly'] = branchConfig.get('enable_nightly', False)
     BRANCHES[branch]['enable_mobile'] = branchConfig.get('enable_mobile', True)
     BRANCHES[branch]['pgo_strategy'] = branchConfig.get('pgo_strategy', None)
-    BRANCHES[branch]['periodic_interval'] = branchConfig.get('periodic_interval', 6)
+    BRANCHES[branch]['periodic_start_hours'] = branchConfig.get('periodic_start_hours', range(0, 24, 6))
     BRANCHES[branch]['start_hour'] = branchConfig.get('start_hour', [4])
     BRANCHES[branch]['start_minute'] = branchConfig.get('start_minute', [2])
     # Disable XULRunner / SDK builds
@@ -1025,20 +1034,6 @@ for branch in branches:
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
         }
 
-for name, branch in items_before(BRANCHES, 'gecko_version', 18):
-    # Disable pymake
-    for p in ('win32', 'win32-debug', 'win64'):
-        if p not in branch['platforms']:
-            continue
-        branch['platforms'][p]['enable_pymake'] = False
-
-# pulseaudio-libs-devel package rides the trains (bug 662417)
-for name, branch in items_before(BRANCHES, 'gecko_version', 21):
-    for p, pc in branch['platforms'].items():
-        if 'mock_packages' in pc:
-            branch['platforms'][p]['mock_packages'] = \
-                [x for x in branch['platforms'][p]['mock_packages'] if x != 'pulseaudio-libs-devel']
-
 # building 32-bit linux in a x86_64 env rides the trains
 for name, branch in items_before(BRANCHES, 'gecko_version', 24):
     for platform in ['linux', 'linux-debug']:
@@ -1074,40 +1069,6 @@ for name, branch in items_before(BRANCHES, 'gecko_version', 24):
                     'gstreamer-devel', 'gstreamer-plugins-base-devel',
                     'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
                 )]
-
-# Migrate branches to win64-rev2 platform (bug 918414)
-disabled_branches = [x for x in BRANCHES.keys() if x not in ['try-comm-central', 'comm-central', 'comm-aurora', 'comm-beta', 'comm-release']]
-win64_rev1_masters = ['buildbot-master82']
-mixed_branches = []
-for b in mixed_branches:
-    if b not in disabled_branches:
-        raise Exception("win64-rev2 mixed branch '%s' must be in disabled branches list")
-win64_rev2_master = True
-for m in win64_rev1_masters:
-    if m in uname()[1]:
-        win64_rev2_master = False
-        break
-for branch in disabled_branches:
-    for platform in ('win32','win32-debug','win64','win64-debug'):
-        if platform not in BRANCHES[branch]['platforms']:
-            continue
-        if branch in mixed_branches and win64_rev2_master:
-            slaves = SLAVES['win64-rev2']
-            if 'try' in branch:
-                slaves = TRY_SLAVES['win64-rev2']
-            BRANCHES[branch]['platforms'][platform]['slaves'] = slaves
-            if 'l10n_slaves' in BRANCHES[branch]['platforms'][platform]:
-                BRANCHES[branch]['platforms'][platform]['l10n_slaves'] = slaves
-        else:
-            if 'PDBSTR_PATH' in BRANCHES[branch]['platforms'][platform]['env']:
-                BRANCHES[branch]['platforms'][platform]['env']['PDBSTR_PATH'] = '/c/Program Files/Debugging Tools for Windows (x64)/srcsrv/pdbstr.exe'
-            BRANCHES[branch]['platforms'][platform]['env']['HG_SHARE_BASE_DIR'] = 'e:/builds/hg-shared'
-            oldslaves = SLAVES['win64']
-            if 'try' in branch:
-                oldslaves = TRY_SLAVES['win64']
-            BRANCHES[branch]['platforms'][platform]['slaves'] = oldslaves
-            if 'l10n_slaves' in BRANCHES[branch]['platforms'][platform]:
-                BRANCHES[branch]['platforms'][platform]['l10n_slaves'] = oldslaves
 
 
 if __name__ == "__main__":

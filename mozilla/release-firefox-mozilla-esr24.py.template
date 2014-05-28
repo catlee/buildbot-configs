@@ -12,7 +12,7 @@ releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/alwa
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
-                                        '<qa-drivers@mozilla.org>']
+                                        '<qa-drivers@mozilla.com>']
 releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>', '<mikeperry@torproject.org>']
 releaseConfig['AVVendorsRecipients'] = ['<av-vendor-release-announce@mozilla.org>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
@@ -43,6 +43,7 @@ releaseConfig['nextMilestone']       = releaseConfig['nextAppVersion']
 #  Repository configuration, for tagging
 releaseConfig['sourceRepositories']  = {
     'mozilla': {
+        # XXX remove js/src/config/milestone.txt when setting up ESR31
         'name': 'mozilla-esr24',
         'path': '{{ branch }}',
         'revision': '{{ mozillaRevision }}',
@@ -122,17 +123,16 @@ releaseConfig['mozconfigs']          = {
     'win32': 'browser/config/mozconfigs/win32/release',
 }
 releaseConfig['releaseChannel']      = 'esr'
+releaseConfig['testChannels']        = ['releasetest', 'esrtest']
+releaseConfig['testChannelRuleIds']  = [26,37]
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_esr.py'
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

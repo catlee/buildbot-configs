@@ -1,27 +1,30 @@
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(1,16) + range(41,87) + [88] + range(93,95)]
-LINUX_VMS      = ['bld-centos5-32-vmw-%03i' % x for x in range(1,7)]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(1,16) + range(41,69) + range(70,87) + [88] + range(93,95)]
 LINUX_IXS      = []
 LINUX64_IXS    = []
 WIN32_IXS      = []
-WIN64_IXS      = ['w64-ix-slave%03i' % x for x in range(144,158)]
-WIN64_REV2     = ['w64-ix-slave%02i' % x for x in range(6,30) + range(42,44) + range(75,100) if x not in [22,80,85,86]] + \
-                 ['w64-ix-slave%03i' % x for x in range(100,110) + range(111,144)] + \
-                 ['b-2008-ix-%04i' % x for x in range(1,18)]
-MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,24)] # 5 staging, 17 prod, 17 try
-LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 900)] + \
-                 ['bld-linux64-spot-%03d' % x for x in range(1, 900)]
-MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in range(27, 38)]
+WIN64_IXS      = []
+WIN64_REV2     = ['w64-ix-slave%02i' % x for x in range(42,44) + range(75,100) if x not in [80,85,86]] + \
+                 ['w64-ix-slave%03i' % x for x in range(100,110) + range(111,158)] + \
+                 ['b-2008-ix-%04i' % x for x in range(1,18) + range(65,89) + range(161,165)]
+MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(6,10) + range(12,14) + range(15,20)]
+LINUX64_EC2    = ['bld-linux64-ec2-%03d' % x for x in range(1, 50) + range(301, 350)] + \
+                 ['bld-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)] + \
+                 ['bld-linux64-spot-%d' % x for x in range(1000, 1100)]
+MOCK_IX        = ['bld-linux64-ix-%03d' % x for x in range(31, 38)] + \
+                 ['b-linux64-ix-%04d' % x for x in range(1, 12)]
+
 if set(WIN64_REV2).intersection(set(WIN64_IXS)):
     raise Exception('WIN64_REV2 and WIN64_IXS overlap')
 
 SLAVES = {
-    'linux':            LINUX_VMS + LINUX_IXS,
+    'linux':            LINUX_IXS,
     'linux64':          LINUX64_IXS,
     'win32':            WIN32_IXS,
     'win64':            WIN64_IXS,
     'win64-rev2':       WIN64_REV2,
     'macosx64-lion':    MAC_LION_MINIS,
     'mock':             MOCK_DL120G7 + LINUX64_EC2 + MOCK_IX,
+    'mock-hw':          MOCK_DL120G7 + MOCK_IX,
 }
 
 TRY_LINUX      = []
@@ -31,14 +34,18 @@ TRY_LINUX64_IXS= []
 TRY_MAC64      = []
 TRY_WIN32_IXS  = []
 TRY_WIN64_IXS  = []
-TRY_LINUX64_EC2 = ['try-linux64-ec2-%03d' % x for x in range(1, 900)] + \
-    ['try-linux64-spot-%03d' % x for x in range(1, 900)]
-TRY_WIN64_REV2 = ['w64-ix-slave%02i' % x for x in [3] + range(31,75) if x not in [42,43]] + \
-                 ['w64-ix-slave%03i' % x for x in [110] + range(158,171)]
-TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,43)] + \
-                   ['b-linux64-hp-%03d' % x for x in range(1, 7)]
-TRY_MOCK_IX      = ['bld-linux64-ix-%03d' % x for x in range(49, 74) if x not in [51,52,53]]
-TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,41)]
+TRY_LINUX64_EC2 = ['try-linux64-ec2-%03d' % x for x in range(1, 60) + range(301,340)] + \
+    ['try-linux64-spot-%03d' % x for x in range(1, 200) + range(300,500)] + \
+    ['try-linux64-spot-%d' % x for x in range(1000, 1100)]
+TRY_WIN64_REV2 = ['w64-ix-slave%02i' % x for x in range(35,41) + range(53,75)] + \
+                 ['w64-ix-slave%03i' % x for x in [110] + range(159,171)] + \
+                 ['b-2008-ix-%04i' % x for x in range(18, 65) + range(173,176)] + \
+                 ['b-2008-sm-%04d' % x for x in range(1, 65)]
+TRY_MOCK_DL120G7 = ['bld-centos6-hp-%03d' % x for x in range(24,33) + [35] + range(40,43)] + \
+                   ['b-linux64-hp-%04d' % x for x in range(1, 20)] + \
+                   ['b-linux64-ix-%04d' % x for x in range(12, 14)]
+TRY_MOCK_IX      = ['bld-linux64-ix-%03d' % x for x in range(49,51)]
+TRY_LION         = ['bld-lion-r5-%03d' % x for x in range(16,40) + [87]]
 if set(TRY_WIN64_REV2).intersection(set(TRY_WIN64_IXS)):
     raise Exception('TRY_WIN64_REV2 and TRY_WIN64_IXS overlap')
 if set(TRY_WIN64_IXS + TRY_WIN64_REV2).intersection(WIN64_IXS + WIN64_REV2):
@@ -65,6 +72,7 @@ GLOBAL_VARS = {
     'mobile_download_base_url': 'http://ftp.mozilla.org/pub/mozilla.org/mobile',
     'graph_server': 'graphs.mozilla.org',
     'balrog_api_root': 'https://aus4-admin.mozilla.org',
+    'balrog_username': 'ffxbld',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://clobberer.pvt.build.mozilla.org/index.php',
     'disable_tinderbox_mail': True,
@@ -86,6 +94,9 @@ GLOBAL_VARS = {
     'base_bundle_urls': ['https://ftp-ssl.mozilla.org/pub/mozilla.org/firefox/bundles'],
     'tooltool_url_list': ['http://runtime-binaries.pvt.build.mozilla.org/tooltool'],
     'blob_upload': True,
+    'mozharness_configs': {
+        'balrog': 'balrog/production.py',
+    },
 }
 
 BUILDS_BEFORE_REBOOT = 1
@@ -109,16 +120,6 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-Esr24',
         'mobile_tinderbox_tree': 'Mozilla-Esr24',
     },
-    'mozilla-b2g18': {
-        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g18',
-        'tinderbox_tree': 'Mozilla-B2g18',
-        'mobile_tinderbox_tree': 'Mozilla-B2g18',
-    },
-    'mozilla-b2g18_v1_1_0_hd': {
-        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
-        'tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
-        'mobile_tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
-    },
     'mozilla-b2g26_v1_2': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-B2g26-v1.2',
         'tinderbox_tree': 'Mozilla-B2g26-v1.2',
@@ -128,6 +129,11 @@ BRANCHES = {
         'packaged_unittest_tinderbox_tree': 'Mozilla-B2g28-v1.3',
         'tinderbox_tree': 'Mozilla-B2g28-v1.3',
         'mobile_tinderbox_tree': 'Mozilla-B2g28-v1.3',
+    },
+    'mozilla-b2g30_v1_4': {
+        'packaged_unittest_tinderbox_tree': 'Mozilla-B2g30-v1.4',
+        'tinderbox_tree': 'Mozilla-B2g30-v1.4',
+        'mobile_tinderbox_tree': 'Mozilla-B2g30-v1.4',
     },
     'mozilla-beta': {
         'packaged_unittest_tinderbox_tree': 'Mozilla-Beta',

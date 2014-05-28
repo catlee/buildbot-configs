@@ -21,17 +21,17 @@ releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
 releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '27.0b1'
-releaseConfig['appVersion']          = '27.0'
+releaseConfig['version']             = '30.0b1'
+releaseConfig['appVersion']          = '30.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'THUNDERBIRD_27_0b1'
+releaseConfig['baseTag']             = 'THUNDERBIRD_30_0b1'
 releaseConfig['partialUpdates']      = {
 
-    '26.0b1': {
-        'appVersion': '26.0',
-        'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_26_0b1',
+    '29.0b1': {
+        'appVersion': '29.0',
+        'buildNumber': 4,
+        'baseTag': 'THUNDERBIRD_29_0b1',
     },
 
 }
@@ -43,7 +43,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-beta',
         'path': 'releases/comm-beta',
-        'revision': 'e1a04bb47d6b',
+        'revision': '636c7b1ef24a',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -55,14 +55,10 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '9fcd2c8f95b5',
+        'revision': '04c5fcc3831b',
         'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
-                'version': releaseConfig['milestone'],
-                'nextVersion': releaseConfig['nextMilestone']
-            },
-            'js/src/config/milestone.txt': {
                 'version': releaseConfig['milestone'],
                 'nextVersion': releaseConfig['nextMilestone']
             },
@@ -94,7 +90,7 @@ releaseConfig['enableUnittests']     = True
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
 releaseConfig['shippedLocalesPath']  = 'mail/locales/shipped-locales'
 releaseConfig['mergeLocales']        = True
-releaseConfig['l10nUsePymake']       = False
+releaseConfig['l10nUsePymake']       = True
 
 # Mercurial account
 releaseConfig['hgUsername']          = 'tbirdbld'
@@ -126,17 +122,16 @@ releaseConfig['mozconfigs']          = {
     'win32': 'mail/config/mozconfigs/win32/release',
 }
 releaseConfig['releaseChannel']      = 'beta'
+releaseConfig['testChannels']        = ['releasetest', 'betatest']
+releaseConfig['testChannelRuleIds']  = [27,28]
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_thunderbird.py'
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

@@ -11,7 +11,7 @@ releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/alwa
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
-                                        '<qa-drivers@mozilla.org>']
+                                        '<qa-drivers@mozilla.com>']
 releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
 releaseConfig['AVVendorsRecipients'] = ['<av-vendor-release-announce@mozilla.org>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
@@ -22,29 +22,29 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '27.0.1'
-releaseConfig['appVersion']          = '27.0.1'
+releaseConfig['version']             = '29.0.1'
+releaseConfig['appVersion']          = '29.0.1'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_27_0_1'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'FIREFOX_29_0_1'
 releaseConfig['partialUpdates']      = {
 
-    '27.0': {
-        'appVersion': '27.0',
-        'buildNumber': 1,
-        'baseTag': 'FIREFOX_27_0',
-    },
-
-    '25.0.1': {
-        'appVersion': '25.0.1',
-        'buildNumber': 1,
-        'baseTag': 'FIREFOX_25_0_1',
-    },
-
-    '26.0': {
-        'appVersion': '26.0',
+    '28.0': {
+        'appVersion': '28.0',
         'buildNumber': 2,
-        'baseTag': 'FIREFOX_26_0',
+        'baseTag': 'FIREFOX_28_0',
+    },
+
+    '29.0': {
+        'appVersion': '29.0',
+        'buildNumber': 1,
+        'baseTag': 'FIREFOX_29_0',
+    },
+
+    '27.0.1': {
+        'appVersion': '27.0.1',
+        'buildNumber': 1,
+        'baseTag': 'FIREFOX_27_0_1',
     },
 
 }
@@ -56,7 +56,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '66b0d478ee77',
+        'revision': 'bebd4af02d88',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -64,10 +64,6 @@ releaseConfig['sourceRepositories']  = {
                 'nextVersion': releaseConfig['nextAppVersion']
             },
             'config/milestone.txt': {
-                'version': releaseConfig['milestone'],
-                'nextVersion': releaseConfig['nextMilestone']
-            },
-            'js/src/config/milestone.txt': {
                 'version': releaseConfig['milestone'],
                 'nextVersion': releaseConfig['nextMilestone']
             },
@@ -137,6 +133,9 @@ releaseConfig['xulrunner_mozconfigs']          = {
     'macosx64': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
     'win32': 'xulrunner/config/mozconfigs/win32/xulrunner',
 }
+releaseConfig['releaseChannel']      = 'release'
+releaseConfig['testChannels']        = ['releasetest', 'betatest']
+releaseConfig['testChannelRuleIds']  = [25,26]
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = True
@@ -144,11 +143,8 @@ releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 releaseConfig['syncPartnerBundles']  = True
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_release.py'
 
 # Misc configuration
 releaseConfig['makeIndexFiles'] = True
@@ -156,3 +152,9 @@ releaseConfig['enable_repo_setup'] = False
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
 releaseConfig['ftpSymlinkName'] = 'latest'
+
+releaseConfig['bouncer_aliases'] = {
+    'Firefox-%(version)s': 'firefox-latest',
+    'Firefox-%(version)s-stub': 'firefox-stub',
+    'Firefox-%(version)s-EUBallot': 'firefox-latest-euballot',
+}

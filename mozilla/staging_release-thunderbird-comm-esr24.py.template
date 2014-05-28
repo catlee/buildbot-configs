@@ -59,6 +59,7 @@ releaseConfig['sourceRepositories']  = {
         }
     },
     'mozilla': {
+        # XXX remove js/src/config/milestone.txt when setting up ESR31
         'name': 'mozilla-esr24',
         'clonePath': 'releases/mozilla-esr24',
         'path': 'users/stage-ffxbld/mozilla-esr24',
@@ -135,17 +136,17 @@ releaseConfig['mozconfigs']          = {
     'macosx64': 'mail/config/mozconfigs/macosx-universal/release',
     'win32': 'mail/config/mozconfigs/win32/release',
 }
+releaseConfig['releaseChannel']      = 'esr'
+releaseConfig['testChannels']        = ['releasetest', 'esrtest']
+releaseConfig['testChannelRuleIds']  = [22,30]
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://tuxedo.stage.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.allizom.org/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_thunderbird.py'
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

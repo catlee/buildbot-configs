@@ -11,7 +11,7 @@ releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/alwa
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
-                                        '<qa-drivers@mozilla.org>']
+                                        '<qa-drivers@mozilla.com>']
 releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
@@ -22,11 +22,11 @@ releaseConfig['productName']         = 'fennec'
 releaseConfig['appName']             = 'mobile'
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '27.0'
-releaseConfig['appVersion']          = '27.0'
+releaseConfig['version']             = '29.0.1'
+releaseConfig['appVersion']          = '29.0.1'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_27_0'
+releaseConfig['baseTag']             = 'FENNEC_29_0_1'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['version']
 releaseConfig['nextMilestone']       = releaseConfig['version']
@@ -35,7 +35,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '6176b8f17b9d',
+        'revision': 'bebd4af02d88',
         'relbranch': None,
         'bumpFiles': {
             'mobile/android/confvars.sh': {
@@ -47,10 +47,6 @@ releaseConfig['sourceRepositories']  = {
                 'nextVersion': releaseConfig['nextAppVersion']
             },
             'config/milestone.txt': {
-                'version': releaseConfig['milestone'],
-                'nextVersion': releaseConfig['nextMilestone']
-            },
-            'js/src/config/milestone.txt': {
                 'version': releaseConfig['milestone'],
                 'nextVersion': releaseConfig['nextMilestone']
             },

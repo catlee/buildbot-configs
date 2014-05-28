@@ -11,7 +11,7 @@ releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/alwa
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
-                                        '<qa-drivers@mozilla.org>']
+                                        '<qa-drivers@mozilla.com>']
 releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
 releaseConfig['AVVendorsRecipients'] = ['<av-vendor-release-announce@mozilla.org>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
@@ -52,10 +52,6 @@ releaseConfig['sourceRepositories']  = {
                 'nextVersion': releaseConfig['nextAppVersion']
             },
             'config/milestone.txt': {
-                'version': releaseConfig['milestone'],
-                'nextVersion': releaseConfig['nextMilestone']
-            },
-            'js/src/config/milestone.txt': {
                 'version': releaseConfig['milestone'],
                 'nextVersion': releaseConfig['nextMilestone']
             },
@@ -125,6 +121,9 @@ releaseConfig['xulrunner_mozconfigs']          = {
     'macosx64': 'xulrunner/config/mozconfigs/macosx-universal/xulrunner',
     'win32': 'xulrunner/config/mozconfigs/win32/xulrunner',
 }
+releaseConfig['releaseChannel']      = 'release'
+releaseConfig['testChannels']        = ['releasetest', 'betatest']
+releaseConfig['testChannelRuleIds']  = [25,26]
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = True
@@ -132,11 +131,8 @@ releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 releaseConfig['syncPartnerBundles']  = True
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_release.py'
 
 # Misc configuration
 releaseConfig['makeIndexFiles'] = True
@@ -144,3 +140,9 @@ releaseConfig['enable_repo_setup'] = False
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
 releaseConfig['ftpSymlinkName'] = 'latest'
+
+releaseConfig['bouncer_aliases'] = {
+    'Firefox-%(version)s': 'firefox-latest',
+    'Firefox-%(version)s-stub': 'firefox-stub',
+    'Firefox-%(version)s-EUBallot': 'firefox-latest-euballot',
+}

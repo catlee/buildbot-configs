@@ -1,32 +1,17 @@
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
-    'build-system': {
-        'pgo_strategy': 'periodic',
-        'platforms': {
-            'win32': {
-                'pgo_platform': 'win64',
-            },
-        },
-    },
+    # 'build-system': {},  # Bug 1010674
     'fx-team': {
         'enable_perproduct_builds': True,
         'repo_path': 'integration/fx-team',
         'mozconfig_dir': 'mozilla-central',
         'enable_nightly': False,
         'pgo_strategy': 'periodic',
-        'periodic_interval': 3,
+        'periodic_start_hours': range(2, 24, 3),
         'enable_weekly_bundle': True,
     },
     'graphics': {
         'enable_talos': False,
-    },
-    'ionmonkey': {
-        'mozconfig_dir': 'mozilla-central',
-        'enable_nightly': True,
-        'create_snippet': True,
-        'create_partial': True,
-        'pgo_strategy': 'periodic',
-        'branch_projects': ['spidermonkey_tier_1', 'spidermonkey_info'],
     },
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
@@ -34,7 +19,7 @@ PROJECT_BRANCHES = {
         'mozconfig_dir': 'mozilla-central',
         'enable_weekly_bundle': True,
         'pgo_strategy': 'periodic',
-        'periodic_interval': 3,
+        'periodic_start_hours': range(1, 24, 3),
         'talos_suites': {
             'xperf': 1,
         },
@@ -45,7 +30,7 @@ PROJECT_BRANCHES = {
         'enable_perproduct_builds': True,
         'mozconfig_dir': 'mozilla-central',
         'pgo_strategy': 'periodic',
-        'periodic_interval': 3,
+        'periodic_start_hours': range(2, 24, 3),
         'enable_weekly_bundle': True,
         'talos_suites': {
             'xperf': 1,
@@ -62,20 +47,16 @@ PROJECT_BRANCHES = {
             },
             'macosx64': {
                 'enable_checktests': False,
-                'slave_platforms': ['mountainlion'],
-                'talos_slave_platforms': ['mountainlion'],
+                'slave_platforms': ['snowleopard'],
+                'talos_slave_platforms': ['snowleopard'],
             },
             'macosx64-debug': {
                 'enable_checktests': False,
-                'slave_platforms': ['mountainlion'],
+                'slave_platforms': ['snowleopard'],
             },
         },
     },
-    'services-central': {
-        'repo_path': 'services/services-central',
-        'enable_weekly_bundle': True,
-        'pgo_strategy': 'periodic',
-    },
+    #'services-central': {},  # Bug 1010674
     'ux': {
         'branch_name': 'UX',
         'mobile_branch_name': 'UX',
@@ -90,6 +71,7 @@ PROJECT_BRANCHES = {
         'create_snippet': True,
         'create_partial': True,
         'enable_talos': False,
+        'lock_platforms': True,
         'platforms': {
             'macosx64': {
                 'nightly_signing_servers': 'mac-nightly-signing',
@@ -98,6 +80,9 @@ PROJECT_BRANCHES = {
                 'nightly_signing_servers': 'nightly-signing',
             },
             'linux64': {
+                'nightly_signing_servers': 'nightly-signing',
+            },
+            'win32': {
                 'nightly_signing_servers': 'nightly-signing',
             },
         },
@@ -125,34 +110,23 @@ PROJECT_BRANCHES = {
         },
         'mobile_platforms': {
             'android': {
-                'slave_platforms': ['panda_android', 'vm_android_2_3'],
+                'slave_platforms': ['panda_android', 'ubuntu64_hw_mobile'],
             },
             'android-x86': {
                 'enable_opt_unittests': True,
             },
+            'android-armv6': {
+                'enable_opt_unittests': True,
+            }
+
         },
     },
-    'birch': {
-        'pgo_strategy': 'periodic',
-        'enable_nightly': True,
-        'create_snippet': True,
-        'create_mobile_snippet': True,
-        'enable_l10n': True,
-        'enable_l10n_onchange': False,
-        'l10n_platforms': ['linux', 'linux64', 'win32', 'macosx64'],
-        'l10n_tree': 'fxcentral',
-        'l10n_repo_path': 'l10n-central',
-        'enUS_binaryURL': '/nightly/latest-birch',
-    },
+    #'birch': {},  # Bug 1010674
     'cedar': {
         'mozharness_tag': 'default',
         'enable_talos': True,
         'talos_suites': {
             'xperf': 1,
-            'tp5o-metro': 1,
-            'other-metro': 1,
-            'svgr-metro': 1,
-            'dromaeojs-metro': 1,
         },
         'enable_opt_unittests': True,
         'mobile_platforms': {
@@ -160,10 +134,18 @@ PROJECT_BRANCHES = {
                 'enable_opt_unittests': True,
             },
         },
+        # once ready, we can flip this switch and any platform with
+        # mozharness_config in its build config will use mozharness instead
+        # of MozharnessBuildFactory
+        'desktop_mozharness_builds_enabled': True,
     },
     'cypress': {
         'mozharness_tag': 'default',
         'enable_talos': True,
+        # once ready, we can flip this switch and any platform with
+        # mozharness_config in its build config will use mozharness instead
+        # of MozharnessBuildFactory
+        'desktop_mozharness_builds_enabled': False,
     },
     'date': {
         'lock_platforms': True,
@@ -182,31 +164,44 @@ PROJECT_BRANCHES = {
         'enable_merging': False,
     },
     'elm': {
+        'branch_projects': [],
+        'enable_talos': False,
+        'enable_valgrind': False,
         'lock_platforms': True,
         'platforms': {
+            'linux': {},
+            'linux64': {},
+            'win32': {},
+            'macosx64': {},
+            'linux-debug': {},
+            'linux64-debug': {},
+            'macosx64-debug': {},
+            'win32-debug': {},
         },
     },
-    'fig': {},
+    'fig': {
+        'lock_platforms': True,
+        'platforms': {
+            'linux64-mulet': {},
+        }
+    },
     'gum': {},
     'holly': {
-        'pgo_strategy': 'periodic',
-        'enable_nightly': True,
-        'create_snippet': True,
-        'create_partial': True,
+        'branch_projects': [],
+        'pgo_strategy': None,
+        'lock_platforms': True,
+        'enable_nightly': False,
         'platforms': {
-            'linux': {
-                'nightly_signing_servers': 'nightly-signing',
-            },
-            'linux64': {
-                'nightly_signing_servers': 'nightly-signing',
-            },
-            'macosx64': {
-                'nightly_signing_servers': 'mac-nightly-signing',
-            },
-            'win32': {
-                'nightly_signing_servers': 'nightly-signing',
-            },
+            'linux': {},
+            'linux64': {},
+            'win32': {},
+            'macosx64': {},
+            'linux-debug': {},
+            'linux64-debug': {},
+            'macosx64-debug': {},
+            'win32-debug': {},
         },
+        'enable_talos': False,
     },
     'jamun': {},
     'larch': {},

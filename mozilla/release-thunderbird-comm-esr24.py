@@ -21,17 +21,17 @@ releaseConfig['productName']         = 'thunderbird'
 releaseConfig['appName']             = 'mail'
 releaseConfig['mozilla_dir']         = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '24.3.0'
-releaseConfig['appVersion']          = '24.3.0'
+releaseConfig['version']             = '24.5.0'
+releaseConfig['appVersion']          = '24.5.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 2
-releaseConfig['baseTag']             = 'THUNDERBIRD_24_3_0'
+releaseConfig['buildNumber']         = 1
+releaseConfig['baseTag']             = 'THUNDERBIRD_24_5_0'
 releaseConfig['partialUpdates']      = {
 
-    '24.2.0': {
-        'appVersion': '24.2.0',
+    '24.4.0': {
+        'appVersion': '24.4.0',
         'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_24_2_0',
+        'baseTag': 'THUNDERBIRD_24_4_0',
     },
 
 }
@@ -43,7 +43,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-esr24',
         'path': 'releases/comm-esr24',
-        'revision': '614096655436',
+        'revision': '83644ae8e82b',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -53,9 +53,10 @@ releaseConfig['sourceRepositories']  = {
         }
     },
     'mozilla': {
+        # XXX remove js/src/config/milestone.txt when setting up ESR31
         'name': 'mozilla-esr24',
         'path': 'releases/mozilla-esr24',
-        'revision': '557a5299bc6a',
+        'revision': '2dcea6a55d16',
         'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
@@ -131,11 +132,8 @@ releaseConfig['doPartnerRepacks']    = False
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_thunderbird.py'
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False

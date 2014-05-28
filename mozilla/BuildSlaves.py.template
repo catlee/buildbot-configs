@@ -10,13 +10,15 @@ SlavePasswords = {
         'macosx64-lion': 'pass',
         'android': 'pass',
         'android-armv6': 'pass',
-        'android-noion': 'pass',
         'android-x86': 'pass',
         'mock': 'pass',
+        'mock-hw': 'pass',
         }
 tuxedoUsername = 'user'
 tuxedoPassword = 'passwd'
-balrog_username = 'user'
-balrog_password = 'passwd'
+balrog_credentials = {
+    'user': 'pass',
+    'user2': 'pass',
+}
 blobber_username = 'user'
 blobber_password = 'passwd'

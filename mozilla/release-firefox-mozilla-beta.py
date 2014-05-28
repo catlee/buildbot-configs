@@ -11,7 +11,7 @@ releaseConfig['base_clobber_url'] = 'http://clobberer.pvt.build.mozilla.org/alwa
 # Release Notification
 releaseConfig['AllRecipients']       = ['<release@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
-                                        '<qa-drivers@mozilla.org>']
+                                        '<qa-drivers@mozilla.com>']
 releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
 releaseConfig['AVVendorsRecipients'] = ['<av-vendor-release-announce@mozilla.org>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
@@ -22,23 +22,23 @@ releaseConfig['messagePrefix']       = '[release] '
 releaseConfig['productName']         = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '28.0b4'
-releaseConfig['appVersion']          = '28.0'
+releaseConfig['version']             = '30.0b8'
+releaseConfig['appVersion']          = '30.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_28_0b4'
+releaseConfig['baseTag']             = 'FIREFOX_30_0b8'
 releaseConfig['partialUpdates']      = {
 
-    '28.0b2': {
-        'appVersion': '28.0',
+    '30.0b7': {
+        'appVersion': '30.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_28_0b2',
+        'baseTag': 'FIREFOX_30_0b7',
     },
 
-    '28.0b3': {
-        'appVersion': '28.0',
-        'buildNumber': 1,
-        'baseTag': 'FIREFOX_28_0b3',
+    '30.0b6': {
+        'appVersion': '30.0',
+        'buildNumber': 2,
+        'baseTag': 'FIREFOX_30_0b6',
     },
 
 }
@@ -50,7 +50,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': 'f66b06faac65',
+        'revision': '91e40e5e4d26',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -58,10 +58,6 @@ releaseConfig['sourceRepositories']  = {
                 'nextVersion': releaseConfig['nextAppVersion']
             },
             'config/milestone.txt': {
-                'version': releaseConfig['milestone'],
-                'nextVersion': releaseConfig['nextMilestone']
-            },
-            'js/src/config/milestone.txt': {
                 'version': releaseConfig['milestone'],
                 'nextVersion': releaseConfig['nextMilestone']
             },
@@ -132,17 +128,16 @@ releaseConfig['xulrunner_mozconfigs']          = {
     'win32': 'xulrunner/config/mozconfigs/win32/xulrunner',
 }
 releaseConfig['releaseChannel']      = 'beta'
+releaseConfig['testChannels']        = ['releasetest', 'betatest']
+releaseConfig['testChannelRuleIds']  = [25,26]
 
 # Partner repack configuration
 releaseConfig['doPartnerRepacks']    = True
 releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_beta.py'
 
 # Misc configuration
 releaseConfig['enable_repo_setup'] = False
@@ -150,3 +145,8 @@ releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
 releaseConfig['ftpSymlinkName'] = 'latest-beta'
+
+releaseConfig['bouncer_aliases'] = {
+    'Firefox-%(version)s': 'firefox-beta-latest',
+    'Firefox-%(version)s-stub': 'firefox-beta-stub',
+}

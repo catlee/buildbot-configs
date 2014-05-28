@@ -1,23 +1,23 @@
 # Additional branches that start as identical (individual variables can be overriden here)
 PROJECT_BRANCHES = {
     ### PLEASE ADD NEW BRANCHES ALPHABETICALLY (twigs at the bottom, also alphabetically)
-    'build-system': {},
+    # 'build-system': {},  # Bug 1010674
     'fx-team': {
         'repo_path': 'integration/fx-team',
+        'periodic_start_hours': range(2, 24, 3),
         'enable_perproduct_builds': True,
         'enable_nightly': False,
     },
     'graphics': {},
-    'ionmonkey': {
-        'enable_nightly': True
-    },
     # Please sync any customizations made to mozilla-inbound to cypress.
     'mozilla-inbound': {
         'repo_path': 'integration/mozilla-inbound',
+        'periodic_start_hours': range(1, 24, 3),
         'enable_perproduct_builds': True,
     },
     'b2g-inbound': {
         'repo_path': 'integration/b2g-inbound',
+        'periodic_start_hours': range(2, 24, 3),
         'enable_perproduct_builds': True,
         'platforms': {
             'macosx64_gecko': {
@@ -28,9 +28,7 @@ PROJECT_BRANCHES = {
             },
         },
     },
-    'services-central': {
-        'repo_path': 'services/services-central'
-    },
+    #'services-central': {},  # Bug 1010674
     # B2G builds not required on the UX branch
     #'ux': {
     #    'branch_name': 'UX',
@@ -46,7 +44,8 @@ PROJECT_BRANCHES = {
         'mozharness_repo': 'https://hg.mozilla.org/users/asasaki_mozilla.com/ash-mozharness',
         'mozharness_tag': 'default',
     },
-    'birch': {},
+    # Not needed on Birch at the moment, bug 977420.
+    #'birch': {},
     'cedar': {
         'mozharness_tag': 'default',
     },
@@ -55,15 +54,13 @@ PROJECT_BRANCHES = {
     },
     # B2G builds not required on date
     # 'date': {},
-    'elm': {
+    'fig': {
         'lock_platforms': True,
-        'platforms': {
-            'emulator': {},
-        }
+        'platforms': {},
     },
-    'fig': {},
     'gum': {},
-    'holly': {},
+    # disabled for bug 985718
+    #'holly': {},
     'jamun': {},
     'larch': {},
     'maple': {},

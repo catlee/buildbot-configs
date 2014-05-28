@@ -133,11 +133,8 @@ releaseConfig['doPartnerRepacks']    = True
 releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoConfig']        = 'firefox-tuxedo.ini'
-releaseConfig['tuxedoServerUrl']     = 'https://tuxedo.stage.mozilla.com/api/'
-releaseConfig['extraBouncerPlatforms'] = ('solaris-sparc', 'solaris-i386',
-                                          'opensolaris-sparc',
-                                          'opensolaris-i386')
+releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.allizom.org/api'
+releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_release.py'
 
 # Misc configuration
 releaseConfig['makeIndexFiles'] = True
@@ -146,3 +143,8 @@ releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
 releaseConfig['ftpSymlinkName'] = 'latest'
+releaseConfig['bouncer_aliases'] = {
+    'Firefox-%(version)s': 'firefox-latest',
+    'Firefox-%(version)s-stub': 'firefox-stub',
+    'Firefox-%(version)s-EUBallot': 'firefox-latest-euballot',
+}

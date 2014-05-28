@@ -1,53 +1,105 @@
 SLAVES = {
-    'fedora': dict([("talos-r3-fed-%03i" % x, {}) for x in range(11,103) \
-        if x not in [01, 02, 18, 57, 59, 70]]), # bug 799528, bug 731300, bug 731793, bug 753367, bug 779574, bug 740505
-    'fedora64' : dict([("talos-r3-fed64-%03i" % x, {}) for x in range (37,72) \
-        if x not in [32,58]]), # bug 785862, bug 751893
-    'xp-ix': dict([("t-xp32-ix-%03i" % x, {}) for x in range(1,131)]),
-    'win7-ix': dict([("t-w732-ix-%03i" % x, {}) for x in range(1,131)]),
-    'win8': dict([("t-w864-ix-%03i" % x, {}) for x in range(1,131)]),
-    'snowleopard':dict([("talos-r4-snow-%03i" % x, {}) for x in range(1,171) \
-        if x not in [81, 84]]), # bug 729090, bug 795558
-    'mountainlion': dict([("talos-mtnlion-r5-%03i" % x, {}) for x in range(1,90) \
-        if x not in [87]]), # bug 786994
-    'mavericks': dict([("t-mavericks-r5-%03i" % x, {}) for x in range(1,6)]),
-    'tegra_android': dict([('tegra-%03i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
-        for x in range(31,371) \
-        if x not in range(122,129) + [30,33,34,43,44,49,53,65,69,77,78,86,106,131,137,143,147,\
-            153,156,161,162,175,176,180,184,185,186,193,197,198,202,203,204,205,222,224,\
-            226,241,268,275,289,291,292,301,307,320,349,368]]), # decommissioned tegras
-    'panda_android': dict(
-        [('panda-%04i' % x, {'http_port': '30%03i' % x, 'ssl_port': '31%03i' % x}) \
-            for x in range(22,257) + range(270,307) + range(320,874) + range(885,910)]
-    ),
-    'ubuntu32_vm': dict(
-        [("tst-linux32-ec2-%03i" % x, {}) for x in range(1, 900)] +
-        [("tst-linux32-spot-%03i" % x, {}) for x in range(1, 900)]
-    ),
-    'ubuntu64_vm': dict(
-        [("tst-linux64-ec2-%03i" % x, {}) for x in range(1, 900)] +
-        [("tst-linux64-spot-%03i" % x, {}) for x in range(1, 900)]
-    ),
-    'ubuntu32_hw': dict([("talos-linux32-ix-%03i" % x, {}) for x in range(1, 56)]),
-    'ubuntu64_hw': dict([("talos-linux64-ix-%03i" % x, {}) for x in range(1, 120)]),
-    'win64_vm': dict([('tst-w64-ec2-%03i' % x, {}) for x in range(100)]),
+    'xp-ix': {},
+    'win7-ix': {},
+    'win8': {},
+    'snowleopard': {},
+    'mountainlion': {},
+    'mavericks': {},
+    'tegra_android': {},
+    'panda_android': {},
+    'ubuntu32_vm': {},
+    'ubuntu64_vm': {},
+    'ubuntu32_hw': {},
+    'ubuntu64_hw': {},
+    'win64_vm': {},
 }
 
+for i in range(1,131):
+    SLAVES['xp-ix']['t-xp32-ix-%03i' % i] = {}
+
+for i in range(1,131):
+    SLAVES['win7-ix']['t-w732-ix-%03i' % i] = {}
+
+for i in range(1,131):
+    SLAVES['win8']['t-w864-ix-%03i' % i] = {}
+
+for i in range(43,81) + range(82,84) + range(85,171):
+    SLAVES['snowleopard']['talos-r4-snow-%03i' % i] = {}
+
+for i in range(1,167):
+    SLAVES['snowleopard']['t-snow-r4-%04i' % i] = {}
+
+for i in range(1,87) + range(88,90):
+    SLAVES['mountainlion']['talos-mtnlion-r5-%03i' % i] = {}
+
+for i in range(1,4):
+    SLAVES['mavericks']['t-mavericks-r5-%03i' % i] = {}
+
+for i in range(31,33) + range(35,43) + range(45,49) + range(50,53) + \
+         range(54,56) + range(57,64) + range(66,69) + range(70,75) + [77] + \
+         range(79,86) + range(87,90) + range(91,106) + range(107,112) + \
+         range(113,116) + range(117,124) + range(129,131) + range(132,137) + \
+         range(138,143) + range(144,147) + range(148,153) + range(154,156) + \
+         range(157,162) + range(163,172) + [173,174] + range(177,180) + \
+         range(181,184) + range(187,193) + range(194,197) + range(198,221) + \
+         [223,225] + range(227,230) + range(231,241) + range(242,289) + \
+         range(293,295) + [297,299,301] + [304,309] + range(311,314) + \
+         range(315,319) + range(320,322) + [329,331] + range(334,336) + \
+         range(338,340) + range(343,346) + [348] + range(351,356) + [357] + \
+         range(361,365) + [367,369]:
+    SLAVES['tegra_android']['tegra-%03i' % i] = {
+        'http_port': '30%03i' % i,
+        'ssl_port': '31%03i' % i,
+    }
+
+for i in range(22,307) + range(320,874) + range(885,910):
+    SLAVES['panda_android']['panda-%04i' % i] = {
+        'http_port': '30%03i' % i,
+        'ssl_port': '31%03i' % i,
+    }
+
+for i in range(1,100) + range(300,360):
+    SLAVES['ubuntu32_vm']['tst-linux32-ec2-%03i' % i] = {}
+
+for i in range(1,800):
+    SLAVES['ubuntu32_vm']['tst-linux32-spot-%03i' % i] = {}
+
+for i in range(1000, 1100):
+    SLAVES['ubuntu32_vm']['tst-linux32-spot-%i' % i] = {}
+
+for i in range(1,100) + range(301,400):
+    SLAVES['ubuntu64_vm']['tst-linux64-ec2-%03i' % i] = {}
+
+for i in range(1,1000):
+    SLAVES['ubuntu64_vm']['tst-linux64-spot-%03i' % i] = {}
+
+for i in range(1000, 1100):
+    SLAVES['ubuntu64_vm']['tst-linux64-spot-%i' % i] = {}
+
+for i in range(1,56):
+    SLAVES['ubuntu32_hw']['talos-linux32-ix-%03i' % i] = {}
+
+for i in range(1,120):
+    SLAVES['ubuntu64_hw']['talos-linux64-ix-%03i' % i] = {}
+
+for i in range(1,3):
+    SLAVES['win64_vm']['tst-w64-ec2-%03i' % i] = {}
+
 SLAVES['tegra_android-armv6'] = SLAVES['tegra_android']
-SLAVES['tegra_android-noion'] = SLAVES['tegra_android']
-SLAVES['fedora-b2g'] = SLAVES['fedora']
-SLAVES['fedora-b2g-emulator'] = SLAVES['fedora']
 SLAVES['ubuntu64-asan_vm'] = SLAVES['ubuntu64_vm']
 # Use "-b2g" suffix to make misc.py generate unique builder names
 SLAVES['ubuntu32_vm-b2gdt'] = SLAVES['ubuntu32_vm']
 SLAVES['ubuntu64_vm-b2g'] = SLAVES['ubuntu64_vm']
 SLAVES['ubuntu64_vm-b2gdt'] = SLAVES['ubuntu64_vm']
 SLAVES['ubuntu64_vm-b2g-emulator'] = SLAVES['ubuntu64_vm']
+SLAVES['ubuntu64_vm-b2g-emulator-jb'] = SLAVES['ubuntu64_vm']
 SLAVES['ubuntu64_hw-b2g'] = SLAVES['ubuntu64_hw']
 SLAVES['ubuntu64_hw-b2g-emulator'] = SLAVES['ubuntu64_hw']
 SLAVES['mountainlion-b2gdt'] = SLAVES['mountainlion']
 SLAVES['vm_android_2_3'] = SLAVES['ubuntu64_vm']
 SLAVES['win8_64'] = SLAVES['win8']
+SLAVES['ubuntu64_hw_mobile'] = SLAVES['ubuntu64_hw']
+SLAVES['ubuntu64_hw_armv6_mobile'] = SLAVES['ubuntu64_hw']
 
 TRY_SLAVES = {}
 
@@ -81,14 +133,6 @@ BRANCHES = {
         'tinderbox_tree': 'Mozilla-Esr24',
         'mobile_tinderbox_tree': 'Mozilla-Esr24',
     },
-    'mozilla-b2g18': {
-        'tinderbox_tree': 'Mozilla-B2g18',
-        'mobile_tinderbox_tree': 'Mozilla-B2g18',
-    },
-    'mozilla-b2g18_v1_1_0_hd': {
-        'tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
-        'mobile_tinderbox_tree': 'Mozilla-B2g18-v1.1.0hd',
-    },
     'mozilla-b2g26_v1_2': {
         'tinderbox_tree': 'Mozilla-B2g26-v1.2',
         'mobile_tinderbox_tree': 'Mozilla-B2g26-v1.2',
@@ -96,6 +140,14 @@ BRANCHES = {
     'mozilla-b2g28_v1_3': {
         'tinderbox_tree': 'Mozilla-B2g28-v1.3',
         'mobile_tinderbox_tree': 'Mozilla-B2g28-v1.3',
+    },
+    'mozilla-b2g28_v1_3t': {
+        'tinderbox_tree': 'Mozilla-B2g28-v1.3t',
+        'mobile_tinderbox_tree': 'Mozilla-B2g28-v1.3t',
+    },
+    'mozilla-b2g30_v1_4': {
+        'tinderbox_tree': 'Mozilla-B2g30-v1.4',
+        'mobile_tinderbox_tree': 'Mozilla-B2g30-v1.4',
     },
     'mozilla-beta': {
         'tinderbox_tree': 'Mozilla-Beta',
@@ -136,3 +188,4 @@ PROJECTS = {
         'tinderbox_tree': 'Jetpack',
     },
 }
+B2G_PROJECTS = {}

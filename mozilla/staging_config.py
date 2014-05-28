@@ -1,12 +1,12 @@
 from copy import deepcopy
 import production_config as pc
 
-MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(87, 93) if x not in [88]]
+MAC_LION_MINIS = ['bld-lion-r5-%03d' % x for x in range(89, 93)]
 WIN32_IXS      = []
-WIN64_IXS      = ['w64-ix-slave%02i' % x for x in [5]]
+WIN64_IXS      = []
 WIN64_REV2     = ['ix-mn-w0864-%03d' % x for x in range(1,3)] + \
-                 ['w64-ix-slave%02i' % x for x in [4, 22, 80]]
-MOCK_DL120G7   = ['bld-centos6-hp-%03d' % x for x in range(1, 6)]
+                 ['w64-ix-slave%02i' % x for x in [4, 5, 22, 80]]
+MOCK_DL120G7   = ['b-linux64-hp-%04d' % x for x in range(20,25)]
 LINUX64_EC2    = ['dev-linux64-ec2-%03d' % x for x in range(1, 50)]
 
 STAGING_SLAVES = {
@@ -15,6 +15,7 @@ STAGING_SLAVES = {
     'win64-rev2':       WIN64_REV2,
     'macosx64-lion':    MAC_LION_MINIS,
     'mock':             MOCK_DL120G7 + LINUX64_EC2,
+    'mock-hw':          MOCK_DL120G7,
 }
 
 SLAVES = deepcopy(STAGING_SLAVES)
@@ -40,6 +41,7 @@ GLOBAL_VARS = {
     'mobile_download_base_url': 'http://dev-stage01.srv.releng.scl3.mozilla.com/pub/mozilla.org/mobile',
     'graph_server': 'graphs.allizom.org',
     'balrog_api_root': 'https://aus4-admin-dev.allizom.org',
+    'balrog_username': 'stage-ffxbld',
     'build_tools_repo_path': 'build/tools',
     'base_clobber_url': 'http://clobberer-stage.pvt.build.mozilla.org/index.php',
     'disable_tinderbox_mail': True,
@@ -47,13 +49,13 @@ GLOBAL_VARS = {
     # and if a failure to notify the talos master should result in a warning,
     # and sendchange retry count before give up
     'talos_masters': [
-        ('dev-master01.build.scl1.mozilla.com:9901', True, 1),
+        ('dev-master1.srv.releng.scl3.mozilla.com:9901', True, 1),
     ],
     # List of unittest masters to notify of new builds to test,
     # if a failure to notify the master should result in a warning,
     # and sendchange retry count before give up
     'unittest_masters': [
-        ('dev-master01.build.scl1.mozilla.com:9901', True, 1),
+        ('dev-master1.srv.releng.scl3.mozilla.com:9901', True, 1),
         ],
     'xulrunner_tinderbox_tree': 'MozillaTest',
     'weekly_tinderbox_tree': 'MozillaTest',
@@ -65,6 +67,9 @@ GLOBAL_VARS = {
     'base_bundle_urls': ['http://dev-stage01.build.mozilla.org/pub/mozilla.org/firefox/bundles'],
     'tooltool_url_list': ['http://runtime-binaries.pvt.build.mozilla.org/tooltool'],
     'blob_upload': True,
+    'mozharness_configs': {
+        'balrog': 'balrog/staging.py',
+    },
 }
 
 BUILDS_BEFORE_REBOOT = 5
@@ -89,14 +94,6 @@ BRANCHES = {
         'blocklist_update_on_closed_tree': False,
     },
     'mozilla-esr24': {
-        'enable_blocklist_update': False,
-        'blocklist_update_on_closed_tree': False,
-    },
-    'mozilla-b2g18': {
-        'enable_blocklist_update': False,
-        'blocklist_update_on_closed_tree': False,
-    },
-    'mozilla-b2g18_v1_1_0_hd': {
         'enable_blocklist_update': False,
         'blocklist_update_on_closed_tree': False,
     },
