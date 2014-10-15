@@ -811,6 +811,7 @@ PLATFORM_VARS = {
         'src_mozconfig': 'b2g/dev/config/mozconfigs/win32/mulet',
         'enable_dep': True,
         'profiled_build': False,
+        'enable_nightly': True,
         'builds_before_reboot': b2g_localconfig.BUILDS_BEFORE_REBOOT,
         'build_space': 13,
         'upload_symbols': False,
@@ -1457,10 +1458,6 @@ for platform in PLATFORM_VARS.values():
 BRANCHES = {
     'mozilla-central': {
     },
-    'mozilla-aurora': {
-        'gecko_version': 34,
-        'b2g_version': (2, 1, 0),
-    },
     'mozilla-b2g28_v1_3t': {
         'gecko_version': 28,
         'b2g_version': (1, 3, 0),
@@ -1617,36 +1614,6 @@ BRANCHES['mozilla-central']['platforms']['emulator-kk-debug']['enable_nightly'] 
 BRANCHES['mozilla-central']['platforms']['dolphin']['enable_nightly'] = True
 BRANCHES['mozilla-central']['platforms']['dolphin_eng']['enable_nightly'] = True
 
-######## mozilla-aurora
-# This is a path, relative to HGURL, where the repository is located
-# HGURL + repo_path should be a valid repository
-BRANCHES['mozilla-aurora']['repo_path'] = 'releases/mozilla-aurora'
-BRANCHES['mozilla-aurora']['gaia_l10n_root'] = 'https://hg.mozilla.org/gaia-l10n'
-BRANCHES['mozilla-aurora']['gecko_l10n_root'] = 'https://hg.mozilla.org/releases/l10n/mozilla-aurora'
-BRANCHES['mozilla-aurora']['start_hour'] = [0, 16]
-BRANCHES['mozilla-aurora']['start_minute'] = [2]
-BRANCHES['mozilla-aurora']['periodic_start_minute'] = 30
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir'] = 'fake'
-BRANCHES['mozilla-aurora']['aus2_base_upload_dir_l10n'] = 'fake'
-BRANCHES['mozilla-aurora']['platforms']['hamachi']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['hamachi_eng']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['hamachi_eng']['consider_for_nightly'] = False
-BRANCHES['mozilla-aurora']['platforms']['nexus-4']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['nexus-4_eng']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['nexus-4_eng']['consider_for_nightly'] = False
-BRANCHES['mozilla-aurora']['platforms']['helix']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['wasabi']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['flame-kk']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['flame-kk_eng']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['emulator']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['emulator-debug']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['emulator-jb']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['emulator-jb-debug']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['emulator-kk']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['emulator-kk-debug']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['dolphin']['enable_nightly'] = True
-BRANCHES['mozilla-aurora']['platforms']['dolphin_eng']['enable_nightly'] = True
-
 ######## mozilla-b2g34_v2_1
 # This is a path, relative to HGURL, where the repository is located
 # HGURL + repo_path should be a valid repository
@@ -1794,13 +1761,16 @@ for name, branch in items_before(BRANCHES, 'gecko_version', 34):
     if 'linux64-mulet' in branch['platforms']:
         del branch['platforms']['linux64-mulet']
 
-# OSX and Win32 Mulet only on cedar for now (bug 1067628)
+# Enable win32 mulet in gecko 35+
+for name, branch in items_before(BRANCHES, 'gecko_version', 35):
+    if 'win32-mulet' in branch['platforms']:
+        del branch['platforms']['win32-mulet']
+
+# OSX Mulet only on cedar for now (bug 1067628)
 for branch in BRANCHES:
     if branch not in ('cedar',):
         if 'macosx64-mulet' in BRANCHES[branch]['platforms']:
             del BRANCHES[branch]['platforms']['macosx64-mulet']
-        if 'win32-mulet' in BRANCHES[branch]['platforms']:
-            del BRANCHES[branch]['platforms']['win32-mulet']
 
 # tarako is for B2G 1.3t only (gecko28)
 for branch in BRANCHES:
