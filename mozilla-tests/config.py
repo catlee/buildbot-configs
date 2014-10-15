@@ -143,7 +143,7 @@ PLATFORMS['win32']['mozharness_config'] = {
 }
 
 PLATFORMS['win64']['slave_platforms'] = ['win8_64']
-PLATFORMS['win64']['win8_64'] = {'name': 'win8_64'}
+PLATFORMS['win64']['win8_64'] = {'name': 'WINNT 6.2 x64'}
 PLATFORMS['win64']['env_name'] = 'win64-perf'
 PLATFORMS['win64']['stage_product'] = 'firefox'
 PLATFORMS['win64']['win8_64']['mozharness_config'] = {
