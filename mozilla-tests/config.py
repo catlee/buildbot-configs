@@ -117,8 +117,8 @@ PLATFORMS['macosx64']['mozharness_config'] = {
     'config_file': 'talos/mac_config.py',
 }
 
-PLATFORMS['win32']['slave_platforms'] = ['xp-ix', 'win7-ix', 'win8']
-PLATFORMS['win32']['talos_slave_platforms'] = ['xp-ix', 'win7-ix', 'win8']
+PLATFORMS['win32']['slave_platforms'] = ['xp-ix', 'win7-ix']
+PLATFORMS['win32']['talos_slave_platforms'] = ['xp-ix', 'win7-ix']
 PLATFORMS['win32']['env_name'] = 'win32-perf'
 PLATFORMS['win32']['xp-ix'] = {'name': "Windows XP 32-bit"}
 PLATFORMS['win32']['win7-ix'] = {'name': "Windows 7 32-bit"}
@@ -133,6 +133,7 @@ PLATFORMS['win32']['mozharness_config'] = {
 }
 
 PLATFORMS['win64']['slave_platforms'] = ['win8_64']
+PLATFORMS['win64']['talos_slave_platforms'] = ['win8_64']
 PLATFORMS['win64']['win8_64'] = {'name': 'Windows 8 64-bit'}
 PLATFORMS['win64']['env_name'] = 'win64-perf'
 PLATFORMS['win64']['stage_product'] = 'firefox'
@@ -217,7 +218,7 @@ NO_WINXP = [platform for platform in ALL_TALOS_PLATFORMS if platform != 'xp-ix']
 NO_MAC = get_talos_slave_platforms(PLATFORMS, platforms=('linux', 'linux64', 'win32', 'win64'))
 MAC_ONLY = get_talos_slave_platforms(PLATFORMS, platforms=('macosx64',))
 WIN7_ONLY = ['win7-ix']
-WIN8_ONLY = ['win8']
+WIN8_ONLY = ['win8_64']
 LINUX64_ONLY = get_talos_slave_platforms(PLATFORMS, platforms=('linux64',))
 NO_LINUX64 = get_talos_slave_platforms(PLATFORMS, platforms=('linux', 'win32', 'macosx64', 'win64'))
 
@@ -1915,6 +1916,33 @@ for name, branch in items_at_least(BRANCHES, 'gecko_version', mc_gecko_version):
             if platform in ('linux', 'linux64'):
                 branch['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOCHITEST_E10S[:]
 
+# Bug 1080134: we want to disable all 32-bit testing on win8 for gecko 36 and
+# higher, and enable 64-bit tests on win8 instead.
+# Disable 64-bit win8 testing on gecko 35 and lower
+for name, branch in items_before(BRANCHES, 'gecko_version', 36):
+    if 'win64' in branch['platforms']:
+        del branch['platforms']['win64']
+    # Add win8 tests back in
+    if 'win32' in branch['platforms']:
+        branch['platforms']['win32'].setdefault('slave_platforms', ['xp-ix', 'win7-ix']).append('win8')
+        branch['platforms']['win32'].setdefault('talos_slave_platforms', ['xp-ix', 'win7-ix']).append('win8')
+        branch['platforms']['win8'] = PLATFORMS['win32']['win8']
+        branch['platforms']['win8']['slaves'] = SLAVES['win8']
+
+# Disable 32-bit win8 testing on gecko 36 and higher
+for name, branch in items_at_least(BRANCHES, 'gecko_version', 36):
+    if 'win32' not in branch['platforms']:
+        continue
+    if 'win8' in branch['platforms']['win32']:
+        del branch['platforms']['win32']['win8']
+        print "removed win8", name
+    if 'talos_slave_platforms' in branch['platforms']['win32'] and 'win8' in branch['platforms']['win32']['talos_slave_platforms']:
+        branch['platforms']['win32']['talos_slave_platforms'].remove('win8')
+        print "removed talos", name, 'win8'
+    if 'slave_platforms' in branch['platforms']['win32'] and 'win8' in branch['platforms']['win32']['slave_platforms']:
+        branch['platforms']['win32']['slave_platforms'].remove('win8')
+        print "removed", name, 'win8'
+
 # TALOS: If you set 'talos_slave_platforms' for a branch you will only get that subset of platforms
 for branch in BRANCHES.keys():
     for os in PLATFORMS.keys():  # 'macosx64', 'win32' and on
@@ -2022,13 +2050,6 @@ for s in ('chromez-e10s', 'dromaeojs-e10s', 'g1-e10s', 'other-e10s_l64', 'other-
             tests = list(branch[test_key])
             tests[0] = 1
             branch[test_key] = tuple(tests)
-
-# LOOOOOOOOOOOOOOOPS
-# Enable win64 testing on select branches only
-WIN64_TESTING_BRANCHES = ['date']
-for branch in set(BRANCHES.keys()) - set(WIN64_TESTING_BRANCHES):
-    if 'win64' in BRANCHES[branch]['platforms']:
-        del BRANCHES[branch]['platforms']['win64']
 
 # Disable Linux64-cc in every branch except cedar
 for name in BRANCHES.keys():

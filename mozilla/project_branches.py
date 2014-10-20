@@ -196,13 +196,13 @@ PROJECT_BRANCHES = {
         'platforms': {
             'win32': {
                 'enable_opt_unittests': True,
-                'slave_platforms': ['xp-ix', 'win7-ix'],
-                'talos_slave_platforms': ['xp-ix', 'win7-ix'],
+                #'slave_platforms': ['xp-ix', 'win7-ix'],
+                #'talos_slave_platforms': ['xp-ix', 'win7-ix'],
             },
             'win64': {
                 'enable_opt_unittests': True,
-                'slave_platforms': ['win8_64'],
-                'talos_slave_platforms': ['win8_64'],
+                #'slave_platforms': ['win8_64'],
+                #'talos_slave_platforms': ['win8_64'],
             },
             'win64-debug': {
                 'enable_debug_unittests': True,
