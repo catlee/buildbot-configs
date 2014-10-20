@@ -30,16 +30,6 @@ BRANCHES = {
     'mozilla-aurora':      {},
     'mozilla-release':     {},
     'mozilla-beta':        {},
-    'mozilla-esr24': {
-        'gecko_version': 24,
-        'platforms': {
-            'macosx64': {},
-            'win32': {},
-            'linux': {},
-            'linux64': {},
-        },
-        'lock_platforms': True,
-    },
     'mozilla-esr31': {
         'gecko_version': 31,
         'platforms': {
@@ -1073,6 +1063,9 @@ PLATFORM_UNITTEST_VARS = {
                 'mochitest-browser-chrome': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
+                'mochitest-e10s-browser-chrome': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
                 'mochitest-other': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
@@ -1146,6 +1139,9 @@ PLATFORM_UNITTEST_VARS = {
                     'config_files': ["unittests/win_unittest.py"],
                 },
                 'mochitest-browser-chrome': {
+                    'config_files': ["unittests/win_unittest.py"],
+                },
+                'mochitest-e10s-browser-chrome': {
                     'config_files': ["unittests/win_unittest.py"],
                 },
                 'mochitest-other': {
@@ -1308,6 +1304,9 @@ PLATFORM_UNITTEST_VARS = {
                 'mochitest-browser-chrome': {
                     'config_files': ["unittests/mac_unittest.py"],
                 },
+                'mochitest-e10s-browser-chrome': {
+                    'config_files': ["unittests/mac_unittest.py"],
+                },
                 'mochitest-other': {
                     'config_files': ["unittests/mac_unittest.py"],
                 },
@@ -1377,6 +1376,9 @@ PLATFORM_UNITTEST_VARS = {
                 'mochitest-browser-chrome': {
                     'config_files': ["unittests/mac_unittest.py"],
                 },
+                'mochitest-e10s-browser-chrome': {
+                    'config_files': ["unittests/mac_unittest.py"],
+                },
                 'mochitest-other': {
                     'config_files': ["unittests/mac_unittest.py"],
                 },
@@ -1444,6 +1446,9 @@ PLATFORM_UNITTEST_VARS = {
                     'config_files': ["unittests/mac_unittest.py"],
                 },
                 'mochitest-browser-chrome': {
+                    'config_files': ["unittests/mac_unittest.py"],
+                },
+                'mochitest-e10s-browser-chrome': {
                     'config_files': ["unittests/mac_unittest.py"],
                 },
                 'mochitest-other': {
@@ -1573,9 +1578,21 @@ PROJECTS = {
     'jetpack': {
         'branches': ['fx-team'],
         'platforms': {
-            'ubuntu64_vm': {'ext': 'linux-x86_64.tar.bz2', 'debug': True},
-            'ubuntu64-asan_vm': {'ext': 'linux-x86_64-asan.tar.bz2', 'debug': False},
-            'ubuntu32_vm': {'ext': 'linux-i686.tar.bz2', 'debug': True},
+            'ubuntu64_vm': {
+                'ext': 'linux-x86_64.tar.bz2',
+                'env': 'linux-perf',
+                'debug': True
+            },
+            'ubuntu64-asan_vm': {
+                'ext': 'linux-x86_64-asan.tar.bz2',
+                'env': 'linux-perf',
+                'debug': False
+            },
+            'ubuntu32_vm': {
+                'ext': 'linux-i686.tar.bz2',
+                'env': 'linux-perf',
+                'debug': True
+            },
             'snowleopard': {'ext': '(mac|mac64).dmg', 'debug': True},
             'mountainlion': {'ext': '(mac|mac64).dmg', 'debug': True},
             'xp-ix': {
@@ -1638,12 +1655,6 @@ BRANCHES['mozilla-beta']['pgo_strategy'] = 'per-checkin'
 ######### mozilla-aurora
 BRANCHES['mozilla-aurora']['repo_path'] = "releases/mozilla-aurora"
 BRANCHES['mozilla-aurora']['pgo_strategy'] = 'per-checkin'
-
-######### mozilla-esr24
-BRANCHES['mozilla-esr24']['release_tests'] = 1
-BRANCHES['mozilla-esr24']['repo_path'] = "releases/mozilla-esr24"
-BRANCHES['mozilla-esr24']['pgo_strategy'] = 'per-checkin'
-BRANCHES['mozilla-esr24']['xperf_tests'] = (0, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 
 ######### mozilla-esr31
 BRANCHES['mozilla-esr31']['release_tests'] = 1
@@ -1768,21 +1779,6 @@ for name in [x for x in BRANCHES.keys() if not x.startswith('mozilla-b2g')]:
 # for branches running an older version.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=937637
 for platform in PLATFORMS.keys():
-    for name, branch in items_before(BRANCHES, 'gecko_version', 28):
-        if platform not in branch['platforms']:
-            continue
-        for slave_platform in PLATFORMS[platform]['slave_platforms']:
-            if slave_platform not in branch['platforms'][platform]:
-                continue
-
-            for suite_type in ['opt_unittest_suites', 'debug_unittest_suites']:
-                for cpp_suite in CPPUNIT:
-                    try:
-                        branch['platforms'][platform][slave_platform][suite_type].remove(cpp_suite)
-                    except ValueError:
-                        # wasn't in the list anyways
-                        pass
-
     # See Bug 997946 - skip these on OS X 10.8 due to limited capacity
     for name, branch in items_at_least(BRANCHES, 'gecko_version', 28):
         if platform not in branch['platforms']:
@@ -1901,17 +1897,23 @@ for platform in PLATFORMS.keys():
         BRANCHES['cedar']['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOCHITEST_JP[:]
 
 # Enable e10s Linux mochitests on trunk branches
+# Enable e10s browser-chrome mochitests on trunk branches, opt builds only for all platforms (not ready for Xp).
 # Fix this to a certain gecko version once e10s starts riding the trains
 mc_gecko_version = BRANCHES['mozilla-central']['gecko_version']
 for name, branch in items_at_least(BRANCHES, 'gecko_version', mc_gecko_version):
-    if 'linux' in branch['platforms']:
-        branch['platforms']['linux']['ubuntu32_vm']['opt_unittest_suites'] += MOCHITEST_E10S[:] + MOCHITEST_BC_3_E10S[:]
-        branch['platforms']['linux']['ubuntu32_vm']['debug_unittest_suites'] += MOCHITEST_E10S[:]
-    if 'linux64' in branch['platforms']:
-        branch['platforms']['linux64']['ubuntu64_vm']['opt_unittest_suites'] += MOCHITEST_E10S[:] + MOCHITEST_BC_3_E10S[:]
-        branch['platforms']['linux64']['ubuntu64_vm']['debug_unittest_suites'] += MOCHITEST_E10S[:]
-    if 'linux64-asan' in branch['platforms']:
-        branch['platforms']['linux64-asan']['ubuntu64-asan_vm']['opt_unittest_suites'] += MOCHITEST_E10S[:] + MOCHITEST_BC_3_E10S[:]
+    if name == "holly": # On Holly we use normal mochitest as e10s ones
+        continue
+    for platform in PLATFORMS.keys():
+        if platform not in branch['platforms']:
+            continue
+        for slave_platform in PLATFORMS[platform]['slave_platforms']:
+            if platform in branch['platforms'] and slave_platform in branch['platforms'][platform] and \
+                    not slave_platform == 'xp-ix':
+                branch['platforms'][platform][slave_platform]['opt_unittest_suites'] += MOCHITEST_BC_3_E10S[:]
+            if platform in ('linux', 'linux64', 'linux64-asan'):
+                branch['platforms'][platform][slave_platform]['opt_unittest_suites'] += MOCHITEST_E10S[:]
+            if platform in ('linux', 'linux64'):
+                branch['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOCHITEST_E10S[:]
 
 # TALOS: If you set 'talos_slave_platforms' for a branch you will only get that subset of platforms
 for branch in BRANCHES.keys():
@@ -2013,7 +2015,7 @@ for name, branch in items_before(BRANCHES, 'gecko_version', 30):
 # Enable e10s versions of Talos on Holly (bug 1050706).  Once these are enabled
 # on all branches, this block of code can go away.
 branch = BRANCHES['holly']
-for s in ('tp5o-e10s', 'svgr-e10s', 'xperf-e10s'):
+for s in ('chromez-e10s', 'dromaeojs-e10s', 'g1-e10s', 'other-e10s_l64', 'other-e10s_nol64', 'tp5o-e10s', 'svgr-e10s', 'xperf-e10s'):
     if 'e10s' in s:
         test_key = '%s_tests' % s
         if test_key in branch:
@@ -2027,11 +2029,6 @@ WIN64_TESTING_BRANCHES = ['date']
 for branch in set(BRANCHES.keys()) - set(WIN64_TESTING_BRANCHES):
     if 'win64' in BRANCHES[branch]['platforms']:
         del BRANCHES[branch]['platforms']['win64']
-
-# ASAN builds/tests should ride the trains for gecko 26
-for name, branch in items_before(BRANCHES, 'gecko_version', 26):
-    if 'linux64-asan' in branch['platforms']:
-        del branch['platforms']['linux64-asan']
 
 # Disable Linux64-cc in every branch except cedar
 for name in BRANCHES.keys():

@@ -639,9 +639,6 @@ BRANCHES = {
     },
     'comm-beta': {
     },
-    'comm-esr24': {
-        'gecko_version': 24,
-    },
     'comm-esr31': {
         'gecko_version': 31,
     },
@@ -760,7 +757,6 @@ BRANCHES['comm-central']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/thunderbird/nightly/latest-comm-central-l10n/'
 BRANCHES['comm-central']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-central'
-BRANCHES['comm-central']['allLocalesFile'] = 'mail/locales/all-locales'
 BRANCHES['comm-central']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.comm-central' % (GLOBAL_VARS['hgurl'])
 BRANCHES['comm-central']['enable_multi_locale'] = True
@@ -779,43 +775,6 @@ BRANCHES['comm-central']['platforms']['linux']['nightly_signing_servers'] = 'nig
 BRANCHES['comm-central']['platforms']['linux64']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['comm-central']['platforms']['win32']['nightly_signing_servers'] = 'nightly-signing'
 BRANCHES['comm-central']['platforms']['macosx64']['nightly_signing_servers'] = 'nightly-signing'
-
-######## comm-esr24
-BRANCHES['comm-esr24']['repo_path'] = 'releases/comm-esr24'
-BRANCHES['comm-esr24']['moz_repo_path'] = 'releases/mozilla-esr24'
-BRANCHES['comm-esr24']['mozilla_dir'] = 'mozilla'
-BRANCHES['comm-esr24']['update_channel'] = 'nightly-esr24'
-BRANCHES['comm-esr24']['skip_blank_repos'] = True
-BRANCHES['comm-esr24']['call_client_py'] = True
-BRANCHES['comm-esr24']['l10n_repo_path'] = 'releases/l10n/mozilla-esr24'
-BRANCHES['comm-esr24']['enable_weekly_bundle'] = True
-BRANCHES['comm-esr24']['start_hour'] = [3]
-BRANCHES['comm-esr24']['start_minute'] = [2]
-BRANCHES['comm-esr24']['enable_xulrunner'] = False
-# Enable unit tests
-BRANCHES['comm-esr24']['enable_mac_a11y'] = True
-BRANCHES['comm-esr24']['unittest_build_space'] = 6
-# L10n configuration
-BRANCHES['comm-esr24']['enable_l10n'] = False
-BRANCHES['comm-esr24']['enable_l10n_onchange'] = False
-BRANCHES['comm-esr24']['l10nNightlyUpdate'] = False
-BRANCHES['comm-esr24']['l10n_platforms'] = ['linux', 'linux64', 'win32',
-                                            'macosx64']
-BRANCHES['comm-esr24']['l10nDatedDirs'] = True
-BRANCHES['comm-esr24']['l10n_tree'] = 'tbrel'
-BRANCHES['comm-esr24']['enUS_binaryURL'] = \
-    GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-esr24'
-BRANCHES['comm-esr24']['allLocalesFile'] = 'mail/locales/all-locales'
-BRANCHES['comm-esr24']['localesURL'] = \
-    '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.comm-esr24' % (GLOBAL_VARS['hgurl'])
-BRANCHES['comm-esr24']['enable_nightly'] = True
-BRANCHES['comm-esr24']['create_snippet'] = True
-BRANCHES['comm-esr24']['create_partial'] = True
-BRANCHES['comm-esr24']['aus2_base_upload_dir'] = '/opt/aus2/incoming/2/Thunderbird/comm-esr24'
-BRANCHES['comm-esr24']['aus2_base_upload_dir_l10n'] = '/opt/aus2/incoming/2/Thunderbird/comm-esr24'
-BRANCHES['comm-esr24']['enable_blocklist_update'] = False
-BRANCHES['comm-esr24']['file_update_on_closed_tree'] = False
-BRANCHES['comm-esr24']['enable_valgrind'] = False
 
 ######## comm-esr31
 BRANCHES['comm-esr31']['repo_path'] = 'releases/comm-esr31'
@@ -842,7 +801,6 @@ BRANCHES['comm-esr31']['l10nDatedDirs'] = True
 BRANCHES['comm-esr31']['l10n_tree'] = 'tbrel'
 BRANCHES['comm-esr31']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-esr31'
-BRANCHES['comm-esr31']['allLocalesFile'] = 'mail/locales/all-locales'
 BRANCHES['comm-esr31']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.comm-esr31' % (GLOBAL_VARS['hgurl'])
 BRANCHES['comm-esr31']['enable_nightly'] = True
@@ -856,8 +814,6 @@ BRANCHES['comm-esr31']['enable_valgrind'] = False
 
 ######## comm-beta
 BRANCHES['comm-beta']['moz_repo_path'] = 'releases/mozilla-beta'
-# MERGE DAY (remove 'mozilla_dir' once comm-beta no longer services Gecko 33 and lower)
-BRANCHES['comm-beta']['mozilla_dir'] = 'mozilla'
 BRANCHES['comm-beta']['skip_blank_repos'] = True
 BRANCHES['comm-beta']['call_client_py'] = True
 BRANCHES['comm-beta']['repo_path'] = 'releases/comm-beta'
@@ -884,7 +840,6 @@ BRANCHES['comm-beta']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/thunderbird/nightly/latest-comm-beta-l10n/'
 BRANCHES['comm-beta']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-beta'
-BRANCHES['comm-beta']['allLocalesFile'] = 'mail/locales/all-locales'
 BRANCHES['comm-beta']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.comm-beta' % (GLOBAL_VARS['hgurl'])
 # temp disable nightlies (which includes turning off enable_l10n and l10nNightlyUpdate)
@@ -923,7 +878,6 @@ BRANCHES['comm-aurora']['l10nUploadPath'] = \
     '/home/ftp/pub/mozilla.org/thunderbird/nightly/latest-comm-aurora-l10n/'
 BRANCHES['comm-aurora']['enUS_binaryURL'] = \
     GLOBAL_VARS['download_base_url'] + '/nightly/latest-comm-aurora'
-BRANCHES['comm-aurora']['allLocalesFile'] = 'mail/locales/all-locales'
 BRANCHES['comm-aurora']['localesURL'] = \
     '%s/build/buildbot-configs/raw-file/production/mozilla/l10n/all-locales.comm-aurora' % (GLOBAL_VARS['hgurl'])
 BRANCHES['comm-aurora']['enable_multi_locale'] = True
@@ -1080,42 +1034,6 @@ for branch in branches:
         BRANCHES[branch]['platforms']['linux64-debug']['unittest-env'] = {
             'LD_LIBRARY_PATH': '/tools/gcc-4.3.3/installed/lib64',
         }
-
-# building 32-bit linux in a x86_64 env rides the trains
-for name, branch in items_before(BRANCHES, 'gecko_version', 24):
-    for platform in ['linux', 'linux-debug']:
-        branch['platforms'][platform]['mock_target'] = \
-            'mozilla-centos6-i386'
-        branch['platforms'][platform]['mock_packages'] = \
-            ['autoconf213', 'python', 'zip', 'mozilla-python27-mercurial',
-             'git', 'ccache', 'glibc-static', 'libstdc++-static',
-             'perl-Test-Simple', 'perl-Config-General',
-             'gtk2-devel', 'libnotify-devel', 'yasm',
-             'alsa-lib-devel', 'libcurl-devel',
-             'wireless-tools-devel', 'libX11-devel',
-             'libXt-devel', 'mesa-libGL-devel',
-             'gnome-vfs2-devel', 'GConf2-devel', 'wget',
-             'mpfr', # required for system compiler
-             'xorg-x11-font*', # fonts required for PGO
-             'imake', # required for makedepend!?!
-             'gcc45_0moz3', 'gcc454_0moz1', 'gcc472_0moz1', 'yasm', 'ccache', # <-- from releng repo
-             'pulseaudio-libs-devel',
-             'freetype-2.3.11-6.el6_2.9',
-             'freetype-devel-2.3.11-6.el6_2.9',
-            ]
-        if not platform.endswith("-debug"):
-            branch["platforms"][platform]["mock_packages"] += \
-                ["valgrind"]
-
-# gstreamer-devel packages ride the trains (bug 881589)
-for name, branch in items_before(BRANCHES, 'gecko_version', 24):
-    for p, pc in branch['platforms'].items():
-        if 'mock_packages' in pc:
-            branch['platforms'][p]['mock_packages'] = \
-                [x for x in branch['platforms'][p]['mock_packages'] if x not in (
-                    'gstreamer-devel', 'gstreamer-plugins-base-devel',
-                    'gstreamer-devel.i686', 'gstreamer-plugins-base-devel.i686',
-                )]
 
 
 if __name__ == "__main__":
