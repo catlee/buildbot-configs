@@ -148,6 +148,7 @@ GLOBAL_ENV = {
 
 PLATFORM_VARS = {
         'linux': {
+            'job_tags': ['platform:linux32', 'type:build', 'type:opt', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': [
                 '/tools/checkouts/mozharness/external_tools/count_and_reboot.py',
@@ -266,6 +267,7 @@ PLATFORM_VARS = {
             ],
         },
         'linux64': {
+            'job_tags': ['platform:linux64', 'type:build', 'type:opt', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': [
                 '/tools/checkouts/mozharness/external_tools/count_and_reboot.py',
@@ -373,6 +375,7 @@ PLATFORM_VARS = {
             ],
         },
         'linux64-asan': {
+            'job_tags': ['platform:linux64', 'type:build', 'type:opt', 'product:firefox', 'type:asan'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': [
                 '/tools/checkouts/mozharness/external_tools/count_and_reboot.py',
@@ -469,6 +472,7 @@ PLATFORM_VARS = {
             'consider_for_nightly': False,
         },
         'linux64-asan-debug': {
+            'job_tags': ['platform:linux64', 'type:build', 'type:debug', 'product:firefox', 'type:asan'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': [
                 '/tools/checkouts/mozharness/external_tools/count_and_reboot.py',
@@ -566,6 +570,7 @@ PLATFORM_VARS = {
             'consider_for_nightly': False,
         },
         'linux64-st-an-debug': {
+            'job_tags': ['platform:linux64', 'type:static-analysis', 'type:debug', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': [
                 '/tools/checkouts/mozharness/external_tools/count_and_reboot.py',
@@ -663,6 +668,7 @@ PLATFORM_VARS = {
             'consider_for_nightly': False,
         },
         'linux64-sh-haz': {
+            'job_tags': ['platform:linux64', 'type:hazard', 'type:opt', 'product:spidermonkey'],
             'mozharness_config': {
                 'script_name': 'scripts/spidermonkey_build.py',
                 'extra_args': [
@@ -684,6 +690,7 @@ PLATFORM_VARS = {
             'mock_target': 'mozilla-centos6-x86_64',
         },
         'linux64-br-haz': {
+            'job_tags': ['platform:linux64', 'type:hazard', 'type:opt', 'product:firefox'],
             'mozharness_config': {
                 'script_name': 'scripts/spidermonkey_build.py',
                 'extra_args': [
@@ -706,6 +713,7 @@ PLATFORM_VARS = {
             'mock_target': 'mozilla-centos6-x86_64',
         },
         'linux64-cc': {
+            'job_tags': ['platform:linux64', 'type:codecoverage', 'type:opt', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': ['scripts/external_tools/count_and_reboot.py',
                                '-f', '../reboot_count.txt', '-n', '1', '-z'],
@@ -794,6 +802,7 @@ PLATFORM_VARS = {
             ],
         },
         'macosx64': {
+            'job_tags': ['platform:macosx64', 'type:build', 'type:opt', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': ['scripts/external_tools/count_and_reboot.py',
                                '-f', '../reboot_count.txt', '-n', '1', '-z'],
@@ -874,6 +883,7 @@ PLATFORM_VARS = {
             'enable_ccache': True,
         },
         'win32': {
+            'job_tags': ['platform:win32', 'type:build', 'type:opt', 'product:firefox'],
             'mozharness_python': ['c:/mozilla-build/python27/python', '-u'],
             'reboot_command': [
                 'c:/mozilla-build/python27/python', '-u',
@@ -955,6 +965,7 @@ PLATFORM_VARS = {
             'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'win64': {
+            'job_tags': ['platform:win64', 'type:build', 'type:opt', 'product:firefox'],
             'mozharness_python': ['c:/mozilla-build/python27/python', '-u'],
             'mozharness_desktop_l10n': {
                 'scriptName': 'scripts/desktop_l10n.py',
@@ -1023,6 +1034,7 @@ PLATFORM_VARS = {
             'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'linux-debug': {
+            'job_tags': ['platform:linux32', 'type:build', 'type:debug', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': [
                 '/tools/checkouts/mozharness/external_tools/count_and_reboot.py',
@@ -1126,6 +1138,7 @@ PLATFORM_VARS = {
             ],
         },
         'linux64-debug': {
+            'job_tags': ['platform:linux64', 'type:build', 'type:debug', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': [
                 '/tools/checkouts/mozharness/external_tools/count_and_reboot.py',
@@ -1216,6 +1229,7 @@ PLATFORM_VARS = {
             ],
         },
         'macosx64-debug': {
+            'job_tags': ['platform:macosx64', 'type:build', 'type:debug', 'product:firefox'],
             'mozharness_python': '/tools/buildbot/bin/python',
             'reboot_command': ['scripts/external_tools/count_and_reboot.py',
                                '-f', '../reboot_count.txt', '-n', '1', '-z'],
@@ -1281,6 +1295,7 @@ PLATFORM_VARS = {
             'enable_ccache': True,
         },
         'win32-debug': {
+            'job_tags': ['platform:win32', 'type:build', 'type:debug', 'product:firefox'],
             'mozharness_python': ['c:/mozilla-build/python27/python', '-u'],
             'reboot_command': [
                 'c:/mozilla-build/python27/python', '-u',
@@ -1340,6 +1355,7 @@ PLATFORM_VARS = {
             'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'win64-debug': {
+            'job_tags': ['platform:win64', 'type:build', 'type:debug', 'product:firefox'],
             'enable_nightly': False,
             'enable_xulrunner': False,
             'product_name': 'firefox',
@@ -1377,6 +1393,7 @@ PLATFORM_VARS = {
             'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'android': {
+            'job_tags': ['platform:android', 'type:build', 'type:opt', 'product:fennec'],
             'product_name': 'firefox',
             'unittest_platform': 'android-opt',
             'app_name': 'browser',
@@ -1448,6 +1465,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android/releng.manifest',
         },
         'android-api-9': {
+            'job_tags': ['platform:android9', 'type:build', 'type:opt', 'product:fennec'],
             'product_name': 'firefox',
             'unittest_platform': 'android-api-9-opt',
             'app_name': 'browser',
@@ -1518,6 +1536,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android/releng.manifest',
         },
         'android-api-10': {
+            'job_tags': ['platform:android10', 'type:build', 'type:opt', 'product:fennec'],
             'product_name': 'firefox',
             'unittest_platform': 'android-api-10-opt',
             'app_name': 'browser',
@@ -1588,6 +1607,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android/releng.manifest',
         },
         'android-armv6': {
+            'job_tags': ['platform:android-armv6', 'type:build', 'type:opt', 'product:fennec'],
             'enable_nightly': True,
             'product_name': 'firefox',
             'unittest_platform': 'android-armv6-opt',
@@ -1655,6 +1675,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android-armv6/releng.manifest',
         },
         'android-x86': {
+            'job_tags': ['platform:android-x86', 'type:build', 'type:opt', 'product:fennec'],
             'product_name': 'firefox',
             'unittest_platform': 'android-x86-opt',
             'app_name': 'browser',
@@ -1719,6 +1740,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android-x86/releng.manifest',
         },
         'android-debug': {
+            'job_tags': ['platform:android', 'type:build', 'type:debug', 'product:fennec'],
             'enable_nightly': False,
             'product_name': 'firefox',
             'app_name': 'browser',
@@ -1786,6 +1808,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android/releng.manifest',
         },
         'android-debug-api-9': {
+            'job_tags': ['platform:android9', 'type:build', 'type:debug', 'product:fennec'],
             'enable_nightly': False,
             'product_name': 'firefox',
             'app_name': 'browser',
@@ -1852,6 +1875,7 @@ PLATFORM_VARS = {
             'tooltool_manifest_src': 'mobile/android/config/tooltool-manifests/android/releng.manifest',
         },
         'android-debug-api-10': {
+            'job_tags': ['platform:android10', 'type:build', 'type:debug', 'product:fennec'],
             'enable_nightly': False,
             'product_name': 'firefox',
             'app_name': 'browser',

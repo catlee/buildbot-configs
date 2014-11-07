@@ -304,3 +304,18 @@ def items_at_least(map, key, minval):
         value = v.get(key, minval)
         if cmp(value, minval) >= 0:
             yield (k, v)
+
+
+def validateBuilder(b):
+    """
+    Checks that builder b has the correct set of properties set on it for reporting
+
+    Returns True on success
+    Raises AssertionError on failure
+    """
+    assert 'properties' in b, b['name'] + " has no properties"
+    props = b['properties']
+    for p in ('branch', 'platform', 'product', 'job_tags'):
+        assert p in props, "%s has no %s property (factory class is %s)" % (b['name'], p, b['factory'].__class__.__name__)
+
+    return True

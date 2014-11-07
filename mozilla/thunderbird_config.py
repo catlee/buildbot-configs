@@ -110,6 +110,7 @@ GLOBAL_ENV = {
 
 PLATFORM_VARS = {
         'linux': {
+            'job_tags': ['platform:linux32', 'type:build', 'type:opt', 'product:thunderbird'],
             'product_name': 'thunderbird',
             'unittest_platform': 'linux-opt',
             'app_name': 'mail',
@@ -204,6 +205,7 @@ PLATFORM_VARS = {
             ],
         },
         'linux64': {
+            'job_tags': ['platform:linux64', 'type:build', 'type:opt', 'product:thunderbird'],
             'product_name': 'thunderbird',
             'unittest_platform': 'linux64-opt',
             'app_name': 'mail',
@@ -279,6 +281,7 @@ PLATFORM_VARS = {
             ],
         },
         'macosx64': {
+            'job_tags': ['platform:macosx64', 'type:build', 'type:opt', 'product:thunderbird'],
             'product_name': 'thunderbird',
             'unittest_platform': 'macosx64-opt',
             'app_name': 'mail',
@@ -326,6 +329,7 @@ PLATFORM_VARS = {
             'enable_ccache': True,
         },
         'win32': {
+            'job_tags': ['platform:win32', 'type:build', 'type:opt', 'product:thunderbird'],
             'product_name': 'thunderbird',
             'unittest_platform': 'win32-opt',
             'app_name': 'mail',
@@ -372,6 +376,7 @@ PLATFORM_VARS = {
             'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'win64': {
+            'job_tags': ['platform:win64', 'type:build', 'type:opt', 'product:thunderbird'],
             'product_name': 'thunderbird',
             'unittest_platform': 'win64-opt',
             'app_name': 'mail',
@@ -417,6 +422,7 @@ PLATFORM_VARS = {
             'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
         },
         'linux-debug': {
+            'job_tags': ['platform:linux32', 'type:build', 'type:debug', 'product:thunderbird'],
             'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
@@ -497,6 +503,7 @@ PLATFORM_VARS = {
             ],
         },
         'linux64-debug': {
+            'job_tags': ['platform:linux64', 'type:build', 'type:debug', 'product:thunderbird'],
             'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
@@ -556,6 +563,7 @@ PLATFORM_VARS = {
             ],
         },
         'macosx64-debug': {
+            'job_tags': ['platform:macosx64', 'type:build', 'type:debug', 'product:thunderbird'],
             'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',
@@ -591,6 +599,7 @@ PLATFORM_VARS = {
             'enable_ccache': True,
         },
         'win32-debug': {
+            'job_tags': ['platform:win32', 'type:build', 'type:debug', 'product:thunderbird'],
             'enable_nightly': False,
             'product_name': 'thunderbird',
             'app_name': 'mail',

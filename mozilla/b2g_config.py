@@ -86,6 +86,7 @@ GLOBAL_ENV = {
 
 PLATFORM_VARS = {
     'linux32_gecko': {
+        'job_tags': ['platform:linux32', 'type:build', 'type:opt', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'unittest_platform': 'linux32_gecko-opt',
@@ -183,6 +184,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'linux32_gecko-debug': {
+        'job_tags': ['platform:linux32', 'type:build', 'type:debug', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'unittest_platform': 'linux32_gecko-debug',
@@ -281,6 +283,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'linux64_gecko': {
+        'job_tags': ['platform:linux64', 'type:build', 'type:opt', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'unittest_platform': 'linux64_gecko-opt',
@@ -356,6 +359,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'linux64_gecko-debug': {
+        'job_tags': ['platform:linux64', 'type:build', 'type:debug', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'unittest_platform': 'linux64_gecko-debug',
@@ -430,6 +434,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'linux64-mulet': {
+        'job_tags': ['platform:linux64', 'type:build', 'type:opt', 'product:b2g-mulet'],
         'mozharness_python': '/tools/buildbot/bin/python',
         'reboot_command': ['scripts/external_tools/count_and_reboot.py',
                            '-f', '../reboot_count.txt','-n', '1', '-z'],
@@ -509,6 +514,7 @@ PLATFORM_VARS = {
         ],
     },
     'macosx64_gecko': {
+        'job_tags': ['platform:macosx64', 'type:build', 'type:opt', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'unittest_platform': 'macosx64_gecko-opt',
@@ -563,6 +569,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'macosx64_gecko-debug': {
+        'job_tags': ['platform:macosx64', 'type:build', 'type:debug', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'unittest_platform': 'macosx64_gecko-debug',
@@ -616,6 +623,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'macosx64-mulet': {
+        'job_tags': ['platform:macosx64', 'type:build', 'type:opt', 'product:b2g-mulet'],
         'product_name': 'firefox',
         'multi_locale': False,
         'unittest_platform': 'macosx64-mulet-opt',
@@ -666,6 +674,7 @@ PLATFORM_VARS = {
         'enable_ccache': True,
     },
     'win32_gecko': {
+        'job_tags': ['platform:win32', 'type:build', 'type:opt', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
@@ -719,6 +728,7 @@ PLATFORM_VARS = {
         'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
     },
     'win32_gecko-debug': {
+        'job_tags': ['platform:win32', 'type:build', 'type:debug', 'product:b2g-desktop'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
@@ -773,6 +783,7 @@ PLATFORM_VARS = {
         'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
     },
     'linux32_gecko_localizer': {
+        'job_tags': ['platform:linux32', 'type:build', 'type:opt', 'product:b2g-desktop-localizer'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
@@ -872,6 +883,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'win32-mulet': {
+        'job_tags': ['platform:win32', 'type:build', 'type:opt', 'product:b2g-mulet'],
         'product_name': 'firefox',
         'app_name': 'browser',
         'base_name': 'Win32 Mulet %(branch)s',
@@ -917,6 +929,7 @@ PLATFORM_VARS = {
         'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
     },
     'linux64_gecko_localizer': {
+        'job_tags': ['platform:linux64', 'type:build', 'type:opt', 'product:b2g-desktop-localizer'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
@@ -994,6 +1007,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'macosx64_gecko_localizer': {
+        'job_tags': ['platform:macosx64', 'type:build', 'type:opt', 'product:b2g-desktop-localizer'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
@@ -1050,6 +1064,7 @@ PLATFORM_VARS = {
         'gecko_languages_file': 'build/b2g/locales/all-locales',
     },
     'win32_gecko_localizer': {
+        'job_tags': ['platform:win32', 'type:build', 'type:opt', 'product:b2g-desktop-localizer'],
         'product_name': 'b2g',
         'app_name': 'b2g',
         'base_name': builder_prefix + '_%(branch)s_%(platform)s',
@@ -1106,6 +1121,7 @@ PLATFORM_VARS = {
         'tooltool_script': ['python', '/c/mozilla-build/tooltool.py'],
     },
     'hamachi': {
+        'job_tags': ['platform:hamachi', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1129,6 +1145,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'hamachi_eng': {
+        'job_tags': ['platform:hamachi', 'type:build', 'type:opt', 'product:b2g', 'type:b2g-eng'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1151,6 +1168,7 @@ PLATFORM_VARS = {
         'enable_dep': True,
     },
     'tarako': {
+        'job_tags': ['platform:tarako', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1174,6 +1192,7 @@ PLATFORM_VARS = {
         'enable_dep': True,
     },
     'tarako_eng': {
+        'job_tags': ['platform:tarako', 'type:build', 'type:opt', 'product:b2g', 'type:b2g-eng'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1196,6 +1215,7 @@ PLATFORM_VARS = {
         'enable_dep': True,
     },
     'nexus-4': {
+        'job_tags': ['platform:nexus-4', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1221,6 +1241,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'nexus-4_eng': {
+        'job_tags': ['platform:nexus-4', 'type:build', 'type:opt', 'product:b2g', 'type:b2g-eng'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1245,6 +1266,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'helix': {
+        'job_tags': ['platform:helix', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1268,6 +1290,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'emulator': {
+        'job_tags': ['platform:emulator', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1291,6 +1314,7 @@ PLATFORM_VARS = {
         'maxTime': 6 * 3600,
     },
     'emulator-debug': {
+        'job_tags': ['platform:emulator', 'type:build', 'type:debug', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1315,6 +1339,7 @@ PLATFORM_VARS = {
         'maxTime': 6 * 3600,
     },
     'emulator-jb': {
+        'job_tags': ['platform:emulator-jb', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1338,6 +1363,7 @@ PLATFORM_VARS = {
         'maxTime': 6 * 3600,
     },
     'emulator-jb-debug': {
+        'job_tags': ['platform:emulator-jb', 'type:build', 'type:debug', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1362,6 +1388,7 @@ PLATFORM_VARS = {
         'maxTime': 6 * 3600,
     },
     'linux64-b2g-haz': {
+        'job_tags': ['platform:emulator-jb', 'type:hazard', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/hazard_build.py',
             'extra_args': [
@@ -1387,6 +1414,7 @@ PLATFORM_VARS = {
         'mock_target': 'mozilla-centos6-x86_64',
     },
     'emulator-kk': {
+        'job_tags': ['platform:emulator-kk', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1412,6 +1440,7 @@ PLATFORM_VARS = {
         'maxTime': 6 * 3600,
     },
     'emulator-kk-debug': {
+        'job_tags': ['platform:emulator-kk', 'type:build', 'type:debug', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1438,6 +1467,7 @@ PLATFORM_VARS = {
         'maxTime': 6 * 3600,
     },
     'wasabi': {
+        'job_tags': ['platform:wasabi', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1461,6 +1491,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'flame': {
+        'job_tags': ['platform:flame', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1484,6 +1515,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'flame_eng': {
+        'job_tags': ['platform:flame', 'type:build', 'type:opt', 'product:b2g', 'type:b2g-eng'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1506,6 +1538,7 @@ PLATFORM_VARS = {
         'enable_dep': True,
     },
     'flame-kk': {
+        'job_tags': ['platform:flame-kk', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1524,6 +1557,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'flame-kk_eng': {
+        'job_tags': ['platform:flame-kk', 'type:build', 'type:opt', 'product:b2g', 'type:b2g-eng'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1541,6 +1575,7 @@ PLATFORM_VARS = {
         'enable_dep': True,
     },
     'flame-kk_eng-debug': {
+        'job_tags': ['platform:flame-kk', 'type:build', 'type:debug', 'product:b2g', 'type:b2g-eng'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1559,6 +1594,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'dolphin': {
+        'job_tags': ['platform:dolphin', 'type:build', 'type:opt', 'product:b2g'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
@@ -1582,6 +1618,7 @@ PLATFORM_VARS = {
         'enable_dep': False,
     },
     'dolphin_eng': {
+        'job_tags': ['platform:dolphin', 'type:build', 'type:opt', 'product:b2g', 'type:b2g-eng'],
         'mozharness_config': {
             'script_name': 'scripts/b2g_build.py',
             # b2g_build.py will checkout gecko from hg and look up a tooltool manifest given by the
