@@ -101,9 +101,10 @@ PROJECT_BRANCHES = {
     #'birch': {},
     'cedar': {
         'mozharness_tag': 'default',
+        'desktop_mozharness_builds_enabled': True,
         'platforms': {
             'linux64_gecko': {
-                'mozharness_config': {
+                'mozharness_desktop_build': {
                     'script_name': 'scripts/b2g_desktop_build.py',
                     'extra_args': ['--config', 'b2g/desktop_linux64.py'],
                     'reboot_command': ['echo', 'true'],
