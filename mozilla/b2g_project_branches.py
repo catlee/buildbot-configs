@@ -101,6 +101,17 @@ PROJECT_BRANCHES = {
     #'birch': {},
     'cedar': {
         'mozharness_tag': 'default',
+        'platforms': {
+            'linux64_gecko': {
+                'mozharness_config': {
+                    'script_name': 'scripts/b2g_desktop_build.py',
+                    'extra_args': ['--config', 'b2g/desktop_linux64.py'],
+                    'reboot_command': ['echo', 'true'],
+                    'mozharness_repo_cache': '/tools/checkouts/mozharness',
+                    'tools_repo_cache': '/tools/checkouts/build-tools',
+                },
+            },
+        },
     },
     'cypress': {},
     # B2G builds not required on date
