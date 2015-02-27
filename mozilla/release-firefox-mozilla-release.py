@@ -12,7 +12,7 @@ releaseConfig['base_clobber_url'] = 'https://api.pub.build.mozilla.org/clobberer
 releaseConfig['AllRecipients']       = ['<release+releasespam@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
                                         '<qa-drivers@mozilla.com>']
-releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
+releaseConfig['ImportantRecipients'] = ['<release-automation-notifications@mozilla.com>',]
 releaseConfig['AVVendorsRecipients'] = ['<av-vendor-release-announce@mozilla.org>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
@@ -26,7 +26,7 @@ releaseConfig['appName']             = 'browser'
 releaseConfig['version']             = '36.0'
 releaseConfig['appVersion']          = '36.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
+releaseConfig['buildNumber']         = 2
 releaseConfig['baseTag']             = 'FIREFOX_36_0'
 releaseConfig['partialUpdates']      = {
 

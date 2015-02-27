@@ -12,7 +12,7 @@ releaseConfig['base_clobber_url'] = 'https://api.pub.build.mozilla.org/clobberer
 releaseConfig['AllRecipients']       = ['<release+releasespam@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
                                         '<qa-drivers@mozilla.com>']
-releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
+releaseConfig['ImportantRecipients'] = ['<release-automation-notifications@mozilla.com>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
 
@@ -26,7 +26,7 @@ releaseConfig['relbranchPrefix']     = 'MOBILE'
 releaseConfig['version']             = '36.0'
 releaseConfig['appVersion']          = '36.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
+releaseConfig['buildNumber']         = 2
 releaseConfig['baseTag']             = 'FENNEC_36_0'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['version']
@@ -36,7 +36,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': 'a2ffa9047bf4',
+        'revision': '784a4c059370',
         'relbranch': None,
         'bumpFiles': {
             'mobile/android/confvars.sh': {

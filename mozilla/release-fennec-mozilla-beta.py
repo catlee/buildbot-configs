@@ -12,7 +12,7 @@ releaseConfig['base_clobber_url'] = 'https://api.pub.build.mozilla.org/clobberer
 releaseConfig['AllRecipients']       = ['<release+releasespam@mozilla.com>',
                                         '<release-mgmt@mozilla.com>',
                                         '<qa-drivers@mozilla.com>']
-releaseConfig['ImportantRecipients'] = ['<release-drivers@mozilla.org>',]
+releaseConfig['ImportantRecipients'] = ['<release-automation-notifications@mozilla.com>',]
 releaseConfig['releaseTemplates']    = 'release_templates'
 releaseConfig['messagePrefix']       = '[release] '
 
@@ -23,11 +23,11 @@ releaseConfig['stage_product']       = 'mobile'
 releaseConfig['appName']             = 'mobile'
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '36.0b10'
-releaseConfig['appVersion']          = '36.0'
+releaseConfig['version']             = '37.0b1'
+releaseConfig['appVersion']          = '37.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_36_0b10'
+releaseConfig['baseTag']             = 'FENNEC_37_0b1'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextMilestone']       = releaseConfig['milestone']
@@ -36,7 +36,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '8597521cb8bd',
+        'revision': '192f6746dc45',
         'relbranch': None,
         'bumpFiles': {
             'mobile/android/confvars.sh': {
@@ -67,14 +67,14 @@ releaseConfig['otherReposToTag']     = {
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']        = ('android', 'android-x86')
+releaseConfig['enUSPlatforms']        = ('android-api-9', 'android-api-11', 'android-x86')
 releaseConfig['notifyPlatforms']      = releaseConfig['enUSPlatforms']
 releaseConfig['unittestPlatforms']    = ()
 releaseConfig['talosTestPlatforms']   = ()
 releaseConfig['enableUnittests']      = False
 
 # L10n configuration
-releaseConfig['l10nPlatforms']       = ('android',)
+releaseConfig['l10nPlatforms']       = ('android-api-9', 'android-api-11')
 releaseConfig['l10nNotifyPlatforms'] = releaseConfig['l10nPlatforms']
 releaseConfig['mergeLocales']        = True
 releaseConfig['enableMultiLocale']   = True
@@ -98,7 +98,8 @@ releaseConfig['partnerRepackPlatforms'] = ()
 
 # mozconfigs
 releaseConfig['mozconfigs']          = {
-    'android': 'mobile/android/config/mozconfigs/android/release',
+    'android-api-9': 'mobile/android/config/mozconfigs/android-api-9-10-constrained/release',
+    'android-api-11': 'mobile/android/config/mozconfigs/android-api-11/release',
     'android-x86': 'mobile/android/config/mozconfigs/android-x86/release',
 }
 releaseConfig['releaseChannel']      = 'beta'
@@ -115,16 +116,23 @@ releaseConfig['enableUpdatePackaging']    = False
 releaseConfig['balrog_api_root']          = None
 
 releaseConfig['single_locale_options'] = {
-    'android': [
+    'android-api-9': [
         '--cfg',
-        'single_locale/release_mozilla-beta_android.py',
+        'single_locale/release_mozilla-beta_android_api_9.py',
+        '--tag-override', '%s_RELEASE' % releaseConfig['baseTag'],
+    ],
+    'android-api-11': [
+        '--cfg',
+        'single_locale/release_mozilla-beta_android_api_11.py',
         '--tag-override', '%s_RELEASE' % releaseConfig['baseTag'],
     ],
 }
 
 releaseConfig['multilocale_config'] = {
     'platforms': {
-        'android':
+        'android-api-9':
+            'multi_locale/release_mozilla-beta_android.json',
+        'android-api-11':
             'multi_locale/release_mozilla-beta_android.json',
         'android-x86':
             'multi_locale/release_mozilla-beta_android-x86.json',
@@ -141,7 +149,7 @@ releaseConfig['enableSigningAtBuildTime'] = True
 releaseConfig['enablePartialMarsAtBuildTime'] = False
 releaseConfig['autoGenerateChecksums'] = False
 releaseConfig['use_mock'] = True
-releaseConfig['mock_platforms'] = ('android', 'android-x86', 'linux')
+releaseConfig['mock_platforms'] = ('android-api-9', 'android-api-11', 'android-x86', 'linux')
 releaseConfig['ftpSymlinkName'] = 'latest-beta'
 releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['localTestChannel']      = 'beta-localtest'
