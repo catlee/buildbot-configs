@@ -8,7 +8,7 @@ pyasn1==0.0.11a
 pycrypto==2.3
 zope.interface==3.6.1
 MozillaPulse==1.2.1
-amqp==1.4.7
+amqp==1.4.6
 anyjson==0.3.3
 argparse==1.2.1
 kombu==3.0.26
