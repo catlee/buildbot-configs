@@ -3,6 +3,7 @@ import urllib2
 import httplib
 from datetime import date
 import sys
+import os
 
 
 seta_branches = ['fx-team', 'mozilla-inbound']
@@ -28,13 +29,17 @@ seta_platforms = {"Rev4 MacOSX Snow Leopard 10.6": ("macosx64", ["snowleopard"])
 #define seta branches and default values for skipcount and skiptimeout
 skipconfig_defaults_platform = {}
 for sp in seta_platforms:
-  for slave_sp in seta_platforms[sp][1]: 
+  for slave_sp in seta_platforms[sp][1]:
       if slave_sp not in ["xp-ix"]:
           skipconfig_defaults_platform[slave_sp] = (7, 3600)
       else:
           skipconfig_defaults_platform[slave_sp] = (14, 7200)
 
 def get_seta_platforms(branch, platform_filter):
+    # For offline work
+    if os.environ.get('DISABLE_SETA'):
+        return []
+
 
     url = "http://alertmanager.allizom.org/data/setadetails/?date=" + today + "&buildbot=1&branch=" + branch + "&inactive=1"
     try:
@@ -88,7 +93,7 @@ def sort_android_tests(platform, slave_platform, tests):
 
 
 def print_configs(branch, plat, test_dict, BRANCHES):
-   
+
     for sp in test_dict:
         test_config = {}
         for t in test_dict[sp]:
@@ -96,7 +101,7 @@ def print_configs(branch, plat, test_dict, BRANCHES):
             test_type = t.split()[-3]
             test_config[test_type, test] = skipconfig_defaults_platform[str(sp)]
             BRANCHES[branch]['platforms'][plat][str(sp)]['skipconfig'] = test_config
-          
+
 
 def define_configs(branch, platforms, BRANCHES):
 

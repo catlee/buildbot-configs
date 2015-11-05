@@ -2330,7 +2330,7 @@ BRANCHES['try']['dromaeojs_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['try']['g1-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 
 
-#loadSkipConfig(BRANCHES, "desktop")
+loadSkipConfig(BRANCHES, "desktop")
 
 
 ### Tests Enabled In Gecko 39+ ###
