@@ -7,7 +7,7 @@ from config_common import loadDefaultValues, loadCustomTalosSuites, \
 
 import master_common
 reload(master_common)
-from master_common import setMainFirefoxVersions, items_before, items_at_least
+from master_common import setMainFirefoxVersions, items_at_least
 
 import project_branches
 reload(project_branches)
@@ -25,7 +25,9 @@ MOZHARNESS_REBOOT_CMD = ['scripts/external_tools/count_and_reboot.py',
                          '-f', '../reboot_count.txt',
                          '-n', '1', '-z']
 
-TALOS_TP_NEW_OPTS = {'plugins': {'32': 'zips/flash32_10_3_183_5.zip', '64': 'zips/flash64_11_0_d1_98.zip'}, 'pagesets': ['zips/tp5n.zip']}
+TALOS_TP_NEW_OPTS = {'plugins': {'32': 'zips/flash32_10_3_183_5.zip', '64':
+                                 'zips/flash64_11_0_d1_98.zip'}, 'pagesets':
+                     ['zips/tp5n.zip']}
 
 BRANCHES = {
     'mozilla-central':     {},
@@ -82,7 +84,7 @@ PLATFORMS['macosx64']['snowleopard'] = {'name': "Rev4 MacOSX Snow Leopard 10.6"}
 PLATFORMS['macosx64']['yosemite'] = {'name': "Rev5 MacOSX Yosemite 10.10",
                                      'try_by_default': False}
 PLATFORMS['macosx64']['yosemite_r7'] = {'name': "Rev5 MacOSX Yosemite 10.10.5",
-                                     'try_by_default': False}
+                                        'try_by_default': False}
 PLATFORMS['macosx64']['stage_product'] = 'firefox'
 PLATFORMS['macosx64']['mozharness_config'] = {
     'mozharness_python': '/tools/buildbot/bin/python',
@@ -183,7 +185,7 @@ PLATFORMS['linux64-tsan']['mozharness_config'] = {
     'config_file': 'talos/linux_config.py',
 }
 
-PLATFORMS['linux64-cc']['slave_platforms'] = ['ubuntu64_vm', 'ubuntu64_vm_lnx_large' ]
+PLATFORMS['linux64-cc']['slave_platforms'] = ['ubuntu64_vm', 'ubuntu64_vm_lnx_large']
 PLATFORMS['linux64-cc']['ubuntu64_vm'] = {
     'name': 'Ubuntu Code Coverage VM 12.04 x64',
     'build_dir_prefix': 'ubuntu64_vm_cc',
@@ -838,9 +840,9 @@ XPCSHELL_TWO_CHUNKS = [
 # will additionally require other various suites to be run, which are set in the
 # sections below.
 UNITTEST_SUITES = {
-    'opt_unittest_suites': CPPUNIT + MOCHITEST + OTHER_REFTESTS + MOCHITEST_WEBGL + \
+    'opt_unittest_suites': CPPUNIT + MOCHITEST + OTHER_REFTESTS + MOCHITEST_WEBGL +
                            XPCSHELL,
-    'debug_unittest_suites': CPPUNIT + MARIONETTE + MOCHITEST + MOCHITEST_WEBGL + \
+    'debug_unittest_suites': CPPUNIT + MARIONETTE + MOCHITEST + MOCHITEST_WEBGL +
                              OTHER_REFTESTS,
 }
 
