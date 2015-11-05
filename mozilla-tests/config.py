@@ -25,8 +25,6 @@ MOZHARNESS_REBOOT_CMD = ['scripts/external_tools/count_and_reboot.py',
                          '-f', '../reboot_count.txt',
                          '-n', '1', '-z']
 
-TALOS_DIRTY_OPTS = {'talosAddOns': ['profiles/dirtyDBs.zip', 'profiles/dirtyMaxDBs.zip']}
-
 TALOS_TP_NEW_OPTS = {'plugins': {'32': 'zips/flash32_10_3_183_5.zip', '64': 'zips/flash64_11_0_d1_98.zip'}, 'pagesets': ['zips/tp5n.zip']}
 
 BRANCHES = {
@@ -84,7 +82,7 @@ PLATFORMS['macosx64']['snowleopard'] = {'name': "Rev4 MacOSX Snow Leopard 10.6"}
 PLATFORMS['macosx64']['yosemite'] = {'name': "Rev5 MacOSX Yosemite 10.10",
                                      'try_by_default': False}
 PLATFORMS['macosx64']['yosemite_r7'] = {'name': "Rev5 MacOSX Yosemite 10.10.5",
-                                     'try_by_default': False} 
+                                     'try_by_default': False}
 PLATFORMS['macosx64']['stage_product'] = 'firefox'
 PLATFORMS['macosx64']['mozharness_config'] = {
     'mozharness_python': '/tools/buildbot/bin/python',
@@ -1028,7 +1026,7 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'cppunit': {
                     'config_files': ["unittests/linux_unittest.py"],
-                },                
+                },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
                 },
@@ -1062,15 +1060,15 @@ PLATFORM_UNITTEST_VARS = {
             },
         },
         'ubuntu64_vm_lnx_large': {
-           'opt_unittest_suites': [], 
-           'debug_unittest_suites': [], 
+           'opt_unittest_suites': [],
+           'debug_unittest_suites': [],
            'suite_config': {
                'gtest': {
                    'config_files': ["unittests/linux_unittest.py"],
                },
            },
         },
-    }, 
+    },
     'linux64-asan': {
         'product_name': 'firefox',
         'app_name': 'browser',
@@ -1141,7 +1139,7 @@ PLATFORM_UNITTEST_VARS = {
                 },
                 'cppunit': {
                     'config_files': ["unittests/linux_unittest.py"],
-                },                
+                },
                 'marionette': {
                     'config_files': ["marionette/prod_config.py"],
                 },
@@ -2606,14 +2604,14 @@ for platform in PLATFORMS.keys():
             # Not stable on windows XP
             if slave_platform in ['xp-ix', 'win10_64', 'yosemite_r7']:
                 continue
-      
+
             if platform in BRANCHES[name]['platforms']:
-                if (platform in ['linux64', 'linux64-tsan', 'linux64-cc'] and slave_platform in ['ubuntu64_vm']) or (platform in ['linux64-asan'] and slave_platform in ['ubuntu64-asan_vm']):                    
+                if (platform in ['linux64', 'linux64-tsan', 'linux64-cc'] and slave_platform in ['ubuntu64_vm']) or (platform in ['linux64-asan'] and slave_platform in ['ubuntu64-asan_vm']):
                     continue
                 elif (platform in ['linux64', 'linux64-tsan', 'linux64-cc'] and slave_platform in ['ubuntu64_vm_lnx_large']) or (platform in ['linux64-asan'] and slave_platform in ['ubuntu64-asan_vm_lnx_large']):
                     BRANCHES[name]['platforms'][platform][slave_platform]['debug_unittest_suites'] = GTEST
                     BRANCHES[name]['platforms'][platform][slave_platform]['opt_unittest_suites'] = GTEST
-                else:               
+                else:
                     BRANCHES[name]['platforms'][platform][slave_platform]['debug_unittest_suites'] += GTEST
                     BRANCHES[name]['platforms'][platform][slave_platform]['opt_unittest_suites'] += GTEST
 
