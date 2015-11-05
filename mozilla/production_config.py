@@ -66,7 +66,6 @@ GLOBAL_VARS = {
     'unittest_masters': [
         ('buildbot-master81.build.mozilla.org:9301', True, 5),
     ],
-    'xulrunner_tinderbox_tree': 'XULRunner',
     'weekly_tinderbox_tree': 'Testing',
     'l10n_tinderbox_tree': 'Mozilla-l10n',
     'base_bundle_urls': ['https://ftp-ssl.mozilla.org/pub/mozilla.org/firefox/bundles'],

@@ -18,7 +18,6 @@ GLOBAL_VARS = {
     'unittest_masters': [
         ('dev-master1.srv.releng.scl3.mozilla.com:9901', True, 1),
         ],
-    'xulrunner_tinderbox_tree': 'ThunderbirdTest',
     'weekly_tinderbox_tree': 'ThunderbirdTest',
     'l10n_tinderbox_tree': 'MozillaStaging',
     'packaged_unittest_tinderbox_tree': 'ThunderbirdTest',
