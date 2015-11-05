@@ -737,16 +737,6 @@ WEB_PLATFORM_REFTESTS = [
     }),
 ]
 
-WEB_PLATFORM_TESTS = [
-    ('web-platform-tests', {
-        'use_mozharness': True,
-        'script_path': 'scripts/web_platform_tests.py',
-        'extra_args': ["--test-type=testharness"],
-        'blob_upload': True,
-        'script_maxtime': 7200,
-    }),
-]
-
 WEB_PLATFORM_TESTS_CHUNKED = [
     ('web-platform-tests', {
         'use_mozharness': True,
@@ -774,16 +764,6 @@ WEB_PLATFORM_REFTESTS_E10S = [
         'use_mozharness': True,
         'script_path': 'scripts/web_platform_tests.py',
         'extra_args': ["--test-type=reftest", "--e10s"],
-        'blob_upload': True,
-        'script_maxtime': 7200,
-    }),
-]
-
-WEB_PLATFORM_TESTS_E10S = [
-    ('web-platform-tests-e10s', {
-        'use_mozharness': True,
-        'script_path': 'scripts/web_platform_tests.py',
-        'extra_args': ["--test-type=testharness", "--e10s"],
         'blob_upload': True,
         'script_maxtime': 7200,
     }),
