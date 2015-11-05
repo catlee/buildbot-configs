@@ -2165,7 +2165,7 @@ ANDROID_4_3_MOZHARNESS_DICT = [
       'use_mozharness': True,
       'script_path': 'scripts/android_emulator_unittest.py',
       'extra_args': [
-          '--cfg', 'android/androidarm_4_3.py', 
+          '--cfg', 'android/androidarm_4_3.py',
           '--test-suite', 'cppunittest',
       ],
       'blob_upload': True,
@@ -2982,7 +2982,7 @@ ANDROID_4_3_MOZHARNESS_DEBUG_REFTEST_TRUNK = [
         'timeout': 2400,
         'script_maxtime': 14400,
     },
-    ),   
+    ),
     ('plain-reftest-48', {
         'use_mozharness': True,
         'script_path': 'scripts/android_emulator_unittest.py',
@@ -3242,7 +3242,7 @@ for suite in ANDROID_2_3_MOZHARNESS_DICT:
         ANDROID_2_3_AWS_DICT['opt_unittest_suites'].append(suite)
 
 #split 4.3 opt and debug tests to ones that can run on C3 vs less powerful instances
-for suite in ANDROID_4_3_MOZHARNESS_DICT: 
+for suite in ANDROID_4_3_MOZHARNESS_DICT:
     if suite[0].startswith('plain-reftest'):
         ANDROID_4_3_C3_DICT['opt_unittest_suites'].append(suite)
         ANDROID_4_3_C3_DICT['debug_unittest_suites'].append(suite)
@@ -3368,7 +3368,7 @@ for name, branch in items_at_least(BRANCHES, 'gecko_version', 39):
             if branch['platforms'][platform]['enable_debug_unittests'] is True:
                 BRANCHES[name]['platforms'][platform][slave_plat]['debug_unittest_suites'] = deepcopy(ANDROID_MOZHARNESS_MOCHITEST + ANDROID_MOZHARNESS_JSREFTEST + ANDROID_MOZHARNESS_CRASHTEST + ANDROID_MOZHARNESS_PLAIN_REFTEST + ANDROID_MOZHARNESS_XPCSHELL)
 
-for name, branch in items_at_least(BRANCHES, 'gecko_version', 41):    
+for name, branch in items_at_least(BRANCHES, 'gecko_version', 41):
     if name in ('cedar' ):
        continue
     for platform in branch['platforms']:
@@ -3391,7 +3391,7 @@ for name, branch in items_at_least(BRANCHES, 'gecko_version', 41):
             BRANCHES[name]['platforms']['android-api-11']['panda_android']['debug_unittest_suites'] = deepcopy(ANDROID_MOZHARNESS_JSREFTEST + ANDROID_MOZHARNESS_CRASHTEST + ANDROID_MOZHARNESS_PLAIN_REFTEST)
 
 
-# bug 1183877 Increase total-chunks for Android 4.3 Debug crashtests, js-reftests, and reftests 
+# bug 1183877 Increase total-chunks for Android 4.3 Debug crashtests, js-reftests, and reftests
 for name, branch in items_at_least(BRANCHES, 'gecko_version', 44):
     for platform in branch['platforms']:
         if not platform in PLATFORMS:
@@ -3454,7 +3454,7 @@ remove_suite_from_slave_platform(BRANCHES, PLATFORMS, 'mochitest-chrome', 'ubunt
 remove_suite_from_slave_platform(BRANCHES, PLATFORMS, 'mochitest-chrome', 'ubuntu64_vm_mobile', branches_to_keep=trunk_branches)
 remove_suite_from_slave_platform(BRANCHES, PLATFORMS, 'mochitest-chrome', 'ubuntu64_vm_large', branches_to_keep=trunk_branches)
 
-loadSkipConfig(BRANCHES,"mobile")
+loadSkipConfig(BRANCHES, "mobile")
 
 if __name__ == "__main__":
     import sys
