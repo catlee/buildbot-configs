@@ -206,7 +206,7 @@ PLATFORMS['linux64-cc']['mozharness_config'] = {
 }
 
 # Lets be explicit instead of magical.
-for platform, platform_config in PLATFORMS.items():
+for platform, platform_config in PLATFORMS.iteritems():
     all_slave_platforms = set(platform_config['slave_platforms'] +
                               platform_config.get('talos_slave_platforms', []))
     for slave_platform in all_slave_platforms:
@@ -2097,7 +2097,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
 
 # Copy unittest vars in first, then platform vars
 for branch in BRANCHES.keys():
-    for key, value in GLOBAL_VARS.items():
+    for key, value in GLOBAL_VARS.iteritems():
         # In order to have things ride the trains we need to be able to
         # override "global" things. Therefore, we shouldn't override anything
         # that's already been set.
@@ -2105,15 +2105,15 @@ for branch in BRANCHES.keys():
             continue
         BRANCHES[branch][key] = deepcopy(value)
 
-    for key, value in BRANCH_UNITTEST_VARS.items():
+    for key, value in BRANCH_UNITTEST_VARS.iteritems():
         # Don't override platforms if it's set and locked
         if key == 'platforms' and 'platforms' in BRANCHES[branch] and BRANCHES[branch].get('lock_platforms'):
             continue
         BRANCHES[branch][key] = deepcopy(value)
 
-    for platform, platform_config in PLATFORM_UNITTEST_VARS.items():
+    for platform, platform_config in PLATFORM_UNITTEST_VARS.iteritems():
         if platform in BRANCHES[branch]['platforms']:
-            for key, value in platform_config.items():
+            for key, value in platform_config.iteritems():
                 value = deepcopy(value)
                 if isinstance(value, str):
                     value = value % locals()
@@ -2121,14 +2121,14 @@ for branch in BRANCHES.keys():
 
     # Copy in local config
     if branch in localconfig.BRANCHES:
-        for key, value in localconfig.BRANCHES[branch].items():
+        for key, value in localconfig.BRANCHES[branch].iteritems():
             if key == 'platforms':
                 # Merge in these values
                 if 'platforms' not in BRANCHES[branch]:
                     BRANCHES[branch]['platforms'] = {}
 
-                for platform, platform_config in value.items():
-                    for key, value in platform_config.items():
+                for platform, platform_config in value.iteritems():
+                    for key, value in platform_config.iteritems():
                         value = deepcopy(value)
                         if isinstance(value, str):
                             value = value % locals()
@@ -2138,17 +2138,17 @@ for branch in BRANCHES.keys():
 
     # Merge in any project branch config for platforms
     if branch in ACTIVE_PROJECT_BRANCHES and 'platforms' in PROJECT_BRANCHES[branch]:
-        for platform, platform_config in PROJECT_BRANCHES[branch]['platforms'].items():
+        for platform, platform_config in PROJECT_BRANCHES[branch]['platforms'].iteritems():
             if platform in PLATFORMS:
-                for key, value in platform_config.items():
+                for key, value in platform_config.iteritems():
                     value = deepcopy(value)
                     if isinstance(value, str):
                         value = value % locals()
                     BRANCHES[branch]['platforms'][platform][key] = value
 
-    for platform, platform_config in localconfig.PLATFORM_VARS.items():
+    for platform, platform_config in localconfig.PLATFORM_VARS.iteritems():
         if platform in BRANCHES[branch]['platforms']:
-            for key, value in platform_config.items():
+            for key, value in platform_config.iteritems():
                 value = deepcopy(value)
                 if isinstance(value, str):
                     value = value % locals()
@@ -2192,10 +2192,10 @@ PROJECTS = {
         'ftp_url': 'ftp://ftp.mozilla.org/pub/mozilla.org/firefox/tinderbox-builds/%(branch)s-%(platform)s',
     },
 }
-for k, v in localconfig.PROJECTS.items():
+for k, v in localconfig.PROJECTS.iteritems():
     if k not in PROJECTS:
         PROJECTS[k] = {}
-    for k1, v1 in v.items():
+    for k1, v1 in v.iteritems():
         PROJECTS[k][k1] = v1
 
 ########

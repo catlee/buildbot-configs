@@ -132,7 +132,7 @@ PLATFORMS['android-x86']['mozharness_config'] = {
 }
 
 # Lets be explicit instead of magical.
-for platform, platform_config in PLATFORMS.items():
+for platform, platform_config in PLATFORMS.iteritems():
     for slave_platform in platform_config['slave_platforms']:
         platform_config[slave_platform]['slaves'] = sorted(SLAVES[slave_platform])
         if slave_platform in TRY_SLAVES:
@@ -3113,7 +3113,7 @@ for branch in ACTIVE_PROJECT_BRANCHES:
 
 # Copy unittest vars in first, then platform vars
 for branch in BRANCHES.keys():
-    for key, value in GLOBAL_VARS.items():
+    for key, value in GLOBAL_VARS.iteritems():
         # In order to have things ride the trains we need to be able to
         # override "global" things. Therefore, we shouldn't override anything
         # that's already been set.
@@ -3121,15 +3121,15 @@ for branch in BRANCHES.keys():
             continue
         BRANCHES[branch][key] = deepcopy(value)
 
-    for key, value in BRANCH_UNITTEST_VARS.items():
+    for key, value in BRANCH_UNITTEST_VARS.iteritems():
         # Don't override platforms if it's set and locked
         if key == 'platforms' and 'platforms' in BRANCHES[branch] and BRANCHES[branch].get('lock_platforms'):
             continue
         BRANCHES[branch][key] = deepcopy(value)
 
-    for platform, platform_config in PLATFORM_UNITTEST_VARS.items():
+    for platform, platform_config in PLATFORM_UNITTEST_VARS.iteritems():
         if platform in BRANCHES[branch]['platforms']:
-            for key, value in platform_config.items():
+            for key, value in platform_config.iteritems():
                 value = deepcopy(value)
                 if isinstance(value, str):
                     value = value % locals()
@@ -3137,14 +3137,14 @@ for branch in BRANCHES.keys():
 
     # Copy in local config
     if branch in localconfig.BRANCHES:
-        for key, value in localconfig.BRANCHES[branch].items():
+        for key, value in localconfig.BRANCHES[branch].iteritems():
             if key == 'platforms':
                 # Merge in these values
                 if 'platforms' not in BRANCHES[branch]:
                     BRANCHES[branch]['platforms'] = {}
 
-                for platform, platform_config in value.items():
-                    for key, value in platform_config.items():
+                for platform, platform_config in value.iteritems():
+                    for key, value in platform_config.iteritems():
                         value = deepcopy(value)
                         if isinstance(value, str):
                             value = value % locals()
@@ -3154,17 +3154,17 @@ for branch in BRANCHES.keys():
 
     # Merge in any project branch config for platforms
     if branch in ACTIVE_PROJECT_BRANCHES and 'mobile_platforms' in PROJECT_BRANCHES[branch]:
-        for platform, platform_config in PROJECT_BRANCHES[branch]['mobile_platforms'].items():
+        for platform, platform_config in PROJECT_BRANCHES[branch]['mobile_platforms'].iteritems():
             if platform in PLATFORMS:
-                for key, value in platform_config.items():
+                for key, value in platform_config.iteritems():
                     value = deepcopy(value)
                     if isinstance(value, str):
                         value = value % locals()
                     BRANCHES[branch]['platforms'][platform][key] = value
 
-    for platform, platform_config in localconfig.PLATFORM_VARS.items():
+    for platform, platform_config in localconfig.PLATFORM_VARS.iteritems():
         if platform in BRANCHES[branch]['platforms']:
-            for key, value in platform_config.items():
+            for key, value in platform_config.iteritems():
                 value = deepcopy(value)
                 if isinstance(value, str):
                     value = value % locals()
@@ -3436,7 +3436,7 @@ effects. Does not remove any suites from the specified
                     continue
                 if not slave_plat == slave_platform:
                     continue
-                for unittest_suite_type, unittest_suites in BRANCHES[branch]['platforms'][platform][slave_plat].items():
+                for unittest_suite_type, unittest_suites in BRANCHES[branch]['platforms'][platform][slave_plat].iteritems():
                     # This replaces the contents of the unittest_suites list in place with the filtered list.
                     unittest_suites[:] = [ suite for suite in unittest_suites if not suite_to_remove in suite[0] ]
 
@@ -3465,7 +3465,7 @@ if __name__ == "__main__":
     if len(args) > 0:
         items = dict([(b, BRANCHES[b]) for b in args])
     else:
-        items = dict(BRANCHES.items())
+        items = dict(BRANCHES.iteritems())
 
     for k, v in sorted(items.iteritems()):
         out = pprint.pformat(v)
