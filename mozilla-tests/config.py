@@ -218,8 +218,6 @@ for platform, platform_config in PLATFORMS.iteritems():
 
 ALL_TALOS_PLATFORMS = get_talos_slave_platforms(PLATFORMS, platforms=('linux64', 'win32', 'macosx64', 'win64', ))
 LINUX_ONLY = get_talos_slave_platforms(PLATFORMS, platforms=('linux64', ))
-NO_WINXP = [platform for platform in ALL_TALOS_PLATFORMS if platform != 'xp-ix']
-NO_OSX = get_talos_slave_platforms(PLATFORMS, platforms=('linux64', 'win32', 'win64'))
 WIN7_ONLY = ['win7-ix']
 
 SUITES = {
@@ -298,12 +296,12 @@ SUITES = {
     'dromaeojs': {
         'enable_by_default': True,
         'suites': GRAPH_CONFIG + ['--activeTests', 'dromaeo_css:dromaeo_dom:kraken:v8_7'],
-        'options': ({}, NO_WINXP),
+        'options': ({}, ALL_TALOS_PLATFORMS),
     },
     'dromaeojs-e10s': {
         'enable_by_default': False,
         'suites': GRAPH_CONFIG + ['--activeTests', 'dromaeo_css:dromaeo_dom:kraken:v8_7'],
-        'options': ({}, NO_OSX),
+        'options': ({}, ALL_TALOS_PLATFORMS),
     },
     'chromez': {
         'enable_by_default': True,
@@ -607,6 +605,16 @@ MOCHITEST_WEBGL = [
         'extra_args': ['--mochitest-suite', 'mochitest-gl'],
         'blob_upload': True,
         'script_maxtime': 12000,
+    }),
+]
+
+MOCHITEST_WEBGL_E10S = [
+    ('mochitest-gl-e10s', {
+        'use_mozharness': True,
+        'script_path': 'scripts/desktop_unittest.py',
+        'extra_args': ['--mochitest-suite', 'mochitest-gl', '--e10s'],
+        'blob_upload': True,
+        'script_maxtime': 1800,
     }),
 ]
 
@@ -2219,15 +2227,13 @@ BRANCHES['mozilla-central']['build_branch'] = "1.9.2"
 BRANCHES['mozilla-central']['pgo_strategy'] = 'periodic'
 BRANCHES['mozilla-central']['xperf-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 BRANCHES['mozilla-central']['tp5o-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
-BRANCHES['mozilla-central']['g1-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, NO_OSX)
-#BRANCHES['mozilla-central']['g1-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
+BRANCHES['mozilla-central']['g1-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-central']['g2-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-central']['g3_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['mozilla-central']['g3-e10s_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['mozilla-central']['other-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-central']['svgr-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
-BRANCHES['mozilla-central']['dromaeojs-e10s_tests'] = (1, False, {}, NO_OSX)
-#BRANCHES['mozilla-central']['dromaeojs-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
+BRANCHES['mozilla-central']['dromaeojs-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-central']['chromez-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 
 
@@ -2235,15 +2241,13 @@ BRANCHES['mozilla-central']['chromez-e10s_tests'] = (1, False, {}, ALL_TALOS_PLA
 # no xperf here since it fails all the time
 BRANCHES['mozilla-inbound']['xperf-e10s_tests'] = (0, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 BRANCHES['mozilla-inbound']['tp5o-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
-BRANCHES['mozilla-inbound']['g1-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, NO_OSX)
-#BRANCHES['mozilla-inbound']['g1-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
+BRANCHES['mozilla-inbound']['g1-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-inbound']['g2-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-inbound']['g3_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['mozilla-inbound']['g3-e10s_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['mozilla-inbound']['other-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-inbound']['svgr-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
-BRANCHES['mozilla-inbound']['dromaeojs-e10s_tests'] = (1, False, {}, NO_OSX)
-#BRANCHES['mozilla-inbound']['dromaeojs-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
+BRANCHES['mozilla-inbound']['dromaeojs-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['mozilla-inbound']['chromez-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 
 
@@ -2251,15 +2255,13 @@ BRANCHES['mozilla-inbound']['chromez-e10s_tests'] = (1, False, {}, ALL_TALOS_PLA
 # no xperf here since it fails all the time
 BRANCHES['fx-team']['xperf-e10s_tests'] = (0, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
 BRANCHES['fx-team']['tp5o-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
-BRANCHES['fx-team']['g1-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, NO_OSX)
-#BRANCHES['fx-team']['g1-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
+BRANCHES['fx-team']['g1-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['fx-team']['g2-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['fx-team']['other-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['fx-team']['g3_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['fx-team']['g3-e10s_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['fx-team']['svgr-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
-BRANCHES['fx-team']['dromaeojs-e10s_tests'] = (1, False, {}, NO_OSX)
-#BRANCHES['fx-team']['dromaeojs-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
+BRANCHES['fx-team']['dromaeojs-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['fx-team']['chromez-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 
 
@@ -2315,13 +2317,11 @@ BRANCHES['try']['platforms']['macosx64']['yosemite_r7']['debug_unittest_suites']
 
 # now for e10s tests
 BRANCHES['try']['tp5o-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
-#BRANCHES['try']['g1-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, NO_OSX)
 BRANCHES['try']['g2-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
 BRANCHES['try']['g3-e10s_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['try']['other-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['try']['svgr-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['try']['chromez-e10s_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
-#BRANCHES['try']['dromaeojs-e10s_tests'] = (1, False, {}, NO_OSX)
 
 # Talos jobs which are disabled, we need to determine why and fix, or document better (bug 1220132)
 BRANCHES['try']['xperf-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, WIN7_ONLY)
@@ -2459,6 +2459,18 @@ for name, branch in items_at_least(BRANCHES, 'gecko_version', aurora_gecko_versi
                 branch['platforms'][platform][slave_platform]['debug_unittest_suites'] += WEB_PLATFORM_TESTS_CHUNKED_MORE_E10S + WEB_PLATFORM_REFTESTS_E10S
                 branch['platforms'][platform][slave_platform]['opt_unittest_suites'] += WEB_PLATFORM_TESTS_CHUNKED_E10S + WEB_PLATFORM_REFTESTS_E10S
 
+# Bug 1215233 - Enable more e10s tests on Windows 7 only
+#   Turn on mochitest-gl-e10s - bug 1221102
+for name, branch in items_at_least(BRANCHES, 'gecko_version', trunk_gecko_version):
+    for platform in PLATFORMS.keys():
+        if platform not in branch['platforms']:
+            continue
+        for slave_platform in PLATFORMS[platform]['slave_platforms']:
+            if slave_platform in branch['platforms'][platform] and slave_platform in ('win7-ix',):
+                if name not in TWIGS:
+                    branch['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOCHITEST_WEBGL_E10S
+                    branch['platforms'][platform][slave_platform]['opt_unittest_suites'] += MOCHITEST_WEBGL_E10S
+
 # Bug 1200437
 # Use 7 chunks for m-bc on branches > trunk, excluding twigs, 3 chunks elsewhere
 # Bug 1203227
@@ -2472,18 +2484,26 @@ for branch in BRANCHES.keys():
                 continue
             if branch.startswith('mozilla-b2g'):
                 continue
-            if branch in TWIGS or ('gecko_version' in BRANCHES[branch] and BRANCHES[branch]['gecko_version'] != trunk_gecko_version):
-                if slave_platform in ('ubuntu64_vm', 'ubuntu32_vm') and branch not in TWIGS:
-                    BRANCHES[branch]['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOCHITEST_BC_3 + MOCHITEST_DT_8
-                else:
-                    BRANCHES[branch]['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOCHITEST_BC_3 + MOCHITEST_DT_4
-                if slave_platform in ('ubuntu64-asan_vm',) and branch not in TWIGS:
-                    BRANCHES[branch]['platforms'][platform][slave_platform]['opt_unittest_suites'] += MOCHITEST_BC_3 + MOCHITEST_DT_8
-                else:
-                    BRANCHES[branch]['platforms'][platform][slave_platform]['opt_unittest_suites'] += MOCHITEST_BC_3 + MOCHITEST_DT_2
+            bc_suite = MOCHITEST_BC_3[:]
+            dt_opt_suite = MOCHITEST_DT_2[:]
+            dt_debug_suite = MOCHITEST_DT_4[:]
+            gecko_version = BRANCHES[branch].get('gecko_version')
+            if branch in TWIGS:
+                pass
+            elif gecko_version and gecko_version != trunk_gecko_version:
+                if gecko_version > 38:
+                    # gecko_version <= 38 is a no-op for this entire if statement
+                    if slave_platform in ('ubuntu64_vm', 'ubuntu32_vm'):
+                        dt_debug_suite = MOCHITEST_DT_8[:]
+                    if slave_platform in ('ubuntu64-asan_vm',):
+                        dt_opt_suite = MOCHITEST_DT_8[:]
             else:
-                BRANCHES[branch]['platforms'][platform][slave_platform]['opt_unittest_suites'] += MOCHITEST_BC_7 + MOCHITEST_DT_8
-                BRANCHES[branch]['platforms'][platform][slave_platform]['debug_unittest_suites'] += MOCHITEST_BC_7 + MOCHITEST_DT_8
+                dt_opt_suite = MOCHITEST_DT_8[:]
+                dt_debug_suite = MOCHITEST_DT_8[:]
+                bc_suite = MOCHITEST_BC_7[:]
+            BRANCHES[branch]['platforms'][platform][slave_platform]['opt_unittest_suites'] += bc_suite + dt_opt_suite
+            BRANCHES[branch]['platforms'][platform][slave_platform]['debug_unittest_suites'] += bc_suite + dt_debug_suite
+
 
 # Enable mediatests on gecko >= 44 (bug 1209258)
 for name, branch in items_at_least(BRANCHES, 'gecko_version', 44):

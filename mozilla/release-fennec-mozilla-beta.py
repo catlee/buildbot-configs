@@ -20,11 +20,11 @@ releaseConfig['stage_product']       = 'mobile'
 releaseConfig['appName']             = 'mobile'
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '42.0b10'
-releaseConfig['appVersion']          = '42.0'
+releaseConfig['version']             = '43.0b1'
+releaseConfig['appVersion']          = '43.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_42_0b10'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'FENNEC_43_0b1'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextVersion']         = releaseConfig['version']
@@ -34,7 +34,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '4d60b9516805',
+        'revision': 'd64148d6bb60',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version_display.txt': {
@@ -132,11 +132,15 @@ releaseConfig['single_locale_options'] = {
         '--cfg',
         'single_locale/release_mozilla-beta_android_api_9.py',
         '--tag-override', '%s_RELEASE' % releaseConfig['baseTag'],
+        '--cfg', 'single_locale/production.py',
+        '--no-taskcluster-upload',
     ],
     'android-api-11': [
         '--cfg',
         'single_locale/release_mozilla-beta_android_api_11.py',
         '--tag-override', '%s_RELEASE' % releaseConfig['baseTag'],
+        '--cfg', 'single_locale/production.py',
+        '--no-taskcluster-upload',
     ],
 }
 

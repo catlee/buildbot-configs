@@ -29,11 +29,11 @@ seta_platforms = {"Rev4 MacOSX Snow Leopard 10.6": ("macosx64", ["snowleopard"])
 #define seta branches and default values for skipcount and skiptimeout
 skipconfig_defaults_platform = {}
 for sp in seta_platforms:
-  for slave_sp in seta_platforms[sp][1]:
-      if slave_sp not in ["xp-ix"]:
-          skipconfig_defaults_platform[slave_sp] = (7, 3600)
-      else:
-          skipconfig_defaults_platform[slave_sp] = (14, 7200)
+    for slave_sp in seta_platforms[sp][1]:
+        if slave_sp in ["xp-ix"]:
+            skipconfig_defaults_platform[slave_sp] = (14, 7200)
+        else:
+            skipconfig_defaults_platform[slave_sp] = (7, 3600)
 
 def get_seta_platforms(branch, platform_filter):
     # For offline work
@@ -82,13 +82,13 @@ def sort_android_tests(platform, slave_platform, tests):
         tests_by_slave_platform[s] = []
     for t in tests:
         if t.split()[-1].startswith('plain-reftest'):
-            tests_by_slave_platform[slave_platform[0]].append(t)
-        elif t.split()[-1].startswith('crashtest'):
-            tests_by_slave_platform[slave_platform[0]].append(t)
-        elif t.split()[-1].startswith('jsreftest'):
-            tests_by_slave_platform[slave_platform[0]].append(t)
-        else:
             tests_by_slave_platform[slave_platform[1]].append(t)
+        elif t.split()[-1].startswith('crashtest'):
+            tests_by_slave_platform[slave_platform[1]].append(t)
+        elif t.split()[-1].startswith('jsreftest'):
+            tests_by_slave_platform[slave_platform[1]].append(t)
+        else:
+            tests_by_slave_platform[slave_platform[0]].append(t)
     return tests_by_slave_platform
 
 
