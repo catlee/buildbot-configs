@@ -2648,8 +2648,10 @@ BRANCHES['try']['start_minute'] = [2]
 # Disable Nightly builds
 BRANCHES['try']['enable_nightly'] = False
 BRANCHES['try']['enable_mac_a11y'] = True
-# only do unittests locally until they are switched over to talos-r3
-BRANCHES['try']['enable_l10n'] = False
+BRANCHES['try']['enable_l10n'] = True
+BRANCHES['try']['desktop_mozharness_repacks_enabled'] = True
+BRANCHES['try']['l10n_platforms'] = ['linux', 'linux64', 'win32', 'macosx64',
+                                     'win64']
 BRANCHES['try']['enable_l10n_onchange'] = False
 BRANCHES['try']['l10nNightlyUpdate'] = False
 BRANCHES['try']['l10nDatedDirs'] = False
