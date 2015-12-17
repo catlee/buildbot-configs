@@ -2324,8 +2324,6 @@ BRANCHES['try']['g3_tests'] = (1, False, {}, LINUX_ONLY)
 BRANCHES['try']['dromaeojs_tests'] = (1, False, {}, ALL_TALOS_PLATFORMS)
 BRANCHES['try']['pgo_strategy'] = None
 BRANCHES['try']['enable_try'] = True
-BRANCHES['try']['platforms']['macosx64']['yosemite_r7']['opt_unittest_suites'] = UNITTEST_SUITES['opt_unittest_suites'][:]
-BRANCHES['try']['platforms']['macosx64']['yosemite_r7']['debug_unittest_suites'] = UNITTEST_SUITES['debug_unittest_suites'][:]
 
 # now for e10s tests
 BRANCHES['try']['tp5o-e10s_tests'] = (1, False, TALOS_TP_NEW_OPTS, ALL_TALOS_PLATFORMS)
@@ -2529,12 +2527,10 @@ for name, branch in items_at_least(BRANCHES, 'gecko_version', 44):
 
 
 # Bug 1223072 - disable media-tests on linux asan, debug (on development and release-stabilization branches)
-development_branches = ('b2g-inbound', 'fx-team', 'mozilla-central', 'mozilla-inbound')
-release_stability_branches = ('mozilla-b2g37_v2_2', 'mozilla-beta', 'mozilla-esr38', 'mozilla-release', 'mozilla-aurora')
 
 for slave_platform in ('ubuntu64_vm', 'ubuntu64-asan_vm'):
     for platform in ('linux64', 'linux64-asan'):
-        for branch in development_branches + release_stability_branches:
+        for branch in BRANCHES.keys():
             if platform not in BRANCHES[branch]['platforms']:
                 continue
             if slave_platform in BRANCHES[branch]['platforms'][platform]:
