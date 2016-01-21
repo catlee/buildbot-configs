@@ -2551,6 +2551,7 @@ BRANCHES['b2g-ota']['enabled_products'] = ['firefox']
 
 ######## try
 # Try-specific configs
+BRANCHES['try']['l10n_repo_path'] = 'l10n-central'
 BRANCHES['try']['stage_username'] = 'trybld'
 BRANCHES['try']['stage_username_mobile'] = 'trybld'
 BRANCHES['try']['stage_ssh_key'] = 'trybld_dsa'
