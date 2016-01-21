@@ -23,11 +23,11 @@ releaseConfig['appName']             = 'mail'
 releaseConfig['relbranchPrefix']     = 'THUNDERBIRD'
 releaseConfig['mozilla_srcdir']      = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '38.4.0'
-releaseConfig['appVersion']          = '38.4.0'
+releaseConfig['version']             = '38.5.1'
+releaseConfig['appVersion']          = '38.5.1'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 3
-releaseConfig['baseTag']             = 'THUNDERBIRD_38_4_0'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'THUNDERBIRD_38_5_1'
 releaseConfig['partialUpdates']      = {
 
     '38.3.0': {
@@ -36,16 +36,16 @@ releaseConfig['partialUpdates']      = {
         'baseTag': 'THUNDERBIRD_38_3_0',
     },
 
-    '38.1.0': {
-        'appVersion': '38.1.0',
-        'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_38_1_0',
+    '38.4.0': {
+        'appVersion': '38.4.0',
+        'buildNumber': 3,
+        'baseTag': 'THUNDERBIRD_38_4_0',
     },
 
-    '38.2.0': {
-        'appVersion': '38.2.0',
+    '38.5.0': {
+        'appVersion': '38.5.0',
         'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_38_2_0',
+        'baseTag': 'THUNDERBIRD_38_5_0',
     },
 
 }
@@ -57,7 +57,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-esr38',
         'path': 'releases/comm-esr38',
-        'revision': '86aaf7d1e621',
+        'revision': '5299a9e25fb1',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -69,7 +69,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-esr38',
         'path': 'releases/mozilla-esr38',
-        'revision': 'bea414cb5af0',
+        'revision': '36f8dc19f1be',
         'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
@@ -162,12 +162,6 @@ releaseConfig['bouncer_aliases'] = {
     'Thunderbird-%(version)s': 'thunderbird-latest',
 }
 
-# Product details config
-releaseConfig["productDetailsRepo"] = "svn+ssh://tbirdbld@svn.mozilla.org/libs/product-details"
-releaseConfig["mozillaComRepo"]     = "svn+ssh://tbirdbld@svn.mozilla.org/projects/mozilla.com"
-releaseConfig["svnSshKey"]          = "/home/cltbld/.ssh/ffxbld_rsa"
-
 # Misc configuration
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
-releaseConfig['ftpSymlinkName'] = 'latest'

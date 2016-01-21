@@ -22,12 +22,18 @@ releaseConfig['appName']             = 'mail'
 releaseConfig['relbranchPrefix']     = 'THUNDERBIRD'
 releaseConfig['mozilla_srcdir']      = 'mozilla'
 #  Current version info
-releaseConfig['version']             = '43.0b1'
-releaseConfig['appVersion']          = '43.0'
+releaseConfig['version']             = '44.0b1'
+releaseConfig['appVersion']          = '44.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'THUNDERBIRD_43_0b1'
+releaseConfig['baseTag']             = 'THUNDERBIRD_44_0b1'
 releaseConfig['partialUpdates']      = {
+
+    '43.0b1': {
+        'appVersion': '43.0',
+        'buildNumber': 3,
+        'baseTag': 'THUNDERBIRD_43_0b1',
+    },
 
     '42.0b1': {
         'appVersion': '42.0',
@@ -41,12 +47,6 @@ releaseConfig['partialUpdates']      = {
         'baseTag': 'THUNDERBIRD_42_0b2',
     },
 
-    '41.0b2': {
-        'appVersion': '41.0',
-        'buildNumber': 1,
-        'baseTag': 'THUNDERBIRD_41_0b2',
-    },
-
 }
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
@@ -56,7 +56,7 @@ releaseConfig['sourceRepositories']  = {
     'comm': {
         'name': 'comm-beta',
         'path': 'releases/comm-beta',
-        'revision': '55507ff7483e',
+        'revision': '8bfffb4cf500',
         'relbranch': None,
         'bumpFiles': {
             'mail/config/version.txt': {
@@ -68,7 +68,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '146ddbbd1d97',
+        'revision': '40e457de9ce8',
         'relbranch': None,
         'bumpFiles': {
             'config/milestone.txt': {
@@ -162,13 +162,7 @@ releaseConfig['bouncer_aliases']     = {
     'Thunderbird-%(version)s': 'thunderbird-beta-latest',
 }
 
-# Product details config
-releaseConfig["productDetailsRepo"] = "svn+ssh://tbirdbld@svn.mozilla.org/libs/product-details"
-releaseConfig["mozillaComRepo"]     = "svn+ssh://tbirdbld@svn.mozilla.org/projects/mozilla.com"
-releaseConfig["svnSshKey"]          = "/home/cltbld/.ssh/tbirdbld_dsa"
-
 # Misc configuration
 releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
-releaseConfig['ftpSymlinkName'] = 'latest-beta'

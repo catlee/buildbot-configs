@@ -79,7 +79,7 @@ PROJECT_BRANCHES = {
         'enable_perproduct_builds': True,
         'pgo_strategy': 'per-checkin',
         'enable_l10n': True,
-        'enable_l10n_onchange': True,
+        'enable_l10n_onchange': False,
         'l10n_repo_path': 'l10n-central',
         'l10n_platforms': ['linux', 'linux64', 'win32', 'macosx64', 'win64'],
         'l10nDatedDirs': True,
@@ -193,11 +193,13 @@ PROJECT_BRANCHES = {
         'partner_repack_platforms': ('linux', 'linux64', 'win32', 'win64', 'macosx64'),
         "release_platforms": ("linux", "linux64", "win32", "win64", "macosx64"),
         "l10n_release_platforms": ("linux", "linux64", "win32", "win64", "macosx64"),
-        'balrog_api_root': 'https://aus4-admin-dev.allizom.org/api',
-        'tuxedoServerUrl':  'https://bounceradmin.mozilla.com/api',
-        'bouncer_submitter_config':  "releases/bouncer_firefox_date.py",
+        "release_channels": ("date", ),
+        'balrog_api_root':'https://aus4-admin-dev.allizom.org/api',
+        'tuxedoServerUrl': 'https://admin-bouncer.stage.mozaws.net/api',
+        'bouncer_submitter_config': "releases/bouncer_firefox_beta.py",
         'bouncer_branch': "releases/date",
-        'bouncer_enabled': True
+        'bouncer_enabled': True,
+        'push_to_candidates_enabled': True
     },
     'elm': {
         'branch_projects': [],

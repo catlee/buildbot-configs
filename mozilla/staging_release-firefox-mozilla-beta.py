@@ -70,7 +70,7 @@ releaseConfig['otherReposToTag']     = {
 }
 
 # Platform configuration
-releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'win32', 'macosx64')
+releaseConfig['enUSPlatforms']       = ('linux', 'linux64', 'macosx64', 'win32', 'win64')
 releaseConfig['notifyPlatforms']     = releaseConfig['enUSPlatforms']
 releaseConfig['talosTestPlatforms']  = releaseConfig['enUSPlatforms']
 
@@ -134,11 +134,17 @@ releaseConfig['updateChannels'] = {
 }
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = False
-releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
+releaseConfig['doPartnerRepacks'] = True
+releaseConfig['partnerRepackPlatforms'] = releaseConfig['l10nPlatforms']
+releaseConfig['partnerRepackConfig'] = {
+    'use_mozharness': True,
+    'script': 'scripts/desktop_partner_repacks.py',
+    'config_file': 'partner_repacks/staging_release_mozilla-release_desktop.py',
+    's3cfg': '/builds/partners-s3cfg',
+}
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.allizom.org/api'
+releaseConfig['tuxedoServerUrl']     = 'https://admin-bouncer.stage.mozaws.net/api'
 releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_beta.py'
 
 # Misc configuration
@@ -146,7 +152,6 @@ releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
 releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
-releaseConfig['ftpSymlinkName'] = 'latest-beta'
 releaseConfig['bouncer_aliases'] = {
     'Firefox-%(version)s': 'firefox-beta-latest',
     'Firefox-%(version)s-stub': 'firefox-beta-stub',

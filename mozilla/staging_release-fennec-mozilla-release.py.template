@@ -127,11 +127,6 @@ releaseConfig["updateChannels"] = {
     }
 }
 
-# Product details config
-releaseConfig["productDetailsRepo"] = "svn+ssh://ffxbld@dev-stage01.srv.releng.scl3.mozilla.com/libs/product-details"
-releaseConfig["mozillaComRepo"]     = "svn+ssh://ffxbld@dev-stage01.srv.releng.scl3.mozilla.com/projects/mozilla.com"
-releaseConfig["svnSshKey"]          = "/home/cltbld/.ssh/ffxbld_rsa"
-
 # Fennec specific
 releaseConfig['usePrettyNames']           = False
 releaseConfig['disableStandaloneRepacks'] = True
@@ -184,11 +179,10 @@ releaseConfig['enableSigningAtBuildTime'] = True
 releaseConfig['enablePartialMarsAtBuildTime'] = False
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('android-api-9', 'android-api-11', 'android-x86', 'linux')
-releaseConfig['ftpSymlinkName'] = 'latest'
 releaseConfig['partialUpdates']      = {}
 releaseConfig['bouncerServer']       = 'download.allizom.org'
 
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.allizom.org/api'
+releaseConfig['tuxedoServerUrl']     = 'https://admin-bouncer.stage.mozaws.net/api'
 releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_fennec.py'
 releaseConfig['bouncerServer']       = 'download.mozilla.org'
 releaseConfig['bouncer_aliases'] = {

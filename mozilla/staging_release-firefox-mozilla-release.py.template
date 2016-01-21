@@ -76,7 +76,6 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-release'
 releaseConfig['otherReposToTag']     = {
     'users/stage-ffxbld/compare-locales': 'RELEASE_AUTOMATION',
     'users/stage-ffxbld/buildbot': 'production-0.8',
-    'users/stage-ffxbld/partner-repacks': 'default',
 }
 
 # Platform configuration
@@ -88,6 +87,9 @@ releaseConfig['talosTestPlatforms']  = ()
 # Unittests
 releaseConfig['unittestPlatforms']   = ()
 releaseConfig['enableUnittests']     = False
+
+# SDK
+releaseConfig['packageSDK']          = True
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
@@ -177,24 +179,23 @@ releaseConfig['updateChannels'] = {
 }
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = False
-releaseConfig['partnersRepoPath']    = 'users/stage-ffxbld/partner-repacks'
-releaseConfig['syncPartnerBundles']  = False
+releaseConfig['doPartnerRepacks'] = True
+releaseConfig['partnerRepackPlatforms'] = releaseConfig['l10nPlatforms']
+releaseConfig['partnerRepackConfig'] = {
+    'use_mozharness': True,
+    'script': 'scripts/desktop_partner_repacks.py',
+    'config_file': 'partner_repacks/staging_release_mozilla-release_desktop.py',
+    's3cfg': '/builds/partners-s3cfg',
+}
 
 # Tuxedo/Bouncer configuration
-releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.allizom.org/api'
+releaseConfig['tuxedoServerUrl']     = 'https://admin-bouncer.stage.mozaws.net/api'
 releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_release.py'
-
-# Product details config
-releaseConfig["productDetailsRepo"] = "svn+ssh://ffxbld@dev-stage01.srv.releng.scl3.mozilla.com/libs/product-details"
-releaseConfig["mozillaComRepo"]     = "svn+ssh://ffxbld@dev-stage01.srv.releng.scl3.mozilla.com/projects/mozilla.com"
-releaseConfig["svnSshKey"]          = "/home/cltbld/.ssh/ffxbld_rsa"
 
 # Misc configuration
 releaseConfig['build_tools_repo_path'] = "users/stage-ffxbld/tools"
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
-releaseConfig['ftpSymlinkName'] = 'latest'
 
 releaseConfig['bouncer_aliases'] = {
     'Firefox-%(version)s': 'firefox-latest',

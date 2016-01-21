@@ -20,11 +20,11 @@ releaseConfig['stage_product']       = 'mobile'
 releaseConfig['appName']             = 'mobile'
 releaseConfig['relbranchPrefix']     = 'MOBILE'
 #  Current version info
-releaseConfig['version']             = '44.0b1'
+releaseConfig['version']             = '44.0b11'
 releaseConfig['appVersion']          = '44.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
 releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FENNEC_44_0b1'
+releaseConfig['baseTag']             = 'FENNEC_44_0b11'
 #  Next (nightly) version info
 releaseConfig['nextAppVersion']      = releaseConfig['appVersion']
 releaseConfig['nextVersion']         = releaseConfig['version']
@@ -34,7 +34,7 @@ releaseConfig['sourceRepositories']  = {
     'mobile': {
         'name': 'mozilla-beta',
         'path': 'releases/mozilla-beta',
-        'revision': '6411e85ba1eb',
+        'revision': 'be602df60aa4',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version_display.txt': {
@@ -115,11 +115,6 @@ releaseConfig["updateChannels"] = {
     }
 }
 
-# Product details config
-releaseConfig["productDetailsRepo"] = "svn+ssh://ffxbld@svn.mozilla.org/libs/product-details"
-releaseConfig["mozillaComRepo"]     = "svn+ssh://ffxbld@svn.mozilla.org/projects/mozilla.com"
-releaseConfig["svnSshKey"]          = "/home/cltbld/.ssh/ffxbld_rsa"
-
 # Fennec specific
 releaseConfig['usePrettyNames']           = False
 releaseConfig['disableStandaloneRepacks'] = True
@@ -165,7 +160,6 @@ releaseConfig['enableSigningAtBuildTime'] = True
 releaseConfig['enablePartialMarsAtBuildTime'] = False
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('android-api-9', 'android-api-11', 'android-x86', 'linux')
-releaseConfig['ftpSymlinkName'] = 'latest-beta'
 releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['partialUpdates']      = {}
 releaseConfig['bouncerServer']       = 'download.mozilla.org'

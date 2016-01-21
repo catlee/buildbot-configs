@@ -20,11 +20,11 @@ releaseConfig['productName']         = 'firefox'
 releaseConfig['stage_product']       = 'firefox'
 releaseConfig['appName']             = 'browser'
 #  Current version info
-releaseConfig['version']             = '43.0.1'
-releaseConfig['appVersion']          = '43.0.1'
+releaseConfig['version']             = '44.0'
+releaseConfig['appVersion']          = '44.0'
 releaseConfig['milestone']           = releaseConfig['appVersion']
-releaseConfig['buildNumber']         = 1
-releaseConfig['baseTag']             = 'FIREFOX_43_0_1'
+releaseConfig['buildNumber']         = 2
+releaseConfig['baseTag']             = 'FIREFOX_44_0'
 releaseConfig['partialUpdates']      = {
 
     '42.0': {
@@ -39,21 +39,21 @@ releaseConfig['partialUpdates']      = {
         'baseTag': 'FIREFOX_41_0_2',
     },
 
-    '43.0': {
-        'appVersion': '43.0',
-        'buildNumber': 1,
-        'baseTag': 'FIREFOX_43_0',
+    '43.0.4': {
+        'appVersion': '43.0.4',
+        'buildNumber': 3,
+        'baseTag': 'FIREFOX_43_0_4',
     },
 
-    '40.0.3': {
-        'appVersion': '40.0.3',
+    '44.0': {
+        'appVersion': '44.0',
         'buildNumber': 1,
-        'baseTag': 'FIREFOX_40_0_3',
+        'baseTag': 'FIREFOX_44_0',
     },
 
 }
 # What's New Page, should be revisited with each release.
-releaseConfig['openURL'] = 'https://www.mozilla.org/%LOCALE%/firefox/43.0.1/whatsnew/?oldversion=%OLD_VERSION%'
+# releaseConfig['openURL'] = 'https://www.mozilla.org/%LOCALE%/firefox/44.0/whatsnew/?oldversion=%OLD_VERSION%'
 
 releaseConfig['HACK_first_released_version'] = {'win64': "42.0"}
 
@@ -65,7 +65,7 @@ releaseConfig['sourceRepositories']  = {
     'mozilla': {
         'name': 'mozilla-release',
         'path': 'releases/mozilla-release',
-        'revision': '3f46faf48a4a',
+        'revision': '45a3e4181f46',
         'relbranch': None,
         'bumpFiles': {
             'browser/config/version.txt': {
@@ -91,7 +91,6 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-release'
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
-    'build/partner-repacks': 'default',
 }
 
 # Platform configuration
@@ -156,7 +155,7 @@ releaseConfig['updateChannels'] = {
         },
     },
     "beta": {
-        "enabled": False,
+        "enabled": True,
         # For the beta channel, we want to able to provide updates to this
         # from prior betas or prior RCs that were shipped to the beta channel,
         # so this regex matches either.
@@ -189,24 +188,22 @@ releaseConfig['updateChannels'] = {
 }
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = False
-releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
-releaseConfig['syncPartnerBundles']  = False
+releaseConfig['doPartnerRepacks'] = True
+releaseConfig['partnerRepackPlatforms'] = releaseConfig['l10nPlatforms']
+releaseConfig['partnerRepackConfig'] = {
+    'use_mozharness': True,
+    'script': 'scripts/desktop_partner_repacks.py',
+    'config_file': 'partner_repacks/release_mozilla-release_desktop.py',
+    's3cfg': '/builds/partners-s3cfg',
+}
 
 # Tuxedo/Bouncer configuration
 releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
 releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_release.py'
 
-# Product details config
-releaseConfig["productDetailsRepo"] = "svn+ssh://ffxbld@svn.mozilla.org/libs/product-details"
-releaseConfig["mozillaComRepo"]     = "svn+ssh://ffxbld@svn.mozilla.org/projects/mozilla.com"
-releaseConfig["svnSshKey"]          = "/home/cltbld/.ssh/ffxbld_rsa"
-
 # Misc configuration
-releaseConfig['makeIndexFiles'] = True
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
-releaseConfig['ftpSymlinkName'] = 'latest'
 
 releaseConfig['bouncer_aliases'] = {
     'Firefox-%(version)s': 'firefox-latest',

@@ -74,7 +74,6 @@ releaseConfig['l10nRevisionFile']    = 'l10n-changesets_mozilla-beta'
 releaseConfig['otherReposToTag']     = {
     'build/compare-locales': 'RELEASE_AUTOMATION',
     'build/buildbot': 'production-0.8',
-    'build/partner-repacks': 'default',
 }
 
 # Platform configuration
@@ -85,6 +84,9 @@ releaseConfig['talosTestPlatforms']  = ()
 # Unittests
 releaseConfig['unittestPlatforms']   = ()
 releaseConfig['enableUnittests']     = False
+
+# SDK
+releaseConfig['packageSDK']          = True
 
 # L10n configuration
 releaseConfig['l10nPlatforms']       = releaseConfig['enUSPlatforms']
@@ -141,23 +143,23 @@ releaseConfig['updateChannels'] = {
 }
 
 # Partner repack configuration
-releaseConfig['doPartnerRepacks']    = False
-releaseConfig['partnersRepoPath']    = 'build/partner-repacks'
+releaseConfig['doPartnerRepacks'] = True
+releaseConfig['partnerRepackPlatforms'] = releaseConfig['l10nPlatforms']
+releaseConfig['partnerRepackConfig'] = {
+    'use_mozharness': True,
+    'script': 'scripts/desktop_partner_repacks.py',
+    'config_file': 'partner_repacks/release_mozilla-release_desktop.py',
+    's3cfg': '/builds/partners-s3cfg',
+}
 
 # Tuxedo/Bouncer configuration
 releaseConfig['tuxedoServerUrl']     = 'https://bounceradmin.mozilla.com/api'
 releaseConfig['bouncer_submitter_config'] = 'releases/bouncer_firefox_beta.py'
 
-# Product details config
-releaseConfig["productDetailsRepo"] = "svn+ssh://ffxbld@svn.mozilla.org/libs/product-details"
-releaseConfig["mozillaComRepo"]     = "svn+ssh://ffxbld@svn.mozilla.org/projects/mozilla.com"
-releaseConfig["svnSshKey"]          = "/home/cltbld/.ssh/ffxbld_rsa"
-
 # Misc configuration
 releaseConfig['enableAutomaticPushToMirrors'] = True
 releaseConfig['use_mock'] = True
 releaseConfig['mock_platforms'] = ('linux','linux64')
-releaseConfig['ftpSymlinkName'] = 'latest-beta'
 
 releaseConfig['bouncer_aliases'] = {
     'Firefox-%(version)s': 'firefox-beta-latest',
